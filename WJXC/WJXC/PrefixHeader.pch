@@ -1,0 +1,29 @@
+//
+//  PrefixHeader.pch
+//  WJXC
+//
+//  Created by lichaowei on 15/6/25.
+//  Copyright (c) 2015年 lcw. All rights reserved.
+//
+
+#ifndef WJXC_PrefixHeader_pch
+#define WJXC_PrefixHeader_pch
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+
+#import "AppConstants.h" //整个app常用常量
+#import "EnumConstants.h" //常用枚举
+#import "NotificationConstants.h"//通知
+#import "ColorConstants.h"//颜色
+#import "ImageConstants.h"//图片
+#import "ApiConstants.h"//接口
+
+#import "XNavigationController.h"//滑动返回系统子类
+#import "MyViewController.h"//viewController基类
+#import "UIColor+ConvertColor.h"
+#import "UIView+Frame.h"
+
+#import "YJYRequstManager.h"//网络请求类
+
+#endif
