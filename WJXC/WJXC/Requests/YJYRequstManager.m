@@ -140,6 +140,8 @@
     }
     
     [self addOperation:requestOpertation];
+    
+    return requestOpertation;
 }
 
 /**
