@@ -7,6 +7,7 @@
 //
 
 #import "ShoppingCarController.h"
+#import <AlipaySDK/AlipaySDK.h>
 
 @interface ShoppingCarController ()
 
@@ -17,6 +18,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    UIButton *btn = [[UIButton alloc]initWithframe:CGRectMake(100, 200, 100, 50) buttonType:UIButtonTypeCustom normalTitle:@"结算" selectedTitle:nil target:self action:@selector(clickToOrder:)];
+    [self.view addSubview:btn];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -24,14 +28,16 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
+#pragma - mark 事件处理
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+/**
+ *  点击生成订单支付
+ *
+ *  @param sender
+ */
+- (void)clickToOrder:(UIButton *)sender
+{
+    
 }
-*/
 
 @end

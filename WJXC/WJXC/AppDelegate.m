@@ -9,6 +9,8 @@
 #import "AppDelegate.h"
 #import "RootViewController.h"
 
+#import <AlipaySDK/AlipaySDK.h>//支付宝
+
 @interface AppDelegate ()
 
 @end

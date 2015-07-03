@@ -577,7 +577,7 @@
     
     if (between >= 1) { //大于一个小时需要更新
         
-        NSLog(@"需要更新融云用户信息 %@ bew:%d",oldDate,between);
+        NSLog(@"需要更新融云用户信息 %@ bew:%ld",oldDate,(long)between);
         
         return YES;
     }

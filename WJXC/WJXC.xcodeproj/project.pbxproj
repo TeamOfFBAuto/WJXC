@@ -36,13 +36,10 @@
 		1394571F1B46296F00C45EB6 /* my_address_delete@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 139456CB1B46296F00C45EB6 /* my_address_delete@2x.png */; };
 		139457201B46296F00C45EB6 /* my_address_xg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 139456CC1B46296F00C45EB6 /* my_address_xg@2x.png */; };
 		139457211B46296F00C45EB6 /* my_collect@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 139456CD1B46296F00C45EB6 /* my_collect@2x.png */; };
-		139457221B46296F00C45EB6 /* my_collect_shopping cart@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 139456CE1B46296F00C45EB6 /* my_collect_shopping cart@2x.png */; };
 		139457231B46296F00C45EB6 /* my_indent@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 139456CF1B46296F00C45EB6 /* my_indent@2x.png */; };
 		139457241B46296F00C45EB6 /* my_indent_no@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 139456D01B46296F00C45EB6 /* my_indent_no@2x.png */; };
 		139457251B46296F00C45EB6 /* my_jt@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 139456D11B46296F00C45EB6 /* my_jt@2x.png */; };
 		139457261B46296F00C45EB6 /* my_setting@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 139456D21B46296F00C45EB6 /* my_setting@2x.png */; };
-		139457271B46296F00C45EB6 /* shopping cart_address_top_add@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 139456D31B46296F00C45EB6 /* shopping cart_address_top_add@2x.png */; };
-		139457281B46296F00C45EB6 /* shopping cart_left@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 139456D41B46296F00C45EB6 /* shopping cart_left@2x.png */; };
 		139457291B46296F00C45EB6 /* shopping cart_address_add@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 139456D61B46296F00C45EB6 /* shopping cart_address_add@2x.png */; };
 		1394572A1B46296F00C45EB6 /* shopping cart_address_middle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 139456D71B46296F00C45EB6 /* shopping cart_address_middle@2x.png */; };
 		1394572B1B46296F00C45EB6 /* shopping cart_address_middle_xg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 139456D81B46296F00C45EB6 /* shopping cart_address_middle_xg@2x.png */; };
@@ -84,6 +81,16 @@
 		1394574F1B46296F00C45EB6 /* register_password2@2x.PNG in Resources */ = {isa = PBXBuildFile; fileRef = 139457021B46296F00C45EB6 /* register_password2@2x.PNG */; };
 		139457501B46296F00C45EB6 /* register_password@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 139457031B46296F00C45EB6 /* register_password@2x.png */; };
 		139457511B46296F00C45EB6 /* register_phone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 139457041B46296F00C45EB6 /* register_phone@2x.png */; };
+		139457551B4672C300C45EB6 /* AlipaySDK.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 139457531B4672C300C45EB6 /* AlipaySDK.bundle */; };
+		139457561B4672C300C45EB6 /* AlipaySDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 139457541B4672C300C45EB6 /* AlipaySDK.framework */; };
+		139457591B46730100C45EB6 /* Order.m in Sources */ = {isa = PBXBuildFile; fileRef = 139457581B46730100C45EB6 /* Order.m */; };
+		1394576C1B4678D200C45EB6 /* NSDate+Additons.m in Sources */ = {isa = PBXBuildFile; fileRef = 1394575E1B4678D200C45EB6 /* NSDate+Additons.m */; };
+		1394576D1B4678D200C45EB6 /* NSString+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 139457601B4678D200C45EB6 /* NSString+Additions.m */; };
+		1394576E1B4678D200C45EB6 /* UIButton+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 139457621B4678D200C45EB6 /* UIButton+Additions.m */; };
+		1394576F1B4678D200C45EB6 /* UIImageView+Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 139457641B4678D200C45EB6 /* UIImageView+Extensions.m */; };
+		139457701B4678D200C45EB6 /* UILabel+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 139457661B4678D200C45EB6 /* UILabel+Additions.m */; };
+		139457711B4678D200C45EB6 /* UIView+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 139457681B4678D200C45EB6 /* UIView+Additions.m */; };
+		139457721B4678D200C45EB6 /* UIViewController+Addtions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1394576A1B4678D200C45EB6 /* UIViewController+Addtions.m */; };
 		13A64BFA1B3BDF5D00D9A106 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13A64BF91B3BDF5D00D9A106 /* main.m */; };
 		13A64BFD1B3BDF5D00D9A106 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13A64BFC1B3BDF5D00D9A106 /* AppDelegate.m */; };
 		13A64C051B3BDF5D00D9A106 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13A64C041B3BDF5D00D9A106 /* Images.xcassets */; };
@@ -187,13 +194,10 @@
 		139456CB1B46296F00C45EB6 /* my_address_delete@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "my_address_delete@2x.png"; sourceTree = "<group>"; };
 		139456CC1B46296F00C45EB6 /* my_address_xg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "my_address_xg@2x.png"; sourceTree = "<group>"; };
 		139456CD1B46296F00C45EB6 /* my_collect@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "my_collect@2x.png"; sourceTree = "<group>"; };
-		139456CE1B46296F00C45EB6 /* my_collect_shopping cart@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "my_collect_shopping cart@2x.png"; sourceTree = "<group>"; };
 		139456CF1B46296F00C45EB6 /* my_indent@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "my_indent@2x.png"; sourceTree = "<group>"; };
 		139456D01B46296F00C45EB6 /* my_indent_no@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "my_indent_no@2x.png"; sourceTree = "<group>"; };
 		139456D11B46296F00C45EB6 /* my_jt@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "my_jt@2x.png"; sourceTree = "<group>"; };
 		139456D21B46296F00C45EB6 /* my_setting@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "my_setting@2x.png"; sourceTree = "<group>"; };
-		139456D31B46296F00C45EB6 /* shopping cart_address_top_add@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "shopping cart_address_top_add@2x.png"; sourceTree = "<group>"; };
-		139456D41B46296F00C45EB6 /* shopping cart_left@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "shopping cart_left@2x.png"; sourceTree = "<group>"; };
 		139456D61B46296F00C45EB6 /* shopping cart_address_add@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "shopping cart_address_add@2x.png"; sourceTree = "<group>"; };
 		139456D71B46296F00C45EB6 /* shopping cart_address_middle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "shopping cart_address_middle@2x.png"; sourceTree = "<group>"; };
 		139456D81B46296F00C45EB6 /* shopping cart_address_middle_xg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "shopping cart_address_middle_xg@2x.png"; sourceTree = "<group>"; };
@@ -235,6 +239,25 @@
 		139457021B46296F00C45EB6 /* register_password2@2x.PNG */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "register_password2@2x.PNG"; sourceTree = "<group>"; };
 		139457031B46296F00C45EB6 /* register_password@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "register_password@2x.png"; sourceTree = "<group>"; };
 		139457041B46296F00C45EB6 /* register_phone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "register_phone@2x.png"; sourceTree = "<group>"; };
+		139457531B4672C300C45EB6 /* AlipaySDK.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = AlipaySDK.bundle; sourceTree = "<group>"; };
+		139457541B4672C300C45EB6 /* AlipaySDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AlipaySDK.framework; sourceTree = "<group>"; };
+		139457571B46730100C45EB6 /* Order.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Order.h; sourceTree = "<group>"; };
+		139457581B46730100C45EB6 /* Order.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Order.m; sourceTree = "<group>"; };
+		1394575D1B4678D200C45EB6 /* NSDate+Additons.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Additons.h"; sourceTree = "<group>"; };
+		1394575E1B4678D200C45EB6 /* NSDate+Additons.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+Additons.m"; sourceTree = "<group>"; };
+		1394575F1B4678D200C45EB6 /* NSString+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Additions.h"; sourceTree = "<group>"; };
+		139457601B4678D200C45EB6 /* NSString+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Additions.m"; sourceTree = "<group>"; };
+		139457611B4678D200C45EB6 /* UIButton+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+Additions.h"; sourceTree = "<group>"; };
+		139457621B4678D200C45EB6 /* UIButton+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+Additions.m"; sourceTree = "<group>"; };
+		139457631B4678D200C45EB6 /* UIImageView+Extensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+Extensions.h"; sourceTree = "<group>"; };
+		139457641B4678D200C45EB6 /* UIImageView+Extensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+Extensions.m"; sourceTree = "<group>"; };
+		139457651B4678D200C45EB6 /* UILabel+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UILabel+Additions.h"; sourceTree = "<group>"; };
+		139457661B4678D200C45EB6 /* UILabel+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UILabel+Additions.m"; sourceTree = "<group>"; };
+		139457671B4678D200C45EB6 /* UIView+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Additions.h"; sourceTree = "<group>"; };
+		139457681B4678D200C45EB6 /* UIView+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Additions.m"; sourceTree = "<group>"; };
+		139457691B4678D200C45EB6 /* UIViewController+Addtions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Addtions.h"; sourceTree = "<group>"; };
+		1394576A1B4678D200C45EB6 /* UIViewController+Addtions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+Addtions.m"; sourceTree = "<group>"; };
+		139457731B46793100C45EB6 /* CategoriesHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CategoriesHeader.h; sourceTree = "<group>"; };
 		13A64BF41B3BDF5D00D9A106 /* WJXC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WJXC.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13A64BF81B3BDF5D00D9A106 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		13A64BF91B3BDF5D00D9A106 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -354,6 +377,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E3D0800D1B3D4B9D00E4F87D /* libz.dylib in Frameworks */,
+				139457561B4672C300C45EB6 /* AlipaySDK.framework in Frameworks */,
 				E3D0800B1B3D4B9100E4F87D /* libstdc++.dylib in Frameworks */,
 				E3D080091B3D4B8300E4F87D /* CoreTelephony.framework in Frameworks */,
 				E3D080071B3D4B7800E4F87D /* libsqlite3.dylib in Frameworks */,
@@ -443,13 +467,10 @@
 				139456CB1B46296F00C45EB6 /* my_address_delete@2x.png */,
 				139456CC1B46296F00C45EB6 /* my_address_xg@2x.png */,
 				139456CD1B46296F00C45EB6 /* my_collect@2x.png */,
-				139456CE1B46296F00C45EB6 /* my_collect_shopping cart@2x.png */,
 				139456CF1B46296F00C45EB6 /* my_indent@2x.png */,
 				139456D01B46296F00C45EB6 /* my_indent_no@2x.png */,
 				139456D11B46296F00C45EB6 /* my_jt@2x.png */,
 				139456D21B46296F00C45EB6 /* my_setting@2x.png */,
-				139456D31B46296F00C45EB6 /* shopping cart_address_top_add@2x.png */,
-				139456D41B46296F00C45EB6 /* shopping cart_left@2x.png */,
 			);
 			path = "个人中心";
 			sourceTree = "<group>";
@@ -546,6 +567,37 @@
 				139457041B46296F00C45EB6 /* register_phone@2x.png */,
 			);
 			path = "注册";
+			sourceTree = "<group>";
+		};
+		139457521B4672C300C45EB6 /* AlipaySDK */ = {
+			isa = PBXGroup;
+			children = (
+				139457531B4672C300C45EB6 /* AlipaySDK.bundle */,
+				139457541B4672C300C45EB6 /* AlipaySDK.framework */,
+			);
+			path = AlipaySDK;
+			sourceTree = "<group>";
+		};
+		1394575A1B4678D200C45EB6 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				139457731B46793100C45EB6 /* CategoriesHeader.h */,
+				1394575D1B4678D200C45EB6 /* NSDate+Additons.h */,
+				1394575E1B4678D200C45EB6 /* NSDate+Additons.m */,
+				1394575F1B4678D200C45EB6 /* NSString+Additions.h */,
+				139457601B4678D200C45EB6 /* NSString+Additions.m */,
+				139457611B4678D200C45EB6 /* UIButton+Additions.h */,
+				139457621B4678D200C45EB6 /* UIButton+Additions.m */,
+				139457631B4678D200C45EB6 /* UIImageView+Extensions.h */,
+				139457641B4678D200C45EB6 /* UIImageView+Extensions.m */,
+				139457651B4678D200C45EB6 /* UILabel+Additions.h */,
+				139457661B4678D200C45EB6 /* UILabel+Additions.m */,
+				139457671B4678D200C45EB6 /* UIView+Additions.h */,
+				139457681B4678D200C45EB6 /* UIView+Additions.m */,
+				139457691B4678D200C45EB6 /* UIViewController+Addtions.h */,
+				1394576A1B4678D200C45EB6 /* UIViewController+Addtions.m */,
+			);
+			path = Categories;
 			sourceTree = "<group>";
 		};
 		13A64BEB1B3BDF5D00D9A106 = {
@@ -671,6 +723,7 @@
 		13A64C3D1B3BEB7100D9A106 /* HelpTools */ = {
 			isa = PBXGroup;
 			children = (
+				1394575A1B4678D200C45EB6 /* Categories */,
 				E3D0801E1B3D51D000E4F87D /* LNavigationController.h */,
 				E3D0801F1B3D51D000E4F87D /* LNavigationController.m */,
 				E3D080201B3D51D000E4F87D /* LTools.h */,
@@ -757,6 +810,7 @@
 		E3D07FC11B3D4A5F00E4F87D /* ThirdClass */ = {
 			isa = PBXGroup;
 			children = (
+				139457521B4672C300C45EB6 /* AlipaySDK */,
 				E3D080151B3D51A500E4F87D /* SVProgressHUD */,
 				E3D07FC21B3D4A9100E4F87D /* UMengShare */,
 			);
@@ -862,6 +916,8 @@
 		E3D0800E1B3D510C00E4F87D /* CommonModels */ = {
 			isa = PBXGroup;
 			children = (
+				139457571B46730100C45EB6 /* Order.h */,
+				139457581B46730100C45EB6 /* Order.m */,
 				E3D0800F1B3D510C00E4F87D /* BaseModel.h */,
 				E3D080101B3D510C00E4F87D /* BaseModel.m */,
 				E3D080111B3D510C00E4F87D /* UserInfo.h */,
@@ -1034,7 +1090,6 @@
 				139457351B46296F00C45EB6 /* homepage_top_back_g@2x.png in Resources */,
 				1394571F1B46296F00C45EB6 /* my_address_delete@2x.png in Resources */,
 				1394572B1B46296F00C45EB6 /* shopping cart_address_middle_xg@2x.png in Resources */,
-				139457221B46296F00C45EB6 /* my_collect_shopping cart@2x.png in Resources */,
 				1394573E1B46296F00C45EB6 /* homepage_activity_clock@2x.png in Resources */,
 				1394571B1B46296F00C45EB6 /* classify_top_jt1@2x.png in Resources */,
 				1394574D1B46296F00C45EB6 /* homepage_top_search@2x.png in Resources */,
@@ -1060,9 +1115,7 @@
 				139457491B46296F00C45EB6 /* homepage_jingxuan@2x.png in Resources */,
 				E3D07FF11B3D4A9100E4F87D /* UMSCommentInputControlleriPad.xib in Resources */,
 				E3D07FF21B3D4A9100E4F87D /* UMShareEditViewController.xib in Resources */,
-				139457271B46296F00C45EB6 /* shopping cart_address_top_add@2x.png in Resources */,
 				139457231B46296F00C45EB6 /* my_indent@2x.png in Resources */,
-				139457281B46296F00C45EB6 /* shopping cart_left@2x.png in Resources */,
 				1394571D1B46296F00C45EB6 /* my_collect_shopping cart@2x.png in Resources */,
 				1394572D1B46296F00C45EB6 /* shopping cart_dd_middle_jt@2x.png in Resources */,
 				139457451B46296F00C45EB6 /* homepage_bottom_my_green@2x.png in Resources */,
@@ -1076,6 +1129,7 @@
 				139457411B46296F00C45EB6 /* homepage_bottom_classify_green@2x.png in Resources */,
 				139457311B46296F00C45EB6 /* shopping cart_dd_top_phone@2x.png in Resources */,
 				139457511B46296F00C45EB6 /* register_phone@2x.png in Resources */,
+				139457551B4672C300C45EB6 /* AlipaySDK.bundle in Resources */,
 				E3D080451B3D58F300E4F87D /* login_xinfeng@2x.png in Resources */,
 				1394571C1B46296F00C45EB6 /* classify_top_jt2@2x.png in Resources */,
 				1394573A1B46296F00C45EB6 /* homepage_qianggou_collect@2x.png in Resources */,
@@ -1179,12 +1233,17 @@
 			files = (
 				13A64C6A1B3BFD0200D9A106 /* YJYRequstManager.m in Sources */,
 				E3D080231B3D51D000E4F87D /* LNavigationController.m in Sources */,
+				1394576F1B4678D200C45EB6 /* UIImageView+Extensions.m in Sources */,
+				1394576E1B4678D200C45EB6 /* UIButton+Additions.m in Sources */,
 				13A64C601B3BF72F00D9A106 /* PersonalViewController.m in Sources */,
 				13A64C561B3BF3E700D9A106 /* MyViewController.m in Sources */,
 				E3D080331B3D523200E4F87D /* RegisterViewController.m in Sources */,
+				1394576C1B4678D200C45EB6 /* NSDate+Additons.m in Sources */,
 				E3D080311B3D523200E4F87D /* LoginViewController.m in Sources */,
+				139457701B4678D200C45EB6 /* UILabel+Additions.m in Sources */,
 				13A64C431B3BEB7100D9A106 /* UIColor+ConvertColor.m in Sources */,
 				13A64BFD1B3BDF5D00D9A106 /* AppDelegate.m in Sources */,
+				139457711B4678D200C45EB6 /* UIView+Additions.m in Sources */,
 				E3D0801B1B3D51A500E4F87D /* SVIndefiniteAnimatedView.m in Sources */,
 				13A64C5A1B3BF6A800D9A106 /* UIView+Frame.m in Sources */,
 				E3D080141B3D510C00E4F87D /* UserInfo.m in Sources */,
@@ -1192,9 +1251,12 @@
 				E3D0802F1B3D523200E4F87D /* ForgetPwdController.m in Sources */,
 				E3D0801D1B3D51A500E4F87D /* SVProgressHUD.m in Sources */,
 				E3D080131B3D510C00E4F87D /* BaseModel.m in Sources */,
+				1394576D1B4678D200C45EB6 /* NSString+Additions.m in Sources */,
+				139457721B4678D200C45EB6 /* UIViewController+Addtions.m in Sources */,
 				13A64C661B3BF76A00D9A106 /* HomeViewController.m in Sources */,
 				13A64C631B3BF74E00D9A106 /* ShoppingCarController.m in Sources */,
 				13A64C5D1B3BF71C00D9A106 /* ClassViewController.m in Sources */,
+				139457591B46730100C45EB6 /* Order.m in Sources */,
 				E3D080241B3D51D000E4F87D /* LTools.m in Sources */,
 				13A64BFA1B3BDF5D00D9A106 /* main.m in Sources */,
 			);
@@ -1335,6 +1397,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/WJXC/Libraries/ThirdClass/UMengShare/UMSocial_Sdk_Extra_Frameworks/TencentOpenAPI",
+					"$(PROJECT_DIR)/WJXC/Libraries/ThirdClass/AlipaySDK",
 				);
 				GCC_PREFIX_HEADER = "$(SRCROOT)/WJXC/PrefixHeader.pch";
 				INFOPLIST_FILE = WJXC/Info.plist;
@@ -1360,6 +1423,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/WJXC/Libraries/ThirdClass/UMengShare/UMSocial_Sdk_Extra_Frameworks/TencentOpenAPI",
+					"$(PROJECT_DIR)/WJXC/Libraries/ThirdClass/AlipaySDK",
 				);
 				GCC_PREFIX_HEADER = "$(SRCROOT)/WJXC/PrefixHeader.pch";
 				INFOPLIST_FILE = WJXC/Info.plist;
