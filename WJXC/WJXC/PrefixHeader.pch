@@ -19,7 +19,6 @@
 #import "ImageConstants.h"//图片
 #import "ApiConstants.h"//接口
 
-#import "XNavigationController.h"//滑动返回系统子类
 #import "MyViewController.h"//viewController基类
 #import "UIColor+ConvertColor.h"
 #import "UIView+Frame.h"

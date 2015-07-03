@@ -56,7 +56,7 @@
             
         NSString *className = classNames[i];
         UIViewController *vc = [[NSClassFromString(className) alloc]init];
-        XNavigationController *unvc = [[XNavigationController alloc]initWithRootViewController:vc];
+        LNavigationController *unvc = [[LNavigationController alloc]initWithRootViewController:vc];
         [items addObject:unvc];
         
     }
