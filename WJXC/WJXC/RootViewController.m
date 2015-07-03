@@ -64,8 +64,14 @@
 
     self.viewControllers = [NSArray arrayWithArray:items];
     
-    NSArray *normalImages = @[@"gfujin_up",@"ttai_up",@"my_up",@"my_up"];
-    NSArray *selectedImages = @[@"gfujin_down",@"ttai_down",@"my_down",@"my_down"];
+    NSArray *normalImages = @[@"homepage_bottom_home_grey",
+                              @"homepage_bottom_classify_grey",
+                              @"homepage_bottom_shopping cart_grey",
+                              @"homepage_bottom_my_grey"];
+    NSArray *selectedImages = @[@"homepage_bottom_home_green",
+                                @"homepage_bottom_classify_green",
+                                @"homepage_bottom_shopping cart_green",
+                                @"homepage_bottom_my_green"];
     
     for (int i = 0; i < normalImages.count; i ++) {
         
@@ -83,9 +89,9 @@
     }
     
     [[UITabBarItem appearance] setTitleTextAttributes:
-     [NSDictionary dictionaryWithObjectsAndKeys:[UIColor colorWithHexString:@"666666"],                                                                                                              NSForegroundColorAttributeName, nil] forState:UIControlStateNormal];
+     [NSDictionary dictionaryWithObjectsAndKeys:[UIColor colorWithHexString:@"656565"],                                                                                                              NSForegroundColorAttributeName, nil] forState:UIControlStateNormal];
     [[UITabBarItem appearance] setTitleTextAttributes:
-     [NSDictionary dictionaryWithObjectsAndKeys:[UIColor colorWithHexString:@"dc4b6c"],                                                                                                              NSForegroundColorAttributeName, nil] forState:UIControlStateSelected];
+     [NSDictionary dictionaryWithObjectsAndKeys:[UIColor colorWithHexString:@"89b700"],                                                                                                              NSForegroundColorAttributeName, nil] forState:UIControlStateSelected];
     
 }
 
