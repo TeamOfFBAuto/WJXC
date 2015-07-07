@@ -34,7 +34,7 @@
         
         NSString *key = [NSString stringWithUTF8String:name];
         
-        NSLog(@"归档 key %@",key);
+//        NSLog(@"归档 key %@",key);
         
         id value = [self valueForKey:key];
         

@@ -49,6 +49,8 @@
         
         [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:IOS7_OR_LATER?IOS7DAOHANGLANBEIJING_PUSH:IOS6DAOHANGLANBEIJING] forBarMetrics: UIBarMetricsDefault];
     }
+    
+    self.navigationController.navigationBarHidden = NO;//默认不隐藏
         
 }
 

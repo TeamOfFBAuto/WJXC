@@ -25,10 +25,13 @@
 
 #import "YJYRequstManager.h"//网络请求类
 
+#import "RefreshTableView.h"
+
 #import "LTools.h"//工具类
 #import "UMSocial.h"//友盟
 #import "SVProgressHUD.h"//浮层提示框
 #import "LNavigationController.h"//滑动返回
+#import "UIImageView+WebCache.h"
 
 //umeng相关
 #import "MobClick.h"

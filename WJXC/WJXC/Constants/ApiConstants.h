@@ -36,6 +36,7 @@
 //找回密码
 #define USER_GETBACK_PASSWORD @"/index.php?d=api&c=user&m=get_back_password&mobile=%@&code=%d&new_password=%@&confirm_password=%@"
 
+#define USER_UPLOAD_HEADIMAGE @"/index.php?d=api&c=user&m=update_user_photo"
 
 
 #endif

@@ -58,6 +58,9 @@
 #define USRR_AUTHKEY @"authkey"
 #define USER_DEVICE_TOKEN @"DEVICE_TOKEN"
 
+#define USER_UPDATEHEADIMAGE @"updateHeadImage"//更新用户头像
+#define USER_NEWHEADIMAGE @"newHeadImage"//新头像
+
 //int 转 string
 #define NSStringFromFloat(float) [NSString stringWithFormat:@"%f",(float)]
 #define NSStringFromInt(int) [NSString stringWithFormat:@"%d",(int)]
@@ -75,10 +78,6 @@
 #define WXAPPID @"wx47f54e431de32846" //正式
 #define WXAPPSECRET @"a71699732e3bef01aefdaf324e2f522c"
 #define RedirectUrl @"http://sns.whalecloud.com/sina2/callback" //回调地址
-
-
-
-
 
 
 #endif

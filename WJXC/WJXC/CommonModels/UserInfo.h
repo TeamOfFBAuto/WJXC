@@ -27,6 +27,10 @@
 @property(nonatomic,retain)NSString *state;
 @property(nonatomic,retain)NSString *type;
 @property(nonatomic,retain)NSString *photo;
+
+@property(nonatomic,retain)NSString *avatar;//头像
+@property(nonatomic,retain)NSString *third_avatar;
+
 @property(nonatomic,retain)NSString *third_photo;
 @property(nonatomic,retain)NSString *thirdid;
 @property(nonatomic,retain)NSString *score;

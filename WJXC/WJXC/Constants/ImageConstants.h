@@ -20,7 +20,7 @@
 /**
  *  返回按钮
  */
-#define BACK_DEFAULT_IMAGE [UIImage imageNamed:@"back"]
+#define BACK_DEFAULT_IMAGE [UIImage imageNamed:@"homepage_top_back_g"]
 
 /**
  *  默认头像

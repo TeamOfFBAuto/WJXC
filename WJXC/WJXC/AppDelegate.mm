@@ -24,12 +24,12 @@
 #pragma mark 友盟
     [self umengShare];
     
+    [self uploadHeadImage];//上传头像
     
     [self requestForPost];
     
     RootViewController *root = [[RootViewController alloc]init];
     self.window.rootViewController = root;
-    
     
     
     
@@ -172,6 +172,61 @@
     
     //    [UMSocialTencentWeiboHandler openSSOWithRedirectUrl:@"http://sns.whalecloud.com/tencent2/callback"];
     
+}
+
+#pragma - mark 上传更新头像
+
+
+
+/**
+ *  上传头像
+ *
+ *  @param aImage
+ */
+- (void)uploadHeadImage
+{
+    //不需要更新,return
+    if (![LTools cacheBoolForKey:USER_UPDATEHEADIMAGE]) {
+        
+        NSLog(@"不需要更新头像");
+        
+        return;
+    }else
+    {
+        NSLog(@"需要更新头像");
+
+    }
+    
+    NSString *authcode = [LTools cacheForKey:USER_AUTHOD];
+    
+    //没有authcode return
+    if (authcode.length == 0) {
+        
+        return;
+    }
+    
+    UIImage *image = [[SDImageCache sharedImageCache]imageFromDiskCacheForKey:USER_NEWHEADIMAGE];
+    
+    NSDictionary *params = @{@"authcode":authcode};
+    [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodPost api:USER_UPLOAD_HEADIMAGE parameters:params constructingBodyBlock:^(id<AFMultipartFormData> formData) {
+        
+        if (image != nil) {
+            NSData *imageData =UIImageJPEGRepresentation(image, 1.f);
+            [formData appendPartWithFileData:imageData name:@"pic" fileName:@"myhead.jpg" mimeType:@"image/jpg"];
+        }
+        
+    } completion:^(NSDictionary *result) {
+        
+        NSLog(@"completion result %@",result[Erro_Info]);
+        
+        [LTools cacheBool:NO ForKey:USER_UPDATEHEADIMAGE];//不需要更新头像
+        
+        
+    } failBlock:^(NSDictionary *result) {
+        
+        NSLog(@"failBlock result %@",result[Erro_Info]);
+        
+    }];
 }
 
 #pragma - mark 网络请求例子

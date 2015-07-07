@@ -10,8 +10,11 @@
 #import "LoginViewController.h"
 #import "PersonalCell.h"
 #import "FBActionSheet.h"
+#import "UserInfo.h"
+#import "MyCollectController.h"//我的收藏
+#import "ShoppingAddressController.h"//我的地址
 
-@interface PersonalViewController ()<UITableViewDataSource,UITableViewDelegate,UIActionSheetDelegate>
+@interface PersonalViewController ()<UITableViewDataSource,UITableViewDelegate,UIActionSheetDelegate,UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 {
     UITableView *_tableView;
     NSArray *_images_arr;
@@ -40,6 +43,8 @@
     [super viewWillAppear:animated];
     
     self.navigationController.navigationBarHidden = YES;
+    
+    [self updateLoginState];
 }
 
 -(void)viewWillDisappear:(BOOL)animated
@@ -68,6 +73,14 @@
     
     [self tableviewHeaderView];//tableView 头部
     
+    //本地数据
+    
+    UserInfo *userInfo = [UserInfo cacheResultForKey:USERINFO_MODEL];
+    [self setViewWithUserInfo:userInfo];
+    
+    //网络请求
+    [self getUserInfo];
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -75,8 +88,79 @@
     // Dispose of any resources that can be recreated.
 }
 
+#pragma mark - 网络请求
+
+- (void)getUserInfo
+{
+    NSDictionary *params = @{@"authcode":[LTools cacheForKey:USER_AUTHOD]};
+    
+    __weak typeof(self)weakSelf = self;
+    [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodGet api:GET_USERINFO_WITHID parameters:params constructingBodyBlock:nil completion:^(NSDictionary *result) {
+        
+        NSLog(@"result %@ %@",result[Erro_Info],result);
+        
+        NSDictionary *dic = result[@"user_info"];
+        if ([dic isKindOfClass:[NSDictionary class]]) {
+            
+            UserInfo *userInfo = [[UserInfo alloc]initWithDictionary:dic];
+            [weakSelf setViewWithUserInfo:userInfo];
+        }
+        
+    } failBlock:^(NSDictionary *result) {
+        
+        NSLog(@"result %@",result[Erro_Info]);
+        
+    }];
+}
+
+/**
+ *  上传头像
+ *
+ *  @param aImage
+ */
+- (void)uploadHeadImage:(UIImage *)aImage
+{
+    NSDictionary *params = @{@"authcode":[LTools cacheForKey:USER_AUTHOD]};
+    [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodPost api:USER_UPLOAD_HEADIMAGE parameters:params constructingBodyBlock:^(id<AFMultipartFormData> formData) {
+        
+        if (aImage != nil) {
+            NSData *imageData =UIImageJPEGRepresentation(aImage, 0.5);
+            [formData appendPartWithFileData:imageData name:@"pic" fileName:@"myhead.jpg" mimeType:@"image/jpg"];
+        }
+        
+    } completion:^(NSDictionary *result) {
+        
+        NSLog(@"completion result %@",result[Erro_Info]);
+
+        [LTools cacheBool:NO ForKey:USER_UPDATEHEADIMAGE];//不需要更新头像
+
+        
+    } failBlock:^(NSDictionary *result) {
+        
+        NSLog(@"failBlock result %@",result[Erro_Info]);
+
+    }];
+}
 
 #pragma mark - 事件处理
+
+- (void)setViewWithUserInfo:(UserInfo *)userInfo
+{
+    //归档保存用户信息
+    [userInfo cacheForKey:USERINFO_MODEL];
+    
+    self.nameLabel.text = userInfo.user_name;
+    
+    //需要更换头像,显示本地需要更换的头像
+    if ([LTools cacheBoolForKey:USER_UPDATEHEADIMAGE]) {
+        
+        UIImage *image = [[SDImageCache sharedImageCache]imageFromDiskCacheForKey:USER_NEWHEADIMAGE];
+        self.iconImageView.image = image;
+    }else
+    {
+        [self.iconImageView sd_setImageWithURL:[NSURL URLWithString:userInfo.avatar] placeholderImage:DEFAULT_HEADIMAGE];
+    }
+}
 
 //跳出登录界面
 -(void)presentLoginVc{
@@ -85,9 +169,9 @@
 //    [sheet showInView:self.view];
     
     
-//    LoginViewController *login = [[LoginViewController alloc]init];
-//    UINavigationController *unVc = [[UINavigationController alloc]initWithRootViewController:login];
-//    [self presentViewController:unVc animated:YES completion:nil];
+    LoginViewController *login = [[LoginViewController alloc]init];
+    UINavigationController *unVc = [[UINavigationController alloc]initWithRootViewController:login];
+    [self presentViewController:unVc animated:YES completion:nil];
 }
 
 /**
@@ -100,14 +184,13 @@
     FBActionSheet *sheet = [[FBActionSheet alloc]initWithFrame:self.view.frame];
     [sheet actionBlock:^(NSInteger buttonIndex) {
         NSLog(@"%ld",(long)buttonIndex);
-        if (buttonIndex == 0) {
+        
+        if(buttonIndex ==0){
             NSLog(@"拍照");
-            
-            
-        }else if (buttonIndex == 1)
-        {
+            [self choseImageWithTypeCameraTypePhotoLibrary:UIImagePickerControllerSourceTypeCamera];
+        }else if(buttonIndex == 1){
             NSLog(@"相册");
-            
+            [self choseImageWithTypeCameraTypePhotoLibrary:UIImagePickerControllerSourceTypePhotoLibrary];
         }
         
     }];
@@ -119,7 +202,7 @@
 
 - (void)updateLoginState
 {
-    BOOL isLogin = NO;//判断登录状态
+    BOOL isLogin = [LTools cacheBoolForKey:LOGIN_SERVER_STATE];//判断登录状态
         
     self.iconImageView.hidden = !isLogin;
     self.nameLabel.hidden = !isLogin;
@@ -135,7 +218,7 @@
         _iconImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 75, 50, 50)];
         [_iconImageView addTaget:self action:@selector(clickPersonalImage:) tag:0];
         [_iconImageView addRoundCorner];
-        _iconImageView.backgroundColor = [UIColor orangeColor];
+        _iconImageView.backgroundColor = [UIColor clearColor];
         [_iconImageView setBorderWidth:2.f borderColor:[UIColor whiteColor]];
         _iconImageView.centerX = DEVICE_WIDTH/2.f;
         [_headerView addSubview:_iconImageView];
@@ -181,6 +264,41 @@
     [self updateLoginState];
 
     _tableView.tableHeaderView = _headerView;
+}
+
+-(void)choseImageWithTypeCameraTypePhotoLibrary:(UIImagePickerControllerSourceType)type{
+    
+    UIImagePickerController * imagePicker = [[UIImagePickerController alloc] init];
+    imagePicker.delegate =self;
+    imagePicker.sourceType = type;
+    imagePicker.allowsEditing = YES;
+    imagePicker.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+    imagePicker.allowsEditing =YES;
+    [self presentViewController:imagePicker animated:YES completion:^{
+        
+    }];
+}
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    
+    UIImage *image = [info objectForKey:@"UIImagePickerControllerEditedImage"];
+    //    NSData * imageData = UIImageJPEGRepresentation(image,0.6);
+    
+     image = [LTools scaleToSizeWithImage:image size:CGSizeMake(200, 200)];
+    //TODO：将图片发给服务器
+    
+    [LTools cacheBool:YES ForKey:USER_UPDATEHEADIMAGE];//需要更新头像
+    
+    [[SDImageCache sharedImageCache]storeImage:image forKey:USER_NEWHEADIMAGE toDisk:YES];//存储更新头像image
+    
+    [self uploadHeadImage:image];
+    
+    self.iconImageView.image = image;
+    
+    [picker dismissViewControllerAnimated:YES completion:^{
+        
+    }];
 }
 
 #pragma mark - 代理
@@ -229,6 +347,10 @@
         case 0:
         {
             NSLog(@"我的收藏");
+            
+            MyCollectController *collect = [[MyCollectController alloc]init];
+            collect.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:collect animated:YES];
         }
             break;
         case 1:
