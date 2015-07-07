@@ -38,7 +38,6 @@
     
     NSLog(@"RootViewController viewWillAppear");
     
-
 }
 
 - (void)didReceiveMemoryWarning {
