@@ -80,7 +80,7 @@
     _myTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,0,100,44)];
     _myTitleLabel.textAlignment = NSTextAlignmentCenter;
     _myTitleLabel.text = _myTitle;
-    _myTitleLabel.textColor = RGBCOLOR(253, 106, 157);
+    _myTitleLabel.textColor = DEFAULT_TEXTCOLOR;
     _myTitleLabel.font = [UIFont systemFontOfSize:17];
     self.navigationItem.titleView = _myTitleLabel;
 

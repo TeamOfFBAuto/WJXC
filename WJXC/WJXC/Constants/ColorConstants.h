@@ -25,7 +25,7 @@ alpha:(a)]
  */
 
 #define DEFAULT_VIEW_BACKGROUNDCOLOR RGBCOLOR(239, 239, 239)
-#define DEFAULT_TEXTCOLOR RGBCOLOR(255, 45, 120) //主题颜色一致
+#define DEFAULT_TEXTCOLOR RGBCOLOR(129, 180, 40) //主题颜色一致
 
 
 #endif
