@@ -116,7 +116,8 @@ static int seconds = 60;//计时60s
     
     __weak typeof(self)weakSelf = self;
     
-    NSString *url = [NSString stringWithFormat:USER_GET_SECURITY_CODE,mobile,type,[LTools md5Phone:mobile]];
+    NSString *url = [NSString stringWithFormat:USER_GET_SECURITY_CODE,mobile];
+    url = [NSString stringWithFormat:@"%@%@",SERVER_URL,url];
     
     LTools *tool = [[LTools alloc]initWithUrl:url isPost:NO postData:nil];
     [tool requestCompletion:^(NSDictionary *result, NSError *erro) {
@@ -177,23 +178,20 @@ static int seconds = 60;//计时60s
     }
     
     
-    NSString *url = [NSString stringWithFormat:USER_REGISTER_ACTION,userName,password,sex,type,code,mobile];
+    NSString *codestr = [NSString stringWithFormat:@"%d",code];
+    NSDictionary *params = @{@"mobile":mobile,
+                             @"code":codestr,
+                             @"password":password
+                             };
     
-    LTools *tool = [[LTools alloc]initWithUrl:url isPost:NO postData:nil];
-    [tool requestCompletion:^(NSDictionary *result, NSError *erro) {
-        
-        NSLog(@"result %@ erro %@",result,erro);
-        
-        [LTools showMBProgressWithText:result[RESULT_INFO] addToView:self.view];
+    [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodPost api:USER_REGISTER_ACTION parameters:params constructingBodyBlock:nil completion:^(NSDictionary *result) {
         
         [self performSelector:@selector(clickToClose:) withObject:nil afterDelay:0.2];
+    } failBlock:^(NSDictionary *result) {
         
-        
-    } failBlock:^(NSDictionary *failDic, NSError *erro) {
-        
-        NSLog(@"failDic %@ erro %@",failDic,erro);
-        
+         NSLog(@"failDic %@",result);
     }];
+    
 
 }
 
@@ -207,5 +205,25 @@ static int seconds = 60;//计时60s
 #pragma mark - 创建视图
 
 #pragma mark - 代理
+
+
+
+
+- (void)requestForPost
+{
+    //    参数:product_id、authcode
+    
+    NSDictionary *params = @{@"product_id":@"25",
+                             @"authcode":@"WyQBeAd+B+FW7QeaXu4J3geiAOJTpgv6V3oHNlcyUWYBMlNhUzVUY1ViBT0DYQx8UWc="};
+    [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodPost api:HOME_PRODUCT_COLLECT_ADD parameters:params constructingBodyBlock:nil completion:^(NSDictionary *result) {
+        
+        NSLog(@"result %@ %@",result[Erro_Info],result);
+        
+    } failBlock:^(NSDictionary *result) {
+        
+        NSLog(@"result %@",result[Erro_Info]);
+        
+    }];
+}
 
 @end

@@ -174,8 +174,8 @@
     
     if ([result isKindOfClass:[NSDictionary class]]) {
         
-        int erroCode = [[result objectForKey:@"errcode"]intValue];
-        NSString *erroInfo = [result objectForKey:@"errinfo"];
+        int erroCode = [[result objectForKey:@"errorcode"]intValue];
+        NSString *erroInfo = [result objectForKey:@"msg"];
         
         if (erroCode == 0) { //无错误,请求数据成功
             

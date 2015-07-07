@@ -250,12 +250,19 @@
     
     NSString *token = [LTools cacheForKey:USER_DEVICE_TOKEN];
     
-    NSString *url = [NSString stringWithFormat:USER_LOGIN_ACTION,type,password,thirdId,nickName,thirdphoto,gender,token,mobile,@"iOS"];
+    token = @"test";
     
-    LTools *tool = [[LTools alloc]initWithUrl:url isPost:NO postData:nil];
-    [tool requestCompletion:^(NSDictionary *result, NSError *erro) {
+    
+    NSDictionary *params = @{
+                             @"type":type,
+                             @"mobile":mobile,
+                             @"password":password,
+                             @"devicetoken":token
+                             };
+    [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodPost api:USER_LOGIN_ACTION parameters:params constructingBodyBlock:nil completion:^(NSDictionary *result) {
         
-        NSLog(@"result %@ erro %@",result,erro);
+        NSLog(@"%@",result);
+        
         
         UserInfo *user = [[UserInfo alloc]initWithDictionary:result];
         
@@ -277,12 +284,12 @@
         [LTools cache:user.photo ForKey:USER_HEAD_IMAGEURL];
         
         
-
+        
         //保存登录状态 yes
         
         [LTools cacheBool:YES ForKey:LOGIN_SERVER_STATE];
         
-//        [LTools showMBProgressWithText:result[RESULT_INFO] addToView:self.view];
+        //        [LTools showMBProgressWithText:result[RESULT_INFO] addToView:self.view];
         
         [SVProgressHUD showInfoWithStatus:result[RESULT_INFO] maskType:SVProgressHUDMaskTypeClear];
         
@@ -291,16 +298,12 @@
         [weakSelf performSelector:@selector(leftButtonTap:) withObject:nil afterDelay:0.2];
         
         [weakSelf loginResultIsSuccess:YES];
+    } failBlock:^(NSDictionary *result) {
         
-        
-    } failBlock:^(NSDictionary *failDic, NSError *erro) {
-        
-        NSLog(@"failDic %@ erro %@",failDic,erro);
-        
-        
+        NSLog(@"%@",result);
         [weakSelf loginResultIsSuccess:NO];
-
     }];
+    
 }
 
 

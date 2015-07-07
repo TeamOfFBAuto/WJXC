@@ -30,22 +30,97 @@
     RootViewController *root = [[RootViewController alloc]init];
     self.window.rootViewController = root;
     
+    
+    
+    
+#pragma mark 远程通知
+    
+    if (IOS7_OR_LATER) {
+        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
+        [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
+    }
+    
+    if ([[[UIDevice currentDevice] systemVersion] doubleValue] > 8.0)
+    {
+        if ([application respondsToSelector:@selector(registerUserNotificationSettings:)]) {
+            UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:(UIRemoteNotificationTypeBadge
+                                                                                                 |UIRemoteNotificationTypeSound
+                                                                                                 |UIRemoteNotificationTypeAlert) categories:nil];
+            [application registerUserNotificationSettings:settings];
+        }else{
+            
+            //注册推送, iOS 8
+            UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert) categories:nil];
+            [application registerUserNotificationSettings:settings];
+        }
+    }else
+    {
+        // 注册苹果推送，申请推送权限。
+        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound];
+    }
+    
+    
+    //UIApplicationLaunchOptionsRemoteNotificationKey,判断是通过推送消息启动的
+    
+    NSDictionary *infoDic = [launchOptions objectForKey:@"UIApplicationLaunchOptionsRemoteNotificationKey"];
+    if (infoDic)
+    {
+        //test
+        NSLog(@"didFinishLaunch : infoDic %@",infoDic);
+        
+    }
+    
+    
+    
     return YES;
 }
 
-- (void)applicationWillResignActive:(UIApplication *)application {
-    // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
-    // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
+
+#pragma mark 远程推送
+
+- (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings
+{
+    // Register to receive notifications.
+    [application registerForRemoteNotifications];
 }
 
-- (void)applicationDidEnterBackground:(UIApplication *)application {
-    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
-    // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+- (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forRemoteNotification:(NSDictionary *)userInfo completionHandler:(void(^)())completionHandler
+{
+    // Handle the actions.
+    if ([identifier isEqualToString:@"declineAction"]){
+    }
+    else if ([identifier isEqualToString:@"answerAction"]){
+    }
 }
 
-- (void)applicationWillEnterForeground:(UIApplication *)application {
-    // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+// 获取苹果推送权限成功。
+- (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)deviceToken
+{
+    
+    NSLog(@"My token is: %@", deviceToken);
+    
+    
+    
+    NSString *string_pushtoken=[NSString stringWithFormat:@"%@",deviceToken];
+    
+    while ([string_pushtoken rangeOfString:@"<"].length||[string_pushtoken rangeOfString:@">"].length||[string_pushtoken rangeOfString:@" "].length) {
+        string_pushtoken=[string_pushtoken stringByReplacingOccurrencesOfString:@"<" withString:@""];
+        string_pushtoken=[string_pushtoken stringByReplacingOccurrencesOfString:@">" withString:@""];
+        string_pushtoken=[string_pushtoken stringByReplacingOccurrencesOfString:@" " withString:@""];
+        
+    }
+    NSLog(@"mytoken==%@",string_pushtoken);
+    
+    
+    [LTools cache:string_pushtoken ForKey:USER_DEVICE_TOKEN];
+    
+    //给服务器token
+    
 }
+
+
+
+
 
 /**
  这里处理新浪微博SSO授权进入新浪微博客户端后进入后台，再返回原来应用
@@ -141,6 +216,24 @@
         NSLog(@"result %@",result[Erro_Info]);
         
     }];
+}
+
+
+
+
+
+- (void)applicationWillResignActive:(UIApplication *)application {
+    // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
+    // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
+}
+
+- (void)applicationDidEnterBackground:(UIApplication *)application {
+    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
+    // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+}
+
+- (void)applicationWillEnterForeground:(UIApplication *)application {
+    // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
 }
 
 @end
