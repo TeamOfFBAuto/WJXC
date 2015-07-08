@@ -28,7 +28,7 @@ PODS:
   - SDWebImage/Core (3.7.2)
   - UIView+Helpers (1.4.0)
   - UMeng (2.2.1)
-  - UMengFeedback (1.4.2.1)
+  - UMengFeedback (2.3.3)
 
 DEPENDENCIES:
   - AFNetworking (~> 2.3.1)
@@ -38,7 +38,7 @@ DEPENDENCIES:
   - SDWebImage (~> 3.7.1)
   - UIView+Helpers (~> 1.4.0)
   - UMeng (~> 2.2.1)
-  - UMengFeedback (~> 1.4.1)
+  - UMengFeedback (~> 2.3.1)
 
 SPEC CHECKSUMS:
   AFNetworking: 05b9f6e3aa5ac45bc383b4bb108ef338080a26c7
@@ -48,6 +48,6 @@ SPEC CHECKSUMS:
   SDWebImage: 71b7cdc1d1721d6a82ed62889030225f2c249e29
   UIView+Helpers: dff2da5bb142b8ed51460176af41ef726d49174b
   UMeng: a4fe3231efeb223015d9649e92538dd16a92685f
-  UMengFeedback: b09b566e039fd2dd9a2a915d0ecde589489605f4
+  UMengFeedback: 6dd19dc88d310c317023aa495d10671b1c112531
 
 COCOAPODS: 0.34.4

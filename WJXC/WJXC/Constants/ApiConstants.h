@@ -35,8 +35,14 @@
 #define USER_GET_SECURITY_CODE @"/index.php?d=api&c=user&m=get_code"
 //找回密码
 #define USER_GETBACK_PASSWORD @"/index.php?d=api&c=user&m=get_back_password&mobile=%@&code=%d&new_password=%@&confirm_password=%@"
+//修改密码
+#define USER_UPDATE_PASSWORD @"/index.php?d=api&c=user&m=change_password"
 
+//修改用户头像
 #define USER_UPLOAD_HEADIMAGE @"/index.php?d=api&c=user&m=update_user_photo"
+
+//修改用户名字
+#define USER_UPDATE_USERNAME @"/index.php?d=api&c=user&m=update_user_info"
 
 #define ABOUT_US_URL @"http://www.baidu.com"
 

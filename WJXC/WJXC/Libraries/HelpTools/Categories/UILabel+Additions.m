@@ -24,4 +24,11 @@
     return titleLabel;
 }
 
+- (void)addTapGestureTarget:(id)target action:(SEL)selector
+{
+    self.userInteractionEnabled = YES;
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:target action:selector];
+    [self addGestureRecognizer:tap];
+}
+
 @end

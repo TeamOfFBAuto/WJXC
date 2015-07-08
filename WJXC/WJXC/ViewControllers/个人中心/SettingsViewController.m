@@ -10,6 +10,9 @@
 #import "UpdatePWDController.h"
 #import "AboutUsController.h"
 
+#import "UMFeedback.h"
+#import "FeedBackController.h"
+
 @interface SettingsViewController ()<UITableViewDataSource,UITableViewDelegate>
 {
     NSArray *_titlesArr;
@@ -214,6 +217,10 @@
             break;
         case 2:
         {
+            
+            UIViewController *viewController = [UMFeedback feedbackModalViewController];
+            
+            [self presentViewController:viewController animated:YES completion:nil];
             
         }
             break;

@@ -839,7 +839,7 @@
 //数字和字母 和 _
 + (BOOL)isValidatePwd:(NSString *)pwdString
 {
-    NSString * emailRegex = @"^[a-zA-Z0-9_]{6,20}$";
+    NSString * emailRegex = @"^[a-zA-Z0-9_]{6,32}$";
     NSPredicate * emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",emailRegex];
     return [emailTest evaluateWithObject:pwdString];
 }

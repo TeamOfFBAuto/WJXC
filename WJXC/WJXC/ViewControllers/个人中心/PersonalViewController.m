@@ -16,6 +16,8 @@
 #import "OrderViewController.h"//我的订单
 #import "SettingsViewController.h"//设置
 
+#import "NickNameSheet.h"//修改昵称view
+
 @interface PersonalViewController ()<UITableViewDataSource,UITableViewDelegate,UIActionSheetDelegate,UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 {
     UITableView *_tableView;
@@ -151,6 +153,40 @@
     }];
 }
 
+/**
+ *  修改昵称
+ *
+ *  @param newName 新的昵称
+ */
+- (void)updateUserName:(NSString *)newName
+{
+    NSDictionary *params = @{@"authcode":[LTools cacheForKey:USER_AUTHOD],
+                             @"user_name":newName};
+    
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    
+    __weak typeof(self)weakSelf = self;
+    [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodPost api:USER_UPDATE_USERNAME parameters:params constructingBodyBlock:nil completion:^(NSDictionary *result) {
+        
+        NSLog(@"result %@ %@",result[Erro_Info],result);
+        
+        [MBProgressHUD hideAllHUDsForView:weakSelf.view animated:YES];
+            
+        //更新本地用户model
+        UserInfo *userInfo = [UserInfo cacheResultForKey:USERINFO_MODEL];
+        userInfo.user_name = newName;
+        [userInfo cacheForKey:USERINFO_MODEL];
+        
+        [weakSelf setViewWithUserInfo:userInfo];
+        
+    } failBlock:^(NSDictionary *result) {
+        
+        NSLog(@"result %@",result[Erro_Info]);
+        [MBProgressHUD hideAllHUDsForView:weakSelf.view animated:YES];
+        
+    }];
+}
+
 #pragma mark - 事件处理
 
 - (void)notificatonForLogout:(NSNotification *)notification
@@ -178,10 +214,6 @@
 
 //跳出登录界面
 -(void)presentLoginVc{
-    
-//    UIActionSheet *sheet = [[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"拍照",@"从相册选择", nil];
-//    [sheet showInView:self.view];
-    
     
     LoginViewController *login = [[LoginViewController alloc]init];
     UINavigationController *unVc = [[UINavigationController alloc]initWithRootViewController:login];
@@ -211,6 +243,27 @@
 }
 
 /**
+ *  点击昵称,修改昵称
+ */
+- (void)clickNickName
+{
+    __weak typeof(self)weakSelf = self;
+    NickNameSheet *sheet = [[NickNameSheet alloc]initWithFrame:self.view.frame];
+    sheet.nickActionBlock = ^(NSString *content){
+        
+        NSLog(@"content %@",content);
+        
+        if ([LTools isEmpty:content]) {
+            
+            [LTools showMBProgressWithText:@"用户名不能为空" addToView:weakSelf.view];
+        }else
+        {
+            [weakSelf updateUserName:content];
+        }
+    };
+}
+
+/**
  *  更新登录状态
  */
 
@@ -221,6 +274,10 @@
     self.iconImageView.hidden = !isLogin;
     self.nameLabel.hidden = !isLogin;
     self.unLoginButton.hidden = isLogin;
+    
+    self.nameLabel.text = [LTools cacheForKey:USER_NAME];
+    
+    [self.iconImageView sd_setImageWithURL:[NSURL URLWithString:[LTools cacheForKey:USER_HEAD_IMAGEURL]] placeholderImage:DEFAULT_HEADIMAGE];
 }
 
 #pragma mark - 创建视图
@@ -247,6 +304,7 @@
         //用户名
         _nameLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, _iconImageView.bottom + 5, DEVICE_WIDTH, 30) title:@"name" font:14 align:NSTextAlignmentCenter textColor:[UIColor whiteColor]];
         [_headerView addSubview:_nameLabel];
+        [_nameLabel addTapGestureTarget:self action:@selector(clickNickName)];
     }
     return _nameLabel;
 }

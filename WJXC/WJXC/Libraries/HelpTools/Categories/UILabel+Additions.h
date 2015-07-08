@@ -15,4 +15,7 @@
                       font:(CGFloat)size
                      align:(NSTextAlignment)align
                  textColor:(UIColor *)textColor;
+
+- (void)addTapGestureTarget:(id)target action:(SEL)selector;//添加点击手势
+
 @end

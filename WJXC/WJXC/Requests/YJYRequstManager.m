@@ -253,7 +253,7 @@
  */
 - (void)showErroInfo:(NSString *)errInfo
 {
-    
+    [LTools showMBProgressWithText:errInfo addToView:[UIApplication sharedApplication].keyWindow];
 }
 
 /**

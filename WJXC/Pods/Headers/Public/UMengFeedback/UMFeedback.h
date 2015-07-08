@@ -1,1 +1,1 @@
-../../../UMengFeedback/UMFeedback_iOS_1.4.2/UMFeedback.h
+../../../UMengFeedback/UMFeedback_iOS_2.3.3/UMengFeedback_SDK/UMFeedback.h

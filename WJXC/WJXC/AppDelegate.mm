@@ -10,8 +10,9 @@
 #import "RootViewController.h"
 
 #import <AlipaySDK/AlipaySDK.h>//支付宝
+#import "UMFeedback.h"
 
-@interface AppDelegate ()
+@interface AppDelegate ()<UMFeedbackDataDelegate>
 
 @end
 
@@ -144,12 +145,27 @@
 }
 
 
+#pragma mark - UMFeedbackDataDelegate <NSObject>
+
+- (void)getFinishedWithError: (NSError *)error
+{
+    
+}
+- (void)postFinishedWithError:(NSError *)error
+{
+    
+}
 
 
 #pragma mark - 友盟分享
 
+
 - (void)umengShare
 {
+    //友盟反馈
+    
+    [UMFeedback setAppkey:UmengAppkey];
+    
     [UMSocialData setAppKey:UmengAppkey];
     
     //使用友盟统计
