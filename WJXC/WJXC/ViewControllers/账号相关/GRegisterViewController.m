@@ -25,6 +25,7 @@ static int seconds = 60;//计时60s
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    [self setMyViewControllerLeftButtonType:MyViewControllerLeftbuttonTypeBack WithRightButtonType:MyViewControllerRightbuttonTypeNull];
     
     [self creatUpView];
     
