@@ -43,7 +43,22 @@ install_resource()
       ;;
   esac
 }
-          install_resource "UMengFeedback/UMFeedback_iOS_1.4.2/umFeedback.bundle"
+          install_resource "UMengFeedback/UMFeedback_iOS_2.3.3/UMengFeedback_SDK/zh-Hans.lproj/UMFeedbackLocalizable.strings"
+                    install_resource "UMengFeedback/UMFeedback_iOS_2.3.3/UMengFeedback_SDK/Resources/bubble_min@2x.png"
+                    install_resource "UMengFeedback/UMFeedback_iOS_2.3.3/UMengFeedback_SDK/Resources/cancel@2x.png"
+                    install_resource "UMengFeedback/UMFeedback_iOS_2.3.3/UMengFeedback_SDK/Resources/microphone@2x.png"
+                    install_resource "UMengFeedback/UMFeedback_iOS_2.3.3/UMengFeedback_SDK/Resources/save@2x.png"
+                    install_resource "UMengFeedback/UMFeedback_iOS_2.3.3/UMengFeedback_SDK/Resources/ToolViewInputText@2x.png"
+                    install_resource "UMengFeedback/UMFeedback_iOS_2.3.3/UMengFeedback_SDK/Resources/ToolViewInputTextHL@2x.png"
+                    install_resource "UMengFeedback/UMFeedback_iOS_2.3.3/UMengFeedback_SDK/Resources/ToolViewInputVoice@2x.png"
+                    install_resource "UMengFeedback/UMFeedback_iOS_2.3.3/UMengFeedback_SDK/Resources/ToolViewInputVoiceHL@2x.png"
+                    install_resource "UMengFeedback/UMFeedback_iOS_2.3.3/UMengFeedback_SDK/Resources/umeng_add_photo@2x.png"
+                    install_resource "UMengFeedback/UMFeedback_iOS_2.3.3/UMengFeedback_SDK/Resources/umeng_fb_audio_dialog_cancel@2x.png"
+                    install_resource "UMengFeedback/UMFeedback_iOS_2.3.3/UMengFeedback_SDK/Resources/umeng_fb_audio_dialog_content@2x.png"
+                    install_resource "UMengFeedback/UMFeedback_iOS_2.3.3/UMengFeedback_SDK/Resources/umeng_fb_audio_play_01@2x.png"
+                    install_resource "UMengFeedback/UMFeedback_iOS_2.3.3/UMengFeedback_SDK/Resources/umeng_fb_audio_play_02@2x.png"
+                    install_resource "UMengFeedback/UMFeedback_iOS_2.3.3/UMengFeedback_SDK/Resources/umeng_fb_audio_play_03@2x.png"
+                    install_resource "UMengFeedback/UMFeedback_iOS_2.3.3/UMengFeedback_SDK/Resources/umeng_fb_audio_play_default@2x.png"
           
 rsync -avr --copy-links --no-relative --exclude '*/.svn/*' --files-from="$RESOURCES_TO_COPY" / "${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}"
 if [[ "${ACTION}" == "install" ]]; then

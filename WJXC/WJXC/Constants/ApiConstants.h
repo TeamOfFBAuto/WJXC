@@ -27,7 +27,7 @@
 #define USER_LOGIN_ACTION @"/index.php?d=api&c=user&m=login"
 
 //退出登录
-#define USER_LOGOUT_ACTION @"/index.php?d=api&c=user_api&m=login_out&authcode=%@"
+#define USER_LOGOUT_ACTION @"/index.php?d=api&c=user&m=login_out"
 
 //注册
 #define USER_REGISTER_ACTION @"/index.php?d=api&c=user&m=register"
@@ -35,8 +35,16 @@
 #define USER_GET_SECURITY_CODE @"/index.php?d=api&c=user&m=get_code"
 //找回密码
 #define USER_GETBACK_PASSWORD @"/index.php?d=api&c=user&m=get_back_password&mobile=%@&code=%d&new_password=%@&confirm_password=%@"
+//修改密码
+#define USER_UPDATE_PASSWORD @"/index.php?d=api&c=user&m=change_password"
 
+//修改用户头像
 #define USER_UPLOAD_HEADIMAGE @"/index.php?d=api&c=user&m=update_user_photo"
+
+//修改用户名字
+#define USER_UPDATE_USERNAME @"/index.php?d=api&c=user&m=update_user_info"
+
+#define ABOUT_US_URL @"http://www.baidu.com"
 
 
 //获取商品详情+评论

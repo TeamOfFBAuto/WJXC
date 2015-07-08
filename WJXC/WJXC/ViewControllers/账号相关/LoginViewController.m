@@ -315,7 +315,7 @@
         [LTools cache:user.user_name ForKey:USER_NAME];
         [LTools cache:user.uid ForKey:USER_UID];
         [LTools cache:user.authcode ForKey:USER_AUTHOD];
-        [LTools cache:user.photo ForKey:USER_HEAD_IMAGEURL];
+        [LTools cache:user.avatar ForKey:USER_HEAD_IMAGEURL];
         
         
         

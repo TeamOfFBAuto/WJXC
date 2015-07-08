@@ -39,4 +39,11 @@ typedef enum{
     SecurityCode_Match
 }SecurityCode_Type;
 
+typedef enum{
+    ORDERTYPE_DaiFu = 1, //待付
+    ORDERTYPE_PeiSong, //配送中
+    ORDERTYPE_DaiPingJia,//待评价
+    ORDERTYPE_WanCheng //完成
+}ORDERTYPE;
+
 #endif

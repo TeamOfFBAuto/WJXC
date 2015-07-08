@@ -18,6 +18,12 @@
 
 @implementation MyCollectController
 
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    self.navigationController.navigationBarHidden = NO;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -83,12 +89,5 @@
     CollectCell *cell = (CollectCell *)[LTools cellForIdentify:identify cellName:identify forTable:tableView];
     return cell;
 }
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return 1;
-}
-
-
 
 @end

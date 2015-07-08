@@ -28,7 +28,7 @@
         
         [self createHeaderView];
 //        [self createFooterView];
-        self.backgroundColor = [UIColor clearColor];
+//        self.backgroundColor = [UIColor clearColor];
         self.delegate = self;
         
     }

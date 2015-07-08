@@ -7,6 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		135F85DF1B4CBDB500B5E5AD /* OrderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 135F85DE1B4CBDB500B5E5AD /* OrderViewController.m */; };
+		135F85E21B4CBE5C00B5E5AD /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 135F85E11B4CBE5C00B5E5AD /* SettingsViewController.m */; };
+		135F85E51B4CC5ED00B5E5AD /* UpdatePWDController.m in Sources */ = {isa = PBXBuildFile; fileRef = 135F85E41B4CC5ED00B5E5AD /* UpdatePWDController.m */; };
+		135F85E81B4CC63300B5E5AD /* AboutUsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 135F85E71B4CC63300B5E5AD /* AboutUsController.m */; };
+		135F85EB1B4CDB1300B5E5AD /* FeedBackController.m in Sources */ = {isa = PBXBuildFile; fileRef = 135F85EA1B4CDB1300B5E5AD /* FeedBackController.m */; };
+		1375AD5A1B4D054D001631CE /* my_password_line_gray.png in Resources */ = {isa = PBXBuildFile; fileRef = 1375AD581B4D054D001631CE /* my_password_line_gray.png */; };
+		1375AD5B1B4D054D001631CE /* my_password_line_green.png in Resources */ = {isa = PBXBuildFile; fileRef = 1375AD591B4D054D001631CE /* my_password_line_green.png */; };
+		1375AD5E1B4D0E67001631CE /* NickNameSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 1375AD5D1B4D0E67001631CE /* NickNameSheet.m */; };
+		1375AD621B4D3F29001631CE /* OrderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1375AD601B4D3F29001631CE /* OrderCell.m */; };
+		1375AD631B4D3F29001631CE /* OrderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1375AD611B4D3F29001631CE /* OrderCell.xib */; };
 		139457051B46296F00C45EB6 /* login_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 139456AD1B46296F00C45EB6 /* login_bg@2x.png */; };
 		139457061B46296F00C45EB6 /* login_password@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 139456AE1B46296F00C45EB6 /* login_password@2x.png */; };
 		139457071B46296F00C45EB6 /* login_qq@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 139456AF1B46296F00C45EB6 /* login_qq@2x.png */; };
@@ -196,6 +206,23 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		135F85DD1B4CBDB500B5E5AD /* OrderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrderViewController.h; sourceTree = "<group>"; };
+		135F85DE1B4CBDB500B5E5AD /* OrderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrderViewController.m; sourceTree = "<group>"; };
+		135F85E01B4CBE5C00B5E5AD /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
+		135F85E11B4CBE5C00B5E5AD /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
+		135F85E31B4CC5ED00B5E5AD /* UpdatePWDController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UpdatePWDController.h; sourceTree = "<group>"; };
+		135F85E41B4CC5ED00B5E5AD /* UpdatePWDController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UpdatePWDController.m; sourceTree = "<group>"; };
+		135F85E61B4CC63300B5E5AD /* AboutUsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutUsController.h; sourceTree = "<group>"; };
+		135F85E71B4CC63300B5E5AD /* AboutUsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutUsController.m; sourceTree = "<group>"; };
+		135F85E91B4CDB1300B5E5AD /* FeedBackController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedBackController.h; sourceTree = "<group>"; };
+		135F85EA1B4CDB1300B5E5AD /* FeedBackController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeedBackController.m; sourceTree = "<group>"; };
+		1375AD581B4D054D001631CE /* my_password_line_gray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = my_password_line_gray.png; sourceTree = "<group>"; };
+		1375AD591B4D054D001631CE /* my_password_line_green.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = my_password_line_green.png; sourceTree = "<group>"; };
+		1375AD5C1B4D0E67001631CE /* NickNameSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NickNameSheet.h; sourceTree = "<group>"; };
+		1375AD5D1B4D0E67001631CE /* NickNameSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NickNameSheet.m; sourceTree = "<group>"; };
+		1375AD5F1B4D3F29001631CE /* OrderCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrderCell.h; sourceTree = "<group>"; };
+		1375AD601B4D3F29001631CE /* OrderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrderCell.m; sourceTree = "<group>"; };
+		1375AD611B4D3F29001631CE /* OrderCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OrderCell.xib; sourceTree = "<group>"; };
 		139456AD1B46296F00C45EB6 /* login_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_bg@2x.png"; sourceTree = "<group>"; };
 		139456AE1B46296F00C45EB6 /* login_password@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_password@2x.png"; sourceTree = "<group>"; };
 		139456AF1B46296F00C45EB6 /* login_qq@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_qq@2x.png"; sourceTree = "<group>"; };
@@ -609,6 +636,8 @@
 		139456C91B46296F00C45EB6 /* 个人中心 */ = {
 			isa = PBXGroup;
 			children = (
+				1375AD581B4D054D001631CE /* my_password_line_gray.png */,
+				1375AD591B4D054D001631CE /* my_password_line_green.png */,
 				13FEA47A1B4A35BD009BD01D /* my_bg@2x.png */,
 				139456CA1B46296F00C45EB6 /* my_address@2x.png */,
 				139456CB1B46296F00C45EB6 /* my_address_delete@2x.png */,
@@ -921,6 +950,16 @@
 				13FEA48F1B4BCEA9009BD01D /* MyCollectController.m */,
 				13FEA4961B4BD520009BD01D /* ShoppingAddressController.h */,
 				13FEA4971B4BD520009BD01D /* ShoppingAddressController.m */,
+				135F85DD1B4CBDB500B5E5AD /* OrderViewController.h */,
+				135F85DE1B4CBDB500B5E5AD /* OrderViewController.m */,
+				135F85E01B4CBE5C00B5E5AD /* SettingsViewController.h */,
+				135F85E11B4CBE5C00B5E5AD /* SettingsViewController.m */,
+				135F85E31B4CC5ED00B5E5AD /* UpdatePWDController.h */,
+				135F85E41B4CC5ED00B5E5AD /* UpdatePWDController.m */,
+				135F85E91B4CDB1300B5E5AD /* FeedBackController.h */,
+				135F85EA1B4CDB1300B5E5AD /* FeedBackController.m */,
+				135F85E61B4CC63300B5E5AD /* AboutUsController.h */,
+				135F85E71B4CC63300B5E5AD /* AboutUsController.m */,
 			);
 			path = "个人中心";
 			sourceTree = "<group>";
@@ -960,6 +999,8 @@
 				E3CE7F641B4CFF980012940C /* GCycleScrollView.m */,
 				13FEA47C1B4A55BE009BD01D /* FBActionSheet.h */,
 				13FEA47D1B4A55BE009BD01D /* FBActionSheet.m */,
+				1375AD5C1B4D0E67001631CE /* NickNameSheet.h */,
+				1375AD5D1B4D0E67001631CE /* NickNameSheet.m */,
 				13FEA4751B4A28E1009BD01D /* PersonalCell.h */,
 				13FEA4761B4A28E1009BD01D /* PersonalCell.m */,
 				13FEA4771B4A28E1009BD01D /* PersonalCell.xib */,
@@ -969,6 +1010,9 @@
 				13FEA4991B4BD590009BD01D /* AddressCell.h */,
 				13FEA49A1B4BD590009BD01D /* AddressCell.m */,
 				13FEA49B1B4BD590009BD01D /* AddressCell.xib */,
+				1375AD5F1B4D3F29001631CE /* OrderCell.h */,
+				1375AD601B4D3F29001631CE /* OrderCell.m */,
+				1375AD611B4D3F29001631CE /* OrderCell.xib */,
 			);
 			path = CommonViews;
 			sourceTree = "<group>";
@@ -1413,6 +1457,7 @@
 				E3D07FF51B3D4A9100E4F87D /* UMSnsAccountViewController.xib in Resources */,
 				1394571A1B46296F00C45EB6 /* classify_2_04@2x.png in Resources */,
 				1394570C1B46296F00C45EB6 /* classify_01@2x.png in Resources */,
+				1375AD631B4D3F29001631CE /* OrderCell.xib in Resources */,
 				139457331B46296F00C45EB6 /* shopping cart_right@2x.png in Resources */,
 				1394574A1B46296F00C45EB6 /* homepage_star1@2x.png in Resources */,
 				E3D07FF01B3D4A9100E4F87D /* UMSCommentInputController.xib in Resources */,
@@ -1446,6 +1491,7 @@
 				139457311B46296F00C45EB6 /* shopping cart_dd_top_phone@2x.png in Resources */,
 				139457511B46296F00C45EB6 /* register_phone@2x.png in Resources */,
 				139457551B4672C300C45EB6 /* AlipaySDK.bundle in Resources */,
+				1375AD5A1B4D054D001631CE /* my_password_line_gray.png in Resources */,
 				E3D080451B3D58F300E4F87D /* login_xinfeng@2x.png in Resources */,
 				1394571C1B46296F00C45EB6 /* classify_top_jt2@2x.png in Resources */,
 				1394573A1B46296F00C45EB6 /* homepage_qianggou_collect@2x.png in Resources */,
@@ -1466,6 +1512,7 @@
 				139457071B46296F00C45EB6 /* login_qq@2x.png in Resources */,
 				139457261B46296F00C45EB6 /* my_setting@2x.png in Resources */,
 				13FEA49D1B4BD590009BD01D /* AddressCell.xib in Resources */,
+				1375AD5B1B4D054D001631CE /* my_password_line_green.png in Resources */,
 				E3D07FED1B3D4A9100E4F87D /* UMSocialLocalizable.strings in Resources */,
 				139457321B46296F00C45EB6 /* shopping cart_selected@2x.png in Resources */,
 				E3D0803E1B3D588800E4F87D /* share_weixin@2x.png in Resources */,
@@ -1569,10 +1616,13 @@
 				13FEA47E1B4A55BE009BD01D /* FBActionSheet.m in Sources */,
 				1394576C1B4678D200C45EB6 /* NSDate+Additons.m in Sources */,
 				E3D080311B3D523200E4F87D /* LoginViewController.m in Sources */,
+				1375AD5E1B4D0E67001631CE /* NickNameSheet.m in Sources */,
 				139457701B4678D200C45EB6 /* UILabel+Additions.m in Sources */,
 				13A64C431B3BEB7100D9A106 /* UIColor+ConvertColor.m in Sources */,
+				135F85E51B4CC5ED00B5E5AD /* UpdatePWDController.m in Sources */,
 				E3C15F8F1B4CA3BD00C30039 /* FBCity.m in Sources */,
 				13A64BFD1B3BDF5D00D9A106 /* AppDelegate.mm in Sources */,
+				1375AD621B4D3F29001631CE /* OrderCell.m in Sources */,
 				E3C15F941B4CA45000C30039 /* GRegisterViewController.m in Sources */,
 				139457711B4678D200C45EB6 /* UIView+Additions.m in Sources */,
 				E3CE7F681B4D1FE60012940C /* NSDictionary+GJson.m in Sources */,
@@ -1583,7 +1633,11 @@
 				13A64C201B3BE2F800D9A106 /* RootViewController.m in Sources */,
 				13FEA4981B4BD520009BD01D /* ShoppingAddressController.m in Sources */,
 				E3D0802F1B3D523200E4F87D /* ForgetPwdController.m in Sources */,
+
 				E3CE7F791B4D59FE0012940C /* ProductCommentViewController.m in Sources */,
+
+				135F85DF1B4CBDB500B5E5AD /* OrderViewController.m in Sources */,
+
 				E3C15F8E1B4CA3BD00C30039 /* DataBase.m in Sources */,
 				E3D0801D1B3D51A500E4F87D /* SVProgressHUD.m in Sources */,
 				E3D080131B3D510C00E4F87D /* BaseModel.m in Sources */,
@@ -1592,9 +1646,12 @@
 				13A64C661B3BF76A00D9A106 /* HomeViewController.m in Sources */,
 				E3CE7F761B4D549E0012940C /* UILabel+GautoMatchedText.m in Sources */,
 				13FEA4901B4BCEA9009BD01D /* MyCollectController.m in Sources */,
+				135F85EB1B4CDB1300B5E5AD /* FeedBackController.m in Sources */,
 				13A64C631B3BF74E00D9A106 /* ShoppingCarController.m in Sources */,
+				135F85E81B4CC63300B5E5AD /* AboutUsController.m in Sources */,
 				13A64C5D1B3BF71C00D9A106 /* ClassViewController.m in Sources */,
 				139457591B46730100C45EB6 /* Order.m in Sources */,
+				135F85E21B4CBE5C00B5E5AD /* SettingsViewController.m in Sources */,
 				13FEA49C1B4BD590009BD01D /* AddressCell.m in Sources */,
 				E3CE7F651B4CFF980012940C /* GCycleScrollView.m in Sources */,
 				13FEA48D1B4BCE2A009BD01D /* LRefreshTableHeaderView.m in Sources */,

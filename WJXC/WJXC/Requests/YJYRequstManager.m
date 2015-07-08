@@ -226,6 +226,7 @@
                     error:(NSError *)error
               failtBlock:(AFResultBlock)failBlock
 {
+    NSLog(@"failure %@",operation.responseString);
     NSString *errInfo = @"网络有问题,请检查网络";
     switch (error.code) {
         case NSURLErrorNotConnectedToInternet:
@@ -252,7 +253,7 @@
  */
 - (void)showErroInfo:(NSString *)errInfo
 {
-    
+    [LTools showMBProgressWithText:errInfo addToView:[UIApplication sharedApplication].keyWindow];
 }
 
 /**
