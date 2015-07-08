@@ -39,4 +39,8 @@
 #define USER_UPLOAD_HEADIMAGE @"/index.php?d=api&c=user&m=update_user_photo"
 
 
+//获取商品详情+评论
+#define GET_PRODUCTDETAIL @"/index.php?d=api&c=products&m=get_product_detail"
+
+
 #endif

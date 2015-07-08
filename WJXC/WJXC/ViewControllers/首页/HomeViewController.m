@@ -7,6 +7,7 @@
 //
 
 #import "HomeViewController.h"
+#import "ProductDetailViewController.h"
 
 @interface HomeViewController ()
 
@@ -18,6 +19,17 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    
+    
+    
+    
+    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [btn setFrame:CGRectMake(100, 100, 100, 100)];
+    [btn setTitle:@"单品详情" forState:UIControlStateNormal];
+    [btn addTarget:self action:@selector(test) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:btn];
+    
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -25,14 +37,11 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+-(void)test{
+    ProductDetailViewController *cc = [[ProductDetailViewController alloc]init];
+    cc.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:cc animated:YES];
 }
-*/
+
 
 @end

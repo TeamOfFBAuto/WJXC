@@ -28,6 +28,9 @@
 //from  wl
 #import "SVProgressHUD.h"        //提示层
 
+#import "NSDictionary+GJson.h"
+#import "UILabel+GautoMatchedText.h"
+
 @protocol GgetllocationDelegate <NSObject>
 
 @optional
