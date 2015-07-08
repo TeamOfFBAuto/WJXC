@@ -7,7 +7,7 @@
 //
 
 #import "LoginViewController.h"
-#import "RegisterViewController.h"
+#import "GRegisterViewController.h"
 #import "ForgetPwdController.h"
 #import "UserInfo.h"
 #import "WXApi.h"
@@ -45,10 +45,28 @@
     // Do any additional setup after loading the view from its nib.
         
     self.myTitleLabel.text = @"登录";
-    self.myTitleLabel.textColor = RGBCOLOR(253, 106, 157);
-    self.rightString = @"注册";
+    self.myTitleLabel.textColor = RGBCOLOR(105, 160, 4);
+    
 
-    [self setMyViewControllerLeftButtonType:MyViewControllerLeftbuttonTypeNull WithRightButtonType:MyViewControllerRightbuttonTypeText];
+    [self setMyViewControllerLeftButtonType:MyViewControllerLeftbuttonTypeBack WithRightButtonType:MyViewControllerRightbuttonTypeText];
+    
+    
+    NSMutableAttributedString *aaa = [[NSMutableAttributedString alloc]initWithString:@"没有账户？去注册"];
+    
+    [aaa addAttribute:NSForegroundColorAttributeName value:RGBCOLOR(105, 106, 107) range:NSMakeRange(0,5)];
+    [aaa addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:12] range:NSMakeRange(0,5)];
+    [aaa addAttribute:NSForegroundColorAttributeName value:RGBCOLOR(122, 173, 0) range:NSMakeRange(5, 3)];
+    [aaa addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:12] range:NSMakeRange(5, 3)];
+    [aaa addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInteger:NSUnderlineStyleSingle] range:NSMakeRange(5, 3)];
+    
+    
+    
+    self.zhuceLabel.attributedText = aaa;
+    
+    self.zhuceLabel.userInteractionEnabled = YES;
+    UITapGestureRecognizer *tt = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(gotoZhuce)];
+    [self.zhuceLabel addGestureRecognizer:tt];
+    
     
 }
 
@@ -72,10 +90,7 @@
     _aLoginBlock = aBlock;
 }
 
--(void)rightButtonTap:(UIButton *)sender
-{
-    [self clickToRegister:sender];
-}
+
 
 /**
  *  忘记密码
@@ -89,9 +104,8 @@
 /**
  *  注册
  */
-- (IBAction)clickToRegister:(id)sender {
-    
-    RegisterViewController *regis = [[RegisterViewController alloc]init];
+-(void)gotoZhuce{
+    GRegisterViewController *regis = [[GRegisterViewController alloc]init];
     [self.navigationController pushViewController:regis animated:YES];
 }
 
@@ -252,14 +266,34 @@
     
     token = @"test";
     
+    NSDictionary *params;
+    if ([type isEqualToString:@"normal"]) {
+        params = @{
+                   @"type":type,
+                   @"mobile":mobile,
+                   @"password":password,
+                   @"devicetoken":token
+                   };
+    }else{
+        params = @{
+                   @"type":type,
+                   @"thirdid":thirdId,
+                   @"nickname":nickName,
+                   @"third_photo":thirdphoto,
+                   @"gender":[NSString stringWithFormat:@"%d",gender],
+                   @"devicetoken":token,
+                   @"login_source":@"iOS"
+                   };
+    }
     
-    NSDictionary *params = @{
-                             @"type":type,
-                             @"mobile":mobile,
-                             @"password":password,
-                             @"devicetoken":token
-                             };
+    
+    
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    
     [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodPost api:USER_LOGIN_ACTION parameters:params constructingBodyBlock:nil completion:^(NSDictionary *result) {
+        
+        
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         
         NSLog(@"%@",result);
         
@@ -299,12 +333,15 @@
         
         [weakSelf loginResultIsSuccess:YES];
     } failBlock:^(NSDictionary *result) {
-        
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         NSLog(@"%@",result);
         [weakSelf loginResultIsSuccess:NO];
     }];
     
 }
+
+
+
 
 
 @end

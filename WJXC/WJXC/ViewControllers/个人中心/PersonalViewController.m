@@ -342,6 +342,24 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
+    
+    
+//    //判断是否登录
+//    [LTools cacheBool:NO ForKey:LOGIN_SERVER_STATE];
+//    if ([LTools cacheBoolForKey:LOGIN_SERVER_STATE] == NO) {
+//        
+//        LoginViewController *login = [[LoginViewController alloc]init];
+//        
+//        UINavigationController *unVc = [[UINavigationController alloc]initWithRootViewController:login];
+//        
+//        [self presentViewController:unVc animated:YES completion:nil];
+//        
+//        
+//        return;
+//        
+//    }
+    
+    
     int index = (int)indexPath.row;
     switch (index) {
         case 0:

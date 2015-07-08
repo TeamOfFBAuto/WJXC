@@ -73,10 +73,10 @@
 
 #define SinaAppKey @"2208620241" //正式审核通过 微博开放平台账号szkyaojiayou@163.com 密码：mobile2014
 #define SinaAppSecret @"fe596bc4ac8c92316ad5f255fbc49432"
-#define QQAPPID @"1104065435" //十六进制:41CEB39B; 生成方法:echo 'ibase=10;obase=16;1104065435'|bc
-#define QQAPPKEY @"UgVWGacRoeo9NtZy" //正式的账号
-#define WXAPPID @"wx47f54e431de32846" //正式
-#define WXAPPSECRET @"a71699732e3bef01aefdaf324e2f522c"
+#define QQAPPID @"1104757360" //tencent1104757360 十六进制:QQ41d94270; 生成方法:NSString *str = [ [NSString alloc] initWithFormat:@"%x",1104757360];
+#define QQAPPKEY @"m7DlzFpxeDxRBULc"
+#define WXAPPID @"wx509a0740cca6f939"
+#define WXAPPSECRET @"9a5909e5af9621847e80c1dc5bae52e3"
 #define RedirectUrl @"http://sns.whalecloud.com/sina2/callback" //回调地址
 
 
