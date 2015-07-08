@@ -13,6 +13,8 @@
 #import "UserInfo.h"
 #import "MyCollectController.h"//我的收藏
 #import "ShoppingAddressController.h"//我的地址
+#import "OrderViewController.h"//我的订单
+#import "SettingsViewController.h"//设置
 
 @interface PersonalViewController ()<UITableViewDataSource,UITableViewDelegate,UIActionSheetDelegate,UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 {
@@ -42,7 +44,7 @@
 {
     [super viewWillAppear:animated];
     
-    self.navigationController.navigationBarHidden = YES;
+    [self.navigationController setNavigationBarHidden:YES animated:animated];
     
     [self updateLoginState];
 }
@@ -81,6 +83,8 @@
     //网络请求
     [self getUserInfo];
     
+    //监控退出登录通知
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(notificatonForLogout:) name:NOTIFICATION_LOGOUT object:nil];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -92,6 +96,11 @@
 
 - (void)getUserInfo
 {
+    NSString *authcode = [LTools cacheForKey:USER_AUTHOD];
+    if (!authcode || authcode.length == 0) {
+        
+        return;
+    }
     NSDictionary *params = @{@"authcode":[LTools cacheForKey:USER_AUTHOD]};
     
     __weak typeof(self)weakSelf = self;
@@ -143,6 +152,11 @@
 }
 
 #pragma mark - 事件处理
+
+- (void)notificatonForLogout:(NSNotification *)notification
+{
+    [self updateLoginState];
+}
 
 - (void)setViewWithUserInfo:(UserInfo *)userInfo
 {
@@ -343,49 +357,60 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     
-    
-//    //判断是否登录
-//    [LTools cacheBool:NO ForKey:LOGIN_SERVER_STATE];
-//    if ([LTools cacheBoolForKey:LOGIN_SERVER_STATE] == NO) {
-//        
-//        LoginViewController *login = [[LoginViewController alloc]init];
-//        
-//        UINavigationController *unVc = [[UINavigationController alloc]initWithRootViewController:login];
-//        
-//        [self presentViewController:unVc animated:YES completion:nil];
-//        
-//        
-//        return;
-//        
-//    }
-    
-    
+    BOOL isLogin = [LTools cacheBoolForKey:LOGIN_SERVER_STATE];//判断登录状态
+
     int index = (int)indexPath.row;
     switch (index) {
         case 0:
         {
             NSLog(@"我的收藏");
             
+            if (!isLogin) {
+                [self presentLoginVc];
+                return;
+            }
+            
             MyCollectController *collect = [[MyCollectController alloc]init];
             collect.hidesBottomBarWhenPushed = YES;
+            collect.lastPageNavigationHidden = YES;
             [self.navigationController pushViewController:collect animated:YES];
         }
             break;
         case 1:
         {
+            if (!isLogin) {
+                [self presentLoginVc];
+                return;
+            }
             NSLog(@"我的地址");
+            ShoppingAddressController *shopping = [[ShoppingAddressController alloc]init];
+            shopping.hidesBottomBarWhenPushed = YES;
+            shopping.lastPageNavigationHidden = YES;
+            [self.navigationController pushViewController:shopping animated:YES];
 
         }
             break;
         case 2:
         {
+            if (!isLogin) {
+                [self presentLoginVc];
+                return;
+            }
             NSLog(@"我的订单");
+            OrderViewController *order = [[OrderViewController alloc]init];
+            order.hidesBottomBarWhenPushed = YES;
+            order.lastPageNavigationHidden = YES;
+            [self.navigationController pushViewController:order animated:YES];
 
         }
             break;
         case 3:
         {
             NSLog(@"设置");
+            SettingsViewController *settings = [[SettingsViewController alloc]init];
+            settings.hidesBottomBarWhenPushed = YES;
+            settings.lastPageNavigationHidden = YES;
+            [self.navigationController pushViewController:settings animated:YES];
 
         }
             break;

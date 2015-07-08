@@ -18,12 +18,18 @@
 
 @implementation ShoppingAddressController
 
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    self.navigationController.navigationBarHidden = NO;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    self.myTitle = @"我的收藏";
+    self.myTitle = @"收货地址";
     [self setMyViewControllerLeftButtonType:MyViewControllerLeftbuttonTypeBack WithRightButtonType:MyViewControllerRightbuttonTypeNull];
     
     _table = [[RefreshTableView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH,DEVICE_HEIGHT - 64)];
@@ -36,6 +42,18 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - 事件处理
+
+/**
+ *  选中默认地址
+ *
+ *  @param sender
+ */
+- (void)clickToSelectAddress:(UIButton *)sender
+{
+    sender.selected = !sender.selected;
 }
 
 #pragma mark - 代理
@@ -67,7 +85,7 @@
 
 - (CGFloat)heightForRowIndexPath:(NSIndexPath *)indexPath
 {
-    return 86.f;
+    return 150.f;
 }
 
 #pragma mark - UITableViewDataSource
@@ -81,6 +99,8 @@
 {
     static NSString *identify = @"AddressCell";
     AddressCell *cell = (AddressCell *)[LTools cellForIdentify:identify cellName:identify forTable:tableView];
+    [cell.addressButton addTarget:self action:@selector(clickToSelectAddress:) forControlEvents:UIControlEventTouchUpInside];
+    
     return cell;
 }
 

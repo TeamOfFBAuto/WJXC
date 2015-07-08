@@ -27,7 +27,7 @@
 #define USER_LOGIN_ACTION @"/index.php?d=api&c=user&m=login"
 
 //退出登录
-#define USER_LOGOUT_ACTION @"/index.php?d=api&c=user_api&m=login_out&authcode=%@"
+#define USER_LOGOUT_ACTION @"/index.php?d=api&c=user&m=login_out"
 
 //注册
 #define USER_REGISTER_ACTION @"/index.php?d=api&c=user&m=register"
@@ -37,6 +37,8 @@
 #define USER_GETBACK_PASSWORD @"/index.php?d=api&c=user&m=get_back_password&mobile=%@&code=%d&new_password=%@&confirm_password=%@"
 
 #define USER_UPLOAD_HEADIMAGE @"/index.php?d=api&c=user&m=update_user_photo"
+
+#define ABOUT_US_URL @"http://www.baidu.com"
 
 
 #endif
