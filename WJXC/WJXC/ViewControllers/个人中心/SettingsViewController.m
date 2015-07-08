@@ -75,7 +75,7 @@
     
     UIButton *btn = [[UIButton alloc]initWithframe:CGRectMake(33, footer.height - 43 - 20, DEVICE_WIDTH - 66, 43) buttonType:UIButtonTypeCustom normalTitle:@"退出登录" selectedTitle:nil target:self action:@selector(clickToLogout:)];
     btn.backgroundColor = DEFAULT_TEXTCOLOR;
-    [btn addCornerRadius:5.f];
+    [btn addCornerRadius:3.f];
 
     [footer addSubview:btn];
     
