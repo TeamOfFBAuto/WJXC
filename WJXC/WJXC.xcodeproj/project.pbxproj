@@ -17,6 +17,7 @@
 		1375AD5E1B4D0E67001631CE /* NickNameSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 1375AD5D1B4D0E67001631CE /* NickNameSheet.m */; };
 		1375AD621B4D3F29001631CE /* OrderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1375AD601B4D3F29001631CE /* OrderCell.m */; };
 		1375AD631B4D3F29001631CE /* OrderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1375AD611B4D3F29001631CE /* OrderCell.xib */; };
+		13842E1B1B5669CD00A96D87 /* AddressModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 13842E1A1B5669CD00A96D87 /* AddressModel.m */; };
 		139457051B46296F00C45EB6 /* login_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 139456AD1B46296F00C45EB6 /* login_bg@2x.png */; };
 		139457061B46296F00C45EB6 /* login_password@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 139456AE1B46296F00C45EB6 /* login_password@2x.png */; };
 		139457071B46296F00C45EB6 /* login_qq@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 139456AF1B46296F00C45EB6 /* login_qq@2x.png */; };
@@ -117,6 +118,7 @@
 		13A64C631B3BF74E00D9A106 /* ShoppingCarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13A64C621B3BF74E00D9A106 /* ShoppingCarController.m */; };
 		13A64C661B3BF76A00D9A106 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13A64C651B3BF76A00D9A106 /* HomeViewController.m */; };
 		13A64C6A1B3BFD0200D9A106 /* YJYRequstManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 13A64C691B3BFD0200D9A106 /* YJYRequstManager.m */; };
+		13B2DBCF1B552B2800EE2B6C /* AddAddressController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B2DBCE1B552B2800EE2B6C /* AddAddressController.m */; };
 		13FEA4781B4A28E1009BD01D /* PersonalCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 13FEA4761B4A28E1009BD01D /* PersonalCell.m */; };
 		13FEA4791B4A28E1009BD01D /* PersonalCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13FEA4771B4A28E1009BD01D /* PersonalCell.xib */; };
 		13FEA47B1B4A35BD009BD01D /* my_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 13FEA47A1B4A35BD009BD01D /* my_bg@2x.png */; };
@@ -223,6 +225,8 @@
 		1375AD5F1B4D3F29001631CE /* OrderCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrderCell.h; sourceTree = "<group>"; };
 		1375AD601B4D3F29001631CE /* OrderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrderCell.m; sourceTree = "<group>"; };
 		1375AD611B4D3F29001631CE /* OrderCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OrderCell.xib; sourceTree = "<group>"; };
+		13842E191B5669CD00A96D87 /* AddressModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddressModel.h; sourceTree = "<group>"; };
+		13842E1A1B5669CD00A96D87 /* AddressModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddressModel.m; sourceTree = "<group>"; };
 		139456AD1B46296F00C45EB6 /* login_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_bg@2x.png"; sourceTree = "<group>"; };
 		139456AE1B46296F00C45EB6 /* login_password@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_password@2x.png"; sourceTree = "<group>"; };
 		139456AF1B46296F00C45EB6 /* login_qq@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_qq@2x.png"; sourceTree = "<group>"; };
@@ -353,6 +357,8 @@
 		13A64C651B3BF76A00D9A106 /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
 		13A64C681B3BFD0200D9A106 /* YJYRequstManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YJYRequstManager.h; sourceTree = "<group>"; };
 		13A64C691B3BFD0200D9A106 /* YJYRequstManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YJYRequstManager.m; sourceTree = "<group>"; };
+		13B2DBCD1B552B2800EE2B6C /* AddAddressController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddAddressController.h; sourceTree = "<group>"; };
+		13B2DBCE1B552B2800EE2B6C /* AddAddressController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddAddressController.m; sourceTree = "<group>"; };
 		13FEA4751B4A28E1009BD01D /* PersonalCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonalCell.h; sourceTree = "<group>"; };
 		13FEA4761B4A28E1009BD01D /* PersonalCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonalCell.m; sourceTree = "<group>"; };
 		13FEA4771B4A28E1009BD01D /* PersonalCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PersonalCell.xib; sourceTree = "<group>"; };
@@ -960,6 +966,8 @@
 				135F85EA1B4CDB1300B5E5AD /* FeedBackController.m */,
 				135F85E61B4CC63300B5E5AD /* AboutUsController.h */,
 				135F85E71B4CC63300B5E5AD /* AboutUsController.m */,
+				13B2DBCD1B552B2800EE2B6C /* AddAddressController.h */,
+				13B2DBCE1B552B2800EE2B6C /* AddAddressController.m */,
 			);
 			path = "个人中心";
 			sourceTree = "<group>";
@@ -1278,6 +1286,8 @@
 				E3D080101B3D510C00E4F87D /* BaseModel.m */,
 				E3D080111B3D510C00E4F87D /* UserInfo.h */,
 				E3D080121B3D510C00E4F87D /* UserInfo.m */,
+				13842E191B5669CD00A96D87 /* AddressModel.h */,
+				13842E1A1B5669CD00A96D87 /* AddressModel.m */,
 			);
 			path = CommonModels;
 			sourceTree = "<group>";
@@ -1633,11 +1643,8 @@
 				13A64C201B3BE2F800D9A106 /* RootViewController.m in Sources */,
 				13FEA4981B4BD520009BD01D /* ShoppingAddressController.m in Sources */,
 				E3D0802F1B3D523200E4F87D /* ForgetPwdController.m in Sources */,
-
 				E3CE7F791B4D59FE0012940C /* ProductCommentViewController.m in Sources */,
-
 				135F85DF1B4CBDB500B5E5AD /* OrderViewController.m in Sources */,
-
 				E3C15F8E1B4CA3BD00C30039 /* DataBase.m in Sources */,
 				E3D0801D1B3D51A500E4F87D /* SVProgressHUD.m in Sources */,
 				E3D080131B3D510C00E4F87D /* BaseModel.m in Sources */,
@@ -1645,6 +1652,7 @@
 				139457721B4678D200C45EB6 /* UIViewController+Addtions.m in Sources */,
 				13A64C661B3BF76A00D9A106 /* HomeViewController.m in Sources */,
 				E3CE7F761B4D549E0012940C /* UILabel+GautoMatchedText.m in Sources */,
+				13842E1B1B5669CD00A96D87 /* AddressModel.m in Sources */,
 				13FEA4901B4BCEA9009BD01D /* MyCollectController.m in Sources */,
 				135F85EB1B4CDB1300B5E5AD /* FeedBackController.m in Sources */,
 				13A64C631B3BF74E00D9A106 /* ShoppingCarController.m in Sources */,
@@ -1657,6 +1665,7 @@
 				13FEA48D1B4BCE2A009BD01D /* LRefreshTableHeaderView.m in Sources */,
 				E3D080241B3D51D000E4F87D /* LTools.m in Sources */,
 				13A64BFA1B3BDF5D00D9A106 /* main.m in Sources */,
+				13B2DBCF1B552B2800EE2B6C /* AddAddressController.m in Sources */,
 				E3C15FDD1B4CDC2800C30039 /* ProductDetailViewController.m in Sources */,
 				13FEA4781B4A28E1009BD01D /* PersonalCell.m in Sources */,
 				13FEA4891B4BCD89009BD01D /* RefreshTableView.m in Sources */,

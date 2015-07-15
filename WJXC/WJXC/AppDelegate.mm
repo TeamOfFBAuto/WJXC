@@ -27,12 +27,8 @@
     
     [self uploadHeadImage];//上传头像
     
-    [self requestForPost];
-    
     RootViewController *root = [[RootViewController alloc]init];
     self.window.rootViewController = root;
-    
-    
     
 #pragma mark 远程通知
     

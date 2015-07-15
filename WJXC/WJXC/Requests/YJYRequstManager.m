@@ -90,8 +90,19 @@
     {
         baseUrl = [NSString stringWithFormat:@"%@%@",SERVER_URL,apiString];
         
+        NSArray *allkeys = [paramsDic allKeys];
+        
+        NSMutableString *url = [NSMutableString stringWithString:baseUrl];
+        
+        for (NSString *key in allkeys) {
+            
+            NSString *param = [NSString stringWithFormat:@"&%@=%@",key,paramsDic[key]];
+            [url appendString:param];
+        }
+        
         NSLog(@"urlString --- %@",baseUrl);
         NSLog(@"params --- %@",paramsDic);
+        NSLog(@"url---:%@",url);
         
         if (method == YJYRequstMethodGet) {
             
@@ -243,6 +254,8 @@
     
     NSDictionary *failDic = @{Erro_Info: errInfo};
     failBlock(failDic);
+    
+    [self showErroInfo:errInfo];
 }
 
 
@@ -253,6 +266,7 @@
  */
 - (void)showErroInfo:(NSString *)errInfo
 {
+    [MBProgressHUD hideAllHUDsForView:[UIApplication sharedApplication].keyWindow animated:YES];
     [LTools showMBProgressWithText:errInfo addToView:[UIApplication sharedApplication].keyWindow];
 }
 
