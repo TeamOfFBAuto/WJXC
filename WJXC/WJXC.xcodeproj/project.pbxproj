@@ -17,6 +17,11 @@
 		1375AD5E1B4D0E67001631CE /* NickNameSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 1375AD5D1B4D0E67001631CE /* NickNameSheet.m */; };
 		1375AD621B4D3F29001631CE /* OrderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1375AD601B4D3F29001631CE /* OrderCell.m */; };
 		1375AD631B4D3F29001631CE /* OrderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1375AD611B4D3F29001631CE /* OrderCell.xib */; };
+		1384071B1B578C120008CAC3 /* ProductModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 1384071A1B578C120008CAC3 /* ProductModel.m */; };
+		138407221B5798660008CAC3 /* ShoppingCartCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 138407201B5798660008CAC3 /* ShoppingCartCell.m */; };
+		138407231B5798660008CAC3 /* ShoppingCartCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 138407211B5798660008CAC3 /* ShoppingCartCell.xib */; };
+		1384072A1B57A0450008CAC3 /* shopping cart_reduce_gray@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 138407281B57A0450008CAC3 /* shopping cart_reduce_gray@2x.png */; };
+		1384072B1B57A0450008CAC3 /* shopping cart_reduce_green@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 138407291B57A0450008CAC3 /* shopping cart_reduce_green@2x.png */; };
 		13842E1B1B5669CD00A96D87 /* AddressModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 13842E1A1B5669CD00A96D87 /* AddressModel.m */; };
 		139457051B46296F00C45EB6 /* login_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 139456AD1B46296F00C45EB6 /* login_bg@2x.png */; };
 		139457061B46296F00C45EB6 /* login_password@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 139456AE1B46296F00C45EB6 /* login_password@2x.png */; };
@@ -225,6 +230,13 @@
 		1375AD5F1B4D3F29001631CE /* OrderCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrderCell.h; sourceTree = "<group>"; };
 		1375AD601B4D3F29001631CE /* OrderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrderCell.m; sourceTree = "<group>"; };
 		1375AD611B4D3F29001631CE /* OrderCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OrderCell.xib; sourceTree = "<group>"; };
+		138407191B578C120008CAC3 /* ProductModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProductModel.h; sourceTree = "<group>"; };
+		1384071A1B578C120008CAC3 /* ProductModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProductModel.m; sourceTree = "<group>"; };
+		1384071F1B5798660008CAC3 /* ShoppingCartCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShoppingCartCell.h; sourceTree = "<group>"; };
+		138407201B5798660008CAC3 /* ShoppingCartCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShoppingCartCell.m; sourceTree = "<group>"; };
+		138407211B5798660008CAC3 /* ShoppingCartCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ShoppingCartCell.xib; sourceTree = "<group>"; };
+		138407281B57A0450008CAC3 /* shopping cart_reduce_gray@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "shopping cart_reduce_gray@2x.png"; sourceTree = "<group>"; };
+		138407291B57A0450008CAC3 /* shopping cart_reduce_green@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "shopping cart_reduce_green@2x.png"; sourceTree = "<group>"; };
 		13842E191B5669CD00A96D87 /* AddressModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddressModel.h; sourceTree = "<group>"; };
 		13842E1A1B5669CD00A96D87 /* AddressModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddressModel.m; sourceTree = "<group>"; };
 		139456AD1B46296F00C45EB6 /* login_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_bg@2x.png"; sourceTree = "<group>"; };
@@ -660,6 +672,8 @@
 		139456D51B46296F00C45EB6 /* 购物车及订单 */ = {
 			isa = PBXGroup;
 			children = (
+				138407281B57A0450008CAC3 /* shopping cart_reduce_gray@2x.png */,
+				138407291B57A0450008CAC3 /* shopping cart_reduce_green@2x.png */,
 				139456D61B46296F00C45EB6 /* shopping cart_address_add@2x.png */,
 				139456D71B46296F00C45EB6 /* shopping cart_address_middle@2x.png */,
 				139456D81B46296F00C45EB6 /* shopping cart_address_middle_xg@2x.png */,
@@ -1018,6 +1032,9 @@
 				13FEA4991B4BD590009BD01D /* AddressCell.h */,
 				13FEA49A1B4BD590009BD01D /* AddressCell.m */,
 				13FEA49B1B4BD590009BD01D /* AddressCell.xib */,
+				1384071F1B5798660008CAC3 /* ShoppingCartCell.h */,
+				138407201B5798660008CAC3 /* ShoppingCartCell.m */,
+				138407211B5798660008CAC3 /* ShoppingCartCell.xib */,
 				1375AD5F1B4D3F29001631CE /* OrderCell.h */,
 				1375AD601B4D3F29001631CE /* OrderCell.m */,
 				1375AD611B4D3F29001631CE /* OrderCell.xib */,
@@ -1288,6 +1305,8 @@
 				E3D080121B3D510C00E4F87D /* UserInfo.m */,
 				13842E191B5669CD00A96D87 /* AddressModel.h */,
 				13842E1A1B5669CD00A96D87 /* AddressModel.m */,
+				138407191B578C120008CAC3 /* ProductModel.h */,
+				1384071A1B578C120008CAC3 /* ProductModel.m */,
 			);
 			path = CommonModels;
 			sourceTree = "<group>";
@@ -1502,6 +1521,7 @@
 				139457511B46296F00C45EB6 /* register_phone@2x.png in Resources */,
 				139457551B4672C300C45EB6 /* AlipaySDK.bundle in Resources */,
 				1375AD5A1B4D054D001631CE /* my_password_line_gray.png in Resources */,
+				1384072A1B57A0450008CAC3 /* shopping cart_reduce_gray@2x.png in Resources */,
 				E3D080451B3D58F300E4F87D /* login_xinfeng@2x.png in Resources */,
 				1394571C1B46296F00C45EB6 /* classify_top_jt2@2x.png in Resources */,
 				1394573A1B46296F00C45EB6 /* homepage_qianggou_collect@2x.png in Resources */,
@@ -1556,12 +1576,14 @@
 				E3D07FF41B3D4A9100E4F87D /* UMSLoginViewController.xib in Resources */,
 				139457051B46296F00C45EB6 /* login_bg@2x.png in Resources */,
 				13FEA49F1B4BDEAC009BD01D /* shopping cart_normal@2x.png in Resources */,
+				1384072B1B57A0450008CAC3 /* shopping cart_reduce_green@2x.png in Resources */,
 				1394573C1B46296F00C45EB6 /* homepage_qianggou_share@2x.png in Resources */,
 				1394573B1B46296F00C45EB6 /* homepage_qianggou_jiantou@2x.png in Resources */,
 				139457361B46296F00C45EB6 /* homepage_bottom_line@2x.png in Resources */,
 				1394572F1B46296F00C45EB6 /* shopping cart_dd_top_line@2x.png in Resources */,
 				139457211B46296F00C45EB6 /* my_collect@2x.png in Resources */,
 				13FEA47B1B4A35BD009BD01D /* my_bg@2x.png in Resources */,
+				138407231B5798660008CAC3 /* ShoppingCartCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1631,6 +1653,7 @@
 				13A64C431B3BEB7100D9A106 /* UIColor+ConvertColor.m in Sources */,
 				135F85E51B4CC5ED00B5E5AD /* UpdatePWDController.m in Sources */,
 				E3C15F8F1B4CA3BD00C30039 /* FBCity.m in Sources */,
+				1384071B1B578C120008CAC3 /* ProductModel.m in Sources */,
 				13A64BFD1B3BDF5D00D9A106 /* AppDelegate.mm in Sources */,
 				1375AD621B4D3F29001631CE /* OrderCell.m in Sources */,
 				E3C15F941B4CA45000C30039 /* GRegisterViewController.m in Sources */,
@@ -1638,6 +1661,7 @@
 				E3CE7F681B4D1FE60012940C /* NSDictionary+GJson.m in Sources */,
 				13FEA4941B4BD198009BD01D /* CollectCell.m in Sources */,
 				E3D0801B1B3D51A500E4F87D /* SVIndefiniteAnimatedView.m in Sources */,
+				138407221B5798660008CAC3 /* ShoppingCartCell.m in Sources */,
 				13A64C5A1B3BF6A800D9A106 /* UIView+Frame.m in Sources */,
 				E3D080141B3D510C00E4F87D /* UserInfo.m in Sources */,
 				13A64C201B3BE2F800D9A106 /* RootViewController.m in Sources */,

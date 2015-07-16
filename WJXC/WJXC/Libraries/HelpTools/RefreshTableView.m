@@ -93,6 +93,8 @@
         self.dataArray = [NSMutableArray array];
         self.delegate = self;
         [self createHeaderView];
+        
+        _neverShowLoadMore = !show;
         if (show) {
             
             [self createFooterView];
@@ -141,6 +143,12 @@
 
 - (void)createFooterView
 {
+    //不显示加载更多
+    if (_neverShowLoadMore) {
+        
+        return;
+    }
+    
     UIView *tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 320, TABLEFOOTER_HEIGHT)];
     
     [tableFooterView addSubview:self.loadingIndicator];

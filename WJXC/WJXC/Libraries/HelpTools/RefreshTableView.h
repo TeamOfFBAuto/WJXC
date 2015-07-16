@@ -44,6 +44,9 @@
 @end
 
 @interface RefreshTableView : UITableView<L_EGORefreshTableDelegate,UITableViewDataSource,UITableViewDelegate>
+{
+    BOOL _neverShowLoadMore;//是否永远不显示加载更多
+}
 
 
 @property (nonatomic,retain)LRefreshTableHeaderView * refreshHeaderView;

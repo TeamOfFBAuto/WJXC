@@ -145,6 +145,9 @@
         [left_button addTarget:self action:@selector(leftButtonTap:) forControlEvents:UIControlEventTouchUpInside];
         
         self.navigationItem.leftBarButtonItems = @[spaceButton,[[UIBarButtonItem alloc] initWithCustomView:left_button]];
+    }else if (theType == MyViewControllerLeftbuttonTypeNull)
+    {
+        self.navigationItem.leftBarButtonItems = nil;
     }else
     {
         
@@ -190,7 +193,7 @@
         
         _my_right_button.titleLabel.font = [UIFont systemFontOfSize:15];
         
-        [_my_right_button setTitleColor:RGBCOLOR(253, 106, 157) forState:UIControlStateNormal];
+        [_my_right_button setTitleColor:DEFAULT_TEXTCOLOR forState:UIControlStateNormal];
         
         
         [_my_right_button addTarget:self action:@selector(rightButtonTap:) forControlEvents:UIControlEventTouchUpInside];

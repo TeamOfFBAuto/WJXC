@@ -52,13 +52,13 @@
 
 //收货地址相关接口==================
 
-//获取用户的收货地址列表(get参数调取参数：authcode page per_page)
+//获取用户的收货地址列表
 #define USER_ADDRESS_LIST @"/index.php?d=api&c=user&m=get_user_address"
 
-//16、添加用户的收货地址(post参数调取参数:authcode、pro_id省份id、city_id城市id、street具体的地址、receiver_username收货人姓名、mobile收货人手机号、phone收货人电话（可不填）、zip_code邮编（可不填）、default_address是否设为默认地址 1=》是 0=》不是)
+//16、添加用户的收货地址
 #define USER_ADDRESS_ADD @"/index.php?d=api&c=user&m=add_user_address"
 
-//17、编辑用户的收货地址(post参数调取参数:authcode、address_id收货地址id、pro_id省份id、city_id城市id、street具体的地址、receiver_username收货人姓名、mobile收货人手机号、phone收货人电话（可不填）、zip_code邮编（可不填）、default_address是否设为默认地址 1=》是 0=》不是)
+//17、编辑用户的收货地址
 #define USER_ADDRESS_EDIT @"/index.php?d=api&c=user&m=edit_user_address"
 
 //设置默认地址
@@ -66,6 +66,29 @@
 
 //删除地址
 #define USER_ADDRESS_DELETE @"/index.php?d=api&c=user&m=del_user_address"
+
+
+//商品相关接口=====================
+
+//25、获取商品列表
+#define PRODUCT_LIST @"/index.php?d=api&c=products&m=get_product_list"
+
+//订单相关接口=====================
+
+//40、购物车添加商品
+#define ORDER_ADD_TO_CART @"/index.php?d=api&c=order&m=add_to_cart"
+
+//41、购物车增加/减少商品
+#define ORDER_EDIT_CART_PRODUCT @"/index.php?d=api&c=order&m=edit_cart_product"
+
+//42、删除某条购物车记录
+#define ORDER_DEL_CART_PRODUCT @"/index.php?d=api&c=order&m=del_cart_product"
+
+//43、获取购物车记录
+#define ORDER_GET_CART_PRODCUTS @"/index.php?d=api&c=order&m=get_cart_products"
+
+//44、用户登录后同步购物车数据
+#define ORDER_SYNC_CART_INFO @"/index.php?d=api&c=order&m=sync_cart_info"
 
 
 #endif
