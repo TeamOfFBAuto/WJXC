@@ -373,6 +373,10 @@
     }
     
     self.userInteractionEnabled = YES;
+    
+    //设置数据个数
+    [self setValue:[NSNumber numberWithInteger:_dataArray.count] forKey:@"_dataArrayCount"];
+
 }
 
 - (BOOL)egoRefreshTableDataSourceIsLoading:(UIView*)view

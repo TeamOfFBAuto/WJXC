@@ -60,7 +60,7 @@
         
         [LTools showMBProgressWithText:result[RESULT_INFO] addToView:self.view];
         
-        [[NSNotificationCenter defaultCenter]postNotificationName:NOTIFICATION_ADD_TO_CART object:nil];
+        [[NSNotificationCenter defaultCenter]postNotificationName:NOTIFICATION_UPDATE_TO_CART object:nil];
         
     } failBlock:^(NSDictionary *result) {
         

@@ -14,6 +14,6 @@
 
 #define NOTIFICATION_ADDADDRESS @"addAddress"//添加新地址
 
-#define NOTIFICATION_ADD_TO_CART @"addProductToCart"//添加到购物车
+#define NOTIFICATION_UPDATE_TO_CART @"updateProductToCart"//更新购物车
 
 #endif

@@ -71,5 +71,7 @@ typedef void(^UpdateParamsBlock)(NSDictionary *params);
 -(void)setMyViewControllerLeftButtonType:(MyViewControllerLeftbuttonType)theType WithRightButtonType:(MyViewControllerRightbuttonType)rightType;
 -(void)leftButtonTap:(UIButton *)sender;
 
+-(void)rightButtonTap:(UIButton *)sender;
+
 
 @end

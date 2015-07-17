@@ -19,6 +19,8 @@
 @property (strong, nonatomic) IBOutlet UIButton *reduceButton;
 @property (strong, nonatomic) IBOutlet UIButton *addButton;
 @property (strong, nonatomic) IBOutlet UILabel *numLabel;
+@property (strong, nonatomic) IBOutlet UIView *bgView;
+@property (strong, nonatomic) IBOutlet UIButton *deleteBtn;
 
 - (void)setCellWithModel:(id)aModel;
 

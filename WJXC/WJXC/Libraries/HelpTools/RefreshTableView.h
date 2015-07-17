@@ -46,6 +46,8 @@
 @interface RefreshTableView : UITableView<L_EGORefreshTableDelegate,UITableViewDataSource,UITableViewDelegate>
 {
     BOOL _neverShowLoadMore;//是否永远不显示加载更多
+    
+    int _dataArrayCount;//数据源个数
 }
 
 
