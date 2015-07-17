@@ -25,6 +25,7 @@
     
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     [btn setFrame:CGRectMake(100, 100, 100, 100)];
+    btn.backgroundColor = [UIColor orangeColor];
     [btn setTitle:@"单品详情" forState:UIControlStateNormal];
     [btn addTarget:self action:@selector(test) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:btn];

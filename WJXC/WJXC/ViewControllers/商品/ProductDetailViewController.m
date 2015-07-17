@@ -242,6 +242,7 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.row == 2) {
         ProductCommentViewController *ccc = [[ProductCommentViewController alloc]init];
+        ccc.model = _theProductModel;
         [self.navigationController pushViewController:ccc animated:YES];
     }
 }
