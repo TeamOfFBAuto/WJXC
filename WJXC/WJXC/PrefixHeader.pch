@@ -25,6 +25,8 @@
 
 #import "YJYRequstManager.h"//网络请求类
 
+#import "DBManager.h" //数据库操作
+
 #import "RefreshTableView.h"
 
 #import "LTools.h"//工具类
@@ -33,6 +35,7 @@
 #import "SVProgressHUD.h"//浮层提示框
 #import "LNavigationController.h"//滑动返回
 #import "UIImageView+WebCache.h"
+#import "FMDB.h" //数据库三方类
 
 //umeng相关
 #import "MobClick.h"

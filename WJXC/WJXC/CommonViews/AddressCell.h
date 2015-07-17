@@ -16,4 +16,6 @@
 @property (strong, nonatomic) IBOutlet UIButton *editButton;
 @property (strong, nonatomic) IBOutlet UIButton *deleteButton;
 
+- (void)setCellWithModel:(id)aModel;
+
 @end

@@ -50,8 +50,50 @@
 //获取商品详情
 #define GET_PRODUCTDETAIL @"/index.php?d=api&c=products&m=get_product_detail"
 
+
 //获取商品评论(参数product_id=1  商品id 必填 comment_level=1 选填 评论级别 1差评 2中评 3好评  0或不传将获取所有级别评论 page=1 当前评论页perpage=1 评论每页显示数目 order=comment_id   排序字段 direction=  排序顺序  [desc:降序   asc：升序])
 #define GET_PRODUCT_COMMENT @"/index.php?d=api&c=products&m=get_product_comment"
+
+//收货地址相关接口==================
+
+//获取用户的收货地址列表
+#define USER_ADDRESS_LIST @"/index.php?d=api&c=user&m=get_user_address"
+
+//16、添加用户的收货地址
+#define USER_ADDRESS_ADD @"/index.php?d=api&c=user&m=add_user_address"
+
+//17、编辑用户的收货地址
+#define USER_ADDRESS_EDIT @"/index.php?d=api&c=user&m=edit_user_address"
+
+//设置默认地址
+#define USER_ADDRESS_SETDEFAULT @"/index.php?d=api&c=user&m=set_default_address"
+
+//删除地址
+#define USER_ADDRESS_DELETE @"/index.php?d=api&c=user&m=del_user_address"
+
+
+//商品相关接口=====================
+
+//25、获取商品列表
+#define PRODUCT_LIST @"/index.php?d=api&c=products&m=get_product_list"
+
+//订单相关接口=====================
+
+//40、购物车添加商品
+#define ORDER_ADD_TO_CART @"/index.php?d=api&c=order&m=add_to_cart"
+
+//41、购物车增加/减少商品
+#define ORDER_EDIT_CART_PRODUCT @"/index.php?d=api&c=order&m=edit_cart_product"
+
+//42、删除某条购物车记录
+#define ORDER_DEL_CART_PRODUCT @"/index.php?d=api&c=order&m=del_cart_product"
+
+//43、获取购物车记录
+#define ORDER_GET_CART_PRODCUTS @"/index.php?d=api&c=order&m=get_cart_products"
+
+//44、用户登录后同步购物车数据
+#define ORDER_SYNC_CART_INFO @"/index.php?d=api&c=order&m=sync_cart_info"
+
 
 
 #endif

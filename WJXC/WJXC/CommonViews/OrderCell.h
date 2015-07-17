@@ -6,6 +6,9 @@
 //  Copyright (c) 2015年 lcw. All rights reserved.
 //
 
+/**
+ *  订单cell
+ */
 #import <UIKit/UIKit.h>
 
 @interface OrderCell : UITableViewCell
