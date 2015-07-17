@@ -63,10 +63,23 @@
     [_table addObserver:self forKeyPath:@"_dataArrayCount" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
     
     //初始化 记录是否选择
-    
     _selectDic = [NSMutableDictionary dictionary];
     
-    [_table showRefreshHeader:YES];
+    NSString *authkey = [GMAPI getAuthkey];
+    
+    if (authkey.length) {
+        
+        [_table showRefreshHeader:YES];
+    }else
+    {
+        //获取本地数据
+        
+        NSArray *array = [[DBManager shareInstance]QueryData];
+        
+        [_table reloadData:array isHaveMore:NO];
+
+    }
+    
     
     //监测购物车是否更新
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(updateCartNotification:) name:NOTIFICATION_UPDATE_TO_CART object:nil];
@@ -441,6 +454,17 @@
               productModel:(ProductModel *)aModel
 {
     NSString *authkey = [GMAPI getAuthkey];
+    
+    if (authkey.length == 0) {
+        
+        [[DBManager shareInstance]increasProductId:aModel.product_id ByNum:num];
+        aModel.product_num = [NSString stringWithFormat:@"%d",[aModel.product_num intValue] + num];
+        [_table reloadData];
+        [self updateSumPrice];
+        
+        return;
+    }
+    
     NSDictionary *params = @{@"authcode":authkey,
                              @"cart_pro_id":aModel.cart_pro_id,
                              @"product_num":[NSNumber numberWithInt:num]};

@@ -53,6 +53,16 @@
     
     int product_num = 1;//测试
     NSString *authcode = [GMAPI getAuthkey];
+    
+    if (authcode.length == 0) {
+        
+        [[DBManager shareInstance]insertProduct:aModel];
+        
+        [LTools showMBProgressWithText:@"添加购物车成功" addToView:self.view];
+
+        return;
+    }
+    
     NSDictionary*dic = @{@"authcode":authcode,
                          @"product_id":aModel.product_id,
                          @"product_num":[NSNumber numberWithInt:product_num]};

@@ -53,5 +53,7 @@
 
 @property(nonatomic,assign)BOOL selected;//是否被选择
 
+//price text,add_time text
+
 
 @end
