@@ -65,20 +65,20 @@
     //初始化 记录是否选择
     _selectDic = [NSMutableDictionary dictionary];
     
-    NSString *authkey = [GMAPI getAuthkey];
+//    NSString *authkey = [GMAPI getAuthkey];
     
-    if (authkey.length) {
-        
-        [_table showRefreshHeader:YES];
-    }else
-    {
-        //获取本地数据
-        
-        NSArray *array = [[DBManager shareInstance]QueryData];
-        
-        [_table reloadData:array isHaveMore:NO];
-
-    }
+//    if (authkey.length) {
+    
+//        [_table showRefreshHeader:YES];
+//    }else
+//    {
+//        //获取本地数据
+//        
+//        NSArray *array = [[DBManager shareInstance]QueryData];
+//        
+//        [_table reloadData:array isHaveMore:NO];
+//
+//    }
     
     
     //监测购物车是否更新
@@ -96,6 +96,20 @@
         
         [_table showRefreshHeader:YES];
         _isUpdateCart = NO;
+    }
+    
+    //判断是否需要同步到服务器 1、数据库有 2、登录了
+    
+    NSString *authkey = [GMAPI getAuthkey];
+    BOOL isExist = [[DBManager shareInstance]isExistUnsyncProduct];
+    if (authkey.length && isExist) {
+        
+        //同步数据
+        
+        [self syncCartInfo];
+    }else
+    {
+        [_table showRefreshHeader:YES];
     }
 }
 
@@ -330,7 +344,6 @@
     
     //注意顺序,一定要先设置 yes or no再做如下操作
     sender.selected = !sender.selected;
-
     
     _selectAllBtn.selected = [self isAllSelected];
 
@@ -342,18 +355,14 @@
 
     _isSelectAll = YES;
     
-    if (sender.selected) {
+    for (int i = 0; i < _table.dataArray.count; i ++) {
         
-        for (int i = 0; i < _table.dataArray.count; i ++) {
-            
-            ProductModel *aModel = [_table.dataArray objectAtIndex:i];
-            [_selectDic setObject:@"yes" forKey:aModel.product_id];
-        }
-    }else
-    {
-        [_selectDic removeAllObjects];
+        ProductModel *aModel = [_table.dataArray objectAtIndex:i];
+        BOOL isOK = sender.selected;
+        [_selectDic setObject:isOK ? @"yes" : @"no" forKey:aModel.product_id];
 
     }
+    
     
     [_table reloadData];
     
@@ -414,6 +423,49 @@
 #pragma mark - 网络请求
 
 /**
+ *  同步购物车信息
+ */
+- (void)syncCartInfo
+{
+//    authcode \商品id 多个中间用英文逗号隔开\商品个数 多个中间用英文逗号隔开
+    
+    NSArray *cartInfo = [[DBManager shareInstance]QueryData];
+    
+    NSMutableArray *product_ids = [NSMutableArray arrayWithCapacity:cartInfo.count];
+    NSMutableArray *product_nums = [NSMutableArray arrayWithCapacity:cartInfo.count];
+    for (ProductModel *aModel in cartInfo) {
+        
+        [product_ids addObject:aModel.product_id];
+        [product_nums addObject:aModel.product_num];
+    }
+    
+    NSString *ids = [product_ids componentsJoinedByString:@","];
+    NSString *nums = [product_nums componentsJoinedByString:@","];
+    
+    NSString *authkey = [GMAPI getAuthkey];
+
+    NSDictionary *params = @{@"authcode":authkey,
+                             @"product_ids":ids,
+                             @"product_nums":nums};
+    
+    __weak typeof(_table)weakTable = _table;
+    __weak typeof(self)weakSelf = self;
+    [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodPost api:ORDER_SYNC_CART_INFO parameters:params constructingBodyBlock:nil completion:^(NSDictionary *result) {
+        
+        NSLog(@"同步数据 %@",result[RESULT_INFO]);
+        //同步成功清空本地
+        [[DBManager shareInstance]deleteAll];
+        //刷新数据
+        [weakTable showRefreshHeader:YES];
+        
+    } failBlock:^(NSDictionary *result) {
+        
+        NSLog(@"同步数据失败 %@",result[RESULT_INFO]);
+        
+    }];
+}
+
+/**
  *  删除购物车某条记录
  *
  *  @param aModel <#aModel description#>
@@ -424,6 +476,22 @@
 //    cart_pro_id 购物车商品id
     
     NSString *authkey = [GMAPI getAuthkey];
+    
+    //未登录
+    if (authkey.length == 0) {
+        
+        [[DBManager shareInstance]deleteProductId:aModel.product_id];
+        
+        [_table.dataArray removeObjectAtIndex:index];
+        
+        [_table reloadData];
+        
+        [_table setValue:[NSNumber numberWithInteger:_table.dataArray.count] forKey:@"_dataArrayCount"];
+        
+        return;
+    }
+    
+    
     NSDictionary *params = @{@"authcode":authkey,
                              @"cart_pro_id":aModel.cart_pro_id};
     
@@ -497,7 +565,35 @@
 //    page 页码
 //    per_page 每页多少条记录
     
+    
     NSString *authkey = [GMAPI getAuthkey];
+    
+    if (authkey.length == 0) {
+        
+        //获取本地数据
+        NSArray *array = [[DBManager shareInstance]QueryData];
+        
+        NSArray *allkeys = [_selectDic allKeys];
+        for (ProductModel *aModel in array) {
+            
+            NSString *productId = [NSString stringWithFormat:@"%@",aModel.product_id];
+            
+            //不包含时 设为yes
+            if (![allkeys containsObject:productId]) {
+                
+                [_selectDic setObject:@"yes" forKey:aModel.product_id];
+
+            }else
+            {
+                NSLog(@"baohan %@",productId);
+            }
+        }
+        
+        [_table reloadData:array isHaveMore:NO];
+        
+        return;
+    }
+    
     NSDictionary *params = @{@"authcode":authkey,
                              @"page":[NSNumber numberWithInt:_table.pageNum],
                              @"perpage":[NSNumber numberWithInt:50]};
@@ -602,15 +698,9 @@
     cell.deleteBtn.tag = kPadding_delete + indexPath.row;
     cell.selectedButton.tag = kPadding_select + indexPath.row;
 
-    if (_isSelectAll) {
-        
-        cell.selectedButton.selected = _selectAllBtn.selected;
-    }else
-    {
-        //默认 yes
-        NSString *state = _selectDic[aModel.product_id];
-        cell.selectedButton.selected = [state isEqualToString:@"yes"] ? YES : NO;
-    }
+    //默认 yes
+    NSString *state = _selectDic[aModel.product_id];
+    cell.selectedButton.selected = [state isEqualToString:@"yes"] ? YES : NO;
     
     [cell.addButton addTarget:self action:@selector(clickToAdd:) forControlEvents:UIControlEventTouchUpInside];
 

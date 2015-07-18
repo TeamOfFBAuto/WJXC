@@ -63,7 +63,37 @@
 }
 
 
-//２.查询数据
+//２.查询是否有未同步数据
+
+-(BOOL)isExistUnsyncProduct
+{
+    if ([_dataBase open]) {
+        
+        FMResultSet *rs = [_dataBase executeQuery:@"SELECT count(*) FROM ShoppingCar where product_id != 0"];
+        
+        while ([rs next]){
+            
+            int num = [rs intForColumnIndex:0];
+            
+            NSLog(@"有未同步数据 existNum: %d",num);
+            
+            if (num > 0) {
+                
+                [rs close];
+                
+                [_dataBase close];
+                
+                return YES;
+            }
+        }
+        
+    }
+    NSLog(@"没有未同步数据");
+    
+    return NO;
+}
+
+
 
 -(NSArray *)QueryData
 {
@@ -144,9 +174,26 @@
         NSString *price = aModel.current_price ? : @"0";
         NSString *cover_pic = aModel.cover_pic ? : @"";
         
-        [_dataBase executeUpdate:@"insert into ShoppingCar (uid,product_name,product_id,current_price,add_time,cover_pic) values (?,?,?,?,?,?)",uid,name,[NSNumber numberWithInt:[productId intValue]],price,addTime,cover_pic];
         
-        [_dataBase executeUpdate:@"update ShoppingCar set product_num = product_num + 1 where product_id = ?",[NSNumber numberWithInt:[productId intValue]]];
+        FMResultSet *rs = [_dataBase executeQuery:@"SELECT count(*) FROM ShoppingCar where product_id = ?",productId];
+        
+        int num = 0;
+        while ([rs next]){
+            
+            num = [rs intForColumnIndex:0];
+            
+            NSLog(@"productId %@ existNum: %d",productId,num);
+
+        }
+        
+        //存在的话 +1 否则 插入新数据
+        if (num > 0) {
+            
+            [_dataBase executeUpdate:@"update ShoppingCar set product_num = product_num + 1 where product_id = ?",[NSNumber numberWithInt:[productId intValue]]];
+        }else
+        {
+            [_dataBase executeUpdate:@"insert into ShoppingCar (uid,product_name,product_id,current_price,add_time,cover_pic,product_num) values (?,?,?,?,?,?,?)",uid,name,[NSNumber numberWithInt:[productId intValue]],price,addTime,cover_pic,[NSNumber numberWithInt:1]];
+        }
         
         [_dataBase commit];
         [_dataBase close];

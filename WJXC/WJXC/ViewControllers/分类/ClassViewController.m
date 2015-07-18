@@ -59,6 +59,9 @@
         [[DBManager shareInstance]insertProduct:aModel];
         
         [LTools showMBProgressWithText:@"添加购物车成功" addToView:self.view];
+        
+        [[NSNotificationCenter defaultCenter]postNotificationName:NOTIFICATION_UPDATE_TO_CART object:nil];
+
 
         return;
     }

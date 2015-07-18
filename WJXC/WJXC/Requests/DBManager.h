@@ -23,6 +23,10 @@
 
 -(NSArray *)QueryData;
 
+//２.查询是否有未同步数据
+
+-(BOOL)isExistUnsyncProduct;
+
 //３.更新数据 数量
 
 -(void)udpateProductId:(NSString *)productId
