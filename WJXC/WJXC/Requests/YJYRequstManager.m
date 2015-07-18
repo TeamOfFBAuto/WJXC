@@ -57,6 +57,7 @@
 {
     NSString *baseUrl = [SERVER_URL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     
+    
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/html",@"text/json",@"text/javascript", nil];
@@ -118,6 +119,7 @@
         }else if (method == YJYRequstMethodPost){
             
             if (constructingBlock) {
+                
                 
                 requestOpertation = [manager POST:baseUrl parameters:paramsDic
                                      

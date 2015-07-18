@@ -126,6 +126,7 @@
     } failBlock:^(NSDictionary *result) {
         
         NSLog(@"failBlock:%@",result);
+        [weakTable loadFail];
 
     }];
 }

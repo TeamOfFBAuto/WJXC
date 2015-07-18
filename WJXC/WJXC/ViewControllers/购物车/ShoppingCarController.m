@@ -12,6 +12,8 @@
 #import "ShoppingCartCell.h"
 #import "ProductModel.h"
 
+#import "ConfirmOrderController.h"//确认订单
+
 #define kPadding_add 1000 //数量增加
 #define kPadding_reduce 2000 //数量减少
 #define kPadding_delete 3000 //删除
@@ -323,6 +325,12 @@
 
     }
     NSLog(@"总价: %f",[self sumPrice]);
+    
+    ConfirmOrderController *confirm = [[ConfirmOrderController alloc]init];
+    confirm.productArray = _table.dataArray;
+    confirm.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:confirm animated:YES];
+    
 }
 
 - (void)clickToSelect:(UIButton *)sender
@@ -548,6 +556,7 @@
     } failBlock:^(NSDictionary *result) {
         
         NSLog(@"failBlock:%@",result);
+        [weakTable loadFail];
         
     }];
 }
