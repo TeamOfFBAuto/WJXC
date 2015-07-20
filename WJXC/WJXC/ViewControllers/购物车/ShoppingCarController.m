@@ -61,27 +61,13 @@
     _table.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.view addSubview:_table];
     
+    _isUpdateCart = YES;
+    
     //监测数据源
     [_table addObserver:self forKeyPath:@"_dataArrayCount" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
     
     //初始化 记录是否选择
     _selectDic = [NSMutableDictionary dictionary];
-    
-//    NSString *authkey = [GMAPI getAuthkey];
-    
-//    if (authkey.length) {
-    
-//        [_table showRefreshHeader:YES];
-//    }else
-//    {
-//        //获取本地数据
-//        
-//        NSArray *array = [[DBManager shareInstance]QueryData];
-//        
-//        [_table reloadData:array isHaveMore:NO];
-//
-//    }
-    
     
     //监测购物车是否更新
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(updateCartNotification:) name:NOTIFICATION_UPDATE_TO_CART object:nil];
@@ -94,12 +80,6 @@
     
     self.navigationController.navigationBarHidden = NO;
     
-    if (_isUpdateCart) {
-        
-        [_table showRefreshHeader:YES];
-        _isUpdateCart = NO;
-    }
-    
     //判断是否需要同步到服务器 1、数据库有 2、登录了
     
     NSString *authkey = [GMAPI getAuthkey];
@@ -111,7 +91,13 @@
         [self syncCartInfo];
     }else
     {
-        [_table showRefreshHeader:YES];
+//        [_table showRefreshHeader:YES];
+        
+        if (_isUpdateCart) {
+            
+            [_table showRefreshHeader:YES];
+            _isUpdateCart = NO;
+        }
     }
 }
 
@@ -313,6 +299,8 @@
  */
 - (void)clickToPay:(UIButton *)sender
 {
+    
+    NSMutableArray *arr = [NSMutableArray array];
     for (int i = 0; i < _table.dataArray.count; i ++) {
         
         ProductModel *aModel = [_table.dataArray objectAtIndex:i];
@@ -320,14 +308,23 @@
         if ([_selectDic[aModel.product_id] isEqualToString:@"yes"]) {
             
             NSLog(@"购买:%@ 单价:%@ 数量:%@",aModel.product_name,aModel.current_price,aModel.product_num);
+            
+            [arr addObject:aModel];
 
         }
 
     }
     NSLog(@"总价: %f",[self sumPrice]);
     
+    if (arr.count == 0) {
+        
+        [LTools showMBProgressWithText:@"您还没有选择商品哦!" addToView:self.view];
+        return;
+    }
+    
     ConfirmOrderController *confirm = [[ConfirmOrderController alloc]init];
-    confirm.productArray = _table.dataArray;
+    confirm.productArray = arr;
+    confirm.sumPrice = [self sumPrice];
     confirm.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:confirm animated:YES];
     
@@ -559,8 +556,8 @@
         [weakTable loadFail];
         
     }];
-}
 
+}
 /**
  *  获取购物车数据
  */

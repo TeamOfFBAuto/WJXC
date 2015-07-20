@@ -19,6 +19,8 @@ typedef void(^ ActionBlock) (NSInteger buttonIndex);
     ActionBlock actionBlock;
     UIView *bgView;
 }
+@property(nonatomic,retain)UIButton *firstButton;
+@property(nonatomic,retain)UIButton *secondButton;
 
 - (void)actionBlock:(ActionBlock)aBlock;
 

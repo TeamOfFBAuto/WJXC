@@ -36,27 +36,27 @@
         [bgView addSubview:btnView];
         [btnView addCornerRadius:5.f];
         
-        UIButton *firstButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        firstButton.frame = CGRectMake(0, 0, DEVICE_WIDTH - KLEFT * 2, 45);
-        [firstButton setTitle:@"拍照" forState:UIControlStateNormal];
-        [firstButton setTitleColor:DEFAULT_TEXTCOLOR forState:UIControlStateNormal];
-        firstButton.tag = 100;
-        firstButton.backgroundColor = [UIColor whiteColor];
-        [firstButton setBackgroundImage:[UIImage imageNamed:@"bai_button554_90"] forState:UIControlStateNormal];
-        [btnView addSubview:firstButton];
+        self.firstButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        _firstButton.frame = CGRectMake(0, 0, DEVICE_WIDTH - KLEFT * 2, 45);
+        [_firstButton setTitle:@"拍照" forState:UIControlStateNormal];
+        [_firstButton setTitleColor:DEFAULT_TEXTCOLOR forState:UIControlStateNormal];
+        _firstButton.tag = 100;
+        _firstButton.backgroundColor = [UIColor whiteColor];
+        [_firstButton setBackgroundImage:[UIImage imageNamed:@"bai_button554_90"] forState:UIControlStateNormal];
+        [btnView addSubview:_firstButton];
         
-        UIView *line = [[UIView alloc]initWithFrame:CGRectMake(0, firstButton.bottom, firstButton.width, 0.5f)];
+        UIView *line = [[UIView alloc]initWithFrame:CGRectMake(0, _firstButton.bottom, _firstButton.width, 0.5f)];
         [btnView addSubview:line];
         line.backgroundColor = [UIColor colorWithHexString:@"d6d6d6"];
         
-        UIButton *secondButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        secondButton.frame = CGRectMake(0, firstButton.bottom + 0.5, DEVICE_WIDTH - KLEFT * 2, 45);
-        [secondButton setTitle:@"从手机相册选择" forState:UIControlStateNormal];
-        [secondButton setTitleColor:DEFAULT_TEXTCOLOR forState:UIControlStateNormal];
-        secondButton.tag = 101;
-        secondButton.backgroundColor = [UIColor whiteColor];
-        [secondButton setBackgroundImage:[UIImage imageNamed:@"bai_button554_90"] forState:UIControlStateNormal];
-        [btnView addSubview:secondButton];
+        self.secondButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        _secondButton.frame = CGRectMake(0, _firstButton.bottom + 0.5, DEVICE_WIDTH - KLEFT * 2, 45);
+        [_secondButton setTitle:@"从手机相册选择" forState:UIControlStateNormal];
+        [_secondButton setTitleColor:DEFAULT_TEXTCOLOR forState:UIControlStateNormal];
+        _secondButton.tag = 101;
+        _secondButton.backgroundColor = [UIColor whiteColor];
+        [_secondButton setBackgroundImage:[UIImage imageNamed:@"bai_button554_90"] forState:UIControlStateNormal];
+        [btnView addSubview:_secondButton];
         
         
         UIButton *cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -69,8 +69,8 @@
         [cancelButton setBackgroundImage:[UIImage imageNamed:@"hui_button554_90"] forState:UIControlStateNormal];
         [bgView addSubview:cancelButton];
         
-        [firstButton addTarget:self action:@selector(actionToDo:) forControlEvents:UIControlEventTouchUpInside];
-        [secondButton addTarget:self action:@selector(actionToDo:) forControlEvents:UIControlEventTouchUpInside];
+        [_firstButton addTarget:self action:@selector(actionToDo:) forControlEvents:UIControlEventTouchUpInside];
+        [_secondButton addTarget:self action:@selector(actionToDo:) forControlEvents:UIControlEventTouchUpInside];
         [cancelButton addTarget:self action:@selector(actionToDo:) forControlEvents:UIControlEventTouchUpInside];
         
         [[UIApplication sharedApplication].keyWindow addSubview:self];

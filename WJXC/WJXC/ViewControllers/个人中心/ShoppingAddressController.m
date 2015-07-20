@@ -10,6 +10,7 @@
 #import "AddressCell.h"
 #import "AddAddressController.h"//添加收货地址
 #import "AddressModel.h"
+#import "SelectAddressCell.h"
 
 #define kPadding_Default 100
 #define kPadding_Delete 1000
@@ -37,9 +38,16 @@
     // Do any additional setup after loading the view.
     
     self.myTitle = @"收货地址";
-    [self setMyViewControllerLeftButtonType:MyViewControllerLeftbuttonTypeBack WithRightButtonType:MyViewControllerRightbuttonTypeNull];
     
-    _table = [[RefreshTableView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH,DEVICE_HEIGHT - 64 - 43 - 25)];
+    if (self.isSelectAddress) {
+        self.rightString = @"管理";
+        [self setMyViewControllerLeftButtonType:MyViewControllerLeftbuttonTypeBack WithRightButtonType:MyViewControllerRightbuttonTypeText];
+    }else
+    {
+        [self setMyViewControllerLeftButtonType:MyViewControllerLeftbuttonTypeBack WithRightButtonType:MyViewControllerRightbuttonTypeNull];
+    }
+    
+    _table = [[RefreshTableView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH,DEVICE_HEIGHT - 64 - 43 - 25) showLoadMore:NO];
     _table.refreshDelegate = self;
     _table.dataSource = self;
     _table.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -219,6 +227,22 @@
 - (void)didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     AddressModel *aModel = _table.dataArray[indexPath.row];
+
+    self.selectAddressId = aModel.address_id;
+    
+    [_table reloadData];
+    
+    if (self.isSelectAddress) {
+        
+        if (self.selectAddressBlock) {
+            
+            self.selectAddressBlock(aModel);
+        }
+        
+        [self performSelector:@selector(leftButtonTap:) withObject:nil afterDelay:0.5];
+        
+        return;
+    }
     AddAddressController *address = [[AddAddressController alloc]init];
     address.isEditAddress = YES;
     address.addressModel = aModel;
@@ -227,6 +251,10 @@
 
 - (CGFloat)heightForRowIndexPath:(NSIndexPath *)indexPath
 {
+    if (self.isSelectAddress) {
+        
+        return 88.f;
+    }
     return 150.f;
 }
 
@@ -239,6 +267,24 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (self.isSelectAddress) {
+
+        static NSString *identify = @"SelectAddressCell";
+        SelectAddressCell *cell = (SelectAddressCell *)[LTools cellForIdentify:identify cellName:identify forTable:tableView];
+        AddressModel *aModel = [_table.dataArray objectAtIndex:indexPath.row];
+        [cell setCellWithModel:aModel];
+        
+        if ([aModel.address_id isEqualToString:self.selectAddressId]) {
+            
+            cell.selectImage.hidden = NO;
+        }else
+        {
+            cell.selectImage.hidden = YES;
+        }
+        
+        return cell;
+    }
+    
     static NSString *identify = @"AddressCell";
     AddressCell *cell = (AddressCell *)[LTools cellForIdentify:identify cellName:identify forTable:tableView];
     [cell.addressButton addTarget:self action:@selector(clickToSelectAddress:) forControlEvents:UIControlEventTouchUpInside];

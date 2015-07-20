@@ -115,6 +115,10 @@
 		139D43A11B5A65E40036DC3B /* SelectCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 139D439F1B5A65E40036DC3B /* SelectCell.xib */; };
 		139D43A51B5A68FA0036DC3B /* ProductCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 139D43A31B5A68FA0036DC3B /* ProductCell.m */; };
 		139D43A61B5A68FA0036DC3B /* ProductCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 139D43A41B5A68FA0036DC3B /* ProductCell.xib */; };
+		13A2087A1B5C96C800CC4EC0 /* ConfirmInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 13A208781B5C96C800CC4EC0 /* ConfirmInfoCell.m */; };
+		13A2087B1B5C96C800CC4EC0 /* ConfirmInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13A208791B5C96C800CC4EC0 /* ConfirmInfoCell.xib */; };
+		13A2087F1B5CD81C00CC4EC0 /* SelectAddressCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 13A2087D1B5CD81C00CC4EC0 /* SelectAddressCell.m */; };
+		13A208801B5CD81C00CC4EC0 /* SelectAddressCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13A2087E1B5CD81C00CC4EC0 /* SelectAddressCell.xib */; };
 		13A64BFA1B3BDF5D00D9A106 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13A64BF91B3BDF5D00D9A106 /* main.m */; };
 		13A64BFD1B3BDF5D00D9A106 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13A64BFC1B3BDF5D00D9A106 /* AppDelegate.mm */; };
 		13A64C051B3BDF5D00D9A106 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13A64C041B3BDF5D00D9A106 /* Images.xcassets */; };
@@ -365,6 +369,12 @@
 		139D43A21B5A68FA0036DC3B /* ProductCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProductCell.h; sourceTree = "<group>"; };
 		139D43A31B5A68FA0036DC3B /* ProductCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProductCell.m; sourceTree = "<group>"; };
 		139D43A41B5A68FA0036DC3B /* ProductCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProductCell.xib; sourceTree = "<group>"; };
+		13A208771B5C96C800CC4EC0 /* ConfirmInfoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfirmInfoCell.h; sourceTree = "<group>"; };
+		13A208781B5C96C800CC4EC0 /* ConfirmInfoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConfirmInfoCell.m; sourceTree = "<group>"; };
+		13A208791B5C96C800CC4EC0 /* ConfirmInfoCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ConfirmInfoCell.xib; sourceTree = "<group>"; };
+		13A2087C1B5CD81C00CC4EC0 /* SelectAddressCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectAddressCell.h; sourceTree = "<group>"; };
+		13A2087D1B5CD81C00CC4EC0 /* SelectAddressCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectAddressCell.m; sourceTree = "<group>"; };
+		13A2087E1B5CD81C00CC4EC0 /* SelectAddressCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SelectAddressCell.xib; sourceTree = "<group>"; };
 		13A64BF41B3BDF5D00D9A106 /* WJXC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WJXC.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13A64BF81B3BDF5D00D9A106 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		13A64BF91B3BDF5D00D9A106 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -1091,6 +1101,9 @@
 				13FEA4991B4BD590009BD01D /* AddressCell.h */,
 				13FEA49A1B4BD590009BD01D /* AddressCell.m */,
 				13FEA49B1B4BD590009BD01D /* AddressCell.xib */,
+				13A2087C1B5CD81C00CC4EC0 /* SelectAddressCell.h */,
+				13A2087D1B5CD81C00CC4EC0 /* SelectAddressCell.m */,
+				13A2087E1B5CD81C00CC4EC0 /* SelectAddressCell.xib */,
 				1384071F1B5798660008CAC3 /* ShoppingCartCell.h */,
 				138407201B5798660008CAC3 /* ShoppingCartCell.m */,
 				138407211B5798660008CAC3 /* ShoppingCartCell.xib */,
@@ -1103,6 +1116,9 @@
 				139D43A21B5A68FA0036DC3B /* ProductCell.h */,
 				139D43A31B5A68FA0036DC3B /* ProductCell.m */,
 				139D43A41B5A68FA0036DC3B /* ProductCell.xib */,
+				13A208771B5C96C800CC4EC0 /* ConfirmInfoCell.h */,
+				13A208781B5C96C800CC4EC0 /* ConfirmInfoCell.m */,
+				13A208791B5C96C800CC4EC0 /* ConfirmInfoCell.xib */,
 			);
 			path = CommonViews;
 			sourceTree = "<group>";
@@ -1572,6 +1588,7 @@
 				139457401B46296F00C45EB6 /* homepage_banner_miaosha@2x.png in Resources */,
 				139457291B46296F00C45EB6 /* shopping cart_address_add@2x.png in Resources */,
 				E3D0803C1B3D588800E4F87D /* share_QQ@2x.png in Resources */,
+				13A208801B5CD81C00CC4EC0 /* SelectAddressCell.xib in Resources */,
 				139457351B46296F00C45EB6 /* homepage_top_back_g@2x.png in Resources */,
 				1394571F1B46296F00C45EB6 /* my_address_delete@2x.png in Resources */,
 				1394572B1B46296F00C45EB6 /* shopping cart_address_middle_xg@2x.png in Resources */,
@@ -1616,6 +1633,7 @@
 				E3DE39A31B5922330015EEF6 /* gstarBack@2x.png in Resources */,
 				139457111B46296F00C45EB6 /* classify_06@2x.png in Resources */,
 				1394571E1B46296F00C45EB6 /* my_address@2x.png in Resources */,
+				13A2087B1B5C96C800CC4EC0 /* ConfirmInfoCell.xib in Resources */,
 				139457151B46296F00C45EB6 /* classify_2_jt@2x.png in Resources */,
 				139457411B46296F00C45EB6 /* homepage_bottom_classify_green@2x.png in Resources */,
 				E3DE39B81B592A2F0015EEF6 /* MJPhotoBrowser.bundle in Resources */,
@@ -1782,6 +1800,7 @@
 				135F85DF1B4CBDB500B5E5AD /* OrderViewController.m in Sources */,
 				139D43A51B5A68FA0036DC3B /* ProductCell.m in Sources */,
 				E3C15F8E1B4CA3BD00C30039 /* DataBase.m in Sources */,
+				13A2087A1B5C96C800CC4EC0 /* ConfirmInfoCell.m in Sources */,
 				E3D0801D1B3D51A500E4F87D /* SVProgressHUD.m in Sources */,
 				E3DE39BD1B592A2F0015EEF6 /* MJPhotoView.m in Sources */,
 				E3D080131B3D510C00E4F87D /* BaseModel.m in Sources */,
@@ -1802,6 +1821,7 @@
 				13FEA49C1B4BD590009BD01D /* AddressCell.m in Sources */,
 				E3CE7F651B4CFF980012940C /* GCycleScrollView.m in Sources */,
 				13FEA48D1B4BCE2A009BD01D /* LRefreshTableHeaderView.m in Sources */,
+				13A2087F1B5CD81C00CC4EC0 /* SelectAddressCell.m in Sources */,
 				E3D080241B3D51D000E4F87D /* LTools.m in Sources */,
 				E3DE39BB1B592A2F0015EEF6 /* MJPhotoProgressView.m in Sources */,
 				13A64BFA1B3BDF5D00D9A106 /* main.m in Sources */,
