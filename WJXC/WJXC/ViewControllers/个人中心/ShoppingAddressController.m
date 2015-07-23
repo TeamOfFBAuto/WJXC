@@ -162,6 +162,18 @@
 
 #pragma mark - 事件处理
 
+/**
+ *  跳转至收货地址管理
+ *
+ *  @param sender
+ */
+-(void)rightButtonTap:(UIButton *)sender
+{
+    ShoppingAddressController *shopAddress = [[ShoppingAddressController alloc]init];
+    
+    [self.navigationController pushViewController:shopAddress animated:YES];
+}
+
 - (void)clickToAddNewAddress:(UIButton *)sender
 {
     AddAddressController *address = [[AddAddressController alloc]init];

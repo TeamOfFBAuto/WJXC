@@ -119,6 +119,9 @@
 		13A2087B1B5C96C800CC4EC0 /* ConfirmInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13A208791B5C96C800CC4EC0 /* ConfirmInfoCell.xib */; };
 		13A2087F1B5CD81C00CC4EC0 /* SelectAddressCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 13A2087D1B5CD81C00CC4EC0 /* SelectAddressCell.m */; };
 		13A208801B5CD81C00CC4EC0 /* SelectAddressCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13A2087E1B5CD81C00CC4EC0 /* SelectAddressCell.xib */; };
+		13A208831B5FA7DC00CC4EC0 /* PayActionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13A208821B5FA7DC00CC4EC0 /* PayActionViewController.m */; };
+		13A208861B608E8700CC4EC0 /* my_weixin@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 13A208841B608E8700CC4EC0 /* my_weixin@2x.png */; };
+		13A208871B608E8700CC4EC0 /* my_zhifubao@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 13A208851B608E8700CC4EC0 /* my_zhifubao@2x.png */; };
 		13A64BFA1B3BDF5D00D9A106 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13A64BF91B3BDF5D00D9A106 /* main.m */; };
 		13A64BFD1B3BDF5D00D9A106 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13A64BFC1B3BDF5D00D9A106 /* AppDelegate.mm */; };
 		13A64C051B3BDF5D00D9A106 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13A64C041B3BDF5D00D9A106 /* Images.xcassets */; };
@@ -375,6 +378,10 @@
 		13A2087C1B5CD81C00CC4EC0 /* SelectAddressCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectAddressCell.h; sourceTree = "<group>"; };
 		13A2087D1B5CD81C00CC4EC0 /* SelectAddressCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectAddressCell.m; sourceTree = "<group>"; };
 		13A2087E1B5CD81C00CC4EC0 /* SelectAddressCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SelectAddressCell.xib; sourceTree = "<group>"; };
+		13A208811B5FA7DC00CC4EC0 /* PayActionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PayActionViewController.h; sourceTree = "<group>"; };
+		13A208821B5FA7DC00CC4EC0 /* PayActionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PayActionViewController.m; sourceTree = "<group>"; };
+		13A208841B608E8700CC4EC0 /* my_weixin@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "my_weixin@2x.png"; sourceTree = "<group>"; };
+		13A208851B608E8700CC4EC0 /* my_zhifubao@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "my_zhifubao@2x.png"; sourceTree = "<group>"; };
 		13A64BF41B3BDF5D00D9A106 /* WJXC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WJXC.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13A64BF81B3BDF5D00D9A106 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		13A64BF91B3BDF5D00D9A106 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -737,6 +744,8 @@
 		139456D51B46296F00C45EB6 /* 购物车及订单 */ = {
 			isa = PBXGroup;
 			children = (
+				13A208841B608E8700CC4EC0 /* my_weixin@2x.png */,
+				13A208851B608E8700CC4EC0 /* my_zhifubao@2x.png */,
 				138407281B57A0450008CAC3 /* shopping cart_reduce_gray@2x.png */,
 				138407291B57A0450008CAC3 /* shopping cart_reduce_green@2x.png */,
 				139456D61B46296F00C45EB6 /* shopping cart_address_add@2x.png */,
@@ -1060,6 +1069,8 @@
 				13A64C621B3BF74E00D9A106 /* ShoppingCarController.m */,
 				139D439A1B5A489D0036DC3B /* ConfirmOrderController.h */,
 				139D439B1B5A489D0036DC3B /* ConfirmOrderController.m */,
+				13A208811B5FA7DC00CC4EC0 /* PayActionViewController.h */,
+				13A208821B5FA7DC00CC4EC0 /* PayActionViewController.m */,
 			);
 			path = "购物车";
 			sourceTree = "<group>";
@@ -1592,6 +1603,7 @@
 				139457351B46296F00C45EB6 /* homepage_top_back_g@2x.png in Resources */,
 				1394571F1B46296F00C45EB6 /* my_address_delete@2x.png in Resources */,
 				1394572B1B46296F00C45EB6 /* shopping cart_address_middle_xg@2x.png in Resources */,
+				13A208861B608E8700CC4EC0 /* my_weixin@2x.png in Resources */,
 				1394573E1B46296F00C45EB6 /* homepage_activity_clock@2x.png in Resources */,
 				1394571B1B46296F00C45EB6 /* classify_top_jt1@2x.png in Resources */,
 				1394574D1B46296F00C45EB6 /* homepage_top_search@2x.png in Resources */,
@@ -1610,6 +1622,7 @@
 				E3D07FEF1B3D4A9100E4F87D /* UMSCommentDetailController.xib in Resources */,
 				13A64C4C1B3BF1D600D9A106 /* Default-568h@2x.png in Resources */,
 				139457301B46296F00C45EB6 /* shopping cart_dd_top_name@2x.png in Resources */,
+				13A208871B608E8700CC4EC0 /* my_zhifubao@2x.png in Resources */,
 				13A64C081B3BDF5D00D9A106 /* LaunchScreen.xib in Resources */,
 				E3D07FF71B3D4A9100E4F87D /* UMSocialSDKResourcesNew.bundle in Resources */,
 				E3D080321B3D523200E4F87D /* LoginViewController.xib in Resources */,
@@ -1786,6 +1799,7 @@
 				E3C15F941B4CA45000C30039 /* GRegisterViewController.m in Sources */,
 				139457711B4678D200C45EB6 /* UIView+Additions.m in Sources */,
 				E3CE7F681B4D1FE60012940C /* NSDictionary+GJson.m in Sources */,
+				13A208831B5FA7DC00CC4EC0 /* PayActionViewController.m in Sources */,
 				13FEA4941B4BD198009BD01D /* CollectCell.m in Sources */,
 				E3D0801B1B3D51A500E4F87D /* SVIndefiniteAnimatedView.m in Sources */,
 				138407221B5798660008CAC3 /* ShoppingCartCell.m in Sources */,

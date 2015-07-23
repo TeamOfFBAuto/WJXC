@@ -12,7 +12,9 @@
 #import "ConfirmInfoCell.h"
 #import "ShoppingAddressController.h"//收货地址
 #import "AddressModel.h"
+#import "ProductModel.h"
 #import "FBActionSheet.h"
+#import "PayActionViewController.h"//支付页面
 
 #define ALIPAY @"支付宝支付"
 #define WXPAY  @"微信支付"
@@ -22,7 +24,7 @@
     UITableView *_table;
     NSArray *_titles;
     NSArray *_titlesSub;
-    UITextField *_inputTf;
+    UITextField *_inputTf;//备注
     NSString *_selectAddressId;//选中的地址
     
     UILabel *_nameLabel;//收货人name
@@ -31,6 +33,10 @@
     UIImageView *_phoneIcon;//电话icon
     
     NSString *_payStyle;//支付类型
+    
+    float _expressFee;//邮费
+    
+    MBProgressHUD *_loading;//加载
 }
 
 @end
@@ -51,21 +57,30 @@
 //    [temp addObjectsFromArray:self.productArray];
 //    self.productArray = temp;
     
-    _titles = @[@"支付信息",@"备注信息",@"商品清单",@"价格清单"];
+//    _titles = @[@"支付信息",@"备注信息",@"商品清单",@"价格清单"];
+    
+    _titles = @[@"备注信息",@"商品清单",@"价格清单"];
+
     _table = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, DEVICE_HEIGHT - 64) style:UITableViewStylePlain];
     _table.delegate = self;
     _table.dataSource = self;
     [self.view addSubview:_table];
     _table.separatorStyle = UITableViewCellSeparatorStyleNone;
+    _table.backgroundColor = DEFAULT_VIEW_BACKGROUNDCOLOR;
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(clickToHidderkeyboard)];
     tap.delegate = self;
     [_table addGestureRecognizer:tap];
     
-    [self tableHeaderView];
-    [self tableViewFooter];
+    _loading = [LTools MBProgressWithText:@"生成订单中..." addToView:self.view];
     
-    [self createBottomView];
+    
+    [self getAddressAndFee];//获取收货地址和邮费
+    
+//    [self tableHeaderView];
+//    [self tableViewFooter];
+//    
+//    [self createBottomView];
     
 }
 
@@ -74,7 +89,150 @@
     // Dispose of any resources that can be recreated.
 }
 
+#pragma mark - 网络请求
+
+/**
+ *  获取收货地址和邮费
+ */
+- (void)getAddressAndFee
+{
+//    authcode
+//     重量
+    
+    NSString *authkey = [GMAPI getAuthkey];
+    
+    float weight = [self sumWeight];//总重
+    
+    NSDictionary *params = @{@"authcode":authkey,
+                             @"weight":[NSNumber numberWithFloat:weight]};
+
+    __weak typeof(_table)weakTable = _table;
+    __weak typeof(self)weakSelf = self;
+    [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodGet api:ORDER_GET_DEFAULT_ADDRESS parameters:params constructingBodyBlock:nil completion:^(NSDictionary *result) {
+        
+        NSLog(@"获取收货地址和邮费 %@",result[RESULT_INFO]);
+        
+        NSDictionary *address = result[@"address"];
+        
+        AddressModel *aModel = [[AddressModel alloc]initWithDictionary:address];
+        
+        [weakSelf tableHeaderViewWithAddressModel:aModel];
+        [weakSelf tableViewFooter];
+        [weakSelf createBottomView];
+        
+    } failBlock:^(NSDictionary *result) {
+        
+        NSLog(@"获取收货地址和邮费 失败 %@",result[RESULT_INFO]);
+        
+    }];
+
+}
+
+/**
+ *  生成订单
+ */
+- (void)postOrderInfo
+{
+    //    authcode \商品id 多个中间用英文逗号隔开\商品个数 多个中间用英文逗号隔开
+    
+    int num = (int)self.productArray.count;
+    NSMutableArray *product_ids = [NSMutableArray arrayWithCapacity:num];
+    NSMutableArray *product_nums = [NSMutableArray arrayWithCapacity:num];
+    for (ProductModel *aModel in self.productArray) {
+        
+        [product_ids addObject:aModel.product_id];
+        [product_nums addObject:aModel.product_num];
+    }
+    
+    NSString *ids = [product_ids componentsJoinedByString:@","];
+    NSString *nums = [product_nums componentsJoinedByString:@","];
+    
+    NSString *authkey = [GMAPI getAuthkey];
+    
+    NSString *note = _inputTf.text.length > 0 ? _inputTf.text : @"";//备注
+    NSString *addressId = _selectAddressId;
+    NSString *expressFee = [NSString stringWithFormat:@"%.2f",_expressFee];
+    
+    if (addressId.length == 0) {
+        
+        [LTools alertText:@"请选择有效收货地址" viewController:self];
+        
+        return;
+    }
+    
+    [_loading show:YES];
+    
+    NSDictionary *params = @{@"authcode":authkey,
+                             @"product_ids":ids,
+                             @"product_nums":nums,
+                             @"address_id":addressId,
+                             @"express_fee":expressFee,
+                             @"order_note":note};
+    
+    __weak typeof(_table)weakTable = _table;
+    __weak typeof(self)weakSelf = self;
+    [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodPost api:ORDER_SUBMIT parameters:params constructingBodyBlock:nil completion:^(NSDictionary *result) {
+        
+        NSLog(@"提交订单成功 %@",result[RESULT_INFO]);
+        
+        /**
+         *  {
+         errorcode = 0;
+         msg = "\U8ba2\U5355\U63d0\U4ea4\U6210\U529f";
+         "order_id" = 7;
+         }
+         */
+        
+        [_loading hide:YES];
+        
+        NSString *orderId = result[@"order_id"];
+        NSString *orderNum = result[@"order_no"];
+
+        [weakSelf pushToPayPageWithOrderId:orderId orderNum:orderNum];
+        
+    } failBlock:^(NSDictionary *result) {
+        
+        NSLog(@"提交订单失败 %@",result[RESULT_INFO]);
+        
+        [_loading hide:YES];
+
+    }];
+}
+
+
 #pragma mark - 事件处理
+
+/**
+ *  计算总重量
+ *
+ *  @return
+ */
+- (float)sumWeight
+{
+    float sum = 0.f;
+    int count = (int)self.productArray.count;
+    for (int i = 0; i < count; i ++) {
+        
+        ProductModel *aModel = [self.productArray objectAtIndex:i];
+        
+        sum += ([aModel.weight floatValue] * [aModel.product_num floatValue]);
+    }
+    
+    return sum;
+}
+
+/**
+ *  跳转至支付页面
+ */
+- (void)pushToPayPageWithOrderId:(NSString *)orderId
+                        orderNum:(NSString *)orderNum
+{
+    PayActionViewController *pay = [[PayActionViewController alloc]init];
+    pay.orderId = orderId;
+    pay.orderNum = orderNum;
+    pay.sumPrice = self.sumPrice;
+    [self.navigationController pushViewController:pay animated:YES];
+}
 
 - (void)clickToHidderkeyboard
 {
@@ -88,7 +246,8 @@
  */
 - (void)clickToConfirmOrder:(UIButton *)sender
 {
-    
+    //去生成订单
+    [self postOrderInfo];
 }
 
 /**
@@ -172,8 +331,14 @@
     _table.tableFooterView = footerView;
 }
 
-- (void)tableHeaderView
+- (void)tableHeaderViewWithAddressModel:(AddressModel *)aModel
 {
+    _selectAddressId = aModel.address_id;
+    _expressFee = [aModel.fee floatValue];//邮费
+    NSString *name = aModel.receiver_username;
+    NSString *phone = aModel.mobile;
+    NSString *address = aModel.address;
+    
     UIView *headerView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, 122)];
     headerView.backgroundColor = [UIColor colorWithHexString:@"f5f5f5"];
     
@@ -191,7 +356,8 @@
     nameIcon.image = [UIImage imageNamed:@"shopping cart_dd_top_name"];
     
     //名字
-    _nameLabel = [[UILabel alloc]initWithFrame:CGRectMake(nameIcon.right + 10, 13, 60, nameIcon.height) title:@"张三" font:15.f align:NSTextAlignmentLeft textColor:[UIColor colorWithHexString:@"323232"]];
+    CGFloat aWidth = [LTools widthForText:name font:15];
+    _nameLabel = [[UILabel alloc]initWithFrame:CGRectMake(nameIcon.right + 10, 13, aWidth, nameIcon.height) title:name font:15.f align:NSTextAlignmentLeft textColor:[UIColor colorWithHexString:@"323232"]];
     [addressView addSubview:_nameLabel];
     
     //电话icon
@@ -200,11 +366,11 @@
     _phoneIcon.image = [UIImage imageNamed:@"shopping cart_dd_top_phone"];
     
     //电话
-    _phoneLabel = [[UILabel alloc]initWithFrame:CGRectMake(_phoneIcon.right + 10, 13, 120, nameIcon.height) title:@"18622290909" font:15.f align:NSTextAlignmentLeft textColor:[UIColor colorWithHexString:@"323232"]];
+    _phoneLabel = [[UILabel alloc]initWithFrame:CGRectMake(_phoneIcon.right + 10, 13, 120, nameIcon.height) title:phone font:15.f align:NSTextAlignmentLeft textColor:[UIColor colorWithHexString:@"323232"]];
     [addressView addSubview:_phoneLabel];
     
     //地址
-    _addressLabel = [[UILabel alloc]initWithFrame:CGRectMake(10, _phoneIcon.bottom + 15, DEVICE_WIDTH - 10 * 4, 40) title:@"北京 海淀区 四环至五环之间 清河小营西路27号金领时代大厦801" font:14 align:NSTextAlignmentLeft textColor:[UIColor colorWithHexString:@"646462"]];
+    _addressLabel = [[UILabel alloc]initWithFrame:CGRectMake(10, _phoneIcon.bottom + 15, DEVICE_WIDTH - 10 * 4, 40) title:address font:14 align:NSTextAlignmentLeft textColor:[UIColor colorWithHexString:@"646462"]];
     [addressView addSubview:_addressLabel];
     _addressLabel.numberOfLines = 2;
     _addressLabel.lineBreakMode = NSLineBreakByCharWrapping;
@@ -223,6 +389,8 @@
     
     //点击事件
     [headerView addTaget:self action:@selector(clickToSelectAddress:) tag:0];
+    
+    [_table reloadData];
 }
 
 #pragma mark - UITapGestureDelegate
@@ -270,10 +438,10 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 0 || indexPath.section == 1 || indexPath.section == 3) {
+    if (indexPath.section == 0 || indexPath.section == 2) {
         return 30;
     }
-    if (indexPath.section == 2) {
+    if (indexPath.section == 1) {
         return 85;
     }
     
@@ -300,11 +468,11 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (section == 0 || section == 1) {
+    if (section == 0) {
         
         return 1;
     }
-    if (section == 2) {
+    if (section == 1) {
         
         return self.productArray.count;
     }
@@ -313,7 +481,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 2) {
+    if (indexPath.section == 1) {
         static NSString *identify = @"ProductCell";
         ProductCell *cell = (ProductCell *)[LTools cellForIdentify:identify cellName:identify forTable:tableView];
         
@@ -324,7 +492,7 @@
         return cell;
     }
     
-    if (indexPath.section == 1) {
+    if (indexPath.section == 0) {
         
         static NSString *identify = @"tableCell";
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identify];
@@ -340,7 +508,7 @@
         return cell;
     }
     
-    if (indexPath.section == 3) {
+    if (indexPath.section == 2) {
         
         static NSString *identify = @"ConfirmInfoCell";
         ConfirmInfoCell *cell = (ConfirmInfoCell *)[LTools cellForIdentify:identify cellName:identify forTable:tableView];
@@ -351,7 +519,7 @@
             
         }else if (indexPath.row == 1){
             cell.nameLabel.text = @"运费";
-            cell.priceLabel.text = [NSString stringWithFormat:@"￥%.2f",0.00];
+            cell.priceLabel.text = [NSString stringWithFormat:@"￥%.2f",_expressFee];
         }
         
         return cell;
@@ -373,7 +541,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 4;
+    return 3;
 }
 
 @end

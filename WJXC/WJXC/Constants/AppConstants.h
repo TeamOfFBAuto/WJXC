@@ -79,5 +79,17 @@
 #define WXAPPSECRET @"9a5909e5af9621847e80c1dc5bae52e3"
 #define RedirectUrl @"http://sns.whalecloud.com/sina2/callback" //回调地址
 
+/**
+ *  支付宝支付
+ */
+
+//合作商户ID。用签约支付宝账号登录ms.alipay.com后，在账户信息页面获取。
+#define Alipay_PartnerID @"2088911787623114"
+//账户ID。用签约支付宝账号登录ms.alipay.com后，在账户信息页面获取。
+#define Alipay_SellerID  @"yjy@alayy.com"
+
+//PKCS8 商户私钥(建议放在服务端,并且由服务端进行签名和验签)
+#define Alipay_PartnerPrivKey @"MIICdQIBADANBgkqhkiG9w0BAQEFAASCAl8wggJbAgEAAoGBAKLbSbvZjWcuxNwq9Zsg7Iu7cZADPW0uQJXd4BpJMuImbmed5z991NZMBVymUVsjiPJ1QsVVnPfInhmycHkhPc1rCkTX/VyigHxt6pGMqoGT+LR6+TF6O1glYJwY2zAETkRcg6QzJhhPUJFeNUgYZsYs6Q+01taeJ9Rz4JzH3BGVAgMBAAECgYBR6BpIaR1OFN6boNuP3to5WNe/x3FgdQ+0kDfC4Ke/x/ZlFKyWaTHfabKUq21lehTJZKJlXy6oDHU/lVguA8LxvQGAg33Q/r8+/4W2KFZTJToYxfUp+bzgyM0QikKt/M3yGdGxgcSJU3jIU8UTnToALUpbnP8kFC2ebxHHR9GsYQJBANCvnQE1csoCv1zb+cJqDGIo2/YTpEDG3FG+3aYJDpu7K5WOIFCd+ShSi46UHUP9eDPFrQwVFcqV2k+3DWHBYG0CQQDHx65o4vQZ5qFrNT4nTy4IAmROBGzOh/9b8oH9VNfSj2yBLyJaquSJW31IYkjgf9ksqp7xJxXircz252B9o0zJAkAC4BiStrDRNb57QhCr7BgllhiJyHV/6v2IJtAZBJDt9mNAWUf6tGKFerWvjjzk/e4VEIk03GmDdBMg/A20Jhz1AkAIhGDRI+vYNtbm5SwzLNL/kGqKUPH6lB2048/a5wUUevzbPREv4F1B5d6feWE2AP1XRCbmjQ4HzfURCag5cv7RAkBYfDvLxKNjag0OFIBwD8g1qpxKwwvVZv9u1EmsbmmfBKC6TooKF7vtIMQryK0q9+WEMuh3NSDQJSO2i+O9mCSP"
+
 
 #endif

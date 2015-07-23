@@ -21,8 +21,6 @@
 //单品 - 添加收藏 (参数:product_id、authcode)
 #define HOME_PRODUCT_COLLECT_ADD @"/?d=api&c=products&m=favor"
 
-
-
 //登录
 #define USER_LOGIN_ACTION @"/index.php?d=api&c=user&m=login"
 
@@ -44,6 +42,7 @@
 //修改用户名字
 #define USER_UPDATE_USERNAME @"/index.php?d=api&c=user&m=update_user_info"
 
+//关于我们
 #define ABOUT_US_URL @"http://www.baidu.com"
 
 
@@ -94,6 +93,18 @@
 //44、用户登录后同步购物车数据
 #define ORDER_SYNC_CART_INFO @"/index.php?d=api&c=order&m=sync_cart_info"
 
+//47、提交订单,后台生成订单号
+#define ORDER_SUBMIT @"/index.php?d=api&c=order&m=submit_order"
+
+//45、获取用户默认地址及运费
+#define ORDER_GET_DEFAULT_ADDRESS @"/index.php?d=api&c=order&m=get_default_address"
+
+//46、获取运费
+
+#define ORDER_GET_EXPRESS_FEE @"/index.php?d=api&c=order&m=get_express_fee"
+
+//48、获取支付宝签名
+#define ORDER_GET_SIGN @"/index.php?d=api&c=order&m=get_sign"
 
 
 #endif
