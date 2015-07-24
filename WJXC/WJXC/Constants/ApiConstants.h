@@ -106,5 +106,8 @@
 //48、获取支付宝签名
 #define ORDER_GET_SIGN @"/index.php?d=api&c=order&m=get_sign"
 
+//49、生成微信预订单，获取预订单id以及签名
+#define ORDER_CREATE_WEIXIN_ORDER @"/index.php?d=api&c=order&m=create_weixin_order"
+
 
 #endif

@@ -139,6 +139,8 @@
 		13A64C661B3BF76A00D9A106 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13A64C651B3BF76A00D9A106 /* HomeViewController.m */; };
 		13A64C6A1B3BFD0200D9A106 /* YJYRequstManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 13A64C691B3BFD0200D9A106 /* YJYRequstManager.m */; };
 		13B2DBCF1B552B2800EE2B6C /* AddAddressController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B2DBCE1B552B2800EE2B6C /* AddAddressController.m */; };
+		13EB1EA01B623E3600E5CA57 /* my_√@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 13EB1E9F1B623E3600E5CA57 /* my_√@2x.png */; };
+		13EB1EA61B623E8B00E5CA57 /* PayResultViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13EB1EA51B623E8B00E5CA57 /* PayResultViewController.m */; };
 		13FEA4781B4A28E1009BD01D /* PersonalCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 13FEA4761B4A28E1009BD01D /* PersonalCell.m */; };
 		13FEA4791B4A28E1009BD01D /* PersonalCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13FEA4771B4A28E1009BD01D /* PersonalCell.xib */; };
 		13FEA47B1B4A35BD009BD01D /* my_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 13FEA47A1B4A35BD009BD01D /* my_bg@2x.png */; };
@@ -421,6 +423,9 @@
 		13A64C691B3BFD0200D9A106 /* YJYRequstManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YJYRequstManager.m; sourceTree = "<group>"; };
 		13B2DBCD1B552B2800EE2B6C /* AddAddressController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddAddressController.h; sourceTree = "<group>"; };
 		13B2DBCE1B552B2800EE2B6C /* AddAddressController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddAddressController.m; sourceTree = "<group>"; };
+		13EB1E9F1B623E3600E5CA57 /* my_√@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "my_√@2x.png"; sourceTree = "<group>"; };
+		13EB1EA41B623E8B00E5CA57 /* PayResultViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PayResultViewController.h; sourceTree = "<group>"; };
+		13EB1EA51B623E8B00E5CA57 /* PayResultViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PayResultViewController.m; sourceTree = "<group>"; };
 		13FEA4751B4A28E1009BD01D /* PersonalCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonalCell.h; sourceTree = "<group>"; };
 		13FEA4761B4A28E1009BD01D /* PersonalCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonalCell.m; sourceTree = "<group>"; };
 		13FEA4771B4A28E1009BD01D /* PersonalCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PersonalCell.xib; sourceTree = "<group>"; };
@@ -744,6 +749,7 @@
 		139456D51B46296F00C45EB6 /* 购物车及订单 */ = {
 			isa = PBXGroup;
 			children = (
+				13EB1E9F1B623E3600E5CA57 /* my_√@2x.png */,
 				13A208841B608E8700CC4EC0 /* my_weixin@2x.png */,
 				13A208851B608E8700CC4EC0 /* my_zhifubao@2x.png */,
 				138407281B57A0450008CAC3 /* shopping cart_reduce_gray@2x.png */,
@@ -1071,6 +1077,8 @@
 				139D439B1B5A489D0036DC3B /* ConfirmOrderController.m */,
 				13A208811B5FA7DC00CC4EC0 /* PayActionViewController.h */,
 				13A208821B5FA7DC00CC4EC0 /* PayActionViewController.m */,
+				13EB1EA41B623E8B00E5CA57 /* PayResultViewController.h */,
+				13EB1EA51B623E8B00E5CA57 /* PayResultViewController.m */,
 			);
 			path = "购物车";
 			sourceTree = "<group>";
@@ -1664,6 +1672,7 @@
 				1394570D1B46296F00C45EB6 /* classify_02@2x.png in Resources */,
 				139457441B46296F00C45EB6 /* homepage_bottom_home_grey@2x.png in Resources */,
 				139D43A61B5A68FA0036DC3B /* ProductCell.xib in Resources */,
+				13EB1EA01B623E3600E5CA57 /* my_√@2x.png in Resources */,
 				139457371B46296F00C45EB6 /* homepage_qianggou_back@2x.png in Resources */,
 				139457381B46296F00C45EB6 /* homepage_qianggou_banner_bottom_bg@2x.png in Resources */,
 				1394570E1B46296F00C45EB6 /* classify_03@2x.png in Resources */,
@@ -1830,6 +1839,7 @@
 				135F85E81B4CC63300B5E5AD /* AboutUsController.m in Sources */,
 				E3DE39B91B592A2F0015EEF6 /* MJPhotoBrowser.m in Sources */,
 				13A64C5D1B3BF71C00D9A106 /* ClassViewController.m in Sources */,
+				13EB1EA61B623E8B00E5CA57 /* PayResultViewController.m in Sources */,
 				139457591B46730100C45EB6 /* Order.m in Sources */,
 				135F85E21B4CBE5C00B5E5AD /* SettingsViewController.m in Sources */,
 				13FEA49C1B4BD590009BD01D /* AddressCell.m in Sources */,

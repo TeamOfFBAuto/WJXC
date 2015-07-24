@@ -9,6 +9,8 @@
 #import "PayActionViewController.h"
 #import "Order.h"
 #import <AlipaySDK/AlipaySDK.h>
+#import "WXApiObject.h"
+#import "WXApi.h"
 
 @interface PayActionViewController ()
 {
@@ -44,28 +46,123 @@
  */
 - (void)getOrderSignWithType:(NSString *)signType
 {
+    
     NSString *authkey = [GMAPI getAuthkey];
+
+    if ([signType isEqualToString:@"ali"]) {
+        
+        NSDictionary *params = @{@"authcode":authkey,
+                                 @"order_id":self.orderId,
+                                 @"sign_type":signType};
+        
+        __weak typeof(self)weakSelf = self;
+        [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodGet api:ORDER_GET_SIGN parameters:params constructingBodyBlock:nil completion:^(NSDictionary *result) {
+            
+            NSLog(@"获取签名信息 %@ %@",result,result[RESULT_INFO]);
+            
+            NSString *data_str = result[@"data_str"];
+            NSString *sign = result[@"sign"];
+            
+            [weakSelf alipayWithSingString:sign orderDes:data_str];
+            
+        } failBlock:^(NSDictionary *result) {
+            
+            NSLog(@"获取签名信息 失败 %@ %@",result,result[RESULT_INFO]);
+            
+        }];
+        
+        return;
+    }
+    
+    //微信支付
+    
     NSDictionary *params = @{@"authcode":authkey,
-                             @"order_id":self.orderId,
-                             @"sign_type":signType};
+                             @"order_id":self.orderId};
     
     __weak typeof(self)weakSelf = self;
-    [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodGet api:ORDER_GET_SIGN parameters:params constructingBodyBlock:nil completion:^(NSDictionary *result) {
+    [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodGet api:ORDER_CREATE_WEIXIN_ORDER parameters:params constructingBodyBlock:nil completion:^(NSDictionary *result) {
         
-        NSLog(@"获取签名信息 %@ %@",result,result[RESULT_INFO]);
+        NSLog(@"获取微信签名信息 %@ %@",result,result[RESULT_INFO]);
         
-        NSString *data_str = result[@"data_str"];
-        NSString *sign = result[@"sign"];
-        
-        [weakSelf alipayWithSingString:sign orderDes:data_str];
-
+        NSDictionary *preOrderResult = result[@"pre_order_info"];
+        [weakSelf weiXinWithPreOrderInfo:preOrderResult];
         
     } failBlock:^(NSDictionary *result) {
         
-        NSLog(@"获取签名信息 失败 %@ %@",result,result[RESULT_INFO]);
+        NSLog(@"获取微信签名信息 失败 %@ %@",result,result[RESULT_INFO]);
         
     }];
+    
 }
+
+/**
+ *  支付宝支付
+ *
+ *  @param signString 签名字符串
+ *  @param orderDes   未签名描述
+ */
+- (void)alipayWithSingString:(NSString *)signString
+                    orderDes:(NSString *)orderDes
+{
+    NSLog(@"orderDes = %@ \nsign = %@",orderDes,signString);
+    
+    //将商品信息拼接成字符串
+    NSString *orderSpec = orderDes;
+    NSString *signedString = signString;//签名信息
+    //应用注册scheme,在AlixPayDemo-Info.plist定义URL types
+    NSString *appScheme = @"com.wjxc.wjxc";
+    
+    //将签名成功字符串格式化为订单字符串,请严格按照该格式
+    NSString *orderString = nil;
+    if (signedString != nil) {
+        orderString = [NSString stringWithFormat:@"%@&sign=\"%@\"&sign_type=\"%@\"",
+                       orderSpec, signedString, @"RSA"];
+        
+        [[AlipaySDK defaultService] payOrder:orderString fromScheme:appScheme callback:^(NSDictionary *resultDic) {
+            NSLog(@"reslut = %@",resultDic);
+            
+            /**
+             *  支付成功 服务端进行验证签名
+             */
+            
+            //            reslut = {
+            //                memo = "";
+            //                result = "partner=\"2088911787623114\"&seller_id=\"yjy@alayy.com\"&out_trade_no=\"201507230025\"&subject=\"RNai\U7684\U8ba2\U5355\"&body=\"\U8d2d\U4e70 \U6fb3\U6d32\U5c0f\U867e\U7c73b1\U4efd\"&total_fee=\"0.01\"&notify_url=\"http://182.92.106.193:85/api/order/confirm_order_pay\"&service=\"mobile.securitypay.pay\"&payment_type=\"1\"&_input_charset=\"utf-8\"&it_b_pay=\"30m\"&show_url=\"m.alipay.com\"&success=\"true\"&sign_type=\"RSA\"&sign=\"Djzd2Bh3l3cNwtx1vAcZ0jpR/1hEwrRZu5/23xLhQxZTL0Oj4LitZB5B4qQvDx+KFcWOldq3ffGS+NZzJGzNCNhgt4w5Ebu8qABSZqah8YxWame3d63Bu/z73IqjRE3FLdP3CuiFNRDnlImoI/DEbh7FCe2GXEXYB+DduVoPbUI=\"";
+            //                resultStatus = 9000;
+            //            }
+        }];
+        
+    }
+    
+}
+
+/**
+ *  支付宝支付
+ *
+ *  @param signString 签名字符串
+ *  @param orderDes   未签名描述
+ */
+- (void)weiXinWithPreOrderInfo:(NSDictionary *)preOrderInfoResult
+{
+    NSDictionary *dict = preOrderInfoResult;
+    
+    //调起微信支付
+    PayReq* req             = [[PayReq alloc] init];
+    req.openID              = [dict objectForKey:@"appid"];
+    req.partnerId           = [dict objectForKey:@"partnerid"];
+    req.prepayId            = [dict objectForKey:@"prepayid"];
+    req.nonceStr            = [dict objectForKey:@"noncestr"];
+    req.timeStamp           = [[dict objectForKey:@"timestamp"] intValue];
+    req.package             = [dict objectForKey:@"package"];
+    req.sign                = [dict objectForKey:@"sign"];
+    [WXApi sendReq:req];
+    
+    //日志输出
+    NSLog(@"\nappid=%@\npartid=%@\nprepayid=%@\nnoncestr=%@\ntimestamp=%ld\npackage=%@\nsign=%@",req.openID,req.partnerId,req.prepayId,req.nonceStr,(long)req.timeStamp,req.package,req.sign );
+
+}
+
+
 
 #pragma - mark 创建视图
 
@@ -152,6 +249,15 @@
 
 #pragma - mark 事件处理
 
+/**
+ *  支付成功
+ */
+- (void)paySuccessAction
+{
+    //更新购物车
+    [[NSNotificationCenter defaultCenter]postNotificationName:NOTIFICATION_UPDATE_TO_CART object:nil];
+}
+
 - (UIButton *)buttonForTag:(NSInteger)tag
 {
     return (UIButton *)[self.view viewWithTag:tag];
@@ -182,150 +288,5 @@
         [self getOrderSignWithType:@"weixin"];
     }
 }
-
-/**
- *  支付宝支付
- *
- *  @param signString 签名字符串
- *  @param orderDes   未签名描述
- */
-- (void)alipayWithSingString:(NSString *)signString
-                    orderDes:(NSString *)orderDes
-{
-    NSLog(@"orderDes = %@ \nsign = %@",orderDes,signString);
-
-    //将商品信息拼接成字符串
-    NSString *orderSpec = orderDes;
-    NSString *signedString = signString;//签名信息
-    //应用注册scheme,在AlixPayDemo-Info.plist定义URL types
-    NSString *appScheme = @"com.wjxc.wjxc";
-    
-    //将签名成功字符串格式化为订单字符串,请严格按照该格式
-    NSString *orderString = nil;
-    if (signedString != nil) {
-        orderString = [NSString stringWithFormat:@"%@&sign=\"%@\"&sign_type=\"%@\"",
-                       orderSpec, signedString, @"RSA"];
-        
-        [[AlipaySDK defaultService] payOrder:orderString fromScheme:appScheme callback:^(NSDictionary *resultDic) {
-            NSLog(@"reslut = %@",resultDic);
-            
-            /**
-             *  支付成功 服务端进行验证签名
-             */
-            
-//            reslut = {
-//                memo = "";
-//                result = "partner=\"2088911787623114\"&seller_id=\"yjy@alayy.com\"&out_trade_no=\"201507230025\"&subject=\"RNai\U7684\U8ba2\U5355\"&body=\"\U8d2d\U4e70 \U6fb3\U6d32\U5c0f\U867e\U7c73b1\U4efd\"&total_fee=\"0.01\"&notify_url=\"http://182.92.106.193:85/api/order/confirm_order_pay\"&service=\"mobile.securitypay.pay\"&payment_type=\"1\"&_input_charset=\"utf-8\"&it_b_pay=\"30m\"&show_url=\"m.alipay.com\"&success=\"true\"&sign_type=\"RSA\"&sign=\"Djzd2Bh3l3cNwtx1vAcZ0jpR/1hEwrRZu5/23xLhQxZTL0Oj4LitZB5B4qQvDx+KFcWOldq3ffGS+NZzJGzNCNhgt4w5Ebu8qABSZqah8YxWame3d63Bu/z73IqjRE3FLdP3CuiFNRDnlImoI/DEbh7FCe2GXEXYB+DduVoPbUI=\"";
-//                resultStatus = 9000;
-//            }
-        }];
-        
-    }
-    
-}
-
-
-/**
- *  点击生成订单支付
- *
- *  @param sender
- */
-- (void)clickToOrder:(UIButton *)sender
-{
-    /*
-     *点击获取prodcut实例并初始化订单信息
-     */
-    //    Product *product = [self.productList objectAtIndex:indexPath.row];
-    
-    /*
-     *商户的唯一的parnter和seller。
-     *签约后，支付宝会为每个商户分配一个唯一的 parnter 和 seller。
-     */
-    
-    /*============================================================================*/
-    /*=======================需要填写商户app申请的===================================*/
-    /*============================================================================*/
-    NSString *partner = Alipay_PartnerID;
-    NSString *seller = Alipay_SellerID; //支付宝收款账号
-    NSString *privateKey = Alipay_PartnerPrivKey;//商户方私钥
-    /*============================================================================*/
-    /*============================================================================*/
-    /*============================================================================*/
-    
-    //partner和seller获取失败,提示
-    if ([partner length] == 0 ||
-        [seller length] == 0 ||
-        [privateKey length] == 0)
-    {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示"
-                                                        message:@"缺少partner或者seller或者私钥。"
-                                                       delegate:self
-                                              cancelButtonTitle:@"确定"
-                                              otherButtonTitles:nil];
-        [alert show];
-        return;
-    }
-    
-    NSString *productName = @"单品name";
-    NSString *productDescription = @"描述";
-    NSString *price = @"0.01";//商品价格
-    /*
-     *生成订单信息及签名
-     */
-    //将商品信息赋予AlixPayOrder的成员变量
-    Order *order = [[Order alloc] init];
-    order.partner = partner;
-    order.seller = seller;
-    order.tradeNO = @"123456789"; //订单ID（由商家自行制定）
-    order.productName = productName; //商品标题
-    order.productDescription = productDescription; //商品描述
-    order.amount = price; //商品价格
-    order.notifyURL =  @"http://www.alayy.com"; //回调URL
-    
-    order.service = @"mobile.securitypay.pay";
-    order.paymentType = @"1";//支付类型 默认1 商品购买
-    order.inputCharset = @"utf-8";
-    order.itBPay = @"30m";
-    order.showUrl = @"m.alipay.com";
-    
-    //应用注册scheme,在AlixPayDemo-Info.plist定义URL types
-    NSString *appScheme = @"com.wjxc.wjxc";
-    
-    //将商品信息拼接成字符串
-    NSString *orderSpec = [order description];
-    
-    
-    NSLog(@"orderSpec = %@",orderSpec);
-    
-    //获取私钥并将商户信息签名,外部商户可以根据情况存放私钥和签名,只需要遵循RSA签名规范,并将签名字符串base64编码和UrlEncode
-    //id<DataSigner> signer = CreateRSADataSigner(privateKey);
-    //NSString *signedString = [signer signString:orderSpec];
-    
-    
-    /**
-     *  服务端生成订单信息
-     */
-    
-    NSString *signedString = @"";//签名信息
-    
-    //将签名成功字符串格式化为订单字符串,请严格按照该格式
-    NSString *orderString = nil;
-    if (signedString != nil) {
-        orderString = [NSString stringWithFormat:@"%@&sign=\"%@\"&sign_type=\"%@\"",
-                       orderSpec, signedString, @"RSA"];
-        
-        [[AlipaySDK defaultService] payOrder:orderString fromScheme:appScheme callback:^(NSDictionary *resultDic) {
-            NSLog(@"reslut = %@",resultDic);
-            
-            /**
-             *  支付成功 服务端进行验证签名
-             */
-            
-        }];
-        
-    }
-    
-}
-
 
 @end

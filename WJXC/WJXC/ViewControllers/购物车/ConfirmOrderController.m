@@ -35,6 +35,7 @@
     NSString *_payStyle;//支付类型
     
     float _expressFee;//邮费
+    UILabel *_priceLabel;//邮费加产品价格
     
     MBProgressHUD *_loading;//加载
 }
@@ -92,6 +93,37 @@
 #pragma mark - 网络请求
 
 /**
+ *  切换购物地址时 更新邮费
+ */
+- (void)updateExpressFeeWithAddressId:(NSString *)addressId
+{
+    NSString *authkey = [GMAPI getAuthkey];
+    
+    float weight = [self sumWeight];//总重
+    
+    NSDictionary *params = @{@"authcode":authkey,
+                             @"weight":[NSNumber numberWithFloat:weight],
+                             @"address_id":addressId};
+    
+    __weak typeof(_table)weakTable = _table;
+    __weak typeof(self)weakSelf = self;
+    [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodGet api:ORDER_GET_EXPRESS_FEE parameters:params constructingBodyBlock:nil completion:^(NSDictionary *result) {
+        
+        NSLog(@"更新邮费%@ %@",result[RESULT_INFO],result);
+        float fee = [result[@"fee"]floatValue];
+        _expressFee = fee;
+        [weakSelf updateExpressFeeAndSumPrice:fee];
+        [weakTable reloadData];
+        
+    } failBlock:^(NSDictionary *result) {
+        
+        NSLog(@"更新邮费 失败 %@",result[RESULT_INFO]);
+        
+    }];
+
+}
+
+/**
  *  获取收货地址和邮费
  */
 - (void)getAddressAndFee
@@ -115,10 +147,7 @@
         NSDictionary *address = result[@"address"];
         
         AddressModel *aModel = [[AddressModel alloc]initWithDictionary:address];
-        
-        [weakSelf tableHeaderViewWithAddressModel:aModel];
-        [weakSelf tableViewFooter];
-        [weakSelf createBottomView];
+        [weakSelf setViewsWithModel:aModel];
         
     } failBlock:^(NSDictionary *result) {
         
@@ -175,14 +204,6 @@
         
         NSLog(@"提交订单成功 %@",result[RESULT_INFO]);
         
-        /**
-         *  {
-         errorcode = 0;
-         msg = "\U8ba2\U5355\U63d0\U4ea4\U6210\U529f";
-         "order_id" = 7;
-         }
-         */
-        
         [_loading hide:YES];
         
         NSString *orderId = result[@"order_id"];
@@ -201,6 +222,13 @@
 
 
 #pragma mark - 事件处理
+
+- (void)updateExpressFeeAndSumPrice:(CGFloat)express
+{
+    //产品加邮费
+    NSString *price = [NSString stringWithFormat:@"￥%.2f",self.sumPrice + _expressFee];
+    _priceLabel.text = price;
+}
 
 /**
  *  计算总重量
@@ -263,7 +291,8 @@
     address.selectAddressId = _selectAddressId;
     address.selectAddressBlock = ^(AddressModel *aModel){
         _selectAddressId = aModel.address_id;
-        [wealSelf updateAddressInfoWithModel:aModel];
+        [wealSelf updateAddressInfoWithModel:aModel];//更新收货地址显示
+        [wealSelf updateExpressFeeWithAddressId:aModel.address_id];//更新邮费
     };
     
     [self.navigationController pushViewController:address animated:YES];
@@ -312,9 +341,11 @@
     UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(20, 0, 36, 50) title:@"合计:" font:15 align:NSTextAlignmentLeft textColor:[UIColor colorWithHexString:@"303030"]];
     [bottom addSubview:label];
     
-    NSString *price = [NSString stringWithFormat:@"￥%.2f",self.sumPrice];
-    UILabel *priceLabel = [[UILabel alloc]initWithFrame:CGRectMake(label.right + 10, 0, 100, 50) title:price font:12 align:NSTextAlignmentLeft textColor:[UIColor colorWithHexString:@"f98700"]];
-    [bottom addSubview:priceLabel];
+    //产品加邮费
+    NSString *price = [NSString stringWithFormat:@"￥%.2f",self.sumPrice + _expressFee];
+    
+    _priceLabel = [[UILabel alloc]initWithFrame:CGRectMake(label.right + 10, 0, 100, 50) title:price font:12 align:NSTextAlignmentLeft textColor:[UIColor colorWithHexString:@"f98700"]];
+    [bottom addSubview:_priceLabel];
     
     UIButton *sureButton = [[UIButton alloc]initWithframe:CGRectMake(DEVICE_WIDTH - 15 - 100, 10, 100, 30) buttonType:UIButtonTypeRoundedRect normalTitle:@"提交订单" selectedTitle:nil target:self action:@selector(clickToConfirmOrder:)];
     [sureButton addCornerRadius:3.f];
@@ -331,10 +362,22 @@
     _table.tableFooterView = footerView;
 }
 
-- (void)tableHeaderViewWithAddressModel:(AddressModel *)aModel
+/**
+ *  所有视图赋值
+ *
+ *  @param aModel
+ */
+- (void)setViewsWithModel:(AddressModel *)aModel
 {
     _selectAddressId = aModel.address_id;
     _expressFee = [aModel.fee floatValue];//邮费
+    [self tableHeaderViewWithAddressModel:aModel];
+    [self tableViewFooter];
+    [self createBottomView];
+}
+
+- (void)tableHeaderViewWithAddressModel:(AddressModel *)aModel
+{
     NSString *name = aModel.receiver_username;
     NSString *phone = aModel.mobile;
     NSString *address = aModel.address;
@@ -397,7 +440,13 @@
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
 {
-    return ![NSStringFromClass([touch.view class]) isEqualToString:@"UITableViewCellContentView"];
+    NSString *touchViewString = NSStringFromClass([touch.view class]);
+    if ([touchViewString isEqualToString:@"UITableViewCellContentView"]) {
+        
+        return NO;
+    }
+    
+    return YES;
 }
 
 #pragma mark - UIScrollViewDelegate
@@ -412,27 +461,14 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
-    if (indexPath.section == 0 && indexPath.row == 0) {
-        
-        FBActionSheet *sheet = [[FBActionSheet alloc]initWithFrame:self.view.frame];
-        [sheet.firstButton setTitle:ALIPAY forState:UIControlStateNormal];
-        [sheet.secondButton setTitle:WXPAY forState:UIControlStateNormal];
+    NSLog(@"点击商品name = ");
 
-        __weak typeof(_table)weakTable = _table;
-        [sheet actionBlock:^(NSInteger buttonIndex) {
-            NSLog(@"%ld",(long)buttonIndex);
-            
-            if(buttonIndex ==0){
-                NSLog(@"-->%@",ALIPAY);
-                
-                _payStyle = ALIPAY;
-                
-            }else if(buttonIndex == 1){
-                NSLog(@"-->%@",WXPAY);
-                _payStyle = WXPAY;
-            }
-            [weakTable reloadData];
-        }];
+    
+    if (indexPath.section == 1) {
+        
+        ProductModel *aModel = [self.productArray objectAtIndex:indexPath.row];
+        
+        NSLog(@"点击商品name = %@",aModel.product_name);
     }
 }
 

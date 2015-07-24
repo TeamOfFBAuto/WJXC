@@ -11,8 +11,9 @@
 
 #import <AlipaySDK/AlipaySDK.h>//支付宝
 #import "UMFeedback.h"
+#import "WXApi.h"
 
-@interface AppDelegate ()<UMFeedbackDataDelegate>
+@interface AppDelegate ()<UMFeedbackDataDelegate,WXApiDelegate>
 
 @end
 
@@ -23,7 +24,9 @@
     // Override point for customization after application launch.
     
 #pragma mark 友盟
-    [self umengShare];
+//    [self umengShare];
+    
+    [WXApi registerApp:WXAPPID withDescription:@"demo 2.0"];
     
     [self uploadHeadImage];//上传头像
     
@@ -137,6 +140,9 @@
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
     
+    
+    NSLog(@"openURL------ %@",url);
+    
     //如果极简开发包不可用,会跳转支付宝钱包进行支付,需要将支付宝钱包的支付结果回传给开 发包
     if ([url.host isEqualToString:@"safepay"]) {
         [[AlipaySDK defaultService] processOrderWithPaymentResult:url
@@ -152,9 +158,18 @@
         }];
     }
     
-    return  [UMSocialSnsService handleOpenURL:url wxApiDelegate:nil];
+    return  [WXApi handleOpenURL:url delegate:self];
+
+    
+//    return  [UMSocialSnsService handleOpenURL:url wxApiDelegate:nil];
 }
 
+
+
+- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url
+{
+    return  [WXApi handleOpenURL:url delegate:self];
+}
 
 #pragma mark - UMFeedbackDataDelegate <NSObject>
 
@@ -165,6 +180,22 @@
 - (void)postFinishedWithError:(NSError *)error
 {
     
+}
+
+- (void)onResp:(BaseResp *)resp {
+    
+    if ([resp isKindOfClass:[PayResp class]]) {
+        PayResp *response = (PayResp *)resp;
+        switch (response.errCode) {
+            case WXSuccess:
+                //服务器端查询支付通知或查询API返回的结果再提示成功
+                NSLog(@"支付成功");
+                break;
+            default:
+                NSLog(@"支付失败， retcode=%d",resp.errCode);
+                break;
+        }
+    }
 }
 
 
@@ -195,7 +226,7 @@
     [UMSocialQQHandler setSupportWebView:YES];
     
     //设置微信AppId，设置分享url，默认使用友盟的网址
-    [UMSocialWechatHandler setWXAppId:WXAPPID appSecret:WXAPPSECRET url:@"http://www.umeng.com/social"];
+//    [UMSocialWechatHandler setWXAppId:WXAPPID appSecret:WXAPPSECRET url:@"http://www.umeng.com/social"];
     
     //    [UMSocialTencentWeiboHandler openSSOWithRedirectUrl:@"http://sns.whalecloud.com/tencent2/callback"];
     

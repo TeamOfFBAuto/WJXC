@@ -75,9 +75,13 @@
 #define SinaAppSecret @"fe596bc4ac8c92316ad5f255fbc49432"
 #define QQAPPID @"1104757360" //tencent1104757360 十六进制:QQ41d94270; 生成方法:NSString *str = [ [NSString alloc] initWithFormat:@"%x",1104757360];
 #define QQAPPKEY @"m7DlzFpxeDxRBULc"
-#define WXAPPID @"wx509a0740cca6f939"
-#define WXAPPSECRET @"9a5909e5af9621847e80c1dc5bae52e3"
+//#define WXAPPID @"wx509a0740cca6f939"
+//#define WXAPPSECRET @"9a5909e5af9621847e80c1dc5bae52e3"
 #define RedirectUrl @"http://sns.whalecloud.com/sina2/callback" //回调地址
+
+//test 衣加衣
+#define WXAPPID @"wx47f54e431de32846" //正式
+#define WXAPPSECRET @"a71699732e3bef01aefdaf324e2f522c"
 
 /**
  *  支付宝支付
@@ -88,8 +92,6 @@
 //账户ID。用签约支付宝账号登录ms.alipay.com后，在账户信息页面获取。
 #define Alipay_SellerID  @"yjy@alayy.com"
 
-//PKCS8 商户私钥(建议放在服务端,并且由服务端进行签名和验签)
-#define Alipay_PartnerPrivKey @"MIICdQIBADANBgkqhkiG9w0BAQEFAASCAl8wggJbAgEAAoGBAKLbSbvZjWcuxNwq9Zsg7Iu7cZADPW0uQJXd4BpJMuImbmed5z991NZMBVymUVsjiPJ1QsVVnPfInhmycHkhPc1rCkTX/VyigHxt6pGMqoGT+LR6+TF6O1glYJwY2zAETkRcg6QzJhhPUJFeNUgYZsYs6Q+01taeJ9Rz4JzH3BGVAgMBAAECgYBR6BpIaR1OFN6boNuP3to5WNe/x3FgdQ+0kDfC4Ke/x/ZlFKyWaTHfabKUq21lehTJZKJlXy6oDHU/lVguA8LxvQGAg33Q/r8+/4W2KFZTJToYxfUp+bzgyM0QikKt/M3yGdGxgcSJU3jIU8UTnToALUpbnP8kFC2ebxHHR9GsYQJBANCvnQE1csoCv1zb+cJqDGIo2/YTpEDG3FG+3aYJDpu7K5WOIFCd+ShSi46UHUP9eDPFrQwVFcqV2k+3DWHBYG0CQQDHx65o4vQZ5qFrNT4nTy4IAmROBGzOh/9b8oH9VNfSj2yBLyJaquSJW31IYkjgf9ksqp7xJxXircz252B9o0zJAkAC4BiStrDRNb57QhCr7BgllhiJyHV/6v2IJtAZBJDt9mNAWUf6tGKFerWvjjzk/e4VEIk03GmDdBMg/A20Jhz1AkAIhGDRI+vYNtbm5SwzLNL/kGqKUPH6lB2048/a5wUUevzbPREv4F1B5d6feWE2AP1XRCbmjQ4HzfURCag5cv7RAkBYfDvLxKNjag0OFIBwD8g1qpxKwwvVZv9u1EmsbmmfBKC6TooKF7vtIMQryK0q9+WEMuh3NSDQJSO2i+O9mCSP"
 
 
 #endif
