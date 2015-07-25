@@ -24,7 +24,7 @@
     // Override point for customization after application launch.
     
 #pragma mark 友盟
-//    [self umengShare];
+    [self umengShare];
     
     [WXApi registerApp:WXAPPID withDescription:@"demo 2.0"];
     
@@ -134,34 +134,45 @@
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
+
 /**
  这里处理新浪微博SSO授权之后跳转回来，和微信分享完成之后跳转回来
  */
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
     
-    
     NSLog(@"openURL------ %@",url);
+    
+    //当支付宝客户端在操作时,商户 app 进程在后台被结束,只能通过这个 block 输出支付 结果。
+    
+#pragma mark - 支付宝支付回调
     
     //如果极简开发包不可用,会跳转支付宝钱包进行支付,需要将支付宝钱包的支付结果回传给开 发包
     if ([url.host isEqualToString:@"safepay"]) {
         [[AlipaySDK defaultService] processOrderWithPaymentResult:url
                                                   standbyCallback:^(NSDictionary *resultDic) {
                                                       
-                                                      NSLog(@"result = %@",resultDic);
+                                                      NSLog(@"ali result = %@",resultDic);
+                                                      
                                                       
                                                   }]; }
     
     if ([url.host isEqualToString:@"platformapi"]){//支付宝钱包快登授权返回 authCode
         [[AlipaySDK defaultService] processAuthResult:url standbyCallback:^(NSDictionary *resultDic) {
-            NSLog(@"result = %@",resultDic);
+            
+            NSLog(@"ali result = %@",resultDic);
+            
         }];
     }
     
-    return  [WXApi handleOpenURL:url delegate:self];
+    //来自微信
+    if ([url.host isEqualToString:@"pay"]) {
+        
+        return  [WXApi handleOpenURL:url delegate:self];
 
+    }
     
-//    return  [UMSocialSnsService handleOpenURL:url wxApiDelegate:nil];
+    return  [UMSocialSnsService handleOpenURL:url wxApiDelegate:nil];
 }
 
 
@@ -182,19 +193,45 @@
     
 }
 
+#pragma mark - 微信支付回调
+
 - (void)onResp:(BaseResp *)resp {
     
     if ([resp isKindOfClass:[PayResp class]]) {
         PayResp *response = (PayResp *)resp;
+        
+        BOOL result = NO;
         switch (response.errCode) {
             case WXSuccess:
+            {
                 //服务器端查询支付通知或查询API返回的结果再提示成功
                 NSLog(@"支付成功");
+                
+                result = YES;
+            }
+                break;
+            case WXErrCodeCommon:
+            case WXErrCodeSentFail:
+            {
+                NSLog(@"1、可能的原因：签名错误、未注册APPID、项目设置APPID不正确、注册的APPID与设置的不匹配、其他异常等.\n2、发送失败");
+
+            }
+                break;
+            case WXErrCodeUserCancel:
+                NSLog(@"用户取消支付");
+                break;
+            case WXErrCodeAuthDeny:
+
+                NSLog(@"授权失败");
                 break;
             default:
                 NSLog(@"支付失败， retcode=%d",resp.errCode);
+                
                 break;
         }
+        //微信支付通知
+        NSDictionary *params = @{@"result":[NSNumber numberWithBool:result]};
+        [[NSNotificationCenter defaultCenter]postNotificationName:NOTIFICATION_PAY_WEIXIN_RESULT object:nil userInfo:params];
     }
 }
 

@@ -14,4 +14,6 @@
 @property (strong, nonatomic) IBOutlet UILabel *priceLabel;
 @property (strong, nonatomic) IBOutlet UIButton *carButton;
 
+- (void)setCellWithModel:(id)aModel;
+
 @end

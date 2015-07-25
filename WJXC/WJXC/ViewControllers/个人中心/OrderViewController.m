@@ -68,14 +68,6 @@
         [_scroll addSubview:_table];
         _table.tag = 200 + i;
         
-        if (i == 1) {
-            
-            _table.backgroundColor = [UIColor redColor];
-        }
-        if (i == 3) {
-            _table.backgroundColor = [UIColor orangeColor];
-        }
-        
     }
     
     _indicator = [[UIView alloc]initWithFrame:CGRectMake(0, 38, width, 2)];

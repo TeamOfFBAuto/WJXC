@@ -54,6 +54,7 @@
     [self.view addSubview:_table];
     [_table showRefreshHeader:YES];
     
+    
     [self createFooter];
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(updateAddress) name:NOTIFICATION_ADDADDRESS object:nil];
@@ -122,7 +123,7 @@
 - (void)getAddressList
 {
     __weak typeof(_table)weakTable = _table;
-
+    
     NSDictionary *params = @{@"authcode":[GMAPI getAuthkey],
                              @"page":[NSNumber numberWithInt:_table.pageNum],
                              @"per_page":[NSNumber numberWithInt:20]};
@@ -143,6 +144,7 @@
     } failBlock:^(NSDictionary *result) {
         
         NSLog(@"result fail %@",result);
+        [weakTable loadFail];
 
     }];
 }

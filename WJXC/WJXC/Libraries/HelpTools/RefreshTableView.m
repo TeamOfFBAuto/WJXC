@@ -168,7 +168,7 @@
     if (animated)
     {
         [UIView beginAnimations:nil context:NULL];
-        [UIView setAnimationDuration:0.3];
+        [UIView setAnimationDuration:0.0];
         self.contentInset = UIEdgeInsetsMake(65.0f, 0.0f, 0.0f, 0.0f);
         [self scrollRectToVisible:CGRectMake(0, 0.0f, 1, 1) animated:NO];
         [UIView commitAnimations];

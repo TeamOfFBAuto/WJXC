@@ -51,6 +51,11 @@ typedef void(^versionBlock)(BOOL isNewVersion,NSString *updateUrl,NSString *upda
 
 + (UINavigationController *)rootNavigationController;
 
+/**
+ *  判断登录
+ */
++ (BOOL)isLogin;
+
 + (BOOL)isLogin:(UIViewController *)viewController;//判读是否登录
 
 + (BOOL)isLogin:(UIViewController *)viewController loginBlock:(LoginBlock)aBlock;//判断登录状态

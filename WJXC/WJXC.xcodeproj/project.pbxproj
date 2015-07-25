@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		13241E771B63925A00D42737 /* my_paySuccess@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 13241E761B63925A00D42737 /* my_paySuccess@2x.png */; };
+		13241E7A1B6396E200D42737 /* OrderInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13241E791B6396E200D42737 /* OrderInfoViewController.m */; };
 		135F85DF1B4CBDB500B5E5AD /* OrderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 135F85DE1B4CBDB500B5E5AD /* OrderViewController.m */; };
 		135F85E21B4CBE5C00B5E5AD /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 135F85E11B4CBE5C00B5E5AD /* SettingsViewController.m */; };
 		135F85E51B4CC5ED00B5E5AD /* UpdatePWDController.m in Sources */ = {isa = PBXBuildFile; fileRef = 135F85E41B4CC5ED00B5E5AD /* UpdatePWDController.m */; };
@@ -243,6 +245,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		13241E761B63925A00D42737 /* my_paySuccess@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "my_paySuccess@2x.png"; sourceTree = "<group>"; };
+		13241E781B6396E200D42737 /* OrderInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrderInfoViewController.h; sourceTree = "<group>"; };
+		13241E791B6396E200D42737 /* OrderInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrderInfoViewController.m; sourceTree = "<group>"; };
 		135F85DD1B4CBDB500B5E5AD /* OrderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrderViewController.h; sourceTree = "<group>"; };
 		135F85DE1B4CBDB500B5E5AD /* OrderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrderViewController.m; sourceTree = "<group>"; };
 		135F85E01B4CBE5C00B5E5AD /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
@@ -749,6 +754,7 @@
 		139456D51B46296F00C45EB6 /* 购物车及订单 */ = {
 			isa = PBXGroup;
 			children = (
+				13241E761B63925A00D42737 /* my_paySuccess@2x.png */,
 				13EB1E9F1B623E3600E5CA57 /* my_√@2x.png */,
 				13A208841B608E8700CC4EC0 /* my_weixin@2x.png */,
 				13A208851B608E8700CC4EC0 /* my_zhifubao@2x.png */,
@@ -1079,6 +1085,8 @@
 				13A208821B5FA7DC00CC4EC0 /* PayActionViewController.m */,
 				13EB1EA41B623E8B00E5CA57 /* PayResultViewController.h */,
 				13EB1EA51B623E8B00E5CA57 /* PayResultViewController.m */,
+				13241E781B6396E200D42737 /* OrderInfoViewController.h */,
+				13241E791B6396E200D42737 /* OrderInfoViewController.m */,
 			);
 			path = "购物车";
 			sourceTree = "<group>";
@@ -1646,6 +1654,7 @@
 				1394571D1B46296F00C45EB6 /* my_collect_shopping cart@2x.png in Resources */,
 				1394572D1B46296F00C45EB6 /* shopping cart_dd_middle_jt@2x.png in Resources */,
 				139457451B46296F00C45EB6 /* homepage_bottom_my_green@2x.png in Resources */,
+				13241E771B63925A00D42737 /* my_paySuccess@2x.png in Resources */,
 				139457471B46296F00C45EB6 /* homepage_bottom_shopping cart_green@2x.png in Resources */,
 				13FEA4951B4BD198009BD01D /* CollectCell.xib in Resources */,
 				E3D080441B3D58F300E4F87D /* login_suo@2x.png in Resources */,
@@ -1845,6 +1854,7 @@
 				13FEA49C1B4BD590009BD01D /* AddressCell.m in Sources */,
 				E3CE7F651B4CFF980012940C /* GCycleScrollView.m in Sources */,
 				13FEA48D1B4BCE2A009BD01D /* LRefreshTableHeaderView.m in Sources */,
+				13241E7A1B6396E200D42737 /* OrderInfoViewController.m in Sources */,
 				13A2087F1B5CD81C00CC4EC0 /* SelectAddressCell.m in Sources */,
 				E3D080241B3D51D000E4F87D /* LTools.m in Sources */,
 				E3DE39BB1B592A2F0015EEF6 /* MJPhotoProgressView.m in Sources */,

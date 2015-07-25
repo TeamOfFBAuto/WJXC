@@ -27,6 +27,8 @@
     UITextField *_inputTf;//备注
     NSString *_selectAddressId;//选中的地址
     
+    UIImageView *_nameIcon;//名字icon
+
     UILabel *_nameLabel;//收货人name
     UILabel *_phoneLabel;//收货人电话
     UILabel *_addressLabel;//收货地址
@@ -38,6 +40,8 @@
     UILabel *_priceLabel;//邮费加产品价格
     
     MBProgressHUD *_loading;//加载
+    
+    UILabel *_addressHintLabel;//收货地址提示
 }
 
 @end
@@ -208,6 +212,9 @@
         
         NSString *orderId = result[@"order_id"];
         NSString *orderNum = result[@"order_no"];
+        
+        //生成订单成功,更新一下购物车
+        [[NSNotificationCenter defaultCenter]postNotificationName:NOTIFICATION_UPDATE_TO_CART object:nil];
 
         [weakSelf pushToPayPageWithOrderId:orderId orderNum:orderNum];
         
@@ -258,8 +265,11 @@
     PayActionViewController *pay = [[PayActionViewController alloc]init];
     pay.orderId = orderId;
     pay.orderNum = orderNum;
-    pay.sumPrice = self.sumPrice;
+    pay.sumPrice = self.sumPrice + _expressFee;
+    pay.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:pay animated:YES];
+    
+//    self.navigationController.viewControllers
 }
 
 - (void)clickToHidderkeyboard
@@ -276,6 +286,10 @@
 {
     //去生成订单
     [self postOrderInfo];
+    
+    //test
+
+//    [self pushToPayPageWithOrderId:@"1" orderNum:@"11"];
 }
 
 /**
@@ -322,6 +336,13 @@
     _phoneLabel.text = aModel.mobile;
     _addressLabel.text = aModel.address;
 
+    _phoneIcon.hidden = NO;
+    _nameIcon.hidden = NO;
+    
+    if (_addressHintLabel) {
+        [_addressHintLabel removeFromSuperview];
+        _addressHintLabel = nil;
+    }
 }
 
 #pragma mark - 创建视图
@@ -382,6 +403,9 @@
     NSString *phone = aModel.mobile;
     NSString *address = aModel.address;
     
+    //是否有收货地址
+    BOOL haveAddress = address ? YES : NO;
+    
     UIView *headerView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, 122)];
     headerView.backgroundColor = [UIColor colorWithHexString:@"f5f5f5"];
     
@@ -394,22 +418,24 @@
     [headerView addSubview:addressView];
     
     //名字icon
-    UIImageView *nameIcon = [[UIImageView alloc]initWithFrame:CGRectMake(10, 13, 12, 17.5)];
-    [addressView addSubview:nameIcon];
-    nameIcon.image = [UIImage imageNamed:@"shopping cart_dd_top_name"];
+    _nameIcon = [[UIImageView alloc]initWithFrame:CGRectMake(10, 13, 12, 17.5)];
+    [addressView addSubview:_nameIcon];
+    _nameIcon.image = [UIImage imageNamed:@"shopping cart_dd_top_name"];
+    _nameIcon.hidden = !haveAddress;
     
     //名字
     CGFloat aWidth = [LTools widthForText:name font:15];
-    _nameLabel = [[UILabel alloc]initWithFrame:CGRectMake(nameIcon.right + 10, 13, aWidth, nameIcon.height) title:name font:15.f align:NSTextAlignmentLeft textColor:[UIColor colorWithHexString:@"323232"]];
+    _nameLabel = [[UILabel alloc]initWithFrame:CGRectMake(_nameIcon.right + 10, 13, aWidth, _nameIcon.height) title:name font:15.f align:NSTextAlignmentLeft textColor:[UIColor colorWithHexString:@"323232"]];
     [addressView addSubview:_nameLabel];
     
     //电话icon
     _phoneIcon = [[UIImageView alloc]initWithFrame:CGRectMake(_nameLabel.right + 10, 13, 12, 17.5)];
     [addressView addSubview:_phoneIcon];
     _phoneIcon.image = [UIImage imageNamed:@"shopping cart_dd_top_phone"];
+    _phoneIcon.hidden = !haveAddress;
     
     //电话
-    _phoneLabel = [[UILabel alloc]initWithFrame:CGRectMake(_phoneIcon.right + 10, 13, 120, nameIcon.height) title:phone font:15.f align:NSTextAlignmentLeft textColor:[UIColor colorWithHexString:@"323232"]];
+    _phoneLabel = [[UILabel alloc]initWithFrame:CGRectMake(_phoneIcon.right + 10, 13, 120, _nameIcon.height) title:phone font:15.f align:NSTextAlignmentLeft textColor:[UIColor colorWithHexString:@"323232"]];
     [addressView addSubview:_phoneLabel];
     
     //地址
@@ -427,6 +453,13 @@
     UIImageView *bottomImage = [[UIImageView alloc]initWithFrame:CGRectMake(0, addressView.bottom, DEVICE_WIDTH, 3)];
     [headerView addSubview:bottomImage];
     bottomImage.image = [UIImage imageNamed:@"shopping cart_dd_top_line"];
+    
+    if (!haveAddress) {
+        
+        _addressHintLabel = [[UILabel alloc]initWithFrame:headerView.bounds title:@"请填写收货地址以确保商品顺利到达" font:13 align:NSTextAlignmentCenter textColor:[UIColor colorWithHexString:@"646462"]];
+        [headerView addSubview:_addressHintLabel];
+    }
+    
     
     _table.tableHeaderView = headerView;
     
@@ -463,7 +496,6 @@
     
     NSLog(@"点击商品name = ");
 
-    
     if (indexPath.section == 1) {
         
         ProductModel *aModel = [self.productArray objectAtIndex:indexPath.row];
@@ -557,6 +589,8 @@
             cell.nameLabel.text = @"运费";
             cell.priceLabel.text = [NSString stringWithFormat:@"￥%.2f",_expressFee];
         }
+        
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         
         return cell;
     }

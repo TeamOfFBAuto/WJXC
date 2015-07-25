@@ -46,13 +46,6 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    self.myTitle = @"购物车";
-    
-    [self setMyViewControllerLeftButtonType:MyViewControllerLeftbuttonTypeNull WithRightButtonType:MyViewControllerRightbuttonTypeText];
-    
-    [self.my_right_button setTitle:@"编辑" forState:UIControlStateNormal];
-    [self.my_right_button setTitle:@"完成" forState:UIControlStateSelected];
-    
     _table = [[RefreshTableView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH,DEVICE_HEIGHT - 64) showLoadMore:NO];
     _table.refreshDelegate = self;
     _table.dataSource = self;
@@ -76,7 +69,15 @@
 {
     [super viewWillAppear:animated];
     
+    self.navigationController.navigationBarHidden = YES;
     self.navigationController.navigationBarHidden = NO;
+    
+    self.myTitle = @"购物车";
+    
+    [self setMyViewControllerLeftButtonType:MyViewControllerLeftbuttonTypeNull WithRightButtonType:MyViewControllerRightbuttonTypeText];
+    
+    [self.my_right_button setTitle:@"编辑" forState:UIControlStateNormal];
+    [self.my_right_button setTitle:@"完成" forState:UIControlStateSelected];
     
     //判断是否需要同步到服务器 1、数据库有 2、登录了
     
@@ -132,7 +133,7 @@
     UILabel *label2 = [[UILabel alloc]initWithFrame:CGRectMake(0, label.bottom + 5, DEVICE_WIDTH, 15) title:@"快去挑几件喜欢的宝贝吧" font:14 align:NSTextAlignmentCenter textColor:[UIColor colorWithHexString:@"e4e4e4"]];
     [bgView addSubview:label2];
     
-    UIButton *btn = [[UIButton alloc]initWithframe:CGRectMake((DEVICE_WIDTH - 150) / 2.f, label2.bottom + 20, 150, 30) buttonType:UIButtonTypeRoundedRect normalTitle:@"去逛逛" selectedTitle:nil target:self action:@selector(clickToSelectProduct:)];
+    UIButton *btn = [[UIButton alloc]initWithframe:CGRectMake((DEVICE_WIDTH - 150) / 2.f, label2.bottom + 20, 150, 30) buttonType:UIButtonTypeRoundedRect normalTitle:@"去逛逛" selectedTitle:nil target:self action:@selector(clickToGoShopping:)];
     [bgView addSubview:btn];
     btn.backgroundColor = DEFAULT_TEXTCOLOR;
     [btn addCornerRadius:3.f];
@@ -289,9 +290,10 @@
  *
  *  @param sender
  */
-- (void)clickToSelectProduct:(UIButton *)sender
+- (void)clickToGoShopping:(UIButton *)sender
 {
-    
+    UITabBarController *root = ROOTVIEWCONTROLLER;
+    root.selectedIndex = 1;
 }
 
 /**
@@ -301,6 +303,10 @@
  */
 - (void)clickToPay:(UIButton *)sender
 {
+    if (![LTools isLogin:self]) {
+        
+        return;
+    }
     
     NSMutableArray *arr = [NSMutableArray array];
     for (int i = 0; i < _table.dataArray.count; i ++) {

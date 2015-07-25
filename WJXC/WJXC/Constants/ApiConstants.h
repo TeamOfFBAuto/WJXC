@@ -76,6 +76,10 @@
 //25、获取商品列表
 #define PRODUCT_LIST @"/index.php?d=api&c=products&m=get_product_list"
 
+//32、商品收藏列表
+
+#define PRODUCT_COLLECT_LIST @"/index.php?d=api&c=products&m=get_favor_list"
+
 //订单相关接口=====================
 
 //40、购物车添加商品

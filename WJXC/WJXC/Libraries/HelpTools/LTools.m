@@ -1290,6 +1290,17 @@
 
 #pragma - mark 特殊
 
++ (BOOL)isLogin
+{
+    NSString *authey = [GMAPI getAuthkey];
+    
+    if (authey.length > 0) {
+        
+        return YES;
+    }
+    return NO;
+}
+
 + (BOOL)isLogin:(UIViewController *)viewController
 {
     if ([LTools cacheBoolForKey:LOGIN_SERVER_STATE] == NO) {

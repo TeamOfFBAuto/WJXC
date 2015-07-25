@@ -11,6 +11,8 @@
 #import <AlipaySDK/AlipaySDK.h>
 #import "WXApiObject.h"
 #import "WXApi.h"
+#import "PayResultViewController.h"
+#import "OrderInfoViewController.h"
 
 @interface PayActionViewController ()
 {
@@ -27,14 +29,52 @@
     // Do any additional setup after loading the view.
     
     self.myTitle = @"收银台";
-    [self setMyViewControllerLeftButtonType:MyViewControllerLeftbuttonTypeBack WithRightButtonType:MyViewControllerRightbuttonTypeNull];
+    self.rightString = @"查看订单";
+    [self setMyViewControllerLeftButtonType:MyViewControllerLeftbuttonTypeBack WithRightButtonType:MyViewControllerRightbuttonTypeText];
     
     [self createViews];
+    
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(notificationForWxPay:) name:NOTIFICATION_PAY_WEIXIN_RESULT object:nil];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    //在navigationController中移除 确认订单viewController
+    
+    //确认订单之后到支付页面,这时候不能再返回到确认订单页面
+    
+    NSArray *vcArray = self.navigationController.viewControllers;
+    
+    for (UIViewController *viewController in vcArray) {
+        
+        if ([viewController isKindOfClass:NSClassFromString(@"ConfirmOrderController")]) {
+            
+            [viewController removeFromParentViewController];
+        }
+    }
+    
+}
+
+#pragma - mark 通知处理
+
+//微信支付通知
+- (void)notificationForWxPay:(NSNotification *)notify
+{
+    BOOL result = [[notify.userInfo objectForKey:@"result"]boolValue];
+    if (result) {
+        
+        NSLog(@"微信支付成功");
+        
+        [self payResultSuccess:YES];
+
+    }
 }
 
 #pragma - mark 网络请求
@@ -49,47 +89,31 @@
     
     NSString *authkey = [GMAPI getAuthkey];
 
-    if ([signType isEqualToString:@"ali"]) {
+    NSDictionary *params = @{@"authcode":authkey,
+                             @"order_id":self.orderId,
+                             @"sign_type":signType};
+    
+    __weak typeof(self)weakSelf = self;
+    [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodGet api:ORDER_GET_SIGN parameters:params constructingBodyBlock:nil completion:^(NSDictionary *result) {
         
-        NSDictionary *params = @{@"authcode":authkey,
-                                 @"order_id":self.orderId,
-                                 @"sign_type":signType};
+        NSLog(@"获取签名信息 %@ %@",result,result[RESULT_INFO]);
         
-        __weak typeof(self)weakSelf = self;
-        [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodGet api:ORDER_GET_SIGN parameters:params constructingBodyBlock:nil completion:^(NSDictionary *result) {
-            
-            NSLog(@"获取签名信息 %@ %@",result,result[RESULT_INFO]);
+        if ([signType isEqualToString:@"ali"]) {
             
             NSString *data_str = result[@"data_str"];
             NSString *sign = result[@"sign"];
             
             [weakSelf alipayWithSingString:sign orderDes:data_str];
             
-        } failBlock:^(NSDictionary *result) {
+        }else if ([signType isEqualToString:@"weixin"]){
             
-            NSLog(@"获取签名信息 失败 %@ %@",result,result[RESULT_INFO]);
-            
-        }];
-        
-        return;
-    }
-    
-    //微信支付
-    
-    NSDictionary *params = @{@"authcode":authkey,
-                             @"order_id":self.orderId};
-    
-    __weak typeof(self)weakSelf = self;
-    [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodGet api:ORDER_CREATE_WEIXIN_ORDER parameters:params constructingBodyBlock:nil completion:^(NSDictionary *result) {
-        
-        NSLog(@"获取微信签名信息 %@ %@",result,result[RESULT_INFO]);
-        
-        NSDictionary *preOrderResult = result[@"pre_order_info"];
-        [weakSelf weiXinWithPreOrderInfo:preOrderResult];
+            NSDictionary *preOrderResult = result[@"pre_order_info"];
+            [weakSelf weiXinWithPreOrderInfo:preOrderResult];
+        }
         
     } failBlock:^(NSDictionary *result) {
         
-        NSLog(@"获取微信签名信息 失败 %@ %@",result,result[RESULT_INFO]);
+        NSLog(@"获取签名信息 失败 %@ %@",result,result[RESULT_INFO]);
         
     }];
     
@@ -118,18 +142,34 @@
         orderString = [NSString stringWithFormat:@"%@&sign=\"%@\"&sign_type=\"%@\"",
                        orderSpec, signedString, @"RSA"];
         
+        __weak typeof(self)weakSelf = self;
         [[AlipaySDK defaultService] payOrder:orderString fromScheme:appScheme callback:^(NSDictionary *resultDic) {
             NSLog(@"reslut = %@",resultDic);
             
-            /**
-             *  支付成功 服务端进行验证签名
-             */
+            int resultStatus = [resultDic[@"resultStatus"]intValue];
+            if (resultStatus == 9000) {
+                
+                //成功
+                /**
+                *  支付成功 服务端进行验证签名
+                */
+                
+                NSLog(@"暂时未验证签名 支付成功");
+                [weakSelf payResultSuccess:YES];
+                
+            }else
+            {
+                NSLog(@"支付失败");
+//                8000
+//                正在处理中
+//                4000
+//                订单支付失败
+//                6001
+//                用户中途取消
+//                6002
+//                网络连接出错
+            }
             
-            //            reslut = {
-            //                memo = "";
-            //                result = "partner=\"2088911787623114\"&seller_id=\"yjy@alayy.com\"&out_trade_no=\"201507230025\"&subject=\"RNai\U7684\U8ba2\U5355\"&body=\"\U8d2d\U4e70 \U6fb3\U6d32\U5c0f\U867e\U7c73b1\U4efd\"&total_fee=\"0.01\"&notify_url=\"http://182.92.106.193:85/api/order/confirm_order_pay\"&service=\"mobile.securitypay.pay\"&payment_type=\"1\"&_input_charset=\"utf-8\"&it_b_pay=\"30m\"&show_url=\"m.alipay.com\"&success=\"true\"&sign_type=\"RSA\"&sign=\"Djzd2Bh3l3cNwtx1vAcZ0jpR/1hEwrRZu5/23xLhQxZTL0Oj4LitZB5B4qQvDx+KFcWOldq3ffGS+NZzJGzNCNhgt4w5Ebu8qABSZqah8YxWame3d63Bu/z73IqjRE3FLdP3CuiFNRDnlImoI/DEbh7FCe2GXEXYB+DduVoPbUI=\"";
-            //                resultStatus = 9000;
-            //            }
         }];
         
     }
@@ -252,10 +292,30 @@
 /**
  *  支付成功
  */
-- (void)paySuccessAction
+- (void)payResultSuccess:(BOOL)success
 {
     //更新购物车
     [[NSNotificationCenter defaultCenter]postNotificationName:NOTIFICATION_UPDATE_TO_CART object:nil];
+    
+    PayResultViewController *result = [[PayResultViewController alloc]init];
+    result.orderId = self.orderId;
+    result.orderNum = self.orderNum;
+    result.sumPrice = self.sumPrice;
+    result.isPaySuccess = success;
+    result.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:result animated:YES];
+}
+
+/**
+ *  查看订单
+ *
+ *  @param sender
+ */
+-(void)rightButtonTap:(UIButton *)sender
+{
+    NSLog(@"查看订单");
+    OrderInfoViewController *orderInfo = [[OrderInfoViewController alloc]init];
+    [self.navigationController pushViewController:orderInfo animated:YES];
 }
 
 - (UIButton *)buttonForTag:(NSInteger)tag
@@ -276,6 +336,12 @@
  */
 - (void)clickToPay:(UIButton *)sender
 {
+    //test
+    
+//    [self payResultSuccess:YES];
+//    
+//    return;
+    
     if (aliButton.selected) {
         
         NSLog(@"支付宝支付");
