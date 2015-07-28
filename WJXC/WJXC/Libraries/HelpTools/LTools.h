@@ -80,6 +80,13 @@ typedef void(^versionBlock)(BOOL isNewVersion,NSString *updateUrl,NSString *upda
 
 #pragma mark - 融云用户数据
 
+/**
+ *  更新未读消息显示
+ *
+ *  @param number 未读数
+ */
++ (void)updateTabbarUnreadMessageNumber;
+
 //+ (void)rongCloudChatWithUserId:(NSString *)userId
 //                       userName:(NSString *)userName
 //                 viewController:(UIViewController *)viewController;

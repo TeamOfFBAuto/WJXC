@@ -12,12 +12,13 @@
 
 #import "ConfirmOrderController.h"//确认订单
 
+#import "RCDChatViewController.h"
+
 #define kPadding_add 1000 //数量增加
 #define kPadding_reduce 2000 //数量减少
 #define kPadding_delete 3000 //删除
 #define kPadding_alert  4000 //UIAlertView tag
 #define kPadding_select  5000 //UIAlertView tag
-
 
 @interface ShoppingCarController ()<RefreshDelegate,UITableViewDataSource,UIAlertViewDelegate>
 {
@@ -74,7 +75,9 @@
     
     self.myTitle = @"购物车";
     
-    [self setMyViewControllerLeftButtonType:MyViewControllerLeftbuttonTypeNull WithRightButtonType:MyViewControllerRightbuttonTypeText];
+    self.leftString = @"客服";
+    
+    [self setMyViewControllerLeftButtonType:MyViewControllerLeftbuttonTypeText WithRightButtonType:MyViewControllerRightbuttonTypeText];
     
     [self.my_right_button setTitle:@"编辑" forState:UIControlStateNormal];
     [self.my_right_button setTitle:@"完成" forState:UIControlStateSelected];
@@ -430,6 +433,28 @@
     _isEditing = sender.selected;
     
     [_table reloadData];
+}
+
+-(void)leftButtonTap:(UIButton *)sender
+{
+    [self pushToCustomerService];
+}
+
+/**
+ *  跳转至客服
+ */
+- (void)pushToCustomerService
+{
+    RCDChatViewController *chatService = [[RCDChatViewController alloc] init];
+    chatService.userName = @"客服";
+    chatService.targetId = SERVICE_ID;
+    chatService.conversationType = ConversationType_CUSTOMERSERVICE;
+    chatService.title = chatService.userName;
+    
+    //    RCHandShakeMessage* textMsg = [[RCHandShakeMessage alloc] init];
+    //    [[RongUIKit sharedKit] sendMessage:ConversationType_CUSTOMERSERVICE targetId:SERVICE_ID content:textMsg delegate:nil];
+    chatService.hidesBottomBarWhenPushed = YES;
+    [self.navigationController showViewController:chatService sender:nil];
 }
 
 

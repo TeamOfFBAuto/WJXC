@@ -28,6 +28,7 @@ PODS:
   - JSONKit (1.5pre)
   - MBProgressHUD (0.9.1)
   - Reachability (3.1.1)
+  - RongCloudIMKit (2.2.5)
   - SDWebImage (3.7.3):
     - SDWebImage/Core
   - SDWebImage/Core (3.7.3)
@@ -41,6 +42,7 @@ DEPENDENCIES:
   - JSONKit (~> 1.5pre)
   - MBProgressHUD (~> 0.8)
   - Reachability (~> 3.1.1)
+  - RongCloudIMKit (~> 2.2.2)
   - SDWebImage (~> 3.7.1)
   - UIView+Helpers (~> 1.4.0)
   - UMeng (~> 2.2.1)
@@ -52,6 +54,7 @@ SPEC CHECKSUMS:
   JSONKit: bae313ce6a6c444f40489a6c0b023f399888871f
   MBProgressHUD: c47f2c166c126cf2ce36498d80f33e754d4e93ad
   Reachability: dd9aa4fb6667b9f787690a74f53cb7634ce99893
+  RongCloudIMKit: b596312663bf2c1a451c649968f3b69ed993c328
   SDWebImage: 1d2b1a1efda1ade1b00b6f8498865f8ddedc8a84
   UIView+Helpers: dff2da5bb142b8ed51460176af41ef726d49174b
   UMeng: a4fe3231efeb223015d9649e92538dd16a92685f

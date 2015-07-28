@@ -94,5 +94,16 @@
 #define Alipay_SellerID  @"yjy@alayy.com"
 
 
+/**
+ *  融云
+ */
+
+//开发
+#define RONGCLOUD_IM_APPKEY    @"8luwapkvuf1nl" //融云账号 wjcx2015@qq.com
+#define RONGCLOUD_IM_APPSECRET @"bl6uUMP8HdpsU"
+//融云客服id
+#define SERVICE_ID @"KEFU1438066005020"
+
+
 
 #endif

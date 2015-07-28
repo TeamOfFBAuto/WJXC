@@ -9,6 +9,7 @@
 #import "LTools.h"
 #import <CommonCrypto/CommonDigest.h>
 #import "AppDelegate.h"
+#import <RongIMKit/RongIMKit.h>
 
 @implementation LTools
 {
@@ -522,6 +523,28 @@
 #pragma mark - NSUserDefault缓存
 
 #pragma mark 缓存融云用户数据
+
+/**
+ *  更新未读消息显示
+ *
+ *  @param number 未读数
+ */
++ (void)updateTabbarUnreadMessageNumber
+{
+    int unreadMsgCount = [[RCIMClient sharedRCIMClient]getUnreadCount: @[@(ConversationType_CUSTOMERSERVICE)]];
+    
+    NSString *number_str = nil;
+    
+    if (unreadMsgCount > 0) {
+        number_str = [NSString stringWithFormat:@"%d",unreadMsgCount];
+    }
+    
+    UINavigationController *unvc = [((UITabBarController *)ROOTVIEWCONTROLLER).viewControllers objectAtIndex:3];
+    
+    unvc.tabBarItem.badgeValue = number_str;
+    
+    [UIApplication sharedApplication].applicationIconBadgeNumber = [number_str intValue];
+}
 
 + (void)cacheRongCloudUserName:(NSString *)userName forUserId:(NSString *)userId
 {

@@ -18,6 +18,8 @@
 
 #import "NickNameSheet.h"//修改昵称view
 
+#import "RCDChatViewController.h"//客服聊天
+
 @interface PersonalViewController ()<UITableViewDataSource,UITableViewDelegate,UIActionSheetDelegate,UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 {
     UITableView *_tableView;
@@ -49,6 +51,8 @@
     [self.navigationController setNavigationBarHidden:YES animated:animated];
     
     [self updateLoginState];
+    
+    [LTools updateTabbarUnreadMessageNumber];
 }
 
 -(void)viewWillDisappear:(BOOL)animated
@@ -63,10 +67,12 @@
     _images_arr = @[[UIImage imageNamed:@"my_collect"],
                     [UIImage imageNamed:@"my_address"],
                     [UIImage imageNamed:@"my_indent"],
+                    [UIImage imageNamed:@"my_service"],
                     [UIImage imageNamed:@"my_setting"]];
     _titles_arr = @[@"我的收藏",
                     @"我的地址",
                     @"我的订单",
+                    @"客服中心",
                     @"设置"];
     _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, DEVICE_HEIGHT) style:UITableViewStylePlain];
     _tableView.delegate = self;
@@ -87,6 +93,32 @@
     
     //监控退出登录通知
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(notificatonForLogout:) name:NOTIFICATION_LOGOUT object:nil];
+    
+    UINavigationController *unvc = [((UITabBarController *)ROOTVIEWCONTROLLER).viewControllers objectAtIndex:3];
+    [unvc.tabBarItem addObserver:self forKeyPath:@"badgeValue" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
+}
+
+-(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    NSLog(@"observeValueForKeyPath %@",change);
+    
+    if ([keyPath isEqualToString:@"badgeValue"]) {
+        
+        id new = [change objectForKey:@"new"];
+        
+        int newNum = 0.f;
+        if ([new isKindOfClass:[NSNull class]]) {
+            
+            newNum = 0;
+        }else
+        {
+            newNum = [new intValue];
+        }
+        
+        NSLog(@"mine未读消息 %d",newNum);
+                
+        [_tableView reloadData];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -464,12 +496,26 @@
             break;
         case 3:
         {
+            NSLog(@"客服中心");
+            
+            RCDChatViewController *chatService = [[RCDChatViewController alloc] init];
+            chatService.userName = @"客服";
+            chatService.targetId = SERVICE_ID;
+            chatService.conversationType = ConversationType_CUSTOMERSERVICE;
+            chatService.title = chatService.userName;
+            chatService.hidesBottomBarWhenPushed = YES;
+            [self.navigationController showViewController:chatService sender:nil];
+            
+        }
+            break;
+        case 4:
+        {
             NSLog(@"设置");
             SettingsViewController *settings = [[SettingsViewController alloc]init];
             settings.hidesBottomBarWhenPushed = YES;
             settings.lastPageNavigationHidden = YES;
             [self.navigationController pushViewController:settings animated:YES];
-
+            
         }
             break;
             
@@ -495,6 +541,31 @@
 
     cell.iconImageView.image = _images_arr[indexPath.row];
     cell.titleLabel.text = _titles_arr[indexPath.row];
+    
+    if (indexPath.row == 3) {
+        
+        int num = [[RCIMClient sharedRCIMClient]getUnreadCount: @[@(ConversationType_CUSTOMERSERVICE)]];
+        if (num <= 0) {
+            
+            cell.messageNumLabel.hidden = YES;
+        }else
+        {
+            NSString *numstring;
+            if (num > 99) {
+                numstring = [NSString stringWithFormat:@"%d+",99];
+            }else
+            {
+                numstring = [NSString stringWithFormat:@"%d",num];
+            }
+            cell.messageNumLabel.hidden = NO;
+            
+            cell.messageNumLabel.text = numstring;
+        }
+        
+    }else
+    {
+        cell.messageNumLabel.hidden = YES;
+    }
     
     return cell;
 }

@@ -140,6 +140,8 @@
 		13A64C631B3BF74E00D9A106 /* ShoppingCarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13A64C621B3BF74E00D9A106 /* ShoppingCarController.m */; };
 		13A64C661B3BF76A00D9A106 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13A64C651B3BF76A00D9A106 /* HomeViewController.m */; };
 		13A64C6A1B3BFD0200D9A106 /* YJYRequstManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 13A64C691B3BFD0200D9A106 /* YJYRequstManager.m */; };
+		13AD17941B676D8D0091CE10 /* RCDChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13AD17931B676D8D0091CE10 /* RCDChatViewController.m */; };
+		13AD17961B6785870091CE10 /* my_service@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 13AD17951B6785870091CE10 /* my_service@2x.png */; };
 		13B2DBCF1B552B2800EE2B6C /* AddAddressController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B2DBCE1B552B2800EE2B6C /* AddAddressController.m */; };
 		13EB1EA01B623E3600E5CA57 /* my_√@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 13EB1E9F1B623E3600E5CA57 /* my_√@2x.png */; };
 		13EB1EA61B623E8B00E5CA57 /* PayResultViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13EB1EA51B623E8B00E5CA57 /* PayResultViewController.m */; };
@@ -426,6 +428,9 @@
 		13A64C651B3BF76A00D9A106 /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
 		13A64C681B3BFD0200D9A106 /* YJYRequstManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YJYRequstManager.h; sourceTree = "<group>"; };
 		13A64C691B3BFD0200D9A106 /* YJYRequstManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YJYRequstManager.m; sourceTree = "<group>"; };
+		13AD17921B676D8D0091CE10 /* RCDChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCDChatViewController.h; sourceTree = "<group>"; };
+		13AD17931B676D8D0091CE10 /* RCDChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCDChatViewController.m; sourceTree = "<group>"; };
+		13AD17951B6785870091CE10 /* my_service@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "my_service@2x.png"; sourceTree = "<group>"; };
 		13B2DBCD1B552B2800EE2B6C /* AddAddressController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddAddressController.h; sourceTree = "<group>"; };
 		13B2DBCE1B552B2800EE2B6C /* AddAddressController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddAddressController.m; sourceTree = "<group>"; };
 		13EB1E9F1B623E3600E5CA57 /* my_√@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "my_√@2x.png"; sourceTree = "<group>"; };
@@ -736,6 +741,7 @@
 		139456C91B46296F00C45EB6 /* 个人中心 */ = {
 			isa = PBXGroup;
 			children = (
+				13AD17951B6785870091CE10 /* my_service@2x.png */,
 				1375AD581B4D054D001631CE /* my_password_line_gray.png */,
 				1375AD591B4D054D001631CE /* my_password_line_green.png */,
 				13FEA47A1B4A35BD009BD01D /* my_bg@2x.png */,
@@ -990,6 +996,7 @@
 		13A64C3A1B3BEB4200D9A106 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				13AD17911B676B990091CE10 /* 客服 */,
 				E3C15FDA1B4CDC1700C30039 /* 商品 */,
 				E3D080251B3D521E00E4F87D /* 账号相关 */,
 				13A64C501B3BF3B300D9A106 /* 分类 */,
@@ -1107,6 +1114,15 @@
 				13A64C591B3BF6A800D9A106 /* UIView+Frame.m */,
 			);
 			path = "UIView+Frame";
+			sourceTree = "<group>";
+		};
+		13AD17911B676B990091CE10 /* 客服 */ = {
+			isa = PBXGroup;
+			children = (
+				13AD17921B676D8D0091CE10 /* RCDChatViewController.h */,
+				13AD17931B676D8D0091CE10 /* RCDChatViewController.m */,
+			);
+			path = "客服";
 			sourceTree = "<group>";
 		};
 		13FEA4741B4A28B6009BD01D /* CommonViews */ = {
@@ -1655,6 +1671,7 @@
 				1394572D1B46296F00C45EB6 /* shopping cart_dd_middle_jt@2x.png in Resources */,
 				139457451B46296F00C45EB6 /* homepage_bottom_my_green@2x.png in Resources */,
 				13241E771B63925A00D42737 /* my_paySuccess@2x.png in Resources */,
+				13AD17961B6785870091CE10 /* my_service@2x.png in Resources */,
 				139457471B46296F00C45EB6 /* homepage_bottom_shopping cart_green@2x.png in Resources */,
 				13FEA4951B4BD198009BD01D /* CollectCell.xib in Resources */,
 				E3D080441B3D58F300E4F87D /* login_suo@2x.png in Resources */,
@@ -1794,6 +1811,7 @@
 				1394576F1B4678D200C45EB6 /* UIImageView+Extensions.m in Sources */,
 				1394576E1B4678D200C45EB6 /* UIButton+Additions.m in Sources */,
 				139D439C1B5A489D0036DC3B /* ConfirmOrderController.m in Sources */,
+				13AD17941B676D8D0091CE10 /* RCDChatViewController.m in Sources */,
 				E3DE39BA1B592A2F0015EEF6 /* MJPhotoLoadingView.m in Sources */,
 				139D43A01B5A65E40036DC3B /* SelectCell.m in Sources */,
 				E3CE7F731B4D4E870012940C /* ProductDetailModel.m in Sources */,

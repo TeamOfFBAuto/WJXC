@@ -18,6 +18,9 @@
 //根据id获取用户信息 (参数: uid authcode)
 #define GET_USERINFO_WITHID @"/index.php?d=api&c=user&m=get_user_info"
 
+//只根据用户id获取用户信息
+#define GET_USERINFO_ONLY_USERID @"/index.php?d=api&c=user&m=get_user_info_by_uid"
+
 //单品 - 添加收藏 (参数:product_id、authcode)
 #define HOME_PRODUCT_COLLECT_ADD @"/?d=api&c=products&m=favor"
 
@@ -107,11 +110,10 @@
 
 #define ORDER_GET_EXPRESS_FEE @"/index.php?d=api&c=order&m=get_express_fee"
 
-//48、获取支付宝签名
+//48、获取支付宝签名或者微信生成预订单
 #define ORDER_GET_SIGN @"/index.php?d=api&c=order&m=get_sign"
 
-//49、生成微信预订单，获取预订单id以及签名
-#define ORDER_CREATE_WEIXIN_ORDER @"/index.php?d=api&c=order&m=create_weixin_order"
-
+//49、获取订单详情
+#define ORDER_GET_ORDER_INFO @"/index.php?d=api&c=order&m=get_order_info"
 
 #endif
