@@ -116,4 +116,12 @@
 //49、获取订单详情
 #define ORDER_GET_ORDER_INFO @"/index.php?d=api&c=order&m=get_order_info"
 
+//50、获取我的订单列表
+#define ORDER_GET_MY_ORDERS @"/index.php?d=api&c=order&m=get_my_orders"
+
+//51、查看订单支付状态
+#define ORDER_GET_ORDER_PAY @"/index.php?d=api&c=order&m=get_order_pay"
+
+
+
 #endif

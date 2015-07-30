@@ -20,6 +20,8 @@
 @property (strong, nonatomic) IBOutlet UILabel *realPriceLabel;
 @property (strong, nonatomic) IBOutlet UIButton *commentButton;
 
+@property (nonatomic,retain)UIScrollView *contentScroll;//放置多个商品
+
 - (void)setCellWithModel:(id)aModel;
 
 @end

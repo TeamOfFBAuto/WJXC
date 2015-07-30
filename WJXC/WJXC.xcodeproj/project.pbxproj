@@ -117,6 +117,7 @@
 		139D43A11B5A65E40036DC3B /* SelectCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 139D439F1B5A65E40036DC3B /* SelectCell.xib */; };
 		139D43A51B5A68FA0036DC3B /* ProductCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 139D43A31B5A68FA0036DC3B /* ProductCell.m */; };
 		139D43A61B5A68FA0036DC3B /* ProductCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 139D43A41B5A68FA0036DC3B /* ProductCell.xib */; };
+		13A147101B6A1CE600B6A3DB /* OrderModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 13A1470F1B6A1CE600B6A3DB /* OrderModel.m */; };
 		13A2087A1B5C96C800CC4EC0 /* ConfirmInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 13A208781B5C96C800CC4EC0 /* ConfirmInfoCell.m */; };
 		13A2087B1B5C96C800CC4EC0 /* ConfirmInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13A208791B5C96C800CC4EC0 /* ConfirmInfoCell.xib */; };
 		13A2087F1B5CD81C00CC4EC0 /* SelectAddressCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 13A2087D1B5CD81C00CC4EC0 /* SelectAddressCell.m */; };
@@ -381,6 +382,8 @@
 		139D43A21B5A68FA0036DC3B /* ProductCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProductCell.h; sourceTree = "<group>"; };
 		139D43A31B5A68FA0036DC3B /* ProductCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProductCell.m; sourceTree = "<group>"; };
 		139D43A41B5A68FA0036DC3B /* ProductCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProductCell.xib; sourceTree = "<group>"; };
+		13A1470E1B6A1CE600B6A3DB /* OrderModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrderModel.h; sourceTree = "<group>"; };
+		13A1470F1B6A1CE600B6A3DB /* OrderModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrderModel.m; sourceTree = "<group>"; };
 		13A208771B5C96C800CC4EC0 /* ConfirmInfoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfirmInfoCell.h; sourceTree = "<group>"; };
 		13A208781B5C96C800CC4EC0 /* ConfirmInfoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConfirmInfoCell.m; sourceTree = "<group>"; };
 		13A208791B5C96C800CC4EC0 /* ConfirmInfoCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ConfirmInfoCell.xib; sourceTree = "<group>"; };
@@ -1435,6 +1438,8 @@
 				E3CE7F701B4D4E6E0012940C /* 商品 */,
 				139457571B46730100C45EB6 /* Order.h */,
 				139457581B46730100C45EB6 /* Order.m */,
+				13A1470E1B6A1CE600B6A3DB /* OrderModel.h */,
+				13A1470F1B6A1CE600B6A3DB /* OrderModel.m */,
 				E3D0800F1B3D510C00E4F87D /* BaseModel.h */,
 				E3D080101B3D510C00E4F87D /* BaseModel.m */,
 				E3D080111B3D510C00E4F87D /* UserInfo.h */,
@@ -1883,6 +1888,7 @@
 				13FEA4781B4A28E1009BD01D /* PersonalCell.m in Sources */,
 				13FEA4891B4BCD89009BD01D /* RefreshTableView.m in Sources */,
 				138407321B5905B20008CAC3 /* DBManager.m in Sources */,
+				13A147101B6A1CE600B6A3DB /* OrderModel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

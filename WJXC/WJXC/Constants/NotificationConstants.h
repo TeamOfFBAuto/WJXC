@@ -19,5 +19,6 @@
 #define NOTIFICATION_PAY_WEIXIN_RESULT @"weiXinPayResult" //微信支付结果成功或者失败
 #define NOTIFICATION_PAY_ALI_RESULT @"aliPayResult" //支付宝支付结果成功或者失败
 
+#define NOTIFICATION_PAY_SUCCESS @"pay_success" //支付成功通知
 
 #endif

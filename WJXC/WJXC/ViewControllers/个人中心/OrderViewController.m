@@ -8,6 +8,13 @@
 
 #import "OrderViewController.h"
 #import "OrderCell.h"
+#import "OrderModel.h"
+#import "PayActionViewController.h"//支付页面
+
+#define kPadding_One 1000 //去支付
+#define kPadding_Two 2000 //确认收货
+#define kPadding_Three 3000 //评价晒单
+#define kPadding_Four  4000 //再次购买
 
 @interface OrderViewController ()<RefreshDelegate,UITableViewDataSource,UIScrollViewDelegate>
 {
@@ -68,6 +75,8 @@
         [_scroll addSubview:_table];
         _table.tag = 200 + i;
         
+        [_table showRefreshHeader:YES];
+        
     }
     
     _indicator = [[UIView alloc]initWithFrame:CGRectMake(0, 38, width, 2)];
@@ -76,6 +85,8 @@
     
     //默认选中第一个
     [self controlSelectedButtonTag:100];
+    
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(notificationForPaySuccess:) name:NOTIFICATION_PAY_SUCCESS object:nil];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -83,9 +94,125 @@
     // Dispose of any resources that can be recreated.
 }
 
+#pragma - mark 通知处理
+
+/**
+ *  支付成功通知
+ *
+ *  @param notify
+ */
+- (void)notificationForPaySuccess:(NSNotification *)notify
+{
+    //支付成功 更新
+    
+    [[self refreshTableForIndex:0]showRefreshHeader:YES];//待付款
+    [[self refreshTableForIndex:1]showRefreshHeader:YES];//配送中
+}
+
 #pragma - mark 网络请求
 
+/**
+ *  获取订单列表
+ *
+ *  @param orderType 不同的订单状态
+ */
+- (void)getOrderListWithStatus:(ORDERTYPE)orderType
+{
+//    authcode
+//    status 我的订单状态（no_pay待付款，deliver配送中，no_comment待评价，complete已完成）
+    NSString *authey = [GMAPI getAuthkey];
+    if (authey.length == 0) {
+        return;
+    }
+    NSString *status = nil;
+    switch (orderType) {
+        case ORDERTYPE_DaiFu:
+            status = @"no_pay";
+            break;
+        case ORDERTYPE_PeiSong:
+            status = @"deliver";
+            break;
+        case ORDERTYPE_DaiPingJia:
+            status = @"no_comment";
+            break;
+        case ORDERTYPE_WanCheng:
+            status = @"complete";
+            break;
+        default:
+            break;
+    }
+    __weak typeof(RefreshTableView)*weakTable = [self refreshTableForIndex:orderType - 1];
+    
+    NSDictionary *params = @{@"authcode":authey,
+                             @"status":status,
+                             @"perpage":[NSNumber numberWithInt:20]};
+    [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodGet api:ORDER_GET_MY_ORDERS parameters:params constructingBodyBlock:nil completion:^(NSDictionary *result) {
+        
+        NSArray *list = result[@"list"];
+        NSMutableArray *temp = [NSMutableArray arrayWithCapacity:list.count];
+        for (NSDictionary *aDic in list) {
+            
+            OrderModel *aModel = [[OrderModel alloc]initWithDictionary:aDic];
+            [temp addObject:aModel];
+        }
+        [weakTable reloadData:temp pageSize:20];
+        
+    } failBlock:^(NSDictionary *result) {
+        
+        [weakTable loadFail];
+    }];
+}
+
 #pragma - mark 事件处理
+
+/**
+ *  去支付 确认收货 评价 再次购买
+ *
+ *  @param sender
+ */
+- (void)clickToAction:(UIButton *)sender
+{
+    int index = (int)sender.tag;
+    
+    int kadding = 0;
+    
+    if (index > kPadding_Four) {
+        //再次购买
+        kadding = kPadding_Four;
+//        OrderModel *aModel = [[self refreshTableForIndex:0].dataArray objectAtIndex:index - kadding];
+        
+        
+    }else if (index > kPadding_Three){
+        //评价晒单
+        kadding = kPadding_Three;
+        
+    }else if (index > kPadding_Two){
+        //确认收货
+        kadding = kPadding_Two;
+        
+    }else if (index > kPadding_One){
+        //支付
+        kadding = kPadding_One;
+        OrderModel *aModel = [[self refreshTableForIndex:0].dataArray objectAtIndex:index - kPadding_One];
+        [self pushToPayPageWithOrderId:aModel.order_id orderNum:aModel.order_no sumPrice:[aModel.total_fee floatValue]];
+        
+    }
+    
+}
+
+/**
+ *  跳转至支付页面
+ */
+- (void)pushToPayPageWithOrderId:(NSString *)orderId
+                        orderNum:(NSString *)orderNum
+                        sumPrice:(CGFloat)sumPrice
+{
+    PayActionViewController *pay = [[PayActionViewController alloc]init];
+    pay.orderId = orderId;
+    pay.orderNum = orderNum;
+    pay.sumPrice = sumPrice;
+    [self.navigationController pushViewController:pay animated:YES];
+}
 
 /**
  *  获取button 根据tag
@@ -151,11 +278,15 @@
 
 - (void)loadNewDataForTableView:(UITableView *)tableView
 {
+    int tableTag = (int)tableView.tag - 200 + 1;
     
+    [self getOrderListWithStatus:tableTag];
 }
 - (void)loadMoreDataForTableView:(UITableView *)tableView
 {
+    int tableTag = (int)tableView.tag - 200 + 1;
     
+    [self getOrderListWithStatus:tableTag];
 }
 
 //新加
@@ -178,42 +309,54 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     RefreshTableView *refreshTable = (RefreshTableView *)tableView;
-    return refreshTable.dataArray.count + 1;
+    return refreshTable.dataArray.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *identify = @"OrderCell";
     OrderCell *cell = (OrderCell *)[LTools cellForIdentify:identify cellName:identify forTable:tableView];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     int tableViewTag = (int)tableView.tag;
     switch (tableViewTag) {
         case 200:
         {
             [cell.commentButton setTitle:@"去支付" forState:UIControlStateNormal];
+            cell.commentButton.tag = kPadding_One + indexPath.row;
         }
             break;
         case 201:
         {
             [cell.commentButton setTitle:@"确认收货" forState:UIControlStateNormal];
+            cell.commentButton.tag = kPadding_Two + indexPath.row;
 
         }
             break;
         case 202:
         {
             [cell.commentButton setTitle:@"评价晒单" forState:UIControlStateNormal];
+            cell.commentButton.tag = kPadding_Three + indexPath.row;
 
+            
         }
             break;
         case 203:
         {
             [cell.commentButton setTitle:@"再次购买" forState:UIControlStateNormal];
+            cell.commentButton.tag = kPadding_Four + indexPath.row;
 
+            
         }
             break;
         default:
             break;
     }
-    [cell setCellWithModel:nil];
+    
+    [cell.commentButton addTarget:self action:@selector(clickToAction:) forControlEvents:UIControlEventTouchUpInside];
+    
+    RefreshTableView *table = (RefreshTableView *)tableView;
+    OrderModel *aModel = [table.dataArray objectAtIndex:indexPath.row];
+    [cell setCellWithModel:aModel];
     return cell;
 }
 
