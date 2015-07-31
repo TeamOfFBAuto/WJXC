@@ -54,16 +54,6 @@
     self.myTitle = @"确认订单";
     [self setMyViewControllerLeftButtonType:MyViewControllerLeftbuttonTypeBack WithRightButtonType:MyViewControllerRightbuttonTypeNull];
     
-//    NSMutableArray *temp = [NSMutableArray arrayWithArray:self.productArray];
-//    [temp addObjectsFromArray:self.productArray];
-//    [temp addObjectsFromArray:self.productArray];
-//    [temp addObjectsFromArray:self.productArray];
-//    [temp addObjectsFromArray:self.productArray];
-//    [temp addObjectsFromArray:self.productArray];
-//    self.productArray = temp;
-    
-//    _titles = @[@"支付信息",@"备注信息",@"商品清单",@"价格清单"];
-    
     _titles = @[@"备注信息",@"商品清单",@"价格清单"];
 
     _table = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, DEVICE_HEIGHT - 64) style:UITableViewStylePlain];
@@ -81,11 +71,6 @@
     
     
     [self getAddressAndFee];//获取收货地址和邮费
-    
-//    [self tableHeaderView];
-//    [self tableViewFooter];
-//    
-//    [self createBottomView];
     
 }
 

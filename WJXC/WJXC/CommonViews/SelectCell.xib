@@ -35,6 +35,7 @@
                 </subviews>
             </tableViewCellContentView>
             <connections>
+                <outlet property="arrowImageView" destination="ser-FT-cN9" id="Xft-QY-k3d"/>
                 <outlet property="contentLabel" destination="LA1-FL-RgM" id="TGH-69-cAM"/>
                 <outlet property="nameLabel" destination="fcQ-FG-O0Q" id="jiw-Sc-GzA"/>
             </connections>

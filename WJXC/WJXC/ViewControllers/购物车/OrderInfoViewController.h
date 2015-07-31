@@ -12,4 +12,6 @@
 
 @interface OrderInfoViewController : MyViewController
 
+@property (nonatomic,retain)NSString *order_id;
+
 @end

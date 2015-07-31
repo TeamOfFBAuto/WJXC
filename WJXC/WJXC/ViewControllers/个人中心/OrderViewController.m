@@ -10,6 +10,7 @@
 #import "OrderCell.h"
 #import "OrderModel.h"
 #import "PayActionViewController.h"//支付页面
+#import "OrderInfoViewController.h"//订单详情
 
 #define kPadding_One 1000 //去支付
 #define kPadding_Two 2000 //确认收货
@@ -292,7 +293,11 @@
 //新加
 - (void)didSelectRowAtIndexPath:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
 {
-    
+    OrderModel *aModel = [((RefreshTableView *)tableView).dataArray objectAtIndex:indexPath.row];
+
+    OrderInfoViewController *orderInfo = [[OrderInfoViewController alloc]init];
+    orderInfo.order_id = aModel.order_id;
+    [self.navigationController pushViewController:orderInfo animated:YES];
 }
 - (CGFloat)heightForRowIndexPath:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
 {
