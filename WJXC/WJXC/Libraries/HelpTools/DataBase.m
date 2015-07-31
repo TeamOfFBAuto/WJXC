@@ -13,6 +13,7 @@ static sqlite3 *db = nil;
     
 }
 //打开数据库
+
 +(sqlite3 *)openDB
 {
     if (db) {
@@ -29,6 +30,8 @@ static sqlite3 *db = nil;
     sqlite3_open([filePath UTF8String], &db);
     return db;
 }
+
+
 //关闭数据库
 +(void)closeDB
 {

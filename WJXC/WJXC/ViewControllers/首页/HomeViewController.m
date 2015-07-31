@@ -26,6 +26,9 @@
     
     NSMutableArray *_TopDataArray;
     
+    
+    UILabel *_daojiashiLabel;//倒计时label
+    
 }
 @end
 
@@ -324,12 +327,44 @@
         [imv sd_setImageWithURL:[NSURL URLWithString:str] placeholderImage:nil];
         
         if ([amodel.type intValue] == 2) {//秒杀
-            UILabel *miaoshaLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 100, 30)];
-            miaoshaLabel.backgroundColor = [UIColor orangeColor];
-            miaoshaLabel.center = imv.center;
-            miaoshaLabel.textAlignment = NSTextAlignmentCenter;
-            miaoshaLabel.text = @"秒杀";
-            [imv addSubview:miaoshaLabel];
+            
+            CGFloat left_right = 30;
+            CGFloat up_down = 30;
+            
+            
+            NSDictionary *relative_info = amodel.relative_info;
+            NSDictionary *product_info = [relative_info dictionaryValueForKey:@"product_info"];
+            NSString *product_name = [product_info stringValueForKey:@"product_name"];
+            NSString *miaoshajia = [NSString stringWithFormat:@"秒杀价:%@元",[product_info stringValueForKey:@"current_price"]];
+            NSString *yuanjia = [NSString stringWithFormat:@"原价:%@元",[product_info stringValueForKey:@"original_price"]];
+            
+            
+            //商品名称
+            UILabel *nameLabel = [[UILabel alloc]initWithFrame:CGRectMake(left_right, 5, DEVICE_WIDTH - 60, (180*GscreenRatio_568 - 60)/3.0) title:product_name font:25 align:NSTextAlignmentCenter textColor:[UIColor redColor]];
+            [imv addSubview:nameLabel];
+            
+            
+            //秒杀view
+            UIImageView *miaoshaView = [[UIImageView alloc]initWithFrame:CGRectMake(nameLabel.frame.origin.x, CGRectGetMaxY(nameLabel.frame), nameLabel.frame.size.width, nameLabel.frame.size.height)];
+            [miaoshaView setImage:[UIImage imageNamed:@"homepage_qiangou_bottom_bg.png"]];
+//            miaoshaView.backgroundColor = [UIColor orangeColor];
+            [imv addSubview:miaoshaView];
+            //秒杀价
+            UILabel *miaoshajiaLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, miaoshaView.frame.size.width, miaoshaView.frame.size.height*0.5) title:miaoshajia font:17 align:NSTextAlignmentCenter textColor:[UIColor redColor]];
+            [miaoshaView addSubview:miaoshajiaLabel];
+            //原价
+            UILabel *yuanjiaLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(miaoshajiaLabel.frame), miaoshaView.frame.size.width, miaoshajiaLabel.frame.size.height) title:yuanjia font:17 align:NSTextAlignmentCenter textColor:[UIColor grayColor]];
+            [miaoshaView addSubview:yuanjiaLabel];
+            
+            //秒杀倒计时
+            UILabel *miaoshaTitle = [[UILabel alloc]initWithFrame:CGRectMake(miaoshaView.frame.origin.x, CGRectGetMaxY(miaoshaView.frame), miaoshaView.frame.size.width, miaoshaView.frame.size.height) title:@"倒计时" font:12 align:NSTextAlignmentCenter textColor:[UIColor grayColor]];
+            [imv addSubview:miaoshaTitle];
+            
+            _daojiashiLabel = [[UILabel alloc]initWithFrame:CGRectMake(miaoshaTitle.frame.origin.x, CGRectGetMaxY(miaoshaTitle.frame), miaoshaTitle.frame.size.width, miaoshaTitle.frame.size.height) title:yuanjia font:12 align:NSTextAlignmentCenter textColor:[UIColor redColor]];
+            [imv addSubview:_daojiashiLabel];
+            
+            
+            
         }
         
         return imv;
@@ -458,6 +493,13 @@
 
 -(void)setLocationDataWithStr:(NSString *)city{
     self.leftLabel.text = city;
+    
+    
+    int cityId = [GMAPI cityIdForName:self.leftLabel.text];
+    
+    NSLog(@"我擦 %d",cityId)
+    
+    
 }
 
 
