@@ -43,7 +43,11 @@ install_resource()
       ;;
   esac
 }
-          install_resource "UMengFeedback/UMFeedback_iOS_2.3.3/UMengFeedback_SDK/zh-Hans.lproj/UMFeedbackLocalizable.strings"
+          install_resource "RongCloudIMKit/Rong_Cloud_iOS_SDK_v2.2.5/RongCloud.bundle"
+                    install_resource "RongCloudIMKit/Rong_Cloud_iOS_SDK_v2.2.5/en.lproj"
+                    install_resource "RongCloudIMKit/Rong_Cloud_iOS_SDK_v2.2.5/zh-Hans.lproj"
+                    install_resource "RongCloudIMKit/Rong_Cloud_iOS_SDK_v2.2.5/Emoji.plist"
+                    install_resource "UMengFeedback/UMFeedback_iOS_2.3.3/UMengFeedback_SDK/zh-Hans.lproj/UMFeedbackLocalizable.strings"
                     install_resource "UMengFeedback/UMFeedback_iOS_2.3.3/UMengFeedback_SDK/Resources/bubble_min@2x.png"
                     install_resource "UMengFeedback/UMFeedback_iOS_2.3.3/UMengFeedback_SDK/Resources/cancel@2x.png"
                     install_resource "UMengFeedback/UMFeedback_iOS_2.3.3/UMengFeedback_SDK/Resources/microphone@2x.png"

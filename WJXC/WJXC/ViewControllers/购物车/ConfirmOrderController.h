@@ -14,5 +14,6 @@
 @interface ConfirmOrderController : MyViewController
 
 @property(nonatomic,retain)NSArray *productArray;//购买的商品
+@property(nonatomic,assign)float sumPrice;
 
 @end

@@ -8,7 +8,7 @@
 
 #import "AddAddressController.h"
 
-@interface AddAddressController ()
+@interface AddAddressController ()<UITextFieldDelegate>
 {
     UIButton *_saveButton;//保存按钮
     UIButton *_defaultButton;//设为默认按钮
@@ -50,6 +50,7 @@
         UITextField *tf = [[UITextField alloc]initWithFrame:CGRectMake(label.right, label.top, DEVICE_WIDTH - label.right - 10, label.height)];
         [self.view addSubview:tf];
         tf.font = [UIFont systemFontOfSize:14];
+        tf.delegate = self;
         
         tf.tag = 100 + i;
         
@@ -69,6 +70,7 @@
         if (i == 1) {
             //手机号
             tf.keyboardType = UIKeyboardTypePhonePad;
+            tf.clearButtonMode = UITextFieldViewModeWhileEditing;
         }
         
         if (i == 2) {
@@ -245,6 +247,8 @@
             [[self textFieldForTag:100 + i] resignFirstResponder];
         }
     }
+    
+    self.view.top = 64;
 }
 
 /**
@@ -288,6 +292,26 @@
         [_saveButton setBackgroundColor:[UIColor colorWithHexString:@"f0f0f0"]];
         _saveButton.selected = NO;
     }
+}
+
+#pragma - mark UITextFieldDelegate <NSObject>
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    if (iPhone4) {
+        self.view.top = 64 - textField.top;
+    }
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField
+{
+    
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [self clickToHidderKeyboard];
+    return YES;
 }
 
 @end

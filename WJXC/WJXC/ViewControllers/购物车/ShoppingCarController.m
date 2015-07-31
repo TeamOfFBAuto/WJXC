@@ -7,19 +7,18 @@
 //
 
 #import "ShoppingCarController.h"
-#import <AlipaySDK/AlipaySDK.h>
-#import "Order.h"
 #import "ShoppingCartCell.h"
 #import "ProductModel.h"
 
 #import "ConfirmOrderController.h"//确认订单
+
+#import "RCDChatViewController.h"
 
 #define kPadding_add 1000 //数量增加
 #define kPadding_reduce 2000 //数量减少
 #define kPadding_delete 3000 //删除
 #define kPadding_alert  4000 //UIAlertView tag
 #define kPadding_select  5000 //UIAlertView tag
-
 
 @interface ShoppingCarController ()<RefreshDelegate,UITableViewDataSource,UIAlertViewDelegate>
 {
@@ -48,40 +47,19 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    self.myTitle = @"购物车";
-    
-    [self setMyViewControllerLeftButtonType:MyViewControllerLeftbuttonTypeNull WithRightButtonType:MyViewControllerRightbuttonTypeText];
-    
-    [self.my_right_button setTitle:@"编辑" forState:UIControlStateNormal];
-    [self.my_right_button setTitle:@"完成" forState:UIControlStateSelected];
-    
     _table = [[RefreshTableView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH,DEVICE_HEIGHT - 64) showLoadMore:NO];
     _table.refreshDelegate = self;
     _table.dataSource = self;
     _table.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.view addSubview:_table];
     
+    _isUpdateCart = YES;
+    
     //监测数据源
     [_table addObserver:self forKeyPath:@"_dataArrayCount" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
     
     //初始化 记录是否选择
     _selectDic = [NSMutableDictionary dictionary];
-    
-//    NSString *authkey = [GMAPI getAuthkey];
-    
-//    if (authkey.length) {
-    
-//        [_table showRefreshHeader:YES];
-//    }else
-//    {
-//        //获取本地数据
-//        
-//        NSArray *array = [[DBManager shareInstance]QueryData];
-//        
-//        [_table reloadData:array isHaveMore:NO];
-//
-//    }
-    
     
     //监测购物车是否更新
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(updateCartNotification:) name:NOTIFICATION_UPDATE_TO_CART object:nil];
@@ -92,13 +70,17 @@
 {
     [super viewWillAppear:animated];
     
+    self.navigationController.navigationBarHidden = YES;
     self.navigationController.navigationBarHidden = NO;
     
-    if (_isUpdateCart) {
-        
-        [_table showRefreshHeader:YES];
-        _isUpdateCart = NO;
-    }
+    self.myTitle = @"购物车";
+    
+    self.leftString = @"客服";
+    
+    [self setMyViewControllerLeftButtonType:MyViewControllerLeftbuttonTypeText WithRightButtonType:MyViewControllerRightbuttonTypeText];
+    
+    [self.my_right_button setTitle:@"编辑" forState:UIControlStateNormal];
+    [self.my_right_button setTitle:@"完成" forState:UIControlStateSelected];
     
     //判断是否需要同步到服务器 1、数据库有 2、登录了
     
@@ -111,7 +93,13 @@
         [self syncCartInfo];
     }else
     {
-        [_table showRefreshHeader:YES];
+//        [_table showRefreshHeader:YES];
+        
+        if (_isUpdateCart) {
+            
+            [_table showRefreshHeader:YES];
+            _isUpdateCart = NO;
+        }
     }
 }
 
@@ -148,7 +136,7 @@
     UILabel *label2 = [[UILabel alloc]initWithFrame:CGRectMake(0, label.bottom + 5, DEVICE_WIDTH, 15) title:@"快去挑几件喜欢的宝贝吧" font:14 align:NSTextAlignmentCenter textColor:[UIColor colorWithHexString:@"e4e4e4"]];
     [bgView addSubview:label2];
     
-    UIButton *btn = [[UIButton alloc]initWithframe:CGRectMake((DEVICE_WIDTH - 150) / 2.f, label2.bottom + 20, 150, 30) buttonType:UIButtonTypeRoundedRect normalTitle:@"去逛逛" selectedTitle:nil target:self action:@selector(clickToSelectProduct:)];
+    UIButton *btn = [[UIButton alloc]initWithframe:CGRectMake((DEVICE_WIDTH - 150) / 2.f, label2.bottom + 20, 150, 30) buttonType:UIButtonTypeRoundedRect normalTitle:@"去逛逛" selectedTitle:nil target:self action:@selector(clickToGoShopping:)];
     [bgView addSubview:btn];
     btn.backgroundColor = DEFAULT_TEXTCOLOR;
     [btn addCornerRadius:3.f];
@@ -230,6 +218,10 @@
         
         _table.height = DEVICE_HEIGHT - 64 - 49;
         
+        _isEditing = NO;
+        
+        self.my_right_button.selected = NO;
+        
     }else
     {
         _table.tableFooterView = nil;
@@ -301,9 +293,10 @@
  *
  *  @param sender
  */
-- (void)clickToSelectProduct:(UIButton *)sender
+- (void)clickToGoShopping:(UIButton *)sender
 {
-    
+    UITabBarController *root = ROOTVIEWCONTROLLER;
+    root.selectedIndex = 1;
 }
 
 /**
@@ -313,6 +306,12 @@
  */
 - (void)clickToPay:(UIButton *)sender
 {
+    if (![LTools isLogin:self]) {
+        
+        return;
+    }
+    
+    NSMutableArray *arr = [NSMutableArray array];
     for (int i = 0; i < _table.dataArray.count; i ++) {
         
         ProductModel *aModel = [_table.dataArray objectAtIndex:i];
@@ -320,14 +319,23 @@
         if ([_selectDic[aModel.product_id] isEqualToString:@"yes"]) {
             
             NSLog(@"购买:%@ 单价:%@ 数量:%@",aModel.product_name,aModel.current_price,aModel.product_num);
+            
+            [arr addObject:aModel];
 
         }
 
     }
     NSLog(@"总价: %f",[self sumPrice]);
     
+    if (arr.count == 0) {
+        
+        [LTools showMBProgressWithText:@"您还没有选择商品哦!" addToView:self.view];
+        return;
+    }
+    
     ConfirmOrderController *confirm = [[ConfirmOrderController alloc]init];
-    confirm.productArray = _table.dataArray;
+    confirm.productArray = arr;
+    confirm.sumPrice = [self sumPrice];
     confirm.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:confirm animated:YES];
     
@@ -427,6 +435,28 @@
     [_table reloadData];
 }
 
+-(void)leftButtonTap:(UIButton *)sender
+{
+    [self pushToCustomerService];
+}
+
+/**
+ *  跳转至客服
+ */
+- (void)pushToCustomerService
+{
+    RCDChatViewController *chatService = [[RCDChatViewController alloc] init];
+    chatService.userName = @"客服";
+    chatService.targetId = SERVICE_ID;
+    chatService.conversationType = ConversationType_CUSTOMERSERVICE;
+    chatService.title = chatService.userName;
+    
+    //    RCHandShakeMessage* textMsg = [[RCHandShakeMessage alloc] init];
+    //    [[RongUIKit sharedKit] sendMessage:ConversationType_CUSTOMERSERVICE targetId:SERVICE_ID content:textMsg delegate:nil];
+    chatService.hidesBottomBarWhenPushed = YES;
+    [self.navigationController showViewController:chatService sender:nil];
+}
+
 
 #pragma mark - 网络请求
 
@@ -457,7 +487,7 @@
                              @"product_nums":nums};
     
     __weak typeof(_table)weakTable = _table;
-    __weak typeof(self)weakSelf = self;
+//    __weak typeof(self)weakSelf = self;
     [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodPost api:ORDER_SYNC_CART_INFO parameters:params constructingBodyBlock:nil completion:^(NSDictionary *result) {
         
         NSLog(@"同步数据 %@",result[RESULT_INFO]);
@@ -559,8 +589,8 @@
         [weakTable loadFail];
         
     }];
-}
 
+}
 /**
  *  获取购物车数据
  */
@@ -630,6 +660,8 @@
     } failBlock:^(NSDictionary *result) {
         
         NSLog(@"failBlock:%@",result);
+        
+        [weakTable loadFail];
         
     }];
 }
@@ -739,104 +771,6 @@
         [self checkCartIsEmpty];
     }
     
-}
-
-#pragma - mark 事件处理
-
-/**
- *  点击生成订单支付
- *
- *  @param sender
- */
-- (void)clickToOrder:(UIButton *)sender
-{
-    /*
-     *点击获取prodcut实例并初始化订单信息
-     */
-//    Product *product = [self.productList objectAtIndex:indexPath.row];
-    
-    /*
-     *商户的唯一的parnter和seller。
-     *签约后，支付宝会为每个商户分配一个唯一的 parnter 和 seller。
-     */
-    
-    /*============================================================================*/
-    /*=======================需要填写商户app申请的===================================*/
-    /*============================================================================*/
-    NSString *partner = @"111111";
-    NSString *seller = @"22222";
-    NSString *privateKey = @"333333";
-    /*============================================================================*/
-    /*============================================================================*/
-    /*============================================================================*/
-    
-    //partner和seller获取失败,提示
-    if ([partner length] == 0 ||
-        [seller length] == 0 ||
-        [privateKey length] == 0)
-    {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示"
-                                                        message:@"缺少partner或者seller或者私钥。"
-                                                       delegate:self
-                                              cancelButtonTitle:@"确定"
-                                              otherButtonTitles:nil];
-        [alert show];
-        return;
-    }
-    
-    NSString *productName = @"单品name";
-    NSString *productDescription = @"描述";
-    NSString *price = @"0.01";//商品价格
-    /*
-     *生成订单信息及签名
-     */
-    //将商品信息赋予AlixPayOrder的成员变量
-    Order *order = [[Order alloc] init];
-    order.partner = partner;
-    order.seller = seller;
-    order.tradeNO = @"123456789"; //订单ID（由商家自行制定）
-    order.productName = productName; //商品标题
-    order.productDescription = productDescription; //商品描述
-    order.amount = price; //商品价格
-    order.notifyURL =  @"http://www.alayy.com"; //回调URL
-    
-    order.service = @"mobile.securitypay.pay";
-    order.paymentType = @"1";
-    order.inputCharset = @"utf-8";
-    order.itBPay = @"30m";
-    order.showUrl = @"m.alipay.com";
-    
-    //应用注册scheme,在AlixPayDemo-Info.plist定义URL types
-    NSString *appScheme = @"com.wjxc.wjxc";
-    
-    //将商品信息拼接成字符串
-    NSString *orderSpec = [order description];
-    
-
-    NSLog(@"orderSpec = %@",orderSpec);
-    
-    //获取私钥并将商户信息签名,外部商户可以根据情况存放私钥和签名,只需要遵循RSA签名规范,并将签名字符串base64编码和UrlEncode
-    //id<DataSigner> signer = CreateRSADataSigner(privateKey);
-    //NSString *signedString = [signer signString:orderSpec];
-    
-    
-    NSString *signedString = @"";//签名信息
-    
-    //将签名成功字符串格式化为订单字符串,请严格按照该格式
-    NSString *orderString = nil;
-    if (signedString != nil) {
-        orderString = [NSString stringWithFormat:@"%@&sign=\"%@\"&sign_type=\"%@\"",
-                       orderSpec, signedString, @"RSA"];
-        
-        [[AlipaySDK defaultService] payOrder:orderString fromScheme:appScheme callback:^(NSDictionary *resultDic) {
-            NSLog(@"reslut = %@",resultDic);
-            
-            
-            
-        }];
-        
-    }
-
 }
 
 @end

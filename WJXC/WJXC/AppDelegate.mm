@@ -11,15 +11,13 @@
 
 #import <AlipaySDK/AlipaySDK.h>//支付宝
 #import "UMFeedback.h"
+#import "WXApi.h"
+#import <RongIMKit/RongIMKit.h>
 
 #import "BMapKit.h"//百度地图
-//#import "BMKMapManager.h"
 
 
-
-
-
-@interface AppDelegate ()<UMFeedbackDataDelegate,GgetllocationDelegate,BMKGeneralDelegate>
+@interface AppDelegate ()<UMFeedbackDataDelegate,GgetllocationDelegate,BMKGeneralDelegate,WXApiDelegate,RCIMClientReceiveMessageDelegate,RCIMUserInfoDataSource>
 {
     GMAPI *mapApi;
     LocationBlock _locationBlock;
@@ -30,9 +28,39 @@
 
 @implementation AppDelegate
 
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    
+    //微信支付
+    NSString *version = [[NSString alloc] initWithString:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]];
+    NSString *name = [NSString stringWithFormat:@"万聚鲜城 %@",version];
+    [WXApi registerApp:WXAPPID withDescription:name];
+    
+    //融云
+    
+    [[RCIM sharedRCIM] initWithAppKey:RONGCLOUD_IM_APPKEY];
+
+    [[RCIMClient sharedRCIMClient]setReceiveMessageDelegate:self object:nil];
+    
+    [[RCIM sharedRCIM]setUserInfoDataSource:self];//用户信息提供者
+    
+    //头像样式
+    [[RCIM sharedRCIM] setGlobalMessageAvatarStyle:RC_USER_AVATAR_CYCLE];
+    
+    NSString *userToken = @"/Sz7uqK7aG1gU6EbC/qpUMW7g/8tugX5lVlJm8yP1kDNAYEW20rO9BtBJhTxqMKd4YdprT6mI1k=";
+    
+    [[RCIMClient sharedRCIMClient]connectWithToken:userToken success:^(NSString *userId) {
+        
+        NSLog(@"登录融云 userId %@",userId);
+        
+    } error:^(RCConnectErrorCode status) {
+        
+        NSLog(@"RCConnectErrorCode %ld",status);
+        
+    } tokenIncorrect:^{
+        
+        NSLog(@"token不对");
+    }];
     
 #pragma mark 友盟
     [self umengShare];
@@ -147,11 +175,10 @@
     
     //给服务器token
     
+    //融云服务器
+    [[RCIMClient sharedRCIMClient]setDeviceToken:string_pushtoken];
+    
 }
-
-
-
-
 
 /**
  这里处理新浪微博SSO授权进入新浪微博客户端后进入后台，再返回原来应用
@@ -165,15 +192,53 @@
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
+
 /**
  这里处理新浪微博SSO授权之后跳转回来，和微信分享完成之后跳转回来
  */
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
     
+    NSLog(@"openURL------ %@",url);
+    
+    //当支付宝客户端在操作时,商户 app 进程在后台被结束,只能通过这个 block 输出支付 结果。
+    
+#pragma mark - 支付宝支付回调
+    
+    //如果极简开发包不可用,会跳转支付宝钱包进行支付,需要将支付宝钱包的支付结果回传给开 发包
+    if ([url.host isEqualToString:@"safepay"]) {
+        [[AlipaySDK defaultService] processOrderWithPaymentResult:url
+                                                  standbyCallback:^(NSDictionary *resultDic) {
+                                                      
+                                                      NSLog(@"ali result = %@",resultDic);
+                                                      
+                                                      
+                                                  }]; }
+    
+    if ([url.host isEqualToString:@"platformapi"]){//支付宝钱包快登授权返回 authCode
+        [[AlipaySDK defaultService] processAuthResult:url standbyCallback:^(NSDictionary *resultDic) {
+            
+            NSLog(@"ali result = %@",resultDic);
+            
+        }];
+    }
+    
+    //来自微信
+    if ([url.host isEqualToString:@"pay"]) {
+        
+        return  [WXApi handleOpenURL:url delegate:self];
+
+    }
+    
     return  [UMSocialSnsService handleOpenURL:url wxApiDelegate:nil];
 }
 
+
+
+- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url
+{
+    return  [WXApi handleOpenURL:url delegate:self];
+}
 
 #pragma mark - UMFeedbackDataDelegate <NSObject>
 
@@ -184,6 +249,48 @@
 - (void)postFinishedWithError:(NSError *)error
 {
     
+}
+
+#pragma mark - 微信支付回调
+
+- (void)onResp:(BaseResp *)resp {
+    
+    if ([resp isKindOfClass:[PayResp class]]) {
+        PayResp *response = (PayResp *)resp;
+        
+        BOOL result = NO;
+        switch (response.errCode) {
+            case WXSuccess:
+            {
+                //服务器端查询支付通知或查询API返回的结果再提示成功
+                NSLog(@"支付成功");
+                
+                result = YES;
+            }
+                break;
+            case WXErrCodeCommon:
+            case WXErrCodeSentFail:
+            {
+                NSLog(@"1、可能的原因：签名错误、未注册APPID、项目设置APPID不正确、注册的APPID与设置的不匹配、其他异常等.\n2、发送失败");
+
+            }
+                break;
+            case WXErrCodeUserCancel:
+                NSLog(@"用户取消支付");
+                break;
+            case WXErrCodeAuthDeny:
+
+                NSLog(@"授权失败");
+                break;
+            default:
+                NSLog(@"支付失败， retcode=%d",resp.errCode);
+                
+                break;
+        }
+        //微信支付通知
+        NSDictionary *params = @{@"result":[NSNumber numberWithBool:result]};
+        [[NSNotificationCenter defaultCenter]postNotificationName:NOTIFICATION_PAY_WEIXIN_RESULT object:nil userInfo:params];
+    }
 }
 
 
@@ -214,7 +321,7 @@
     [UMSocialQQHandler setSupportWebView:YES];
     
     //设置微信AppId，设置分享url，默认使用友盟的网址
-    [UMSocialWechatHandler setWXAppId:WXAPPID appSecret:WXAPPSECRET url:@"http://www.umeng.com/social"];
+//    [UMSocialWechatHandler setWXAppId:WXAPPID appSecret:WXAPPSECRET url:@"http://www.umeng.com/social"];
     
     //    [UMSocialTencentWeiboHandler openSSOWithRedirectUrl:@"http://sns.whalecloud.com/tencent2/callback"];
     
@@ -319,22 +426,112 @@
     }];
 }
 
-
-
-
-
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
     // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
 }
 
-- (void)applicationDidEnterBackground:(UIApplication *)application {
-    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
-    // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+- (void)applicationWillEnterForeground:(UIApplication *)application {
+
+    [LTools updateTabbarUnreadMessageNumber];
 }
 
-- (void)applicationWillEnterForeground:(UIApplication *)application {
-    // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+- (void)applicationDidEnterBackground:(UIApplication *)application {
+
+    //未读消息
+    int unreadMsgCount = [[RCIMClient sharedRCIMClient]getUnreadCount: @[@(ConversationType_CUSTOMERSERVICE)]];;
+    application.applicationIconBadgeNumber = unreadMsgCount;
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
+{
+    [LTools updateTabbarUnreadMessageNumber];
+}
+
+#pragma - mark RCIMClientReceiveMessageDelegate
+
+- (void)onReceived:(RCMessage *)message left:(int)nLeft object:(id)object
+{
+    NSLog(@"RCIMClientReceiveMessageDelegate %d",nLeft);
+    //接受到消息 更新未读消息
+    
+    if (0 == nLeft) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [UIApplication sharedApplication].applicationIconBadgeNumber = [UIApplication sharedApplication].applicationIconBadgeNumber+1;
+            
+            [LTools updateTabbarUnreadMessageNumber];
+            
+        });
+        
+    }
+    
+}
+
+
+#pragma - mark RCIMUserInfoDataSource <NSObject>
+
+/**
+ *  获取用户信息。
+ *
+ *  @param userId     用户 Id。
+ *  @param completion 用户信息
+ */
+- (void)getUserInfoWithUserId:(NSString *)userId
+                   completion:(void (^)(RCUserInfo *userInfo))completion
+{
+    //客服就不需要了
+    if ([userId isEqualToString:SERVICE_ID]) {
+        
+        return;
+    }
+    
+    NSString *userName = [LTools rongCloudUserNameWithUid:userId];
+    NSString *userIcon = [LTools rongCloudUserIconWithUid:userId];
+
+    NSLog(@"userId %@ userIcon %@",userId,userIcon);
+
+    if ([userId isEqualToString:[GMAPI getUid]]) {
+        
+        userName = [GMAPI getUsername];
+    }
+    
+    NSLog(@"----->|%@|",userName);
+    
+    //没有保存用户名 或者 更新时间超过一个小时
+    if ([LTools isEmpty:userName] || [LTools isEmpty:userIcon]  || [LTools rongCloudNeedRefreshUserId:userId]) {
+        
+        NSDictionary *params = @{@"uid":userId};
+        [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodGet api:GET_USERINFO_ONLY_USERID parameters:params constructingBodyBlock:nil completion:^(NSDictionary *result) {
+            
+            NSDictionary *dic = result[@"user_info"];
+            if ([dic isKindOfClass:[NSDictionary class]]) {
+                
+                NSString *name = dic[@"user_name"];
+                NSString *icon = dic[@"avatar"];
+                
+                //不为空
+                if (![LTools isEmpty:name]) {
+                    
+                    [LTools cacheRongCloudUserName:name forUserId:userId];
+                }
+                
+                [LTools cacheRongCloudUserIcon:icon forUserId:userId];
+                
+                RCUserInfo *userInfo = [[RCUserInfo alloc]initWithUserId:userId name:name portrait:icon];
+                
+                return completion(userInfo);
+            }
+            
+        } failBlock:^(NSDictionary *result) {
+            
+        }];
+    }
+    
+    NSLog(@"userId %@ %@",userId,userName);
+    
+    RCUserInfo *userInfo = [[RCUserInfo alloc]initWithUserId:userId name:userName portrait:userIcon];
+    
+    return completion(userInfo);
 }
 
 

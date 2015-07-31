@@ -51,6 +51,11 @@ typedef void(^versionBlock)(BOOL isNewVersion,NSString *updateUrl,NSString *upda
 
 + (UINavigationController *)rootNavigationController;
 
+/**
+ *  判断登录
+ */
++ (BOOL)isLogin;
+
 + (BOOL)isLogin:(UIViewController *)viewController;//判读是否登录
 
 + (BOOL)isLogin:(UIViewController *)viewController loginBlock:(LoginBlock)aBlock;//判断登录状态
@@ -74,6 +79,13 @@ typedef void(^versionBlock)(BOOL isNewVersion,NSString *updateUrl,NSString *upda
 - (void)versionForAppid:(NSString *)appid Block:(void(^)(BOOL isNewVersion,NSString *updateUrl,NSString *updateContent))version;
 
 #pragma mark - 融云用户数据
+
+/**
+ *  更新未读消息显示
+ *
+ *  @param number 未读数
+ */
++ (void)updateTabbarUnreadMessageNumber;
 
 //+ (void)rongCloudChatWithUserId:(NSString *)userId
 //                       userName:(NSString *)userName

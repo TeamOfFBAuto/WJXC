@@ -18,10 +18,11 @@
 //根据id获取用户信息 (参数: uid authcode)
 #define GET_USERINFO_WITHID @"/index.php?d=api&c=user&m=get_user_info"
 
+//只根据用户id获取用户信息
+#define GET_USERINFO_ONLY_USERID @"/index.php?d=api&c=user&m=get_user_info_by_uid"
+
 //单品 - 添加收藏 (参数:product_id、authcode)
 #define HOME_PRODUCT_COLLECT_ADD @"/?d=api&c=products&m=favor"
-
-
 
 //登录
 #define USER_LOGIN_ACTION @"/index.php?d=api&c=user&m=login"
@@ -44,6 +45,7 @@
 //修改用户名字
 #define USER_UPDATE_USERNAME @"/index.php?d=api&c=user&m=update_user_info"
 
+//关于我们
 #define ABOUT_US_URL @"http://www.baidu.com"
 
 
@@ -93,6 +95,10 @@
 //25、获取商品列表
 #define PRODUCT_LIST @"/index.php?d=api&c=products&m=get_product_list"
 
+//32、商品收藏列表
+
+#define PRODUCT_COLLECT_LIST @"/index.php?d=api&c=products&m=get_favor_list"
+
 //订单相关接口=====================
 
 //40、购物车添加商品
@@ -109,6 +115,28 @@
 
 //44、用户登录后同步购物车数据
 #define ORDER_SYNC_CART_INFO @"/index.php?d=api&c=order&m=sync_cart_info"
+
+//47、提交订单,后台生成订单号
+#define ORDER_SUBMIT @"/index.php?d=api&c=order&m=submit_order"
+
+//45、获取用户默认地址及运费
+#define ORDER_GET_DEFAULT_ADDRESS @"/index.php?d=api&c=order&m=get_default_address"
+
+//46、获取运费
+
+#define ORDER_GET_EXPRESS_FEE @"/index.php?d=api&c=order&m=get_express_fee"
+
+//48、获取支付宝签名或者微信生成预订单
+#define ORDER_GET_SIGN @"/index.php?d=api&c=order&m=get_sign"
+
+//49、获取订单详情
+#define ORDER_GET_ORDER_INFO @"/index.php?d=api&c=order&m=get_order_info"
+
+//50、获取我的订单列表
+#define ORDER_GET_MY_ORDERS @"/index.php?d=api&c=order&m=get_my_orders"
+
+//51、查看订单支付状态
+#define ORDER_GET_ORDER_PAY @"/index.php?d=api&c=order&m=get_order_pay"
 
 
 

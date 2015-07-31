@@ -11,5 +11,6 @@
 @interface PersonalCell : UITableViewCell
 @property (strong, nonatomic) IBOutlet UIImageView *iconImageView;
 @property (strong, nonatomic) IBOutlet UILabel *titleLabel;
+@property (strong, nonatomic) IBOutlet UILabel *messageNumLabel;
 
 @end

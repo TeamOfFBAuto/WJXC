@@ -185,17 +185,17 @@
     {
         _my_right_button = [UIButton buttonWithType:UIButtonTypeCustom];
         
-        _my_right_button.frame = CGRectMake(0,0,30,44);
+        _my_right_button.frame = CGRectMake(0,0,60,44);
         
         _my_right_button.titleLabel.textAlignment = NSTextAlignmentRight;
         
         [_my_right_button setTitle:_rightString forState:UIControlStateNormal];
         
+        [_my_right_button setContentHorizontalAlignment:UIControlContentHorizontalAlignmentRight];
         _my_right_button.titleLabel.font = [UIFont systemFontOfSize:15];
         
         [_my_right_button setTitleColor:DEFAULT_TEXTCOLOR forState:UIControlStateNormal];
-        
-        
+                
         [_my_right_button addTarget:self action:@selector(rightButtonTap:) forControlEvents:UIControlEventTouchUpInside];
         
         self.navigationItem.rightBarButtonItems = @[spaceButton,[[UIBarButtonItem alloc] initWithCustomView:_my_right_button]];

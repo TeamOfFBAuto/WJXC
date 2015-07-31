@@ -61,14 +61,14 @@
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="s2Z-MK-bXJ">
                                 <rect key="frame" x="214" y="95" width="45" height="37"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" image="my_address_xg.png">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="X52-Sc-UIS">
                                 <rect key="frame" x="266" y="95" width="45" height="37"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" image="my_address_delete.png">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -87,7 +87,7 @@
                 <outlet property="nameLabel" destination="Iol-3W-kvM" id="Zak-JG-BTM"/>
                 <outlet property="phoneLabel" destination="3Jr-yu-qiV" id="6Bd-cl-QJi"/>
             </connections>
-            <point key="canvasLocation" x="-122" y="274"/>
+            <point key="canvasLocation" x="-278" y="272"/>
         </tableViewCell>
     </objects>
     <resources>

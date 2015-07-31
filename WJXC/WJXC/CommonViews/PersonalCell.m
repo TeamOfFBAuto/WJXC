@@ -12,6 +12,8 @@
 
 - (void)awakeFromNib {
     // Initialization code
+    
+    [self.messageNumLabel addRoundCorner];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

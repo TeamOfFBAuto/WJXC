@@ -41,6 +41,8 @@
 @property (nonatomic,retain)NSString *cover_height;
 @property (nonatomic,retain)NSString *star_level;
 
+@property (nonatomic,retain)NSString *weight;//重量
+
 //购物车相关
 @property (nonatomic,retain)NSString *add_time;//购物车也用到
 @property (nonatomic,retain)NSString *product_name;//购物车也用到
@@ -53,7 +55,11 @@
 
 @property(nonatomic,assign)BOOL selected;//是否被选择
 
-//price text,add_time text
+//收藏相关
+@property(nonatomic,retain)NSString *favor_id;
+@property(nonatomic,retain)NSString *product_pic;//产品图片
+@property(nonatomic,retain)NSString *product_pic_width;//图片宽度
+@property(nonatomic,retain)NSString *product_pic_height;
 
 
 @end

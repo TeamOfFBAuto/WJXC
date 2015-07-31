@@ -30,6 +30,8 @@
     self.delegate = self;
     
     [self prepareItems];
+    
+    [LTools updateTabbarUnreadMessageNumber];
 }
 
 -(void)viewWillAppear:(BOOL)animated
