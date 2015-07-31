@@ -177,21 +177,21 @@
     
     int kadding = 0;
     
-    if (index > kPadding_Four) {
+    if (index >= kPadding_Four) {
         //再次购买
         kadding = kPadding_Four;
 //        OrderModel *aModel = [[self refreshTableForIndex:0].dataArray objectAtIndex:index - kadding];
         
         
-    }else if (index > kPadding_Three){
+    }else if (index >= kPadding_Three){
         //评价晒单
         kadding = kPadding_Three;
         
-    }else if (index > kPadding_Two){
+    }else if (index >= kPadding_Two){
         //确认收货
         kadding = kPadding_Two;
         
-    }else if (index > kPadding_One){
+    }else if (index >= kPadding_One){
         //支付
         kadding = kPadding_One;
         OrderModel *aModel = [[self refreshTableForIndex:0].dataArray objectAtIndex:index - kPadding_One];

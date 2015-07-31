@@ -16,6 +16,8 @@
 #import "FBActionSheet.h"
 #import "PayActionViewController.h"//支付页面
 
+#import "RCDChatViewController.h"
+
 #import "OrderModel.h"
 
 #define ALIPAY @"支付宝支付"
@@ -145,21 +147,43 @@
     line.backgroundColor = [UIColor colorWithHexString:@"e4e4e4"];
     [bottom addSubview:line];
     
-    UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(20, 0, 36, 50) title:@"合计:" font:15 align:NSTextAlignmentLeft textColor:[UIColor colorWithHexString:@"303030"]];
-    [bottom addSubview:label];
+    NSString *text1 = nil;
+    NSString *text2 = nil;
     
-    //产品加邮费
-    NSString *price = [NSString stringWithFormat:@"￥%.2f",0.01];
+    //订单状态 1=》待付款 2=》已付款 3=》已发货 4=》已送达（已收货） 5=》已取消 6=》已删除
+
+    int status = [_orderModel.status intValue];
     
-    _priceLabel = [[UILabel alloc]initWithFrame:CGRectMake(label.right + 10, 0, 100, 50) title:price font:12 align:NSTextAlignmentLeft textColor:[UIColor colorWithHexString:@"f98700"]];
-    [bottom addSubview:_priceLabel];
+    if (status == 1) {
+        
+        //待支付
+        text1 = @"去支付";
+        text2 = @"取消订单";
+    }else if (status == 2 || status == 3){
+        //配送中
+        text1 = @"确认收货";
+        text2 = @"查看物流";
+    }else if (status == 4){
+        //已完成
+        text1 = @"再次购买";
+        text2 = @"删除订单";
+        
+        //接着判断是否评价
+    }
     
-    UIButton *sureButton = [[UIButton alloc]initWithframe:CGRectMake(DEVICE_WIDTH - 15 - 100, 10, 100, 30) buttonType:UIButtonTypeRoundedRect normalTitle:@"提交订单" selectedTitle:nil target:self action:@selector(clickToConfirmOrder:)];
-    [sureButton addCornerRadius:3.f];
-    [sureButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [sureButton.titleLabel setFont:[UIFont systemFontOfSize:13]];
-    sureButton.backgroundColor = [UIColor colorWithHexString:@"f98700"];
-    [bottom addSubview:sureButton];
+    UIButton *button1 = [[UIButton alloc]initWithframe:CGRectMake(DEVICE_WIDTH - 15 - 80, 10, 80, 30) buttonType:UIButtonTypeRoundedRect normalTitle:text1 selectedTitle:nil target:self action:@selector(clickToConfirmOrder:)];
+    [button1 addCornerRadius:3.f];
+    [button1 setTitleColor:[UIColor colorWithHexString:@"f98700"] forState:UIControlStateNormal];
+    [button1.titleLabel setFont:[UIFont systemFontOfSize:13]];
+    [button1 setBorderWidth:0.5f borderColor:[UIColor colorWithHexString:@"f98700"]];
+    [bottom addSubview:button1];
+    
+    UIButton *button2 = [[UIButton alloc]initWithframe:CGRectMake(button1.left - 15 - 80, 10, 80, 30) buttonType:UIButtonTypeRoundedRect normalTitle:text2 selectedTitle:nil target:self action:@selector(clickToConfirmOrder:)];
+    [button2 addCornerRadius:3.f];
+    [button2 setTitleColor:[UIColor colorWithHexString:@"646464"] forState:UIControlStateNormal];
+    [button2.titleLabel setFont:[UIFont systemFontOfSize:13]];
+    [button2 setBorderWidth:0.5f borderColor:[UIColor colorWithHexString:@"646464"]];
+    [bottom addSubview:button2];
 }
 
 - (void)tableViewFooter
@@ -172,33 +196,67 @@
     bgView.backgroundColor = [UIColor whiteColor];
     [footerView addSubview:bgView];
     
-    UIButton *chatBtn = [[UIButton alloc]initWithframe:CGRectMake(0, 0, DEVICE_WIDTH/2.f, 31) buttonType:UIButtonTypeCustom normalTitle:@"联系商家" selectedTitle:nil target:self action:@selector(clickToChat:)];
+    UIButton *chatBtn = [[UIButton alloc]initWithframe:CGRectMake(0, 0, DEVICE_WIDTH/2.f, 31) buttonType:UIButtonTypeCustom normalTitle:nil selectedTitle:nil target:self action:@selector(clickToChat:)];
     [bgView addSubview:chatBtn];
     [chatBtn setTitleColor:DEFAULT_TEXTCOLOR forState:UIControlStateNormal];
     [chatBtn.titleLabel setFont:[UIFont systemFontOfSize:12]];
     chatBtn.backgroundColor = [UIColor whiteColor];
+    [chatBtn setImage:[UIImage imageNamed:@"order_chat"] forState:UIControlStateNormal];
     
     UIView *line = [[UIView alloc]initWithFrame:CGRectMake(chatBtn.right, 5, 0.5, 21)];
     line.backgroundColor = DEFAULT_VIEW_BACKGROUNDCOLOR;
     [bgView addSubview:line];
     
-    UIButton *phoneBtn = [[UIButton alloc]initWithframe:CGRectMake(line.right, 0, DEVICE_WIDTH/2.f, 31) buttonType:UIButtonTypeCustom normalTitle:@"拨打电话" selectedTitle:nil target:self action:@selector(clickToPhone:)];
+    UIButton *phoneBtn = [[UIButton alloc]initWithframe:CGRectMake(line.right, 0, DEVICE_WIDTH/2.f, 31) buttonType:UIButtonTypeCustom normalTitle:nil selectedTitle:nil target:self action:@selector(clickToPhone:)];
     [bgView addSubview:phoneBtn];
+    [phoneBtn setImage:[UIImage imageNamed:@"order_phone"] forState:UIControlStateNormal];
     [phoneBtn setTitleColor:DEFAULT_TEXTCOLOR forState:UIControlStateNormal];
     [phoneBtn.titleLabel setFont:[UIFont systemFontOfSize:12]];
     phoneBtn.backgroundColor = [UIColor whiteColor];
 
 }
 
+/**
+ *  联系客服
+ *
+ *  @param sender
+ */
 - (void)clickToChat:(UIButton *)sender
 {
-    
+    RCDChatViewController *chatService = [[RCDChatViewController alloc] init];
+    chatService.userName = @"客服";
+    chatService.targetId = SERVICE_ID;
+    chatService.conversationType = ConversationType_CUSTOMERSERVICE;
+    chatService.title = chatService.userName;
+    //    RCHandShakeMessage* textMsg = [[RCHandShakeMessage alloc] init];
+    //    [[RongUIKit sharedKit] sendMessage:ConversationType_CUSTOMERSERVICE targetId:SERVICE_ID content:textMsg delegate:nil];
+    [self.navigationController showViewController:chatService sender:nil];
 }
 
+/**
+ *  拨打电话
+ *
+ *  @param sender
+ */
 - (void)clickToPhone:(UIButton *)sender
 {
-    
+    NSString *msg = [NSString stringWithFormat:@"拨打:%@",_orderModel.merchant_phone];
+    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:msg delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+    [alert show];
 }
+
+#pragma - mark UIAlertViewDelegate <NSObject>
+
+// Called when a button is clicked. The view will be automatically dismissed after this call returns
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 1) {
+        
+        NSString *phone = _orderModel.merchant_phone;
+        [[UIApplication sharedApplication]openURL:[NSURL URLWithString:[NSString stringWithFormat:@"tel://%@",phone]]];
+    }
+}
+
 
 /**
  *  所有视图赋值

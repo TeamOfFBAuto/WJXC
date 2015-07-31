@@ -105,6 +105,8 @@
 		139D43A51B5A68FA0036DC3B /* ProductCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 139D43A31B5A68FA0036DC3B /* ProductCell.m */; };
 		139D43A61B5A68FA0036DC3B /* ProductCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 139D43A41B5A68FA0036DC3B /* ProductCell.xib */; };
 		13A147101B6A1CE600B6A3DB /* OrderModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 13A1470F1B6A1CE600B6A3DB /* OrderModel.m */; };
+		13A147131B6B6A6900B6A3DB /* order_chat@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 13A147111B6B6A6900B6A3DB /* order_chat@2x.png */; };
+		13A147141B6B6A6900B6A3DB /* order_phone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 13A147121B6B6A6900B6A3DB /* order_phone@2x.png */; };
 		13A2087A1B5C96C800CC4EC0 /* ConfirmInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 13A208781B5C96C800CC4EC0 /* ConfirmInfoCell.m */; };
 		13A2087B1B5C96C800CC4EC0 /* ConfirmInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13A208791B5C96C800CC4EC0 /* ConfirmInfoCell.xib */; };
 		13A2087F1B5CD81C00CC4EC0 /* SelectAddressCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 13A2087D1B5CD81C00CC4EC0 /* SelectAddressCell.m */; };
@@ -376,6 +378,8 @@
 		139D43A41B5A68FA0036DC3B /* ProductCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProductCell.xib; sourceTree = "<group>"; };
 		13A1470E1B6A1CE600B6A3DB /* OrderModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrderModel.h; sourceTree = "<group>"; };
 		13A1470F1B6A1CE600B6A3DB /* OrderModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrderModel.m; sourceTree = "<group>"; };
+		13A147111B6B6A6900B6A3DB /* order_chat@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "order_chat@2x.png"; sourceTree = "<group>"; };
+		13A147121B6B6A6900B6A3DB /* order_phone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "order_phone@2x.png"; sourceTree = "<group>"; };
 		13A208771B5C96C800CC4EC0 /* ConfirmInfoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfirmInfoCell.h; sourceTree = "<group>"; };
 		13A208781B5C96C800CC4EC0 /* ConfirmInfoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConfirmInfoCell.m; sourceTree = "<group>"; };
 		13A208791B5C96C800CC4EC0 /* ConfirmInfoCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ConfirmInfoCell.xib; sourceTree = "<group>"; };
@@ -767,6 +771,8 @@
 		139456D51B46296F00C45EB6 /* 购物车及订单 */ = {
 			isa = PBXGroup;
 			children = (
+				13A147111B6B6A6900B6A3DB /* order_chat@2x.png */,
+				13A147121B6B6A6900B6A3DB /* order_phone@2x.png */,
 				13241E761B63925A00D42737 /* my_paySuccess@2x.png */,
 				13EB1E9F1B623E3600E5CA57 /* my_√@2x.png */,
 				13A208841B608E8700CC4EC0 /* my_weixin@2x.png */,
@@ -1784,6 +1790,7 @@
 				139457501B46296F00C45EB6 /* register_password@2x.png in Resources */,
 				1394572E1B46296F00C45EB6 /* shopping cart_dd_top_jt@2x.png in Resources */,
 				E3D080301B3D523200E4F87D /* ForgetPwdController.xib in Resources */,
+				13A147131B6B6A6900B6A3DB /* order_chat@2x.png in Resources */,
 				139457421B46296F00C45EB6 /* homepage_bottom_classify_grey@2x.png in Resources */,
 				E30655B41B5CF66800477872 /* garea.plist in Resources */,
 				E3D080341B3D523200E4F87D /* RegisterViewController.xib in Resources */,
@@ -1792,6 +1799,7 @@
 				1394573F1B46296F00C45EB6 /* homepage_xq_bottom_+@2x.png in Resources */,
 				E34099861B6245BD00FF5257 /* gbtnGray@2x.png in Resources */,
 				E3D685111B5B5D820048C044 /* gsearch_down@2x.png in Resources */,
+				13A147141B6B6A6900B6A3DB /* order_phone@2x.png in Resources */,
 				139457201B46296F00C45EB6 /* my_address_xg@2x.png in Resources */,
 				1394574B1B46296F00C45EB6 /* homepage_star@2x.png in Resources */,
 				139457481B46296F00C45EB6 /* homepage_bottom_shopping cart_grey@2x.png in Resources */,
