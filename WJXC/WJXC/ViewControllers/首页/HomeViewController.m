@@ -497,7 +497,7 @@
     
     int cityId = [GMAPI cityIdForName:self.leftLabel.text];
     
-    NSLog(@"我擦 %d",cityId)
+    NSLog(@"我擦 %d",cityId);
     
     
 }
