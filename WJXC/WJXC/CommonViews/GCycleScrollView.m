@@ -28,11 +28,6 @@
 
 
 - (void)loadGcycleScrollView{
-    if (self.theGcycelScrollViewType == GCYCELNEARSTORE) {//附近的商场
-        UIImageView *imv1_back = [[UIImageView alloc]initWithFrame:CGRectMake(0, 60, self.bounds.size.width, self.bounds.size.height-60)];
-        [imv1_back setImage:[UIImage imageNamed:@"gimv1_back.png"]];
-        [self addSubview:imv1_back];
-    }
     
     _scrollView = [[UIScrollView alloc] initWithFrame:self.bounds];
     _scrollView.delegate = self;

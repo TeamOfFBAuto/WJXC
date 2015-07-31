@@ -15,4 +15,10 @@
 
 @interface ProductDetailViewController : MyViewController
 
+
+@property(nonatomic,strong)NSString *product_id;
+
+@property(nonatomic,strong)UILabel *numLabel;
+
+
 @end

@@ -44,7 +44,7 @@
 
 
 
-@interface GMAPI : NSObject<BMKMapViewDelegate,BMKLocationServiceDelegate>
+@interface GMAPI : NSObject<BMKMapViewDelegate,BMKLocationServiceDelegate,BMKGeoCodeSearchDelegate>
 {
     BMKLocationService* _locService;//定位服务
 //    NSDictionary *_theLocationDic;//经纬度
@@ -53,6 +53,9 @@
 
 @property(nonatomic,strong)NSDictionary *theLocationDic;
 @property(nonatomic,assign)id<GgetllocationDelegate> delegate;
+
+
+
 
 +(NSString *)getUsername;
 
@@ -208,5 +211,8 @@
 +(void)cleanUserDefaulWithHomeCloth;
 
 
+
+//获取所有的省份
++ (NSArray *)getAllProvince;
 
 @end

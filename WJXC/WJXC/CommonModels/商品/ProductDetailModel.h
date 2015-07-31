@@ -6,6 +6,9 @@
 //  Copyright (c) 2015年 lcw. All rights reserved.
 //
 
+
+//商品详细model
+
 #import "BaseModel.h"
 
 @interface ProductDetailModel : BaseModel

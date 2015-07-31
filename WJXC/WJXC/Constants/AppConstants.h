@@ -80,4 +80,10 @@
 #define RedirectUrl @"http://sns.whalecloud.com/sina2/callback" //回调地址
 
 
+//百度地图
+#define baiduMapAk @"bBsNsfsiH9MBaiYs4XtuNgID"
+
+
+
+
 #endif

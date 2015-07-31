@@ -112,9 +112,45 @@
     
     
     
+    if (model.comment_reply) {//有回复
+        
+        
+        NSArray *replyArray = model.comment_reply;
+        NSInteger count = replyArray.count;
+        UIView *replyView = [[UIView alloc]initWithFrame:CGRectMake(self.timeLabel.frame.origin.x, CGRectGetMaxY(self.timeLabel.frame)+10, self.userNameLabel.frame.size.width+self.startView.frame.size.width, 50*count)];
+        replyView.backgroundColor = [UIColor grayColor];
+        [self.contentView addSubview:replyView];
+        
+        
+        CGFloat r_y = 0;
+        
+        
+        for (int i = 0; i<count; i++) {
+            NSDictionary *dic = replyArray[i];
+            UILabel *rpLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, r_y, replyView.frame.size.width, 20)];
+            rpLabel.font = [UIFont systemFontOfSize:12];
+            rpLabel.text = [NSString stringWithFormat:@"店家回复：%@",[dic stringValueForKey:@"content"]];
+            [rpLabel setMatchedFrame4LabelWithOrigin:CGPointMake(0, r_y) width:replyView.frame.size.width];
+            [replyView addSubview:rpLabel];
+            
+            r_y +=rpLabel.frame.size.height;
+            
+            
+        }
+        
+        CGRect rr = replyView.frame;
+        rr.size.height = r_y;
+        replyView.frame = rr;
+        
+        
+        height = CGRectGetMaxY(replyView.frame)+15;
+        
+    }else{
+        height = CGRectGetMaxY(self.timeLabel.frame)+15;
+    }
     
     
-    height = CGRectGetMaxY(self.timeLabel.frame)+15;
+    
     
     return height;
 }

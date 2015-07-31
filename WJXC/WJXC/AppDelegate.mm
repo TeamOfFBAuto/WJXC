@@ -12,8 +12,20 @@
 #import <AlipaySDK/AlipaySDK.h>//支付宝
 #import "UMFeedback.h"
 
-@interface AppDelegate ()<UMFeedbackDataDelegate>
+#import "BMapKit.h"//百度地图
+//#import "BMKMapManager.h"
 
+
+
+
+
+@interface AppDelegate ()<UMFeedbackDataDelegate,GgetllocationDelegate,BMKGeneralDelegate>
+{
+    GMAPI *mapApi;
+    LocationBlock _locationBlock;
+    BMKMapManager* _mapManager;
+    CLLocationManager *_locationManager;
+}
 @end
 
 @implementation AppDelegate
@@ -65,6 +77,28 @@
         //test
         NSLog(@"didFinishLaunch : infoDic %@",infoDic);
         
+    }
+    
+    
+    
+#pragma mark 百度地图相关
+    
+    if ([[[UIDevice currentDevice] systemVersion] doubleValue] > 8.0)
+    {
+        //设置定位权限 仅ios8有意义
+        [_locationManager requestWhenInUseAuthorization];// 前台定位
+        
+        //  [locationManager requestAlwaysAuthorization];// 前后台同时定位
+    }
+    [_locationManager startUpdatingLocation];
+    
+    
+    // 要使用百度地图，请先启动BaiduMapManager
+    _mapManager = [[BMKMapManager alloc]init];
+    // 如果要关注网络及授权验证事件，请设定     generalDelegate参数
+    BOOL ret = [_mapManager start:baiduMapAk  generalDelegate:self];
+    if (!ret) {
+        NSLog(@"manager start failed!");
     }
     
     
@@ -302,5 +336,50 @@
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
 }
+
+
+
+#pragma mark - MyMethod
+
+#pragma mark - 获取坐标
+
+- (void)startDingweiWithBlock:(LocationBlock)location
+{
+    _locationBlock = location;
+    
+    //定位获取坐标
+    mapApi = [GMAPI sharedManager];
+    mapApi.delegate = self;
+    
+    [mapApi startDingwei];
+    
+}
+
+
+
+#pragma mark - 定位Delegate
+
+- (void)theLocationDictionary:(NSDictionary *)dic{
+    
+    NSLog(@"定位成功------>%@",dic);
+    
+    if (_locationBlock) {
+        
+        _locationBlock(dic);
+    }
+    
+    [GMAPI sharedManager].theLocationDic = [dic copy];
+}
+
+
+-(void)theLocationFaild:(NSDictionary *)dic{
+    
+    NSLog(@"定位失败----->%@",dic);
+    
+    if (_locationBlock) {
+        _locationBlock(dic);
+    }
+}
+
 
 @end

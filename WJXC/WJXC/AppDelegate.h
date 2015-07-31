@@ -7,11 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-
+typedef void(^LocationBlock)(NSDictionary *dic);//获取坐标block
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 
-
+- (void)startDingweiWithBlock:(LocationBlock)location;
 @end
 

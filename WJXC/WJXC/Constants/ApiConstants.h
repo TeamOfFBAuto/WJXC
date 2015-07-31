@@ -50,9 +50,25 @@
 //获取商品详情
 #define GET_PRODUCTDETAIL @"/index.php?d=api&c=products&m=get_product_detail"
 
+//获取商品列表
+#define GET_PRODUCTlIST @"/index.php?d=api&c=products&m=get_product_list"
+
+
+//获取首页轮播列表
+#define GET_HOMESCROLLVIEWDATA @"/index.php?d=api&c=adver&m=get_adver_list"
 
 //获取商品评论(参数product_id=1  商品id 必填 comment_level=1 选填 评论级别 1差评 2中评 3好评  0或不传将获取所有级别评论 page=1 当前评论页perpage=1 评论每页显示数目 order=comment_id   排序字段 direction=  排序顺序  [desc:降序   asc：升序])
 #define GET_PRODUCT_COMMENT @"/index.php?d=api&c=products&m=get_product_comment"
+
+//获取商品分类
+#define GET_PRODUCT_CLASS @"/index.php?d=api&c=products&m=get_product_category"
+
+//获取热门城市
+#define GET_HOTCITY @"/index.php?d=api&c=products&m=hot_city"
+
+//收藏商品
+#define SHOUCANGRODUCT @"/index.php?d=api&c=products&m=add_favor"
+
 
 //收货地址相关接口==================
 
@@ -94,6 +110,9 @@
 //44、用户登录后同步购物车数据
 #define ORDER_SYNC_CART_INFO @"/index.php?d=api&c=order&m=sync_cart_info"
 
+
+
+//
 
 
 #endif

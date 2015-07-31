@@ -10,4 +10,10 @@
 
 @interface HomeViewController : MyViewController
 
+@property(nonatomic,strong)UILabel *leftLabel;
+
+
+-(void)setLocationDataWithStr:(NSString *)city;
+
+
 @end

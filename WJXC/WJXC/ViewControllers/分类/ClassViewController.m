@@ -9,9 +9,25 @@
 #import "ClassViewController.h"
 #import "ProductModel.h"
 
-@interface ClassViewController ()<RefreshDelegate,UITableViewDataSource>
+#import "GtopScrollView.h"
+#import "ClassView.h"
+#import "ClassDetailViewController.h"
+
+
+@interface ClassViewController ()<RefreshDelegate,UITableViewDataSource,UITableViewDelegate>
 {
     RefreshTableView *_table;
+    
+    NSArray *_dataArray;//数据源
+    
+    GtopScrollView *_topScrollView;//楼层选择view
+    
+    UITableView *_tabelView;
+    
+    NSInteger _selectRow;
+    
+    
+    UIScrollView *_rightView;
 }
 @end
 
@@ -29,15 +45,16 @@
     // Do any additional setup after loading the view.
     
     self.myTitle = @"分类";
-    [self setMyViewControllerLeftButtonType:MyViewControllerLeftbuttonTypeNull WithRightButtonType:MyViewControllerRightbuttonTypeNull];
     
-    _table = [[RefreshTableView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH,DEVICE_HEIGHT - 64)];
-    _table.refreshDelegate = self;
-    _table.dataSource = self;
-    _table.separatorStyle = UITableViewCellSeparatorStyleNone;
-    [self.view addSubview:_table];
+    self.view.backgroundColor = [UIColor whiteColor];
     
-    [_table showRefreshHeader:YES];
+    _selectRow = 0;
+    
+    
+    [self prepareNetData];
+  
+    
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -131,76 +148,193 @@
     }];
 }
 
-#pragma mark - 代理
 
-#pragma mark - RefreshDelegate
-
-- (void)loadNewData
-{
-    [self getProductList];
-}
-- (void)loadMoreData
-{
-    [self getProductList];
-}
-
-- (void)loadNewDataForTableView:(UITableView *)tableView
-{
+#pragma mark - MyMethod
+-(void)prepareNetData{
     
-}
-- (void)loadMoreDataForTableView:(UITableView *)tableView
-{
     
-}
-
-- (void)didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
+    NSDictionary *parameters = @{
+                                 
+                                 };
     
-}
-
-- (CGFloat)heightForRowIndexPath:(NSIndexPath *)indexPath
-{
-    return 44.f;
-}
-
-#pragma mark - UITableViewDataSource
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return _table.dataArray.count;
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    static NSString *identify = @"productCell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identify];
-    if (!cell) {
-        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:identify];
-    }
-    
-    for (UIView *aView in cell.contentView.subviews) {
+    [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodGet api:GET_PRODUCT_CLASS parameters:parameters constructingBodyBlock:nil completion:^(NSDictionary *result) {
         
-        if ([aView isKindOfClass:[UIButton class]]) {
-            [aView removeFromSuperview];
+        NSLog(@"%@",result);
+        
+        NSArray *list = [result arrayValueForKey:@"list"];
+        _dataArray = list;
+        
+        
+        _tabelView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, 80, DEVICE_HEIGHT-64-44) style:UITableViewStylePlain];
+        _tabelView.backgroundColor = RGBCOLOR(241, 240, 245);
+        _tabelView.delegate = self;
+        _tabelView.dataSource = self;
+        [self.view addSubview:_tabelView];
+        _tabelView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        
+        
+        _rightView = [[UIScrollView alloc]initWithFrame:CGRectMake(80, 0, DEVICE_WIDTH - 80, DEVICE_HEIGHT - 64- 44)];
+        _rightView.backgroundColor = [UIColor whiteColor];
+        [self.view addSubview:_rightView];
+        
+        [self reloadRightViewWithTag:0];
+    
+        
+    } failBlock:^(NSDictionary *result) {
+        
+    }];
+}
 
-        }
+
+-(void)reloadRightViewWithTag:(NSInteger)theTag{
+    NSDictionary *dic = _dataArray[theTag];
+    NSArray *child = [dic arrayValueForKey:@"child"];
+    
+    for (UIView *view in _rightView.subviews) {
+        [view removeFromSuperview];
     }
     
-    UIButton *buyBtn = [[UIButton alloc]initWithframe:CGRectMake(DEVICE_WIDTH - 10 - 80, 7, 80, 30) buttonType:UIButtonTypeRoundedRect normalTitle:@"加入购物车+1" selectedTitle:nil target:self action:@selector(clickToAddProductToShoppingCar:)];
-    [cell.contentView addSubview:buyBtn];
-    [buyBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
-    [buyBtn setBorderWidth:1.f borderColor:DEFAULT_TEXTCOLOR];
-    buyBtn.titleLabel.font = [UIFont systemFontOfSize:12];
-    buyBtn.tag = 100 + indexPath.row;
     
-    ProductModel *aModel = _table.dataArray[indexPath.row];
-    cell.textLabel.text = aModel.product_name;
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"现价:%@",aModel.current_price];
-    [cell.imageView sd_setImageWithURL:[NSURL URLWithString:aModel.cover_pic] placeholderImage:DEFAULT_HEADIMAGE];
-    cell.imageView.contentMode = UIViewContentModeScaleAspectFill;
+    NSInteger num_oneRow = 3;
+    CGFloat viewJiange = 10;
+    CGFloat viewWidth = (_rightView.frame.size.width - 4*viewJiange)/num_oneRow;
+    CGFloat viewHeight = viewWidth + 20;
+    
+    CGFloat height = 0;
+    
+    for (int i = 0; i<child.count; i++) {
+        NSDictionary *dic = child[i];
+        ClassView *view = [[ClassView alloc]initWithFrame:CGRectMake(10+i%3*(viewWidth+viewJiange), 10+i/3*(viewHeight+viewJiange), viewWidth, viewHeight)];
+        [_rightView addSubview:view];
+        view.section = theTag;
+        view.row = i;
+        
+        UITapGestureRecognizer *tt = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(smallClassViewClickedWithIndexPath:)];
+        [view addGestureRecognizer:tt];
+        
+        
+        NSString *imgUrl = [dic stringValueForKey:@"cover_pic"];
+        UIImageView *imagev = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, viewWidth, viewWidth)];
+        [imagev sd_setImageWithURL:[NSURL URLWithString:imgUrl] placeholderImage:nil];
+        [view addSubview:imagev];
+        
+        UILabel *titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(imagev.frame), viewWidth, 20)];
+        titleLabel.text = [dic stringValueForKey:@"category_name"];
+        titleLabel.font = [UIFont systemFontOfSize:12];
+        titleLabel.textAlignment = NSTextAlignmentCenter;
+        [view addSubview:titleLabel];
+        
+        height = CGRectGetMaxY(view.frame)+10;
+    }
+    
+    
+    _rightView.contentSize = CGSizeMake(DEVICE_WIDTH - 80, height);
+//    _rightView.frame = CGRectMake(80, 0, DEVICE_WIDTH - 80,height);
+//    _rightView.backgroundColor = [UIColor redColor];
+    
+    
+}
+
+
+
+-(void)smallClassViewClickedWithIndexPath:(UITapGestureRecognizer*)sender{
+    ClassView *cc = (ClassView*)sender.view;
+    NSInteger section = cc.section;
+    NSInteger row = cc.row;
+    
+    NSDictionary *dic = _dataArray[section];
+    NSArray *child = [dic arrayValueForKey:@"child"];
+    NSDictionary *detail = child[row];
+    
+    ClassDetailViewController *ccc = [[ClassDetailViewController alloc]init];
+    ccc.category_id = [detail stringValueForKey:@"category_id"];
+    ccc.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:ccc animated:YES];
+    
+}
+
+
+
+#pragma mark - UITableViewDelegate && UITableViewDatasource
+
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    static NSString *identifier = @"identifier";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
+    if (!cell) {
+        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
+    }
+    
+    
+    NSDictionary *dic = _dataArray[indexPath.row];
+    
+    NSString *title = [dic stringValueForKey:@"category_name"];
+    
+    
+    for (UIView *view in cell.contentView.subviews) {
+        [view removeFromSuperview];
+    }
+    
+    
+    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [btn setFrame:CGRectMake(0, 0, 80, 50)];
+    [btn setBackgroundImage:[UIImage imageNamed:@"gbtnGray.png"] forState:UIControlStateNormal];
+    [btn setBackgroundImage:[UIImage imageNamed:@"gbtnWhite.png"] forState:UIControlStateSelected];
+    [btn setTitle:title forState:UIControlStateNormal];
+    btn.titleLabel.font = [UIFont systemFontOfSize:13];
+    [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    btn.tag = indexPath.row+10;
+    [btn addTarget:self action:@selector(classClicked:) forControlEvents:UIControlEventTouchUpInside];
+    [cell.contentView addSubview:btn];
+    
+    UIView *line1 = [[UIView alloc]initWithFrame:CGRectMake(79.5, 0, 0.5, 50)];
+    UIView *line2 = [[UIView alloc]initWithFrame:CGRectMake(0, 49.5, 80, 0.5)];
+    line1.backgroundColor = RGBCOLOR(226, 226, 226);
+    line2.backgroundColor = RGBCOLOR(226, 226, 226);
+    
+    [cell.contentView addSubview:line1];
+    [cell.contentView addSubview:line2];
+    
+    
+    if (indexPath.row == _selectRow) {
+        line1.hidden = YES;
+        btn.selected = YES;
+    }else{
+        line1.hidden = NO;
+        btn.selected = NO;
+    }
+    
     
     return cell;
 }
+
+
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    return _dataArray.count;
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return 50;
+}
+
+
+-(void)classClicked:(UIButton *)sender{
+    
+    
+    NSInteger index = sender.tag - 10;
+    if (index == _selectRow) {
+        
+    }else{
+        _selectRow = index;
+        sender.selected = YES;
+        
+        [self reloadRightViewWithTag:_selectRow];
+        [_tabelView reloadData];
+    }
+    
+    
+    
+}
+
 
 
 @end
