@@ -10,6 +10,8 @@
 #import "ProductDetailTableViewCell.h"
 #import "ProductDetailModel.h"
 #import "ProductCommentViewController.h"
+#import "RCDChatViewController.h"
+#import "ProductModel.h"
 
 @interface ProductDetailViewController ()<GCycleScrollViewDelegate,GCycleScrollViewDatasource,UITableViewDataSource,UITableViewDelegate>
 {
@@ -341,12 +343,14 @@
 #pragma mark - 拨打电话
 -(void)bodadianhua{
     
+    [self clickToPhone:nil];
 }
 
 
 #pragma mark - 联系卖家
 -(void)lianximaijia{
     
+    [self clickToChat:nil];
 }
 
 
@@ -354,9 +358,88 @@
 
 -(void)gouwuche{
     
+    
 }
 
+/**
+ *  联系客服
+ *
+ *  @param sender
+ */
+- (void)clickToChat:(UIButton *)sender
+{
+    RCDChatViewController *chatService = [[RCDChatViewController alloc] init];
+    chatService.userName = @"客服";
+    chatService.targetId = SERVICE_ID;
+    chatService.conversationType = ConversationType_CUSTOMERSERVICE;
+    chatService.title = chatService.userName;
+    //    RCHandShakeMessage* textMsg = [[RCHandShakeMessage alloc] init];
+    //    [[RongUIKit sharedKit] sendMessage:ConversationType_CUSTOMERSERVICE targetId:SERVICE_ID content:textMsg delegate:nil];
+    [self.navigationController showViewController:chatService sender:nil];
+}
 
+/**
+ *  拨打电话
+ *
+ *  @param sender
+ */
+- (void)clickToPhone:(UIButton *)sender
+{
+    NSString *phoneNum = @"010-999999999";
+    NSString *msg = [NSString stringWithFormat:@"拨打:%@",phoneNum];
+    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:msg delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+    [alert show];
+}
+
+#pragma - mark UIAlertViewDelegate <NSObject>
+
+// Called when a button is clicked. The view will be automatically dismissed after this call returns
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+        if (buttonIndex == 1) {
+            
+            NSString *phoneNum = @"010-999999999";
+            [[UIApplication sharedApplication]openURL:[NSURL URLWithString:[NSString stringWithFormat:@"tel://%@",phoneNum]]];
+        }
+}
+
+/**
+ *  添加购物车 每次一个
+ */
+- (void)clickToAddProduct
+{
+    ProductModel *aModel = nil;
+    
+    int product_num = 1;//测试
+    NSString *authcode = [GMAPI getAuthkey];
+    
+    if (authcode.length == 0) {
+        
+        [[DBManager shareInstance]insertProduct:aModel];
+        
+        [LTools showMBProgressWithText:@"添加购物车成功" addToView:self.view];
+        
+        [[NSNotificationCenter defaultCenter]postNotificationName:NOTIFICATION_UPDATE_TO_CART object:nil];
+        
+        
+        return;
+    }
+    
+    NSDictionary*dic = @{@"authcode":authcode,
+                         @"product_id":aModel.product_id,
+                         @"product_num":[NSNumber numberWithInt:product_num]};
+    [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodPost api:ORDER_ADD_TO_CART parameters:dic constructingBodyBlock:nil completion:^(NSDictionary *result) {
+        
+        [LTools showMBProgressWithText:result[RESULT_INFO] addToView:self.view];
+        
+        [[NSNotificationCenter defaultCenter]postNotificationName:NOTIFICATION_UPDATE_TO_CART object:nil];
+        
+    } failBlock:^(NSDictionary *result) {
+        
+        
+    }];
+    
+}
 
 
 @end
