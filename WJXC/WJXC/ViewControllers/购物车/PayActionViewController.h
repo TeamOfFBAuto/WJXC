@@ -16,4 +16,6 @@
 @property(nonatomic,retain)NSString *orderNum;//展示用
 @property(nonatomic,assign)float sumPrice;//总价格
 
+@property(nonatomic,assign)int payStyle;//1 支付宝 2 为微信
+
 @end

@@ -18,6 +18,9 @@
 {
     UIButton *wxButton;//选择微信支付
     UIButton *aliButton;//支付宝支付
+    int _validateTime;//验证支付次数
+    NSTimer *_validateTimer;//计时器
+    MBProgressHUD *_loading;
 }
 
 @end
@@ -45,7 +48,7 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
+    self.navigationController.navigationBarHidden = YES;
     self.navigationController.navigationBarHidden = NO;
 }
 
@@ -75,16 +78,82 @@
 - (void)notificationForWxPay:(NSNotification *)notify
 {
     BOOL result = [[notify.userInfo objectForKey:@"result"]boolValue];
+    
+    NSString *erroInfo = [notify.userInfo objectForKey:@"erroInfo"];
     if (result) {
         
         NSLog(@"微信支付成功");
         
-        [self payResultSuccess:YES];
-
+        [self isPayValidate];
+        
+    }else
+    {
+        [self payResultSuccess:NO erroInfo:erroInfo];
     }
 }
 
 #pragma - mark 网络请求
+
+/**
+ *  验证订单支付结果，间隔5s,10次 报错的话就提示支付失败
+ */
+- (void)isPayValidate
+{
+    if (!_loading) {
+        _loading = [LTools MBProgressWithText:@"支付结果确认中..." addToView:self.view];
+    }
+
+    [_loading show:YES];
+    _validateTime = 10;//十次
+    _validateTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(networkForPayValidate) userInfo:nil repeats:YES];
+}
+
+- (void)stopTimer
+{
+    [_loading hide:YES];
+    [_validateTimer invalidate];//干掉
+    _validateTimer = nil;
+    
+    NSLog(@"停止计时");
+
+}
+
+- (void)networkForPayValidate
+{
+    if (_validateTime == 0) {
+        
+        [self stopTimer];
+        
+        return;
+    }
+    
+    NSString *authkey = [GMAPI getAuthkey];
+    NSDictionary *params = @{@"authcode":authkey,
+                             @"order_id":self.orderId};
+    __weak typeof(self)weakSelf = self;
+    
+    [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodGet api:ORDER_GET_ORDER_PAY parameters:params constructingBodyBlock:nil completion:^(NSDictionary *result) {
+        NSLog(@"result %@",result);
+        
+        [weakSelf stopTimer];
+        
+        int pay = [result[@"pay"]intValue];
+        if (pay == 1) {
+            
+            [weakSelf payResultSuccess:YES erroInfo:nil];
+        }else
+        {
+            [weakSelf payResultSuccess:NO erroInfo:result[Erro_Info]];
+        }
+        
+    } failBlock:^(NSDictionary *result) {
+        NSLog(@"result fail %@",result);
+        
+        _validateTime --;
+    }];
+}
+
+
 
 /**
  *  获取签名信息
@@ -162,11 +231,14 @@
                 */
                 
                 NSLog(@"暂时未验证签名 支付成功");
-                [weakSelf payResultSuccess:YES];
+                
+                [weakSelf isPayValidate];
                 
             }else
             {
                 NSLog(@"支付失败");
+                
+                [weakSelf payResultSuccess:NO erroInfo:@"中途取消支付或者网络连接错误"];
 //                8000
 //                正在处理中
 //                4000
@@ -184,7 +256,7 @@
 }
 
 /**
- *  支付宝支付
+ *  微信支付
  *
  *  @param signString 签名字符串
  *  @param orderDes   未签名描述
@@ -260,10 +332,6 @@
     aliButton = [[UIButton alloc]initWithframe:CGRectMake(DEVICE_WIDTH - 50, line1.bottom, 50, 50) buttonType:UIButtonTypeCustom nornalImage:[UIImage imageNamed:@"shopping cart_normal"] selectedImage:[UIImage imageNamed:@"shopping cart_selected"] target:self action:@selector(clickToSelectStyle:)];
     [secondView addSubview:aliButton];
     
-    //默认选择支付宝支付
-    
-    aliButton.selected = YES;
-    
     //线
     UIView *line2 = [[UIView alloc]initWithFrame:CGRectMake(0, aliButton.bottom, DEVICE_WIDTH, 0.5)];
     line2.backgroundColor = DEFAULT_LINECOLOR;
@@ -286,6 +354,17 @@
     [secondView addSubview:wxButton];
     
     
+    //默认选择支付宝支付
+    
+    if (self.payStyle == 2) {
+        
+        wxButton.selected = YES;
+    }else
+    {
+        aliButton.selected = YES;
+    }
+    
+    
     //立即支付按钮
     UIButton *payButton = [[UIButton alloc]initWithframe:CGRectMake(10, secondView.bottom + 30, DEVICE_WIDTH - 20, 33) buttonType:UIButtonTypeRoundedRect normalTitle:@"立即支付" selectedTitle:nil target:self action:@selector(clickToPay:)];
     [self.view addSubview:payButton];
@@ -300,6 +379,7 @@
  *  支付成功
  */
 - (void)payResultSuccess:(BOOL)success
+                erroInfo:(NSString *)erroInfo
 {
     //更新购物车
     [[NSNotificationCenter defaultCenter]postNotificationName:NOTIFICATION_UPDATE_TO_CART object:nil];
@@ -312,6 +392,7 @@
     result.orderNum = self.orderNum;
     result.sumPrice = self.sumPrice;
     result.isPaySuccess = success;
+    result.erroInfo = erroInfo;
     result.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:result animated:YES];
 }
@@ -325,6 +406,7 @@
 {
     NSLog(@"查看订单");
     OrderInfoViewController *orderInfo = [[OrderInfoViewController alloc]init];
+    orderInfo.order_id = self.orderId;
     [self.navigationController pushViewController:orderInfo animated:YES];
 }
 
@@ -346,11 +428,11 @@
  */
 - (void)clickToPay:(UIButton *)sender
 {
-    //test
     
-//    [self payResultSuccess:YES];
-//    
+//    [self payResultSuccess:NO erroInfo:@"支付失败错误信息"];
+////    [self isPayValidate];
 //    return;
+    
     
     if (aliButton.selected) {
         

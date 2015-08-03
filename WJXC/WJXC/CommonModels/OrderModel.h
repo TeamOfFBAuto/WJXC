@@ -22,12 +22,17 @@
 @property(nonatomic,retain)NSString *total_price;
 @property(nonatomic,retain)NSString *address_id;
 @property(nonatomic,retain)NSString *express_fee;
-@property(nonatomic,retain)NSString *merchant_phone;
+@property(nonatomic,retain)NSString *merchant_phone;//客服电话
 
 @property(nonatomic,retain)NSString *receiver_username;
 @property(nonatomic,retain)NSString *receiver_mobile;
 
 @property(nonatomic,retain)NSString *pay_type;//1 支付宝 2 微信
+
+//订单状态 1=》待付款 2=》已付款 3=》已发货 4=》已送达（已收货） 5=》已取消 6=》已删除
+@property(nonatomic,retain)NSString *status;
+
+@property(nonatomic,retain)NSString *is_comment;//是否已评论
 
 -(instancetype)initWithDictionary:(NSDictionary *)dic;
 

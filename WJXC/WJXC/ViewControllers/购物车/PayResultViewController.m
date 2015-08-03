@@ -60,12 +60,49 @@
         [btn2 setBorderWidth:0.5 borderColor:[UIColor orangeColor]];
         [btn2.titleLabel setFont:[UIFont systemFontOfSize:14]];
         [btn2 setTitleColor:[UIColor orangeColor] forState:UIControlStateNormal];
+    }else
+    {
+        //成功
+        UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake((DEVICE_WIDTH - 143) / 2.f, 50, 104, 35)];
+        imageView.image = [UIImage imageNamed:@"my_paySuccess"];
+        [self.view addSubview:imageView];
+        imageView.centerX = DEVICE_WIDTH / 2.f;
+        
+        UILabel *label1 = [[UILabel alloc]initWithFrame:CGRectMake(0, imageView.bottom + 28, DEVICE_WIDTH, 14) title:nil font:13 align:NSTextAlignmentCenter textColor:[UIColor colorWithHexString:@"959595"]];
+        [self.view addSubview:label1];
+        NSString *text = [NSString stringWithFormat:@"%@",self.erroInfo];
+        label1.text = text;
+        
+        CGFloat btnWith = (DEVICE_WIDTH - 74 - 20) / 2.f;
+        
+        //查看订单
+        UIButton *btn1 = [[UIButton alloc]initWithframe:CGRectMake(46, label1.bottom + 30, btnWith, 33) buttonType:UIButtonTypeCustom normalTitle:@"查看订单" selectedTitle:nil target:self action:@selector(clickToSeeOrderInfo:)];
+        [self.view addSubview:btn1];
+        [btn1 addCornerRadius:5.f];
+        [btn1 setBorderWidth:0.5 borderColor:DEFAULT_TEXTCOLOR];
+        [btn1.titleLabel setFont:[UIFont systemFontOfSize:14]];
+        [btn1 setTitleColor:DEFAULT_TEXTCOLOR forState:UIControlStateNormal];
+        
+        //继续购买
+        UIButton *btn2 = [[UIButton alloc]initWithframe:CGRectMake(btn1.right + 20, label1.bottom + 30, btnWith, 33) buttonType:UIButtonTypeCustom normalTitle:@"继续购买" selectedTitle:nil target:self action:@selector(clickToGoShopping:)];
+        [self.view addSubview:btn2];
+        [btn2 addCornerRadius:5.f];
+        [btn2 setBorderWidth:0.5 borderColor:[UIColor orangeColor]];
+        [btn2.titleLabel setFont:[UIFont systemFontOfSize:14]];
+        [btn2 setTitleColor:[UIColor orangeColor] forState:UIControlStateNormal];
     }
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    self.navigationController.navigationBarHidden = YES;
+    self.navigationController.navigationBarHidden = NO;
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -97,6 +134,7 @@
 - (void)clickToSeeOrderInfo:(UIButton *)sender
 {
     OrderInfoViewController *orderInfo = [[OrderInfoViewController alloc]init];
+    orderInfo.order_id = self.orderId;
     [self.navigationController pushViewController:orderInfo animated:YES];
 }
 

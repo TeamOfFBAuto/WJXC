@@ -14,6 +14,10 @@
 
 #import "RCDChatViewController.h"
 
+#import "PayActionViewController.h"//支付页面
+
+#import "OrderModel.h"
+
 #define kPadding_add 1000 //数量增加
 #define kPadding_reduce 2000 //数量减少
 #define kPadding_delete 3000 //删除
@@ -37,6 +41,8 @@
     BOOL _isUpdateCart;//是否更新购物车
     
     NSMutableDictionary *_selectDic;//记录是否选择了
+    
+    OrderModel *_buyAgainOrder;//再次购买order
 }
 
 @end
@@ -46,6 +52,13 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    self.myTitle = @"购物车";
+    
+    [self setMyViewControllerLeftButtonType:MyViewControllerLeftbuttonTypeNull WithRightButtonType:MyViewControllerRightbuttonTypeText];
+    
+    [self.my_right_button setTitle:@"编辑" forState:UIControlStateNormal];
+    [self.my_right_button setTitle:@"完成" forState:UIControlStateSelected];
     
     _table = [[RefreshTableView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH,DEVICE_HEIGHT - 64) showLoadMore:NO];
     _table.refreshDelegate = self;
@@ -64,6 +77,7 @@
     //监测购物车是否更新
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(updateCartNotification:) name:NOTIFICATION_UPDATE_TO_CART object:nil];
     
+//    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(notificationForBuyAgain:) name:NOTIFICATION_BUY_AGAIN object:nil];
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -72,15 +86,6 @@
     
     self.navigationController.navigationBarHidden = YES;
     self.navigationController.navigationBarHidden = NO;
-    
-    self.myTitle = @"购物车";
-    
-    self.leftString = @"客服";
-    
-    [self setMyViewControllerLeftButtonType:MyViewControllerLeftbuttonTypeText WithRightButtonType:MyViewControllerRightbuttonTypeText];
-    
-    [self.my_right_button setTitle:@"编辑" forState:UIControlStateNormal];
-    [self.my_right_button setTitle:@"完成" forState:UIControlStateSelected];
     
     //判断是否需要同步到服务器 1、数据库有 2、登录了
     
@@ -101,6 +106,12 @@
             _isUpdateCart = NO;
         }
     }
+    
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -196,7 +207,36 @@
     _isUpdateCart = YES;
 }
 
+/**
+ *  再次购买通知
+ *
+ *  @param notification
+ */
+- (void)notificationForBuyAgain:(NSNotification *)notification
+{
+    OrderModel *order = [notification.userInfo objectForKey:@"result"];
+    _buyAgainOrder = order;
+}
+
 #pragma mark - 事件处理
+
+/**
+ *  跳转至支付页面
+ */
+- (void)pushToPayPageWithOrderId:(NSString *)orderId
+                        orderNum:(NSString *)orderNum
+                        sumPrice:(CGFloat)sumPrice
+{
+    [self.navigationController popViewControllerAnimated:NO];
+    
+    PayActionViewController *pay = [[PayActionViewController alloc]init];
+    pay.orderId = orderId;
+    pay.orderNum = orderNum;
+    pay.sumPrice = sumPrice;
+    pay.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:pay animated:YES];
+}
+
 
 /**
  *  检测
@@ -434,29 +474,6 @@
     
     [_table reloadData];
 }
-
--(void)leftButtonTap:(UIButton *)sender
-{
-    [self pushToCustomerService];
-}
-
-/**
- *  跳转至客服
- */
-- (void)pushToCustomerService
-{
-    RCDChatViewController *chatService = [[RCDChatViewController alloc] init];
-    chatService.userName = @"客服";
-    chatService.targetId = SERVICE_ID;
-    chatService.conversationType = ConversationType_CUSTOMERSERVICE;
-    chatService.title = chatService.userName;
-    
-    //    RCHandShakeMessage* textMsg = [[RCHandShakeMessage alloc] init];
-    //    [[RongUIKit sharedKit] sendMessage:ConversationType_CUSTOMERSERVICE targetId:SERVICE_ID content:textMsg delegate:nil];
-    chatService.hidesBottomBarWhenPushed = YES;
-    [self.navigationController showViewController:chatService sender:nil];
-}
-
 
 #pragma mark - 网络请求
 

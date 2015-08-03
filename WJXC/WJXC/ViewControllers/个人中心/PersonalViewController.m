@@ -231,6 +231,14 @@
     //归档保存用户信息
     [userInfo cacheForKey:USERINFO_MODEL];
     
+    [LTools cache:userInfo.uid ForKey:USER_UID];
+    if (userInfo.avatar) {
+        [LTools cache:userInfo.avatar ForKey:USER_HEAD_IMAGEURL];
+    }
+    if (userInfo.user_name) {
+        [LTools cache:userInfo.user_name ForKey:USER_NAME];
+    }
+    
     self.nameLabel.text = userInfo.user_name;
     
     //需要更换头像,显示本地需要更换的头像

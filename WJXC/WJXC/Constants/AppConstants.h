@@ -59,6 +59,9 @@
 #define USRR_AUTHKEY @"authkey"
 #define USER_DEVICE_TOKEN @"DEVICE_TOKEN"
 
+#define USER_RONGCLOUD_TOKEN @"RongCloudToken" //融云token
+
+
 #define USER_UPDATEHEADIMAGE @"updateHeadImage"//更新用户头像
 #define USER_NEWHEADIMAGE @"newHeadImage"//新头像
 

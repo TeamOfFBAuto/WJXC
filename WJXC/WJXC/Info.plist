@@ -77,6 +77,8 @@
 	<true/>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>YES</string>
+	<key>UILaunchStoryboardName</key>
+	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
 	<key>UIRequiredDeviceCapabilities</key>

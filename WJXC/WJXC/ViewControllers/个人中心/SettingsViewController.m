@@ -13,6 +13,8 @@
 #import "UMFeedback.h"
 #import "FeedBackController.h"
 
+#import <RongIMKit/RongIMKit.h>
+
 @interface SettingsViewController ()<UITableViewDataSource,UITableViewDelegate>
 {
     NSArray *_titlesArr;
@@ -87,6 +89,11 @@
 - (void)clickToLogout:(UIButton *)sender
 {
     [self logout];
+    
+    //退出融云登录
+    [[RCIM sharedRCIM] disconnect];
+    [[RCIM sharedRCIM] logout];
+    [LTools cache:nil ForKey:USER_RONGCLOUD_TOKEN];
     
     [self cleanUserInfo];
 
