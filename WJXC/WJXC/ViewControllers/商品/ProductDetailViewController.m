@@ -148,38 +148,39 @@
     downView.userInteractionEnabled = YES;
     [downView setImage:[UIImage imageNamed:@"homepage_qiangou_bottom_bg.png"]];
     [self.view addSubview:downView];
-
-    UIButton *jianBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [jianBtn setImage:[UIImage imageNamed:@"homepage_xq_bottom_-.png"] forState:UIControlStateNormal];
-    [jianBtn setFrame:CGRectMake(10, 5, 35, 35)];
-    [downView addSubview:jianBtn];
-    [jianBtn addTarget:self action:@selector(gJian) forControlEvents:UIControlEventTouchUpInside];
     
     
-    _theNum = 1;
-    self.numLabel = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMaxX(jianBtn.frame), jianBtn.frame.origin.y+2, 45, 30)];
-    self.numLabel.layer.borderWidth = 0.5;
-    self.numLabel.layer.cornerRadius = 5;
-    self.numLabel.layer.borderColor = [RGBCOLOR(247, 143, 0)CGColor];
-    self.numLabel.text = [NSString stringWithFormat:@"%d",_theNum];
-    self.numLabel.textColor = RGBCOLOR(247, 143, 0);
-    self.numLabel.font = [UIFont systemFontOfSize:15];
-    self.numLabel.textAlignment = NSTextAlignmentCenter;
-    [downView addSubview:self.numLabel];
     
-    UIButton *jiaBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [jiaBtn setFrame:CGRectMake(CGRectGetMaxX(self.numLabel.frame), jianBtn.frame.origin.y, jianBtn.frame.size.width, jianBtn.frame.size.height)];
-    [jiaBtn setImage:[UIImage imageNamed:@"homepage_xq_bottom_+.png"] forState:UIControlStateNormal];
-    [downView addSubview:jiaBtn];
+    UIButton *phoneBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [phoneBtn setFrame:CGRectMake(10, 0, 45, 45)];
+//    phoneBtn.backgroundColor = [UIColor orangeColor];
+    [phoneBtn setTitle:@"拨打电话" forState:UIControlStateNormal];
+    phoneBtn.titleLabel.font = [UIFont systemFontOfSize:10];
+    [phoneBtn setImage:[UIImage imageNamed:@"bodadianhua.png"] forState:UIControlStateNormal];
+    [phoneBtn setTitleColor:RGBCOLOR(132, 173, 0) forState:UIControlStateNormal];
+    [phoneBtn setImageEdgeInsets:UIEdgeInsetsMake(5, 10, 20, 0)];
+    [phoneBtn setTitleEdgeInsets:UIEdgeInsetsMake(15, -15, 0, 0)];
+    [phoneBtn addTarget:self action:@selector(bodadianhua) forControlEvents:UIControlEventTouchUpInside];
+    [downView addSubview:phoneBtn];
     
-    [jiaBtn addTarget:self action:@selector(gJia) forControlEvents:UIControlEventTouchUpInside];
+    UIButton *lianximaijiaBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [lianximaijiaBtn setFrame:CGRectMake(CGRectGetMaxX(phoneBtn.frame)+20, phoneBtn.frame.origin.y, phoneBtn.frame.size.width, phoneBtn.frame.size.height)];
+    [lianximaijiaBtn setTitle:@"联系卖家" forState:UIControlStateNormal];
+    [lianximaijiaBtn setImage:[UIImage imageNamed:@"lianximaijia.png"] forState:UIControlStateNormal];
+    [lianximaijiaBtn setTitleColor:RGBCOLOR(132, 173, 0) forState:UIControlStateNormal];
+    lianximaijiaBtn.titleLabel.font = [UIFont systemFontOfSize:10];
+    [lianximaijiaBtn addTarget:self action:@selector(lianximaijia) forControlEvents:UIControlEventTouchUpInside];
+    [lianximaijiaBtn setImageEdgeInsets:UIEdgeInsetsMake(5, 10, 20, 0)];
+    [lianximaijiaBtn setTitleEdgeInsets:UIEdgeInsetsMake(15, -15, 0, 0)];
+    
+    [downView addSubview:lianximaijiaBtn];
+    
     
     UIButton *jiaruBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [jiaruBtn setTitle:@"加入购物车" forState:UIControlStateNormal];
-    
     jiaruBtn.titleLabel.textColor = [UIColor whiteColor];
     jiaruBtn.titleLabel.font = [UIFont systemFontOfSize:13];
-    [jiaruBtn setFrame:CGRectMake(CGRectGetMaxX(jiaBtn.frame)+10, jiaBtn.frame.origin.y+2, 110,self.numLabel.frame.size.height)];
+    [jiaruBtn setFrame:CGRectMake(CGRectGetMaxX(lianximaijiaBtn.frame)+12, lianximaijiaBtn.frame.origin.y+5, 110,31)];
     jiaruBtn.layer.cornerRadius = 4;
     jiaruBtn.layer.masksToBounds = YES;
     jiaruBtn.backgroundColor = RGBCOLOR(247, 143, 0);
@@ -198,10 +199,6 @@
     
 }
 
-
--(void)gouwuche{
-    NSLog(@"%s",__FUNCTION__);
-}
 
 
 -(void)gJian{
@@ -338,6 +335,28 @@
         [self.navigationController pushViewController:ccc animated:YES];
     }
 }
+
+
+
+#pragma mark - 拨打电话
+-(void)bodadianhua{
+    
+}
+
+
+#pragma mark - 联系卖家
+-(void)lianximaijia{
+    
+}
+
+
+#pragma mark - 购物车
+
+-(void)gouwuche{
+    
+}
+
+
 
 
 @end

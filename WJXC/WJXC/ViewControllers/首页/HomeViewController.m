@@ -13,6 +13,8 @@
 #import "ProductModel.h"
 #import "GCycleScrollView.h"
 #import "adverModel.h"
+#import "HuodongViewController.h"
+
 
 @interface HomeViewController ()<UITableViewDataSource,RefreshDelegate,GCycleScrollViewDelegate,GCycleScrollViewDatasource>
 {
@@ -27,7 +29,7 @@
     NSMutableArray *_TopDataArray;
     
     
-    UILabel *_daojiashiLabel;//倒计时label
+    UILabel *_daojishiLabel;//倒计时label
     
 }
 @end
@@ -319,8 +321,10 @@
     
     
     if (theGCycleScrollView.tag == 200) {
-        UIImageView *imv = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, 180*GscreenRatio_568)];
+        UIImageView *imv = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, 180)];
         imv.userInteractionEnabled = YES;
+        
+        NSLog(@"%@",NSStringFromCGRect(imv.frame));
         
         adverModel *amodel = _TopDataArray[index];
         NSString *str = amodel.cover_pic;
@@ -339,29 +343,38 @@
             NSString *yuanjia = [NSString stringWithFormat:@"原价:%@元",[product_info stringValueForKey:@"original_price"]];
             
             
+            
+            
+            UIImageView *backImv = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 200, 170)];
+            backImv.center = CGPointMake(imv.center.x, imv.center.y - 15);
+            [backImv setImage:[UIImage imageNamed:@"homepage_banner_miaosha.png"]];
+            [imv addSubview:backImv];
+            
+            
+            
+            
+            //商品分类
+            UILabel *fenleiLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 15, backImv.frame.size.width, 20) title:@"挪威冰鲜" font:10 align:NSTextAlignmentCenter textColor:RGBCOLOR(193, 13, 19)];
+            [backImv addSubview:fenleiLabel];
+            
             //商品名称
-            UILabel *nameLabel = [[UILabel alloc]initWithFrame:CGRectMake(left_right, 5, DEVICE_WIDTH - 60, (180*GscreenRatio_568 - 60)/3.0) title:product_name font:25 align:NSTextAlignmentCenter textColor:[UIColor redColor]];
-            [imv addSubview:nameLabel];
+            UILabel *nameLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(fenleiLabel.frame)-5, backImv.frame.size.width, 40) title:product_name font:20 align:NSTextAlignmentCenter textColor:[UIColor redColor]];
+            [backImv addSubview:nameLabel];
             
-            
-            //秒杀view
-            UIImageView *miaoshaView = [[UIImageView alloc]initWithFrame:CGRectMake(nameLabel.frame.origin.x, CGRectGetMaxY(nameLabel.frame), nameLabel.frame.size.width, nameLabel.frame.size.height)];
-            [miaoshaView setImage:[UIImage imageNamed:@"homepage_qiangou_bottom_bg.png"]];
-//            miaoshaView.backgroundColor = [UIColor orangeColor];
-            [imv addSubview:miaoshaView];
+
             //秒杀价
-            UILabel *miaoshajiaLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, miaoshaView.frame.size.width, miaoshaView.frame.size.height*0.5) title:miaoshajia font:17 align:NSTextAlignmentCenter textColor:[UIColor redColor]];
-            [miaoshaView addSubview:miaoshajiaLabel];
+            UILabel *miaoshajiaLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(nameLabel.frame), backImv.frame.size.width, 24) title:miaoshajia font:15 align:NSTextAlignmentCenter textColor:[UIColor redColor]];
+            [backImv addSubview:miaoshajiaLabel];
             //原价
-            UILabel *yuanjiaLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(miaoshajiaLabel.frame), miaoshaView.frame.size.width, miaoshajiaLabel.frame.size.height) title:yuanjia font:17 align:NSTextAlignmentCenter textColor:[UIColor grayColor]];
-            [miaoshaView addSubview:yuanjiaLabel];
-            
+            UILabel *yuanjiaLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(miaoshajiaLabel.frame)-3, backImv.frame.size.width, miaoshajiaLabel.frame.size.height) title:yuanjia font:15 align:NSTextAlignmentCenter textColor:[UIColor grayColor]];
+            [backImv addSubview:yuanjiaLabel];
+
             //秒杀倒计时
-            UILabel *miaoshaTitle = [[UILabel alloc]initWithFrame:CGRectMake(miaoshaView.frame.origin.x, CGRectGetMaxY(miaoshaView.frame), miaoshaView.frame.size.width, miaoshaView.frame.size.height) title:@"倒计时" font:12 align:NSTextAlignmentCenter textColor:[UIColor grayColor]];
-            [imv addSubview:miaoshaTitle];
-            
-            _daojiashiLabel = [[UILabel alloc]initWithFrame:CGRectMake(miaoshaTitle.frame.origin.x, CGRectGetMaxY(miaoshaTitle.frame), miaoshaTitle.frame.size.width, miaoshaTitle.frame.size.height) title:yuanjia font:12 align:NSTextAlignmentCenter textColor:[UIColor redColor]];
-            [imv addSubview:_daojiashiLabel];
+            UILabel *miaoshaTitle = [[UILabel alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(yuanjiaLabel.frame), backImv.frame.size.width, 20) title:@"倒计时" font:12 align:NSTextAlignmentCenter textColor:[UIColor blackColor]];
+            [backImv addSubview:miaoshaTitle];
+
+            _daojishiLabel = [[UILabel alloc]initWithFrame:CGRectMake(miaoshaTitle.frame.origin.x, CGRectGetMaxY(miaoshaTitle.frame), miaoshaTitle.frame.size.width, miaoshaTitle.frame.size.height) title:@"4小时25分36秒" font:12 align:NSTextAlignmentCenter textColor:[UIColor redColor]];
+            [backImv addSubview:_daojishiLabel];
             
             
             
@@ -382,6 +395,12 @@
     
     adverModel *model = _TopDataArray[index];
     if ([model.type intValue] == 1) {//活动
+        
+        HuodongViewController *cc = [[HuodongViewController alloc]init];
+        cc.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:cc animated:YES];
+        
+        
         
     }else if ([model.type intValue] == 2){//秒杀
         ProductDetailViewController *cc = [[ProductDetailViewController alloc]init];
@@ -495,6 +514,7 @@
     self.leftLabel.text = city;
     
     
+//    int cityId = [GMAPI findIdFromName:self.leftLabel.text];
     int cityId = [GMAPI cityIdForName:self.leftLabel.text];
     
     NSLog(@"我擦 %d",cityId);

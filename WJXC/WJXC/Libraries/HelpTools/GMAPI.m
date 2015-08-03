@@ -647,6 +647,56 @@
     return 0;
 }
 
+
+
+
+//查
++(int)findIdFromName:(NSString *)name{
+    
+    //数据库操作的流程===================================
+    sqlite3 *db = [DataBase openDB];//获取数据库指针
+    sqlite3_stmt *stmt = nil;//数据库的sql语句指针
+    
+    int result = sqlite3_prepare(db, "select * from area", -1, &stmt, NULL);
+    
+    if (result == SQLITE_OK) {
+        while (sqlite3_step(stmt)==SQLITE_ROW) {
+            int thepID = sqlite3_column_int(stmt, 1);
+            const unsigned char *pname = sqlite3_column_text(stmt, 0);
+            NSString *theName = [NSString stringWithUTF8String:(const char*)pname];
+            
+            if ([theName isEqualToString:name]) {
+                sqlite3_finalize(stmt);
+                return thepID;
+            }
+            
+        }
+        
+    }
+    
+    sqlite3_finalize(stmt);
+    NSLog(@"find all faild,reason :%d",result);
+    return 0;
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 +(NSString*)getTimeWithDate:(NSDate*)theDate{
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"yyyy-MM-dd HH:mm"];

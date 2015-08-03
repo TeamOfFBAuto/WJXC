@@ -34,7 +34,7 @@
         UILabel *priceLabel = [[UILabel alloc]initWithFrame:CGRectMake(10, CGRectGetMaxY(productNameLable.frame)+5, DEVICE_WIDTH - 20, 15)];
         NSString *yuanjia = model.original_price;
         NSString *xianjia = model.current_price;
-        NSString *price = [NSString stringWithFormat:@"￥%@ %@",yuanjia,xianjia];
+        NSString *price = [NSString stringWithFormat:@"￥%@ %@",xianjia,yuanjia];
         NSMutableAttributedString  *aaa = [[NSMutableAttributedString alloc]initWithString:price];
         [aaa addAttribute:NSForegroundColorAttributeName value:RGBCOLOR(238, 115, 0) range:NSMakeRange(0, xianjia.length+1)];
         [aaa addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:12] range:NSMakeRange(0, xianjia.length+1)];

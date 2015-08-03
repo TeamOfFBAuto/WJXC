@@ -145,6 +145,7 @@
 //地区选择相关
 + (int)cityIdForName:(NSString *)cityName;
 
++(int)findIdFromName:(NSString *)name;
 
 
 #pragma mark ---------------------提示层

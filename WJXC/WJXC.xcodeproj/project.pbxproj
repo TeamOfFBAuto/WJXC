@@ -150,7 +150,7 @@
 		13FEA49F1B4BDEAC009BD01D /* shopping cart_normal@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 13FEA49E1B4BDEAC009BD01D /* shopping cart_normal@2x.png */; };
 		BEAFF6E8D57D8678EA04910B /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D8D2D770E3C098630ADCAC15 /* libPods.a */; };
 		E30655B41B5CF66800477872 /* garea.plist in Resources */ = {isa = PBXBuildFile; fileRef = E30655B31B5CF66800477872 /* garea.plist */; };
-		E30655B61B5DEF3600477872 /* garea.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = E30655B51B5DEF3600477872 /* garea.sqlite */; };
+		E30D9F9B1B6F2D75007FF926 /* SeachCustomTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E30D9F9A1B6F2D75007FF926 /* SeachCustomTableViewCell.m */; };
 		E34099821B62126500FF5257 /* GtopScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = E34099811B62126500FF5257 /* GtopScrollView.m */; };
 		E34099861B6245BD00FF5257 /* gbtnGray@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E34099841B6245BD00FF5257 /* gbtnGray@2x.png */; };
 		E34099871B6245BD00FF5257 /* gBtnWhite@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E34099851B6245BD00FF5257 /* gBtnWhite@2x.png */; };
@@ -240,6 +240,12 @@
 		E3DE39BD1B592A2F0015EEF6 /* MJPhotoView.m in Sources */ = {isa = PBXBuildFile; fileRef = E3DE39B61B592A2F0015EEF6 /* MJPhotoView.m */; };
 		E3E9373C1B671D8800BDA7D5 /* ClassCustomTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E3E9373B1B671D8800BDA7D5 /* ClassCustomTableViewCell.m */; };
 		E3E9373E1B67773400BDA7D5 /* homepage_xq_bottom_-@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E3E9373D1B67773400BDA7D5 /* homepage_xq_bottom_-@2x.png */; };
+		E3F1A01E1B6F49E600102989 /* garea.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = E3F1A01D1B6F49E600102989 /* garea.sqlite */; };
+		E3F1A0221B6F52EE00102989 /* HuodongViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E3F1A0211B6F52EE00102989 /* HuodongViewController.m */; };
+		E3F1A0261B6F616F00102989 /* HuodongCustomTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E3F1A0251B6F616F00102989 /* HuodongCustomTableViewCell.m */; };
+		E3F1A02A1B6F61F500102989 /* HuodongModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E3F1A0291B6F61F500102989 /* HuodongModel.m */; };
+		E3F1A02D1B6FA46100102989 /* bodadianhua@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E3F1A02B1B6FA46100102989 /* bodadianhua@2x.png */; };
+		E3F1A02E1B6FA46100102989 /* lianximaijia@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E3F1A02C1B6FA46100102989 /* lianximaijia@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -459,7 +465,8 @@
 		D74990800B0EC5419CDAB9EF /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		D8D2D770E3C098630ADCAC15 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		E30655B31B5CF66800477872 /* garea.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = garea.plist; sourceTree = "<group>"; };
-		E30655B51B5DEF3600477872 /* garea.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = garea.sqlite; sourceTree = "<group>"; };
+		E30D9F991B6F2D75007FF926 /* SeachCustomTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SeachCustomTableViewCell.h; sourceTree = "<group>"; };
+		E30D9F9A1B6F2D75007FF926 /* SeachCustomTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SeachCustomTableViewCell.m; sourceTree = "<group>"; };
 		E34099801B62126500FF5257 /* GtopScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GtopScrollView.h; sourceTree = "<group>"; };
 		E34099811B62126500FF5257 /* GtopScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GtopScrollView.m; sourceTree = "<group>"; };
 		E34099841B6245BD00FF5257 /* gbtnGray@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gbtnGray@2x.png"; sourceTree = "<group>"; };
@@ -665,6 +672,15 @@
 		E3E9373A1B671D8800BDA7D5 /* ClassCustomTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClassCustomTableViewCell.h; sourceTree = "<group>"; };
 		E3E9373B1B671D8800BDA7D5 /* ClassCustomTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ClassCustomTableViewCell.m; sourceTree = "<group>"; };
 		E3E9373D1B67773400BDA7D5 /* homepage_xq_bottom_-@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "homepage_xq_bottom_-@2x.png"; sourceTree = "<group>"; };
+		E3F1A01D1B6F49E600102989 /* garea.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = garea.sqlite; sourceTree = "<group>"; };
+		E3F1A0201B6F52EE00102989 /* HuodongViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HuodongViewController.h; sourceTree = "<group>"; };
+		E3F1A0211B6F52EE00102989 /* HuodongViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HuodongViewController.m; sourceTree = "<group>"; };
+		E3F1A0241B6F616F00102989 /* HuodongCustomTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HuodongCustomTableViewCell.h; sourceTree = "<group>"; };
+		E3F1A0251B6F616F00102989 /* HuodongCustomTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HuodongCustomTableViewCell.m; sourceTree = "<group>"; };
+		E3F1A0281B6F61F500102989 /* HuodongModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HuodongModel.h; sourceTree = "<group>"; };
+		E3F1A0291B6F61F500102989 /* HuodongModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HuodongModel.m; sourceTree = "<group>"; };
+		E3F1A02B1B6FA46100102989 /* bodadianhua@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bodadianhua@2x.png"; sourceTree = "<group>"; };
+		E3F1A02C1B6FA46100102989 /* lianximaijia@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "lianximaijia@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1010,6 +1026,7 @@
 		13A64C3A1B3BEB4200D9A106 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				E3F1A01F1B6F52DC00102989 /* 活动 */,
 				E3D685161B5B61330048C044 /* 搜索 */,
 				13AD17911B676B990091CE10 /* 客服 */,
 				E3C15FDA1B4CDC1700C30039 /* 商品 */,
@@ -1025,9 +1042,9 @@
 		13A64C3D1B3BEB7100D9A106 /* HelpTools */ = {
 			isa = PBXGroup;
 			children = (
+				E3F1A01D1B6F49E600102989 /* garea.sqlite */,
 				E34099801B62126500FF5257 /* GtopScrollView.h */,
 				E34099811B62126500FF5257 /* GtopScrollView.m */,
-				E30655B51B5DEF3600477872 /* garea.sqlite */,
 				E30655B31B5CF66800477872 /* garea.plist */,
 				1384072E1B59052D0008CAC3 /* WJXC.sqlite */,
 				E3CE7F741B4D549E0012940C /* UILabel+GautoMatchedText.h */,
@@ -1151,6 +1168,8 @@
 		13FEA4741B4A28B6009BD01D /* CommonViews */ = {
 			isa = PBXGroup;
 			children = (
+				E3F1A0231B6F615200102989 /* 活动 */,
+				E30D9F981B6F2D5D007FF926 /* 搜索 */,
 				E34099881B6271A700FF5257 /* 分类 */,
 				E3CE7F6C1B4D4DA00012940C /* 商品 */,
 				E3CE7F631B4CFF980012940C /* GCycleScrollView.h */,
@@ -1216,6 +1235,15 @@
 				D8D2D770E3C098630ADCAC15 /* libPods.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		E30D9F981B6F2D5D007FF926 /* 搜索 */ = {
+			isa = PBXGroup;
+			children = (
+				E30D9F991B6F2D75007FF926 /* SeachCustomTableViewCell.h */,
+				E30D9F9A1B6F2D75007FF926 /* SeachCustomTableViewCell.m */,
+			);
+			path = "搜索";
 			sourceTree = "<group>";
 		};
 		E34099831B6245BD00FF5257 /* 分类 */ = {
@@ -1340,6 +1368,8 @@
 		E3CE7F691B4D4C660012940C /* 商品 */ = {
 			isa = PBXGroup;
 			children = (
+				E3F1A02B1B6FA46100102989 /* bodadianhua@2x.png */,
+				E3F1A02C1B6FA46100102989 /* lianximaijia@2x.png */,
 				E3DE39A01B5922330015EEF6 /* gstarBack@2x.png */,
 				E3DE39A11B5922330015EEF6 /* gstart_half@2x.png */,
 				E3DE39A21B5922330015EEF6 /* gstart@2x.png */,
@@ -1485,6 +1515,7 @@
 		E3D0800E1B3D510C00E4F87D /* CommonModels */ = {
 			isa = PBXGroup;
 			children = (
+				E3F1A0271B6F61D100102989 /* 活动 */,
 				E35015051B678D2800A6B9DE /* 首页 */,
 				E34099831B6245BD00FF5257 /* 分类 */,
 				E3CE7F701B4D4E6E0012940C /* 商品 */,
@@ -1599,6 +1630,33 @@
 			path = MJPhotoBrowser;
 			sourceTree = "<group>";
 		};
+		E3F1A01F1B6F52DC00102989 /* 活动 */ = {
+			isa = PBXGroup;
+			children = (
+				E3F1A0201B6F52EE00102989 /* HuodongViewController.h */,
+				E3F1A0211B6F52EE00102989 /* HuodongViewController.m */,
+			);
+			path = "活动";
+			sourceTree = "<group>";
+		};
+		E3F1A0231B6F615200102989 /* 活动 */ = {
+			isa = PBXGroup;
+			children = (
+				E3F1A0241B6F616F00102989 /* HuodongCustomTableViewCell.h */,
+				E3F1A0251B6F616F00102989 /* HuodongCustomTableViewCell.m */,
+			);
+			path = "活动";
+			sourceTree = "<group>";
+		};
+		E3F1A0271B6F61D100102989 /* 活动 */ = {
+			isa = PBXGroup;
+			children = (
+				E3F1A0281B6F61F500102989 /* HuodongModel.h */,
+				E3F1A0291B6F61F500102989 /* HuodongModel.m */,
+			);
+			path = "活动";
+			sourceTree = "<group>";
+		};
 		EC7D0EDC457803821F9F3430 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -1711,6 +1769,7 @@
 				1375AD631B4D3F29001631CE /* OrderCell.xib in Resources */,
 				139457331B46296F00C45EB6 /* shopping cart_right@2x.png in Resources */,
 				1394574A1B46296F00C45EB6 /* homepage_star1@2x.png in Resources */,
+				E3F1A02E1B6FA46100102989 /* lianximaijia@2x.png in Resources */,
 				E3D07FF01B3D4A9100E4F87D /* UMSCommentInputController.xib in Resources */,
 				139457161B46296F00C45EB6 /* classify_2@2x.png in Resources */,
 				E3D07FFB1B3D4A9100E4F87D /* TencentOpenApi_IOS_Bundle.bundle in Resources */,
@@ -1767,10 +1826,11 @@
 				E3D0801C1B3D51A500E4F87D /* SVProgressHUD.bundle in Resources */,
 				1394574F1B46296F00C45EB6 /* register_password2@2x.PNG in Resources */,
 				139457431B46296F00C45EB6 /* homepage_bottom_home_green@2x.png in Resources */,
+				E3F1A01E1B6F49E600102989 /* garea.sqlite in Resources */,
 				E3CE7F6B1B4D4C960012940C /* my_jiantou@2x.png in Resources */,
 				E35015041B677E5000A6B9DE /* homepage_qiangou_bottom_bg.png in Resources */,
-				E30655B61B5DEF3600477872 /* garea.sqlite in Resources */,
 				139457081B46296F00C45EB6 /* login_top_back@2x.png in Resources */,
+				E3F1A02D1B6FA46100102989 /* bodadianhua@2x.png in Resources */,
 				139457071B46296F00C45EB6 /* login_qq@2x.png in Resources */,
 				139457261B46296F00C45EB6 /* my_setting@2x.png in Resources */,
 				13FEA49D1B4BD590009BD01D /* AddressCell.xib in Resources */,
@@ -1875,6 +1935,8 @@
 				E3D080231B3D51D000E4F87D /* LNavigationController.m in Sources */,
 				1394576F1B4678D200C45EB6 /* UIImageView+Extensions.m in Sources */,
 				1394576E1B4678D200C45EB6 /* UIButton+Additions.m in Sources */,
+				E3F1A0261B6F616F00102989 /* HuodongCustomTableViewCell.m in Sources */,
+				E30D9F9B1B6F2D75007FF926 /* SeachCustomTableViewCell.m in Sources */,
 				139D439C1B5A489D0036DC3B /* ConfirmOrderController.m in Sources */,
 				13AD17941B676D8D0091CE10 /* RCDChatViewController.m in Sources */,
 				E3DE39BA1B592A2F0015EEF6 /* MJPhotoLoadingView.m in Sources */,
@@ -1905,6 +1967,7 @@
 				E3CE7F681B4D1FE60012940C /* NSDictionary+GJson.m in Sources */,
 				E340998E1B6272F000FF5257 /* ClassDetailViewController.m in Sources */,
 				13A208831B5FA7DC00CC4EC0 /* PayActionViewController.m in Sources */,
+				E3F1A0221B6F52EE00102989 /* HuodongViewController.m in Sources */,
 				13FEA4941B4BD198009BD01D /* CollectCell.m in Sources */,
 				E3D0801B1B3D51A500E4F87D /* SVIndefiniteAnimatedView.m in Sources */,
 				138407221B5798660008CAC3 /* ShoppingCartCell.m in Sources */,
@@ -1936,6 +1999,7 @@
 				135F85E81B4CC63300B5E5AD /* AboutUsController.m in Sources */,
 				E3DE39B91B592A2F0015EEF6 /* MJPhotoBrowser.m in Sources */,
 				13A64C5D1B3BF71C00D9A106 /* ClassViewController.m in Sources */,
+				E3F1A02A1B6F61F500102989 /* HuodongModel.m in Sources */,
 				13EB1EA61B623E8B00E5CA57 /* PayResultViewController.m in Sources */,
 				139457591B46730100C45EB6 /* Order.m in Sources */,
 				135F85E21B4CBE5C00B5E5AD /* SettingsViewController.m in Sources */,
