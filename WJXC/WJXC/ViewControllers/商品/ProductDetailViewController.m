@@ -26,7 +26,12 @@
     
     ProductDetailTableViewCell *_tmpCell;
     
+    UIButton *_shoucangBtn;
+    
     int _theNum;
+    
+    
+    NSString *_isfavor;//是否收藏
     
     
 }
@@ -88,6 +93,12 @@
         
         _gouwucheModel = [[ProductModel alloc]initWithDictionary:detail];
         
+        
+        _shoucangBtn.hidden = NO;
+        
+        _isfavor = _theProductModel.is_favor;
+        
+        
         [_tableView reloadData];
         
         
@@ -125,15 +136,17 @@
     [theBImv addSubview:backBtn];
     
     
-    UIButton *shoucangBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [shoucangBtn setFrame:CGRectMake(DEVICE_WIDTH - 100, 5, 50, 50)];
-    [shoucangBtn setImage:[UIImage imageNamed:@"homepage_qianggou_collect.png"] forState:UIControlStateNormal];
-    [theBImv addSubview:shoucangBtn];
+    _shoucangBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [_shoucangBtn setFrame:CGRectMake(DEVICE_WIDTH - 60, 5, 50, 50)];
+    [_shoucangBtn setImage:[UIImage imageNamed:@"homepage_qianggou_collect.png"] forState:UIControlStateNormal];
+    [_shoucangBtn addTarget:self action:@selector(gshoucang) forControlEvents:UIControlEventTouchUpInside];
+    [theBImv addSubview:_shoucangBtn];
+    _shoucangBtn.hidden = YES;
     
-    UIButton *shareBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [shareBtn setFrame:CGRectMake(DEVICE_WIDTH - 50, 5, 50, 50)];
-    [shareBtn setImage:[UIImage imageNamed:@"homepage_qianggou_share.png"] forState:UIControlStateNormal];
-    [theBImv addSubview:shareBtn];
+//    UIButton *shareBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+//    [shareBtn setFrame:CGRectMake(DEVICE_WIDTH - 50, 5, 50, 50)];
+//    [shareBtn setImage:[UIImage imageNamed:@"homepage_qianggou_share.png"] forState:UIControlStateNormal];
+//    [theBImv addSubview:shareBtn];
 }
 
 
@@ -233,6 +246,9 @@
     NSInteger num = 0;
     if (theGCycleScrollView.tag == 200) {
         num = _theProductModel.image.count;
+        if (num == 0) {
+            num = 1;
+        }
     }
     return num;
     
@@ -244,6 +260,16 @@
     
     
     if (theGCycleScrollView.tag == 200) {
+        
+        
+        if (!_theProductModel.image) {
+            UIImageView *imv = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, 180*GscreenRatio_568)];
+            imv.userInteractionEnabled = YES;
+            [imv setImage:[UIImage imageNamed:@"default02.png"]];
+            return imv;
+        }
+        
+        
         UIImageView *imv = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, 180*GscreenRatio_568)];
         imv.userInteractionEnabled = YES;
         
@@ -253,7 +279,7 @@
             str = [dic objectForKey:@"pic"];
         }
         
-        [imv sd_setImageWithURL:[NSURL URLWithString:str] placeholderImage:nil];
+        [imv sd_setImageWithURL:[NSURL URLWithString:str] placeholderImage:[UIImage imageNamed:@"default02.png"]];
         return imv;
     }
     
@@ -456,6 +482,54 @@
     }];
     
 }
+
+#pragma mark - 收藏
+-(void)gshoucang{
+    
+    
+    
+    
+    if ([_isfavor intValue] == 0) {
+        NSString *product_id = _theProductModel.product_id;
+        
+        NSDictionary *dic = @{
+                              @"product_id":product_id,
+                              @"authcode":[GMAPI getAuthkey],
+                              };
+        [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodGet api:SHOUCANGRODUCT parameters:dic constructingBodyBlock:nil completion:^(NSDictionary *result) {
+            
+            [GMAPI showAutoHiddenMBProgressWithText:[result stringValueForKey:@"msg"] addToView:self.view];
+            
+            _isfavor = @"1";
+            
+        } failBlock:^(NSDictionary *result) {
+             NSLog(@"我操");
+        }];
+    }else if ([_isfavor intValue] == 1){
+        NSString *product_id = _theProductModel.product_id;
+        
+        NSDictionary *dic = @{
+                              @"product_id":product_id,
+                              @"authcode":[GMAPI getAuthkey],
+                              };
+        [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodGet api:QUXIAOSHOUCANG parameters:dic constructingBodyBlock:nil completion:^(NSDictionary *result) {
+            
+            [GMAPI showAutoHiddenMBProgressWithText:[result stringValueForKey:@"msg"] addToView:self.view];
+            
+            _isfavor = @"0";
+            
+        } failBlock:^(NSDictionary *result) {
+            
+            NSLog(@"我操");
+        }];
+    }
+    
+    
+    
+    
+}
+
+
 
 
 @end

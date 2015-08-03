@@ -27,6 +27,7 @@
 @property(nonatomic,strong)NSString *add_time;
 @property(nonatomic,strong)NSString *discount;
 @property(nonatomic,strong)NSString *cover_pic;
+@property(nonatomic,strong)NSString *is_favor;
 
 
 @end

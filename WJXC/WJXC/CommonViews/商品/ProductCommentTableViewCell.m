@@ -118,7 +118,7 @@
         NSArray *replyArray = model.comment_reply;
         NSInteger count = replyArray.count;
         UIView *replyView = [[UIView alloc]initWithFrame:CGRectMake(self.timeLabel.frame.origin.x, CGRectGetMaxY(self.timeLabel.frame)+10, self.userNameLabel.frame.size.width+self.startView.frame.size.width, 50*count)];
-        replyView.backgroundColor = [UIColor grayColor];
+//        replyView.backgroundColor = [UIColor grayColor];
         [self.contentView addSubview:replyView];
         
         
@@ -133,7 +133,7 @@
             [rpLabel setMatchedFrame4LabelWithOrigin:CGPointMake(0, r_y) width:replyView.frame.size.width];
             [replyView addSubview:rpLabel];
             
-            r_y +=rpLabel.frame.size.height;
+            r_y +=rpLabel.frame.size.height+3;
             
             
         }

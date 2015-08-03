@@ -249,6 +249,9 @@
 		E3F1A02A1B6F61F500102989 /* HuodongModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E3F1A0291B6F61F500102989 /* HuodongModel.m */; };
 		E3F1A02D1B6FA46100102989 /* bodadianhua@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E3F1A02B1B6FA46100102989 /* bodadianhua@2x.png */; };
 		E3F1A02E1B6FA46100102989 /* lianximaijia@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E3F1A02C1B6FA46100102989 /* lianximaijia@2x.png */; };
+		E3F1A0311B6FC29000102989 /* Gbtn.m in Sources */ = {isa = PBXBuildFile; fileRef = E3F1A0301B6FC29000102989 /* Gbtn.m */; };
+		E3F1A0341B6FDE1A00102989 /* default01@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E3F1A0321B6FDE1A00102989 /* default01@2x.png */; };
+		E3F1A0351B6FDE1A00102989 /* default02@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E3F1A0331B6FDE1A00102989 /* default02@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -687,6 +690,10 @@
 		E3F1A0291B6F61F500102989 /* HuodongModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HuodongModel.m; sourceTree = "<group>"; };
 		E3F1A02B1B6FA46100102989 /* bodadianhua@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bodadianhua@2x.png"; sourceTree = "<group>"; };
 		E3F1A02C1B6FA46100102989 /* lianximaijia@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "lianximaijia@2x.png"; sourceTree = "<group>"; };
+		E3F1A02F1B6FC29000102989 /* Gbtn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Gbtn.h; sourceTree = "<group>"; };
+		E3F1A0301B6FC29000102989 /* Gbtn.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Gbtn.m; sourceTree = "<group>"; };
+		E3F1A0321B6FDE1A00102989 /* default01@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default01@2x.png"; sourceTree = "<group>"; };
+		E3F1A0331B6FDE1A00102989 /* default02@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default02@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1078,6 +1085,8 @@
 				13A64C571B3BF6A800D9A106 /* UIView+Frame */,
 				13A64C541B3BF3E700D9A106 /* MyViewController.h */,
 				13A64C551B3BF3E700D9A106 /* MyViewController.m */,
+				E3F1A02F1B6FC29000102989 /* Gbtn.h */,
+				E3F1A0301B6FC29000102989 /* Gbtn.m */,
 			);
 			path = HelpTools;
 			sourceTree = "<group>";
@@ -1576,6 +1585,8 @@
 		E3D080371B3D584500E4F87D /* AllImages */ = {
 			isa = PBXGroup;
 			children = (
+				E3F1A0321B6FDE1A00102989 /* default01@2x.png */,
+				E3F1A0331B6FDE1A00102989 /* default02@2x.png */,
 				13A147151B6B865000B6A3DB /* default@2x.png */,
 				E3CE7F691B4D4C660012940C /* 商品 */,
 				139456AC1B46296F00C45EB6 /* 登录 */,
@@ -1760,6 +1771,7 @@
 			files = (
 				1394572A1B46296F00C45EB6 /* shopping cart_address_middle@2x.png in Resources */,
 				139457241B46296F00C45EB6 /* my_indent_no@2x.png in Resources */,
+				E3F1A0341B6FDE1A00102989 /* default01@2x.png in Resources */,
 				139457401B46296F00C45EB6 /* homepage_banner_miaosha@2x.png in Resources */,
 				139457291B46296F00C45EB6 /* shopping cart_address_add@2x.png in Resources */,
 				E3D6851B1B5B6D6B0048C044 /* search_fangdajing@2x.png in Resources */,
@@ -1851,6 +1863,7 @@
 				1394570A1B46296F00C45EB6 /* login_weibo@2x.png in Resources */,
 				13FEA4861B4BCD89009BD01D /* bluedown1@2x.png in Resources */,
 				13A64C051B3BDF5D00D9A106 /* Images.xcassets in Resources */,
+				E3F1A0351B6FDE1A00102989 /* default02@2x.png in Resources */,
 				139457501B46296F00C45EB6 /* register_password@2x.png in Resources */,
 				1394572E1B46296F00C45EB6 /* shopping cart_dd_top_jt@2x.png in Resources */,
 				E3D080301B3D523200E4F87D /* ForgetPwdController.xib in Resources */,
@@ -1980,6 +1993,7 @@
 				E340998E1B6272F000FF5257 /* ClassDetailViewController.m in Sources */,
 				13A208831B5FA7DC00CC4EC0 /* PayActionViewController.m in Sources */,
 				E3F1A0221B6F52EE00102989 /* HuodongViewController.m in Sources */,
+				E3F1A0311B6FC29000102989 /* Gbtn.m in Sources */,
 				13FEA4941B4BD198009BD01D /* CollectCell.m in Sources */,
 				E3D0801B1B3D51A500E4F87D /* SVIndefiniteAnimatedView.m in Sources */,
 				138407221B5798660008CAC3 /* ShoppingCartCell.m in Sources */,

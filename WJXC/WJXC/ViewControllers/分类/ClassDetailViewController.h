@@ -11,7 +11,8 @@
 @interface ClassDetailViewController : MyViewController
 
 
-@property(nonatomic,strong)NSString *category_id;
+@property(nonatomic,strong)NSString *category_p_id;//一级分类
+@property(nonatomic,strong)NSString *category_id;//二级分类
 
 
 @property(nonatomic,strong)UIButton *leftBtn;

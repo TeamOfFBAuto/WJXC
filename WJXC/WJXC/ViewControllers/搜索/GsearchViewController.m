@@ -11,7 +11,7 @@
 #import "SeachCustomTableViewCell.h"
 #import "ProductDetailViewController.h"
 
-@interface GsearchViewController ()<RefreshDelegate,UITableViewDataSource>
+@interface GsearchViewController ()<RefreshDelegate,UITableViewDataSource,UITextFieldDelegate>
 {
     UITextField *_tf;
     
@@ -62,7 +62,7 @@
     _tab.dataSource = self;
     [self.view addSubview:_tab];
     
-    [_tab showRefreshHeader:YES];
+//    [_tab showRefreshHeader:YES];
 }
 
 
@@ -123,6 +123,7 @@
     _tf = [[UITextField alloc]initWithFrame:CGRectMake(CGRectGetMaxX(imv.frame)+5, 0, backview.frame.size.width - 35 - 3, 30)];
     _tf.font = [UIFont systemFontOfSize:15];
     _tf.placeholder = @"请输入关键词";
+    _tf.delegate = self;
     [backview addSubview:_tf];
     
     
@@ -141,7 +142,11 @@
 
 
 -(void)gSearch{
+    
+    [_tf resignFirstResponder];
+    
     [_tab showRefreshHeader:YES];
+    
 }
 
 
@@ -188,6 +193,11 @@
 
 
 
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [self gSearch];
+    return YES;
+}
 
 
 @end

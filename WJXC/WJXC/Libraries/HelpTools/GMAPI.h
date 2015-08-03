@@ -216,4 +216,7 @@
 //获取所有的省份
 + (NSArray *)getAllProvince;
 
+
++ (NSString *)cityNameForId:(int)cityId;
+
 @end

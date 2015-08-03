@@ -13,7 +13,7 @@
 @property(nonatomic,strong)UILabel *leftLabel;
 
 
--(void)setLocationDataWithStr:(NSString *)city;
+-(void)setLocationDataWithCityStr:(NSString *)city provinceStr:(NSString *)province;
 
 
 @end

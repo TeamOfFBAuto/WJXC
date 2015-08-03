@@ -71,6 +71,9 @@
 //收藏商品
 #define SHOUCANGRODUCT @"/index.php?d=api&c=products&m=add_favor"
 
+//取消收藏
+#define QUXIAOSHOUCANG @"/index.php?d=api&c=products&m=cancel_favor"
+
 //搜索
 #define SEACHERPRODUCT @"/index.php?d=api&c=products&m=search_product"
 

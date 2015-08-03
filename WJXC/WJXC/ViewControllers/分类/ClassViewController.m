@@ -215,7 +215,7 @@
         
         NSString *imgUrl = [dic stringValueForKey:@"cover_pic"];
         UIImageView *imagev = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, viewWidth, viewWidth)];
-        [imagev sd_setImageWithURL:[NSURL URLWithString:imgUrl] placeholderImage:nil];
+        [imagev sd_setImageWithURL:[NSURL URLWithString:imgUrl] placeholderImage:[UIImage imageNamed:@"default.png"]];
         [view addSubview:imagev];
         
         UILabel *titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(imagev.frame), viewWidth, 20)];
@@ -243,11 +243,17 @@
     NSInteger row = cc.row;
     
     NSDictionary *dic = _dataArray[section];
+    
+    NSString *category_p_id = [dic stringValueForKey:@"category_id"];//一级分类
+    
     NSArray *child = [dic arrayValueForKey:@"child"];
     NSDictionary *detail = child[row];
     
+    NSString *category_id = [detail stringValueForKey:@"category_id"];//二级分类
+    
     ClassDetailViewController *ccc = [[ClassDetailViewController alloc]init];
-    ccc.category_id = [detail stringValueForKey:@"category_id"];
+    ccc.category_p_id = category_p_id;
+    ccc.category_id = category_id;
     ccc.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:ccc animated:YES];
     

@@ -47,31 +47,7 @@
     
     [self setMyViewControllerLeftButtonType:MyViewControllerLeftbuttonTypeBack WithRightButtonType:MyViewControllerRightbuttonTypeNull];
     self.myTitle = @"选择城市";
-    
-//    UIView *titleView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, 40)];
-//    
-//    //搜索条图片
-//    UIView *kuang=[[UIView alloc]initWithFrame:CGRectMake(6, 6, titleView.frame.size.width-100, 56/2)];
-//    kuang.layer.borderWidth = 0.5f;
-//    kuang.layer.cornerRadius = 4;
-//    kuang.layer.borderColor = [RGBCOLOR(122, 172, 0)CGColor];
-//    [titleView addSubview:kuang];
-//    
-//    //放大镜
-//    UIImageView *fdj = [[UIImageView alloc]initWithFrame:CGRectMake(8, 8, 13, 13)];
-//    [fdj setImage:[UIImage imageNamed:@"search_fangdajing.png"]];
-//    [kuang addSubview:fdj];
-//    
-//    _searchTextField=[[UITextField alloc]initWithFrame:CGRectMake(30+6,MY_MACRO_NAME? 6:12,kuang.frame.size.width - 40,58/2)];
-//    _searchTextField.delegate=self;
-//    _searchTextField.font=[UIFont systemFontOfSize:12.f];
-//    _searchTextField.placeholder=@"请输入城市名称";
-//    _searchTextField.returnKeyType=UIReturnKeySearch;
-//    _searchTextField.userInteractionEnabled = TRUE;
-//    [titleView addSubview:_searchTextField];
-//    
-//    
-//    self.navigationItem.titleView = titleView;
+
     
     
     
@@ -193,18 +169,23 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     NSArray *citiesArray = _citiesArray[indexPath.section];
     NSString *cityName = citiesArray[indexPath.row];
-    [self.delegate setLocationDataWithStr:cityName];
+    
+    NSString *provinceName = _provinceArray[indexPath.section];
+    
+    [self.delegate setLocationDataWithCityStr:cityName provinceStr:provinceName];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
 
 
+
+#pragma mark - 点击section选择直辖市
 -(void)chooseTheStr:(UIGestureRecognizer*)ges{
     NSLog(@"%s",__FUNCTION__);
     
      NSString *str = _provinceArray[ges.view.tag - 10];
     
-    [self.delegate setLocationDataWithStr:str];
+    [self.delegate setLocationDataWithCityStr:str provinceStr:str];
     [self.navigationController popViewControllerAnimated:YES];
     
     
@@ -354,10 +335,19 @@
     
 }
 
+
+
+#pragma mark - 点击热门城市
 -(void)hotCityClicked:(UIButton *)sender{
     NSString *str = [NSString stringWithFormat:@"%@市",sender.titleLabel.text];
     
-    [self.delegate setLocationDataWithStr:str];
+    int aa = [GMAPI cityIdForName:str];
+    NSString *aaa = [NSString stringWithFormat:@"%d",aa];
+    aaa = [aaa substringWithRange:NSMakeRange(0, 2)];
+    aaa = [aaa stringByAppendingString:@"00"];
+    aa = [aaa intValue];
+    NSString *ppp = [GMAPI cityNameForId:aa];
+    [self.delegate setLocationDataWithCityStr:str provinceStr:ppp];
     [self.navigationController popViewControllerAnimated:YES];
 }
 

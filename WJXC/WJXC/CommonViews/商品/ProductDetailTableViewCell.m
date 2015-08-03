@@ -110,7 +110,7 @@
             }
             
             UIImageView *imv = [[UIImageView alloc]initWithFrame:CGRectMake(10, 0, [width floatValue], [height_ floatValue])];
-            [imv l_setImageWithURL:[NSURL URLWithString:src] placeholderImage:nil];
+            [imv l_setImageWithURL:[NSURL URLWithString:src] placeholderImage:[UIImage imageNamed:@"default02.png"]];
             [self.contentView addSubview:imv];
             
             height = [height_ floatValue];

@@ -14,7 +14,7 @@
 #import "GCycleScrollView.h"
 #import "adverModel.h"
 #import "HuodongViewController.h"
-
+#import "GstartView.h"
 
 @interface HomeViewController ()<UITableViewDataSource,RefreshDelegate,GCycleScrollViewDelegate,GCycleScrollViewDatasource>
 {
@@ -41,7 +41,7 @@
     // Do any additional setup after loading the view.
     
     
-    _cellHeight = DEVICE_WIDTH * 0.35;
+    _cellHeight = 130;
     
     
     self.myTitle = @"万聚鲜城";
@@ -50,7 +50,7 @@
     
     self.leftLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 80, 40)];
     self.leftLabel.textColor = RGBCOLOR(124, 172, 0);
-    self.leftLabel.font = [UIFont systemFontOfSize:12];
+    self.leftLabel.font = [UIFont systemFontOfSize:15];
     [self.leftLabel addTaget:self action:@selector(pushToLocationChoose) tag:0];
     
     
@@ -72,7 +72,32 @@
     self.navigationItem.rightBarButtonItems = @[negativeSpacer,btn_right];
     
     
-    [self getjingweidu];
+    
+    if ([GMAPI cacheForKey:USERLocation]) {
+        
+        NSDictionary *dic = [GMAPI cacheForKey:USERLocation];
+        NSString *str;
+        if ([[dic stringValueForKey:@"city"]intValue] == 0) {
+            int theId = [[dic stringValueForKey:@"province"]intValue];
+            str = [GMAPI cityNameForId:theId];
+        }else{
+            int theId = [[dic stringValueForKey:@"city"]intValue];
+            str = [GMAPI cityNameForId:theId];
+        }
+        self.leftLabel.text = str;
+        
+        [self creatTableView];
+    }else{
+        
+        [self getjingweidu];
+        
+    }
+    
+    
+    
+    
+    
+    
     
     
     [self getScrollviewNetData];
@@ -96,17 +121,22 @@
     
     NSString *provinceStr = [_locationDic stringValueForKey:@"province"];
     
-    NSString *province_id = [NSString stringWithFormat:@"%d",[GMAPI cityIdForName:[_locationDic stringValueForKey:@"province"]]];
     NSString *city_id = [NSString stringWithFormat:@"%d",[GMAPI cityIdForName:[_locationDic stringValueForKey:@"city"]]];
     
     if ([provinceStr isEqualToString:@"北京市"]) {
         city_id = @"0";
     }
     
+    
+    NSDictionary *dic = [GMAPI cacheForKey:USERLocation];
+    
+    
     NSDictionary *parame = @{
                              @"is_recommend":@"1",
-                             @"province_id":province_id,
-                             @"city_id":city_id
+                             @"province_id":[dic stringValueForKey:@"province"],
+                             @"city_id":[dic stringValueForKey:@"city"],
+                             @"page":[NSString stringWithFormat:@"%d",_tableView.pageNum],
+                             @"perpage":@"10"
                              };
     [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodGet api:GET_PRODUCTlIST parameters:parame constructingBodyBlock:nil completion:^(NSDictionary *result) {
         NSLog(@"%@",result);
@@ -137,17 +167,20 @@
     
     NSString *provinceStr = [_locationDic stringValueForKey:@"province"];
     
-    NSString *province_id = [NSString stringWithFormat:@"%d",[GMAPI cityIdForName:[_locationDic stringValueForKey:@"province"]]];
     NSString *city_id = [NSString stringWithFormat:@"%d",[GMAPI cityIdForName:[_locationDic stringValueForKey:@"city"]]];
     
     if ([provinceStr isEqualToString:@"北京市"]) {
         city_id = @"0";
     }
     
+    NSDictionary *dic = [GMAPI cacheForKey:USERLocation];
+    
     NSDictionary *parame = @{
                              @"is_recommend":@"1",
-                             @"province_id":province_id,
-                             @"city_id":city_id
+                             @"province_id":[dic stringValueForKey:@"province"],
+                             @"city_id":[dic stringValueForKey:@"city"],
+                             @"page":[NSString stringWithFormat:@"%d",_tableView.pageNum],
+                             @"perpage":@"10"
                              };
     
     [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodGet api:GET_PRODUCTlIST parameters:parame constructingBodyBlock:nil completion:^(NSDictionary *result) {
@@ -192,7 +225,7 @@
     CGFloat height = 0;
     
     if (section == 0) {
-        height = DEVICE_WIDTH*66.0/750;
+        height = 35;
     }
     
     return height;
@@ -220,10 +253,36 @@
     
     ProductModel *model = _tableView.dataArray[indexPath.row];
     UIImageView *imv = [[UIImageView alloc]initWithFrame:CGRectMake(5, 5, DEVICE_WIDTH-10, DEVICE_WIDTH*0.35 -5)];
-    [imv sd_setImageWithURL:[NSURL URLWithString:model.cover_pic] placeholderImage:nil];
+    [imv sd_setImageWithURL:[NSURL URLWithString:model.cover_pic] placeholderImage:[UIImage imageNamed:@"default01.png"]];
     [cell.contentView addSubview:imv];
 
     
+    
+    UIView *infoView = [[UIView alloc]initWithFrame:CGRectMake(imv.frame.size.width*0.5, 0, imv.frame.size.width*0.5-10, imv.frame.size.height)];
+//    infoView.backgroundColor = [UIColor orangeColor];
+    [imv addSubview:infoView];
+    
+    //产品名
+    UILabel *ttLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 30, infoView.frame.size.width, 30) title:model.product_name font:12 align:NSTextAlignmentRight textColor:[UIColor blackColor]];
+    ttLabel.numberOfLines = 2;
+    [infoView addSubview:ttLabel];
+    
+    //价格
+    NSString *pp = [NSString stringWithFormat:@"￥%@",model.current_price];
+    UILabel *priceLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(ttLabel.frame)+5, ttLabel.frame.size.width, ttLabel.frame.size.height*0.5) title:pp font:12 align:NSTextAlignmentRight textColor:RGBCOLOR(241, 113, 0)];
+    [infoView addSubview:priceLabel];
+    
+    //评价星星
+    GstartView *cc = [[GstartView alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(priceLabel.frame)+5, 60, 13)];
+    cc.maxStartNum = 5;
+    cc.startNum = [model.star_level floatValue];
+    [cc updateStartNum];
+    [infoView addSubview:cc];
+    
+    //评价
+    NSString *ping = [NSString stringWithFormat:@"已有%@人评价",model.comment_num];
+    UILabel *pingjiaLabel = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMaxX(cc.frame), cc.frame.origin.y, infoView.frame.size.width - cc.frame.size.width, 15) title:ping font:12 align:NSTextAlignmentRight textColor:RGBCOLOR(121,170,0)];
+    [infoView addSubview:pingjiaLabel];
     
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
@@ -246,12 +305,14 @@
 }
 
 - (UIView *)viewForHeaderInSection:(NSInteger)section tableView:(UITableView *)tableView{
-    UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, DEVICE_WIDTH*66.0/750)];
-    UIImageView *imv = [[UIImageView alloc]initWithFrame:view.bounds];
-    [imv setImage:[UIImage imageNamed:@"homepage_jingxuan.png"]];
-    [view addSubview:imv];
+    UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, 35)];
+    view.backgroundColor = [UIColor whiteColor];
+    UIView *line = [[UIView alloc]initWithFrame:CGRectMake(2.5, 6, 2, 30)];
+    line.backgroundColor = RGBCOLOR(123, 170, 0);
+    [view addSubview:line];
+    UILabel *tt = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMaxX(line.frame)+5, line.frame.origin.y, 60, line.frame.size.height) title:@"精选" font:15 align:NSTextAlignmentLeft textColor:[UIColor blackColor]];
+    [view addSubview:tt];
     
-
     return view;
 }
 
@@ -325,12 +386,9 @@
         
         adverModel *amodel = _TopDataArray[index];
         NSString *str = amodel.cover_pic;
-        [imv sd_setImageWithURL:[NSURL URLWithString:str] placeholderImage:nil];
+        [imv sd_setImageWithURL:[NSURL URLWithString:str] placeholderImage:[UIImage imageNamed:@"default02.png"]];
         
         if ([amodel.type intValue] == 2) {//秒杀
-            
-            CGFloat left_right = 30;
-            CGFloat up_down = 30;
             
             
             NSDictionary *relative_info = amodel.relative_info;
@@ -468,17 +526,31 @@
     
     NSString *theString;
     
+    int cityId = 0;
+    int procinceId = 0;
+    
     if ([[dic stringValueForKey:@"province"]isEqualToString:@"北京市"] || [[dic stringValueForKey:@"province"]isEqualToString:@"上海市"] || [[dic stringValueForKey:@"province"]isEqualToString:@"天津市"] || [[dic stringValueForKey:@"province"]isEqualToString:@"重庆市"]) {
         theString = [dic stringValueForKey:@"province"];
+        procinceId = [GMAPI cityIdForName:theString];
+        cityId = 0;
     }else{
         theString = [dic stringValueForKey:@"city"];
-        
-        
+        procinceId =[GMAPI cityIdForName:[dic stringValueForKey:@"province"]];
+        cityId = [GMAPI cityIdForName:[dic stringValueForKey:@"city"]];
     }
     
     self.leftLabel.text = theString;
     int city_id = [GMAPI cityIdForName:theString];
     NSLog(@"city_id : %d",city_id);
+    
+    
+    
+    NSDictionary *cachDic = @{
+                          @"province":[NSString stringWithFormat:@"%d",procinceId],
+                          @"city":[NSString stringWithFormat:@"%d",cityId]
+                          };
+    [GMAPI cache:cachDic ForKey:USERLocation];
+    
     
     
     [self creatTableView];
@@ -507,14 +579,32 @@
 
 
 
--(void)setLocationDataWithStr:(NSString *)city{
+-(void)setLocationDataWithCityStr:(NSString *)city provinceStr:(NSString *)province{
     self.leftLabel.text = city;
     
-    
-//    int cityId = [GMAPI findIdFromName:self.leftLabel.text];
     int cityId = [GMAPI cityIdForName:self.leftLabel.text];
     
     NSLog(@"我擦 %d",cityId);
+    
+    
+    
+    NSString *pStr = [NSString stringWithFormat:@"%d",[GMAPI cityIdForName:province]];
+    NSString *cStr = [NSString stringWithFormat:@"%d",[GMAPI cityIdForName:city]];
+    
+    if ([pStr isEqualToString:cStr]) {
+        cStr = @"0";
+    }
+    
+    NSDictionary *dic = @{
+                      @"province":pStr,
+                      @"city":cStr
+                      };
+    
+    
+    [GMAPI cache:dic ForKey:USERLocation];
+    
+    
+    [_tableView showRefreshHeader:YES];
     
     
 }

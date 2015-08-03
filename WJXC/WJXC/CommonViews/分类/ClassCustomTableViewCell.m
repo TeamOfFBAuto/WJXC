@@ -65,6 +65,8 @@
         gouwuche.tag = 300+theIndexPath.row;
     }else if ([self.type isEqualToString:@"热卖"]){
         gouwuche.tag = -300-theIndexPath.row;
+    }else if ([self.type isEqualToString:@"价格"]){
+        gouwuche.tag = 300 + theIndexPath.row +100000;
     }
     
     [gouwuche addTarget:self action:@selector(gouwucheBtnClicked:) forControlEvents:UIControlEventTouchUpInside];

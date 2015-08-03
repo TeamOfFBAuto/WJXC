@@ -47,6 +47,8 @@
 #define USER_UID @"useruid"
 #define USERINFO_MODEL @"USERINFO_MODEL" //存储在本地用户model
 
+#define USERLocation @"locationInfo"
+
 //两个登陆标识
 #define LOGIN_SERVER_STATE @"user_login_state" //登陆衣加衣服务器 no是未登陆  yes是已登陆
 #define LOGIN_RONGCLOUD_STATE @"rongcloudLoginState"//融云登陆状态

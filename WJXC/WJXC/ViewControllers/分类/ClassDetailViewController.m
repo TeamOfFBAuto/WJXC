@@ -11,6 +11,7 @@
 #import "ProductModel.h"
 #import "ClassCustomTableViewCell.h"
 #import "ProductDetailViewController.h"
+#import "Gbtn.h"
 
 @interface ClassDetailViewController ()<UIScrollViewDelegate,RefreshDelegate,UITableViewDataSource>
 {
@@ -21,8 +22,9 @@
     
     RefreshTableView *_tab0;
     RefreshTableView *_tab1;
+    RefreshTableView *_tab2;
     
-    UIButton *_priceBtn;
+    Gbtn *_priceBtn;
     
     ClassCustomTableViewCell *_tmpCell;
     
@@ -47,10 +49,11 @@
     
     NSString *tt1 = @"新品";
     NSString *tt2 = @"热卖";
+    NSString *tt3 = @"价格";
     
-    NSArray *titles = @[tt1,tt2];
+    NSArray *titles = @[tt1,tt2,tt3];
     int count = (int)titles.count;
-    CGFloat width = DEVICE_WIDTH / (count+1);
+    CGFloat width = DEVICE_WIDTH / 3.0;
     
     _buttonNum = count;
     
@@ -67,16 +70,39 @@
     
     for (int i = 0; i < count; i ++) {
         //横滑上方的按钮
-        UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [btn setTitle:titles[i] forState:UIControlStateNormal];
-        [self.view addSubview:btn];
-        btn.tag = 100 + i;
-        btn.frame = CGRectMake(width * i, 0, width, 40);
-        [btn setTitleColor:[UIColor colorWithHexString:@"646464"] forState:UIControlStateNormal];
-        [btn setTitleColor:DEFAULT_TEXTCOLOR forState:UIControlStateSelected];
-        [btn.titleLabel setFont:[UIFont systemFontOfSize:14]];
-        [btn addTarget:self action:@selector(clickToSelect:) forControlEvents:UIControlEventTouchUpInside];
-        btn.selected = YES;
+        
+        if (i == 2) {
+            _priceBtn = [Gbtn buttonWithType:UIButtonTypeCustom];
+            [_priceBtn setTitle:titles[i] forState:UIControlStateNormal];
+            [self.view addSubview:_priceBtn];
+            _priceBtn.tag = 100 + i;
+            _priceBtn.frame = CGRectMake(width * i, 0, width, 40);
+            [_priceBtn setTitleColor:[UIColor colorWithHexString:@"646464"] forState:UIControlStateNormal];
+            [_priceBtn setTitleColor:DEFAULT_TEXTCOLOR forState:UIControlStateSelected];
+            [_priceBtn.titleLabel setFont:[UIFont systemFontOfSize:14]];
+            [_priceBtn addTarget:self action:@selector(clickToSelect:) forControlEvents:UIControlEventTouchUpInside];
+            _priceBtn.selected = YES;
+            _priceBtn.paixu = @"升序";
+            
+            [_priceBtn setImage:[UIImage imageNamed:@"classify_top_jt1.png"] forState:UIControlStateNormal];
+            
+            [_priceBtn setImageEdgeInsets:UIEdgeInsetsMake(0, width - 30, 0, 0)];
+            
+        }else{
+            UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+            [btn setTitle:titles[i] forState:UIControlStateNormal];
+            [self.view addSubview:btn];
+            btn.tag = 100 + i;
+            btn.frame = CGRectMake(width * i, 0, width, 40);
+            [btn setTitleColor:[UIColor colorWithHexString:@"646464"] forState:UIControlStateNormal];
+            [btn setTitleColor:DEFAULT_TEXTCOLOR forState:UIControlStateSelected];
+            [btn.titleLabel setFont:[UIFont systemFontOfSize:14]];
+            [btn addTarget:self action:@selector(clickToSelect:) forControlEvents:UIControlEventTouchUpInside];
+            btn.selected = YES;
+        }
+        
+        
+        
         
         RefreshTableView *_table = [[RefreshTableView alloc]initWithFrame:CGRectMake(DEVICE_WIDTH * i, 0, DEVICE_WIDTH,_scroll.height)];
         _table.refreshDelegate = self;
@@ -92,22 +118,14 @@
             _tab1 = _table;
             _tab1.separatorStyle = UITableViewCellSeparatorStyleNone;
             [_tab1 showRefreshHeader:YES];
+        }else if (_table.tag == 202){
+            _tab2 = _table;
+            _tab2.separatorStyle = UITableViewCellSeparatorStyleNone;
+            [_tab2 showRefreshHeader:YES];
         }
         
     }
-    
-    
-    
-    _priceBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [_priceBtn setFrame:CGRectMake(DEVICE_WIDTH - (DEVICE_WIDTH/3), 0, DEVICE_WIDTH/3, 40)];
-    [_priceBtn setTitle:@"价格" forState:UIControlStateNormal];
-    [_priceBtn setTitleColor:[UIColor colorWithHexString:@"646464"] forState:UIControlStateNormal];
-    [_priceBtn.titleLabel setFont:[UIFont systemFontOfSize:14]];
-    [self.view addSubview:_priceBtn];
-    
-    
-    
-    
+  
     
     _indicator = [[UIView alloc]initWithFrame:CGRectMake(0, 38, width, 2)];
     _indicator.backgroundColor = DEFAULT_TEXTCOLOR;
@@ -250,7 +268,7 @@
     __weak typeof(_indicator)weakIndicator = _indicator;
     [UIView animateWithDuration:0.1 animations:^{
         
-        weakIndicator.left = DEVICE_WIDTH *2.0/3 / _buttonNum * (tag - 100);
+        weakIndicator.left = DEVICE_WIDTH / _buttonNum * (tag - 100);
     }];
 }
 
@@ -261,6 +279,23 @@
  */
 - (void)clickToSelect:(UIButton *)sender
 {
+    
+    if (sender.tag == 102) {//价格
+        
+        if (sender.selected) {
+            if ([_priceBtn.paixu isEqualToString:@"升序"]) {
+                _priceBtn.paixu = @"降序";
+                [_priceBtn setImage:[UIImage imageNamed:@"classify_top_jt2.png"] forState:UIControlStateNormal];
+            }else if ([_priceBtn.paixu isEqualToString:@"降序"]){
+                _priceBtn.paixu = @"升序";
+                [_priceBtn setImage:[UIImage imageNamed:@"classify_top_jt1.png"] forState:UIControlStateNormal];
+            }
+            [_tab2 showRefreshHeader:YES];
+        }
+        
+    }
+    
+    
     [self controlSelectedButtonTag:(int)sender.tag];
     
     __weak typeof(_scroll)weakScroll = _scroll;
@@ -268,6 +303,11 @@
         
         [weakScroll setContentOffset:CGPointMake(DEVICE_WIDTH * (sender.tag - 100), 0)];
     }];
+    
+    
+    
+    
+    
 }
 
 - (void)clickToComment:(UIButton *)sender
@@ -293,6 +333,8 @@
                    @"is_new":@"1",
                    @"province_id":province_id,
                    @"city_id":city_id,
+                   @"category_p_id":self.category_p_id,
+                   @"category_id":self.category_id,
                    @"page":[NSString stringWithFormat:@"%d",tableView.pageNum],
                    @"perpage":@"10"
                    };
@@ -301,9 +343,42 @@
                    @"is_hot":@"1",
                    @"province_id":province_id,
                    @"city_id":city_id,
+                   @"category_p_id":self.category_p_id,
+                   @"category_id":self.category_id,
                    @"page":[NSString stringWithFormat:@"%d",tableView.pageNum],
                    @"perpage":@"10"
                    };
+    }else if (tableView.tag == 202){//价格
+        
+        if ([_priceBtn.paixu isEqualToString:@"升序"]) {
+            parame = @{
+                       @"is_hot":@"1",
+                       @"is_new":@"1",
+                       @"province_id":province_id,
+                       @"city_id":city_id,
+                       @"category_p_id":self.category_p_id,
+                       @"category_id":self.category_id,
+                       @"page":[NSString stringWithFormat:@"%d",tableView.pageNum],
+                       @"perpage":@"10",
+                       @"order":@"product_price",
+                       @"direction":@"asc"
+                       };
+        }else if ([_priceBtn.paixu isEqualToString:@"降序"]){
+            parame = @{
+                       @"is_hot":@"1",
+                       @"is_new":@"1",
+                       @"province_id":province_id,
+                       @"city_id":city_id,
+                       @"category_p_id":self.category_p_id,
+                       @"category_id":self.category_id,
+                       @"page":[NSString stringWithFormat:@"%d",tableView.pageNum],
+                       @"perpage":@"10",
+                       @"order":@"product_price",
+                       @"direction":@"desc"
+                       };
+        }
+        
+        
     }
     
     
@@ -323,6 +398,8 @@
             [_tab0 reloadData:productModelArray pageSize:10];
         }else if (tableView.tag == 201){
             [_tab1 reloadData:productModelArray pageSize:10];
+        }else if (tableView.tag == 202){
+            [_tab2 reloadData:productModelArray pageSize:10];
         }
         
     } failBlock:^(NSDictionary *result) {
@@ -354,6 +431,14 @@
                    @"page":[NSString stringWithFormat:@"%d",tableView.pageNum],
                    @"perpage":@"10"
                    };
+    }else if (tableView.tag == 202){//价格
+        parame = @{
+                   @"is_hot":@"1",
+                   @"province_id":province_id,
+                   @"city_id":city_id,
+                   @"page":[NSString stringWithFormat:@"%d",tableView.pageNum],
+                   @"perpage":@"10"
+                   };
     }
 
     
@@ -371,6 +456,8 @@
             [_tab0 reloadData:productModelArray pageSize:10];
         }else if (tableView.tag == 201){
             [_tab1 reloadData:productModelArray pageSize:10];
+        }else if (tableView.tag == 202){
+            [_tab2 reloadData:productModelArray pageSize:10];
         }
         
         
@@ -405,6 +492,10 @@
     }else if (tableView.tag == 201){
         cell.type = @"热卖";
         ProductModel *amodel = _tab1.dataArray[indexPath.row];
+        [cell loadCustomViewWithModel:amodel index:indexPath];
+    }else if (tableView.tag == 202){
+        cell.type = @"价格";
+        ProductModel *amodel = _tab2.dataArray[indexPath.row];
         [cell loadCustomViewWithModel:amodel index:indexPath];
     }
     
@@ -444,6 +535,9 @@
     }else if (tableView.tag == 201){
         ProductModel *amodel = _tab1.dataArray[indexPath.row];
         height = [_tmpCell loadCustomViewWithModel:amodel index:indexPath];
+    }else if (tableView.tag == 202){
+        ProductModel *amodel = _tab2.dataArray[indexPath.row];
+        height = [_tmpCell loadCustomViewWithModel:amodel index:indexPath];
     }
 
     NSLog(@"-------------------%f",height);
@@ -457,6 +551,8 @@
         amodel = _tab0.dataArray[indexPath.row];
     }else if (tableView.tag == 201){
         amodel = _tab1.dataArray[indexPath.row];
+    }else if (tableView.tag == 202){
+        amodel = _tab2.dataArray[indexPath.row];
     }
     
     ProductDetailViewController *cc = [[ProductDetailViewController alloc]init];
@@ -475,8 +571,10 @@
     
     if (index>0) {//新品
         aModel = _tab0.dataArray[index - 300];
-    }else{
+    }else if(index<0){
         aModel = _tab1.dataArray[-index - 300];
+    }else if (index >100000){
+        aModel = _tab2.dataArray[index - 100000 - 300];
     }
     
     
