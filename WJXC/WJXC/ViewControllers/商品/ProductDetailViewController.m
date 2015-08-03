@@ -21,6 +21,8 @@
     
     ProductDetailModel *_theProductModel;//数据源
     
+    ProductModel *_gouwucheModel;//加入购物车Model
+    
     ProductDetailTableViewCell *_tmpCell;
     
     int _theNum;
@@ -182,10 +184,11 @@
     [jiaruBtn setTitle:@"加入购物车" forState:UIControlStateNormal];
     jiaruBtn.titleLabel.textColor = [UIColor whiteColor];
     jiaruBtn.titleLabel.font = [UIFont systemFontOfSize:13];
-    [jiaruBtn setFrame:CGRectMake(CGRectGetMaxX(lianximaijiaBtn.frame)+12, lianximaijiaBtn.frame.origin.y+5, 110,31)];
+    [jiaruBtn setFrame:CGRectMake(DEVICE_WIDTH - 210, lianximaijiaBtn.frame.origin.y+5, 110,31)];
     jiaruBtn.layer.cornerRadius = 4;
     jiaruBtn.layer.masksToBounds = YES;
     jiaruBtn.backgroundColor = RGBCOLOR(247, 143, 0);
+    [jiaruBtn addTarget:self action:@selector(jiarugouwuche) forControlEvents:UIControlEventTouchUpInside];
     [downView addSubview:jiaruBtn];
     
     
@@ -354,7 +357,7 @@
 }
 
 
-#pragma mark - 购物车
+#pragma mark - 跳转购物车
 
 -(void)gouwuche{
     
@@ -389,6 +392,12 @@
     NSString *msg = [NSString stringWithFormat:@"拨打:%@",phoneNum];
     UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:msg delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
     [alert show];
+}
+
+#pragma mark - 加入购物车
+
+-(void)jiarugouwuche{
+    
 }
 
 #pragma - mark UIAlertViewDelegate <NSObject>
