@@ -19,6 +19,8 @@
     
     ProductDetailModel *_theProductModel;//数据源
     
+    ProductModel *_gouwucheModel;//加入购物车Model
+    
     ProductDetailTableViewCell *_tmpCell;
     
     int _theNum;

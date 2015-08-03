@@ -24,7 +24,9 @@
 @property(nonatomic,strong)NSString *bad_comment_num;
 @property(nonatomic,strong)NSArray *product_desc;
 @property(nonatomic,strong)NSArray *image;
+@property(nonatomic,strong)NSString *add_time;
 @property(nonatomic,strong)NSString *discount;
+@property(nonatomic,strong)NSString *cover_pic;
 
 
 @end
