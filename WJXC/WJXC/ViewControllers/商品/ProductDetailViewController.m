@@ -12,6 +12,7 @@
 #import "ProductCommentViewController.h"
 #import "RCDChatViewController.h"
 #import "ProductModel.h"
+#import "ShoppingCarController.h"
 
 @interface ProductDetailViewController ()<GCycleScrollViewDelegate,GCycleScrollViewDatasource,UITableViewDataSource,UITableViewDelegate>
 {
@@ -85,9 +86,9 @@
         
         _theProductModel = [[ProductDetailModel alloc]initWithDictionary:detail];
         
+        _gouwucheModel = [[ProductModel alloc]initWithDictionary:detail];
         
         [_tableView reloadData];
-        
         
         
     } failBlock:^(NSDictionary *result) {
@@ -361,7 +362,11 @@
 
 -(void)gouwuche{
     
+    [self.navigationController popToRootViewControllerAnimated:NO];
     
+    UITabBarController *tabbarVc = ROOTVIEWCONTROLLER;
+    
+    tabbarVc.selectedIndex = 2;
 }
 
 /**
@@ -398,6 +403,8 @@
 
 -(void)jiarugouwuche{
     
+    
+    [self clickToAddProduct];
 }
 
 #pragma - mark UIAlertViewDelegate <NSObject>
@@ -417,7 +424,7 @@
  */
 - (void)clickToAddProduct
 {
-    ProductModel *aModel = nil;
+    ProductModel *aModel = _gouwucheModel;
     
     int product_num = 1;//测试
     NSString *authcode = [GMAPI getAuthkey];
@@ -426,7 +433,7 @@
         
         [[DBManager shareInstance]insertProduct:aModel];
         
-        [LTools showMBProgressWithText:@"添加购物车成功" addToView:self.view];
+        [LTools showMBProgressWithText:@"添加成功" addToView:self.view];
         
         [[NSNotificationCenter defaultCenter]postNotificationName:NOTIFICATION_UPDATE_TO_CART object:nil];
         
