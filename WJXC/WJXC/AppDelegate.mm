@@ -17,12 +17,15 @@
 #import "BMapKit.h"//百度地图
 
 
-@interface AppDelegate ()<UMFeedbackDataDelegate,GgetllocationDelegate,BMKGeneralDelegate,WXApiDelegate,RCIMClientReceiveMessageDelegate,RCIMUserInfoDataSource>
+@interface AppDelegate ()<UMFeedbackDataDelegate,GgetllocationDelegate,BMKGeneralDelegate,WXApiDelegate,RCIMReceiveMessageDelegate,RCIMUserInfoDataSource>
 {
     GMAPI *mapApi;
     LocationBlock _locationBlock;
     BMKMapManager* _mapManager;
     CLLocationManager *_locationManager;
+    
+    int _getRongTokenTime;//获取融云token次数
+    NSTimer *_getRongTokenTimer;//获取融云token计时器
 }
 @end
 
@@ -39,28 +42,19 @@
     //融云
     
     [[RCIM sharedRCIM] initWithAppKey:RONGCLOUD_IM_APPKEY];
-
-    [[RCIMClient sharedRCIMClient]setReceiveMessageDelegate:self object:nil];
+    
+    [[RCIM sharedRCIM]setReceiveMessageDelegate:self];
     
     [[RCIM sharedRCIM]setUserInfoDataSource:self];//用户信息提供者
     
     //头像样式
     [[RCIM sharedRCIM] setGlobalMessageAvatarStyle:RC_USER_AVATAR_CYCLE];
     
-    NSString *userToken = @"/Sz7uqK7aG1gU6EbC/qpUMW7g/8tugX5lVlJm8yP1kDNAYEW20rO9BtBJhTxqMKd4YdprT6mI1k=";
+    //开始融云登录
+    [self startLoginRongTimer];
     
-    [[RCIMClient sharedRCIMClient]connectWithToken:userToken success:^(NSString *userId) {
-        
-        NSLog(@"登录融云 userId %@",userId);
-        
-    } error:^(RCConnectErrorCode status) {
-        
-        NSLog(@"RCConnectErrorCode %ld",status);
-        
-    } tokenIncorrect:^{
-        
-        NSLog(@"token不对");
-    }];
+    //监控登录通知
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(startLoginRongTimer) name:NOTIFICATION_LOGIN object:nil];
     
 #pragma mark 友盟
     [self umengShare];
@@ -259,12 +253,13 @@
         PayResp *response = (PayResp *)resp;
         
         BOOL result = NO;
+        NSString *errInfo = nil;
         switch (response.errCode) {
             case WXSuccess:
             {
                 //服务器端查询支付通知或查询API返回的结果再提示成功
                 NSLog(@"支付成功");
-                
+                errInfo = @"支付成功";
                 result = YES;
             }
                 break;
@@ -272,23 +267,27 @@
             case WXErrCodeSentFail:
             {
                 NSLog(@"1、可能的原因：签名错误、未注册APPID、项目设置APPID不正确、注册的APPID与设置的不匹配、其他异常等.\n2、发送失败");
-
+                errInfo = @"微信支付异常";
             }
                 break;
             case WXErrCodeUserCancel:
                 NSLog(@"用户取消支付");
+                errInfo = @"用户取消支付";
+
                 break;
             case WXErrCodeAuthDeny:
 
                 NSLog(@"授权失败");
+                errInfo = @"微信支付授权失败";
                 break;
             default:
                 NSLog(@"支付失败， retcode=%d",resp.errCode);
                 
+                errInfo = @"微信支付失败";
                 break;
         }
         //微信支付通知
-        NSDictionary *params = @{@"result":[NSNumber numberWithBool:result]};
+        NSDictionary *params = @{@"result":[NSNumber numberWithBool:result],@"erroInfo":errInfo};
         [[NSNotificationCenter defaultCenter]postNotificationName:NOTIFICATION_PAY_WEIXIN_RESULT object:nil userInfo:params];
     }
 }
@@ -448,14 +447,19 @@
     [LTools updateTabbarUnreadMessageNumber];
 }
 
-#pragma - mark RCIMClientReceiveMessageDelegate
-
-- (void)onReceived:(RCMessage *)message left:(int)nLeft object:(id)object
+#pragma - mark RCIMReceiveMessageDelegate <NSObject>
+/**
+ 接收消息到消息后执行。
+ 
+ @param message 接收到的消息。
+ @param left    剩余消息数.
+ */
+- (void)onRCIMReceiveMessage:(RCMessage *)message left:(int)left
 {
-    NSLog(@"RCIMClientReceiveMessageDelegate %d",nLeft);
+    NSLog(@"RCIMReceiveMessageDelegate %d",left);
     //接受到消息 更新未读消息
     
-    if (0 == nLeft) {
+    if (0 == left) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [UIApplication sharedApplication].applicationIconBadgeNumber = [UIApplication sharedApplication].applicationIconBadgeNumber+1;
             
@@ -464,8 +468,26 @@
         });
         
     }
-    
 }
+
+#pragma - mark RCIMClientReceiveMessageDelegate
+
+//- (void)onReceived:(RCMessage *)message left:(int)nLeft object:(id)object
+//{
+//    NSLog(@"RCIMClientReceiveMessageDelegate %d",nLeft);
+//    //接受到消息 更新未读消息
+//    
+//    if (0 == nLeft) {
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            [UIApplication sharedApplication].applicationIconBadgeNumber = [UIApplication sharedApplication].applicationIconBadgeNumber+1;
+//            
+//            [LTools updateTabbarUnreadMessageNumber];
+//            
+//        });
+//        
+//    }
+//    
+//}
 
 
 #pragma - mark RCIMUserInfoDataSource <NSObject>
@@ -578,5 +600,96 @@
     }
 }
 
+
+#pragma - mark 获取融云token
+
+- (void)getRongCloudToken
+{
+    if (_getRongTokenTime == 0) {
+        
+        [self stopRongTimer];
+        
+        return;
+    }
+    
+    _getRongTokenTime --;
+    
+    NSString *userToken = [LTools cacheForKey:USER_RONGCLOUD_TOKEN];
+    
+    if (userToken.length) {
+        
+        [self loginRongCloudWithToken:userToken];
+        
+        return;
+    }
+
+    NSString *user_id = [GMAPI getUid];
+    
+    if (!user_id || user_id.length == 0) {
+        
+        return;
+    }
+    
+    __weak typeof(self)weakSelf = self;
+    NSString *user_name = [GMAPI getUsername];
+    NSString *icon = [GMAPI getUerHeadImageUrl];
+    NSDictionary *params = @{@"user_id":user_id,
+                             @"name":user_name,
+                             @"portrait_uri":icon};
+    [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodGet api:USER_GET_TOKEN parameters:params constructingBodyBlock:nil completion:^(NSDictionary *result) {
+        
+        NSString *token = result[@"token"];
+        
+        [LTools cache:token ForKey:USER_RONGCLOUD_TOKEN];
+        
+        [weakSelf loginRongCloudWithToken:token];
+        
+    } failBlock:^(NSDictionary *result) {
+        
+        
+    }];
+}
+
+- (void)loginRongCloudWithToken:(NSString *)userToken
+{
+    if (userToken.length) {
+        
+        __weak typeof(self)weakSelf = self;
+
+        [[RCIMClient sharedRCIMClient]connectWithToken:userToken success:^(NSString *userId) {
+            
+            NSLog(@"登录成功融云 userId %@",userId);
+            
+            [weakSelf stopRongTimer];//停止计时
+            
+        } error:^(RCConnectErrorCode status) {
+            
+            NSLog(@"RCConnectErrorCode %ld",status);
+            
+        } tokenIncorrect:^{
+            
+            NSLog(@"token不对");
+            
+            [LTools cache:nil ForKey:USER_RONGCLOUD_TOKEN];
+        }];
+    }else
+    {
+        [self getRongCloudToken];
+    }
+
+}
+
+- (void)startLoginRongTimer
+{
+    [self getRongCloudToken];//先登录一次
+    _getRongTokenTime = 5;
+    _getRongTokenTimer = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(getRongCloudToken) userInfo:nil repeats:YES];
+}
+
+- (void)stopRongTimer
+{
+    [_getRongTokenTimer invalidate];
+    _getRongTokenTimer = nil;
+}
 
 @end

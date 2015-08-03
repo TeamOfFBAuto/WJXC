@@ -494,7 +494,6 @@
 -(void)setLocationDataWithStr:(NSString *)city{
     self.leftLabel.text = city;
     
-    
     int cityId = [GMAPI cityIdForName:self.leftLabel.text];
     
     NSLog(@"我擦 %d",cityId);

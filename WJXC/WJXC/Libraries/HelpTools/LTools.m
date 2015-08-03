@@ -539,6 +539,8 @@
         number_str = [NSString stringWithFormat:@"%d",unreadMsgCount];
     }
     
+    NSLog(@"--%d %d",[[RCIMClient sharedRCIMClient]getTotalUnreadCount],unreadMsgCount);
+    
     UINavigationController *unvc = [((UITabBarController *)ROOTVIEWCONTROLLER).viewControllers objectAtIndex:3];
     
     unvc.tabBarItem.badgeValue = number_str;

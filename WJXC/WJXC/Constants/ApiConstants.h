@@ -89,6 +89,8 @@
 //删除地址
 #define USER_ADDRESS_DELETE @"/index.php?d=api&c=user&m=del_user_address"
 
+//20、融云获取tokend
+#define USER_GET_TOKEN @"/index.php?d=api&c=chat&m=get_token"
 
 //商品相关接口=====================
 
@@ -138,9 +140,11 @@
 //51、查看订单支付状态
 #define ORDER_GET_ORDER_PAY @"/index.php?d=api&c=order&m=get_order_pay"
 
+//52、用户确认收货
+#define ORDER_RECEIVING_CONFIRM @"/index.php?d=api&c=order&m=receiving_confirm"
 
-
-//
+//53、用户取消或删除订单
+#define ORDER_HANDLE_ORDER @"/index.php?d=api&c=order&m=handle_order"
 
 
 #endif

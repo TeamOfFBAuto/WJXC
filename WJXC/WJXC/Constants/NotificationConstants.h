@@ -21,4 +21,12 @@
 
 #define NOTIFICATION_PAY_SUCCESS @"pay_success" //支付成功通知
 
+#define NOTIFICATION_BUY_AGAIN @"buy_again" //再次购买通知
+#define NOTIFICATION_RECIEVE_CONFIRM @"recieve_confirm" //确认收货通知
+#define NOTIFICATION_ORDER_CANCEL @"cancelOrder" //取消订单
+#define NOTIFICATION_ORDER_DEL @"delOrder" //删除订单
+
+#define NOTIFICATION_GO_TO_PAY @"goToPayOrder" //去支付订单
+
+
 #endif

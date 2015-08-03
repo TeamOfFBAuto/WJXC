@@ -107,6 +107,7 @@
 		13A147101B6A1CE600B6A3DB /* OrderModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 13A1470F1B6A1CE600B6A3DB /* OrderModel.m */; };
 		13A147131B6B6A6900B6A3DB /* order_chat@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 13A147111B6B6A6900B6A3DB /* order_chat@2x.png */; };
 		13A147141B6B6A6900B6A3DB /* order_phone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 13A147121B6B6A6900B6A3DB /* order_phone@2x.png */; };
+		13A147161B6B865000B6A3DB /* default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 13A147151B6B865000B6A3DB /* default@2x.png */; };
 		13A2087A1B5C96C800CC4EC0 /* ConfirmInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 13A208781B5C96C800CC4EC0 /* ConfirmInfoCell.m */; };
 		13A2087B1B5C96C800CC4EC0 /* ConfirmInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13A208791B5C96C800CC4EC0 /* ConfirmInfoCell.xib */; };
 		13A2087F1B5CD81C00CC4EC0 /* SelectAddressCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 13A2087D1B5CD81C00CC4EC0 /* SelectAddressCell.m */; };
@@ -380,6 +381,7 @@
 		13A1470F1B6A1CE600B6A3DB /* OrderModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrderModel.m; sourceTree = "<group>"; };
 		13A147111B6B6A6900B6A3DB /* order_chat@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "order_chat@2x.png"; sourceTree = "<group>"; };
 		13A147121B6B6A6900B6A3DB /* order_phone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "order_phone@2x.png"; sourceTree = "<group>"; };
+		13A147151B6B865000B6A3DB /* default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default@2x.png"; sourceTree = "<group>"; };
 		13A208771B5C96C800CC4EC0 /* ConfirmInfoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfirmInfoCell.h; sourceTree = "<group>"; };
 		13A208781B5C96C800CC4EC0 /* ConfirmInfoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConfirmInfoCell.m; sourceTree = "<group>"; };
 		13A208791B5C96C800CC4EC0 /* ConfirmInfoCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ConfirmInfoCell.xib; sourceTree = "<group>"; };
@@ -1543,6 +1545,7 @@
 		E3D080371B3D584500E4F87D /* AllImages */ = {
 			isa = PBXGroup;
 			children = (
+				13A147151B6B865000B6A3DB /* default@2x.png */,
 				E3CE7F691B4D4C660012940C /* 商品 */,
 				139456AC1B46296F00C45EB6 /* 登录 */,
 				139456B41B46296F00C45EB6 /* 分类 */,
@@ -1779,6 +1782,7 @@
 				139457081B46296F00C45EB6 /* login_top_back@2x.png in Resources */,
 				139457071B46296F00C45EB6 /* login_qq@2x.png in Resources */,
 				139457261B46296F00C45EB6 /* my_setting@2x.png in Resources */,
+				13A147161B6B865000B6A3DB /* default@2x.png in Resources */,
 				13FEA49D1B4BD590009BD01D /* AddressCell.xib in Resources */,
 				1375AD5B1B4D054D001631CE /* my_password_line_green.png in Resources */,
 				E3D07FED1B3D4A9100E4F87D /* UMSocialLocalizable.strings in Resources */,

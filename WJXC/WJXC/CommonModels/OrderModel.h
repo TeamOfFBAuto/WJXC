@@ -32,6 +32,8 @@
 //订单状态 1=》待付款 2=》已付款 3=》已发货 4=》已送达（已收货） 5=》已取消 6=》已删除
 @property(nonatomic,retain)NSString *status;
 
+@property(nonatomic,retain)NSString *is_comment;//是否已评论
+
 -(instancetype)initWithDictionary:(NSDictionary *)dic;
 
 @end

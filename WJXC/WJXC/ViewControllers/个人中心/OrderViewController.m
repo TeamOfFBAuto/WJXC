@@ -11,6 +11,7 @@
 #import "OrderModel.h"
 #import "PayActionViewController.h"//支付页面
 #import "OrderInfoViewController.h"//订单详情
+#import "ConfirmOrderController.h"//确认订单
 
 #define kPadding_One 1000 //去支付
 #define kPadding_Two 2000 //确认收货
@@ -31,7 +32,7 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
+    self.navigationController.navigationBarHidden = YES;
     self.navigationController.navigationBarHidden = NO;
 }
 
@@ -88,6 +89,9 @@
     [self controlSelectedButtonTag:100];
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(notificationForPaySuccess:) name:NOTIFICATION_PAY_SUCCESS object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(notificationForRecieveConfirm:) name:NOTIFICATION_RECIEVE_CONFIRM object:nil];//确认收货
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(notificationForCancelOrder:) name:NOTIFICATION_ORDER_CANCEL object:nil];//取消订单
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(notificationForDelOrder:) name:NOTIFICATION_ORDER_DEL object:nil];//删除订单
 }
 
 - (void)didReceiveMemoryWarning {
@@ -108,6 +112,33 @@
     
     [[self refreshTableForIndex:0]showRefreshHeader:YES];//待付款
     [[self refreshTableForIndex:1]showRefreshHeader:YES];//配送中
+}
+
+/**
+ *  确认收货通知
+ */
+- (void)notificationForRecieveConfirm:(NSNotification *)notify
+{
+    [[self refreshTableForIndex:1]showRefreshHeader:YES];//待配送
+    [[self refreshTableForIndex:2]showRefreshHeader:YES];//待评价
+}
+
+/**
+ *  取消订单通知
+ */
+- (void)notificationForCancelOrder:(NSNotification *)notify
+{
+    [[self refreshTableForIndex:0]showRefreshHeader:YES];//待付款
+    [[self refreshTableForIndex:1]showRefreshHeader:YES];//配送中
+}
+
+/**
+ *  删除订单通知
+ */
+- (void)notificationForDelOrder:(NSNotification *)notify
+{
+    [[self refreshTableForIndex:2]showRefreshHeader:YES];//待评价
+    [[self refreshTableForIndex:3]showRefreshHeader:YES];//已完成
 }
 
 #pragma - mark 网络请求
@@ -146,7 +177,7 @@
     
     NSDictionary *params = @{@"authcode":authey,
                              @"status":status,
-                             @"perpage":[NSNumber numberWithInt:20]};
+                             @"per_page":[NSNumber numberWithInt:20]};
     [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodGet api:ORDER_GET_MY_ORDERS parameters:params constructingBodyBlock:nil completion:^(NSDictionary *result) {
         
         NSArray *list = result[@"list"];
@@ -167,6 +198,30 @@
 #pragma - mark 事件处理
 
 /**
+ *  再次购买
+ *
+ *  @param sender
+ */
+- (void)buyAgain:(OrderModel *)order
+{
+    //先返回购物车,然后
+    
+    NSMutableArray *temp = [NSMutableArray arrayWithCapacity:order.products.count];
+    for (NSDictionary *aDic in order.products) {
+        
+        ProductModel *aModel = [[ProductModel alloc]initWithDictionary:aDic];
+        [temp addObject:aModel];
+    }
+    NSArray *productArr = temp;
+    ConfirmOrderController *confirm = [[ConfirmOrderController alloc]init];
+    confirm.productArray = productArr;
+    confirm.sumPrice = [order.total_fee floatValue];
+    [self.navigationController pushViewController:confirm animated:YES];
+    
+}
+
+
+/**
  *  去支付 确认收货 评价 再次购买
  *
  *  @param sender
@@ -180,22 +235,51 @@
     if (index >= kPadding_Four) {
         //再次购买
         kadding = kPadding_Four;
-//        OrderModel *aModel = [[self refreshTableForIndex:0].dataArray objectAtIndex:index - kadding];
-        
+        OrderModel *aModel = [[self refreshTableForIndex:3].dataArray objectAtIndex:index - kadding];
+        [self buyAgain:aModel];
         
     }else if (index >= kPadding_Three){
         //评价晒单
         kadding = kPadding_Three;
         
+        
     }else if (index >= kPadding_Two){
         //确认收货
         kadding = kPadding_Two;
+        
+        NSString *authey = [GMAPI getAuthkey];
+        if (authey.length == 0) {
+            return;
+        }
+        
+        OrderModel *aModel = [[self refreshTableForIndex:1].dataArray objectAtIndex:index - kadding];
+
+        __weak typeof(RefreshTableView)*weakTable = [self refreshTableForIndex:1];
+        __weak typeof(RefreshTableView)*weakTable2 = [self refreshTableForIndex:2];
+
+        NSDictionary *params = @{@"authcode":authey,
+                                 @"order_id":aModel.order_id};
+        [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodGet api:ORDER_RECEIVING_CONFIRM parameters:params constructingBodyBlock:nil completion:^(NSDictionary *result) {
+            
+            NSLog(@"result确认收货 %@",result);
+            
+            //刷新配送中列表
+            [weakTable showRefreshHeader:YES];
+            
+            //刷新待评价列表
+            [weakTable2 showRefreshHeader:YES];
+            
+        } failBlock:^(NSDictionary *result) {
+            
+            
+        }];
+
         
     }else if (index >= kPadding_One){
         //支付
         kadding = kPadding_One;
         OrderModel *aModel = [[self refreshTableForIndex:0].dataArray objectAtIndex:index - kPadding_One];
-        [self pushToPayPageWithOrderId:aModel.order_id orderNum:aModel.order_no sumPrice:[aModel.total_fee floatValue]];
+        [self pushToPayPageWithOrderId:aModel.order_id orderNum:aModel.order_no sumPrice:[aModel.total_fee floatValue] payStyle:[aModel.pay_type intValue]];
         
     }
     
@@ -207,11 +291,13 @@
 - (void)pushToPayPageWithOrderId:(NSString *)orderId
                         orderNum:(NSString *)orderNum
                         sumPrice:(CGFloat)sumPrice
+                        payStyle:(int)payStyle
 {
     PayActionViewController *pay = [[PayActionViewController alloc]init];
     pay.orderId = orderId;
     pay.orderNum = orderNum;
     pay.sumPrice = sumPrice;
+    pay.payStyle = payStyle;
     [self.navigationController pushViewController:pay animated:YES];
 }
 
@@ -360,8 +446,14 @@
     [cell.commentButton addTarget:self action:@selector(clickToAction:) forControlEvents:UIControlEventTouchUpInside];
     
     RefreshTableView *table = (RefreshTableView *)tableView;
-    OrderModel *aModel = [table.dataArray objectAtIndex:indexPath.row];
-    [cell setCellWithModel:aModel];
+    
+    if (indexPath.row < table.dataArray.count) {
+        
+        OrderModel *aModel = [table.dataArray objectAtIndex:indexPath.row];
+        [cell setCellWithModel:aModel];
+    }
+    
+    
     return cell;
 }
 
