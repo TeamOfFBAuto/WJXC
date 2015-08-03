@@ -252,6 +252,7 @@
 		E3F1A0311B6FC29000102989 /* Gbtn.m in Sources */ = {isa = PBXBuildFile; fileRef = E3F1A0301B6FC29000102989 /* Gbtn.m */; };
 		E3F1A0341B6FDE1A00102989 /* default01@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E3F1A0321B6FDE1A00102989 /* default01@2x.png */; };
 		E3F1A0351B6FDE1A00102989 /* default02@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E3F1A0331B6FDE1A00102989 /* default02@2x.png */; };
+		E3F1A0701B70039800102989 /* AddCommentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E3F1A06F1B70039800102989 /* AddCommentViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -694,6 +695,8 @@
 		E3F1A0301B6FC29000102989 /* Gbtn.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Gbtn.m; sourceTree = "<group>"; };
 		E3F1A0321B6FDE1A00102989 /* default01@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default01@2x.png"; sourceTree = "<group>"; };
 		E3F1A0331B6FDE1A00102989 /* default02@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default02@2x.png"; sourceTree = "<group>"; };
+		E3F1A06E1B70039800102989 /* AddCommentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddCommentViewController.h; sourceTree = "<group>"; };
+		E3F1A06F1B70039800102989 /* AddCommentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddCommentViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1378,6 +1381,8 @@
 				E3C15FDC1B4CDC2800C30039 /* ProductDetailViewController.m */,
 				E3CE7F771B4D59FE0012940C /* ProductCommentViewController.h */,
 				E3CE7F781B4D59FE0012940C /* ProductCommentViewController.m */,
+				E3F1A06E1B70039800102989 /* AddCommentViewController.h */,
+				E3F1A06F1B70039800102989 /* AddCommentViewController.m */,
 			);
 			path = "商品";
 			sourceTree = "<group>";
@@ -2030,6 +2035,7 @@
 				139457591B46730100C45EB6 /* Order.m in Sources */,
 				135F85E21B4CBE5C00B5E5AD /* SettingsViewController.m in Sources */,
 				13FEA49C1B4BD590009BD01D /* AddressCell.m in Sources */,
+				E3F1A0701B70039800102989 /* AddCommentViewController.m in Sources */,
 				E3D685191B5B61460048C044 /* GsearchViewController.m in Sources */,
 				E3CE7F651B4CFF980012940C /* GCycleScrollView.m in Sources */,
 				13FEA48D1B4BCE2A009BD01D /* LRefreshTableHeaderView.m in Sources */,

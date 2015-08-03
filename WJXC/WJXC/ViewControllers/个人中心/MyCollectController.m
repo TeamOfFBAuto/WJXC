@@ -9,6 +9,7 @@
 #import "MyCollectController.h"
 #import "CollectCell.h"
 #import "ProductModel.h"
+#import "ProductDetailViewController.h"
 
 @interface MyCollectController ()<RefreshDelegate,UITableViewDataSource>
 {
@@ -142,6 +143,14 @@
 - (void)didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSLog(@"单品详情");
+    
+    
+    ProductDetailViewController *cc = [[ProductDetailViewController alloc]init];
+    ProductModel *model = _table.dataArray[indexPath.row];
+    cc.product_id = model.product_id;
+    [self.navigationController pushViewController:cc animated:YES];
+    
+    
 }
 
 - (CGFloat)heightForRowIndexPath:(NSIndexPath *)indexPath

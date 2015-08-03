@@ -219,4 +219,14 @@
 
 + (NSString *)cityNameForId:(int)cityId;
 
+
+
+
+
+#pragma mark - 新加
+
++(NSString*)daojishi:(NSString*)test;
+
+
+
 @end

@@ -784,7 +784,35 @@
 
 
 
-
++(NSString*)daojishi:(NSString*)test{
+    
+    NSDate *date1 = [NSDate dateWithTimeIntervalSince1970:[test doubleValue]];
+    NSDate *date2 = [NSDate date];
+    double bb = [date1 timeIntervalSinceDate:date2];//date2距离date1的时长
+    
+    NSString *aa;
+    
+    NSInteger tt = bb;
+    
+    NSInteger day = tt/86400;
+    NSInteger hour = tt%86400/3600;
+    NSInteger min = tt%86400%3600/60;
+    NSInteger ss = tt%60;
+    
+    aa = [NSString stringWithFormat:@"%ld天%ld时%ld分%ld秒",day,hour,min,ss];
+    
+    if (day ==0) {
+        aa = [NSString stringWithFormat:@"%ld时%ld分%ld秒",hour,min,ss];
+    }else if (day == 0 && hour == 0) {
+        aa = [NSString stringWithFormat:@"%ld分%ld秒",min,ss];
+    }else if (day == 0 && hour == 0 && min == 0) {
+        aa = [NSString stringWithFormat:@"%ld秒",ss];
+    }else if (day == 0 && hour == 0 && min == 0 && ss == 0) {
+        aa = @"已结束";
+    }
+    
+    return aa;
+}
 
 
 
