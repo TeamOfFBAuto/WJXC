@@ -156,7 +156,7 @@
 		E30D9F9B1B6F2D75007FF926 /* SeachCustomTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E30D9F9A1B6F2D75007FF926 /* SeachCustomTableViewCell.m */; };
 		E34099821B62126500FF5257 /* GtopScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = E34099811B62126500FF5257 /* GtopScrollView.m */; };
 		E34099861B6245BD00FF5257 /* gbtnGray@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E34099841B6245BD00FF5257 /* gbtnGray@2x.png */; };
-		E34099871B6245BD00FF5257 /* gBtnWhite@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E34099851B6245BD00FF5257 /* gBtnWhite@2x.png */; };
+		E34099871B6245BD00FF5257 /* gbtnWhite@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E34099851B6245BD00FF5257 /* gbtnWhite@2x.png */; };
 		E340998B1B6271CB00FF5257 /* ClassView.m in Sources */ = {isa = PBXBuildFile; fileRef = E340998A1B6271CB00FF5257 /* ClassView.m */; };
 		E340998E1B6272F000FF5257 /* ClassDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E340998D1B6272F000FF5257 /* ClassDetailViewController.m */; };
 		E35015041B677E5000A6B9DE /* homepage_qiangou_bottom_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = E35015031B677E5000A6B9DE /* homepage_qiangou_bottom_bg.png */; };
@@ -480,7 +480,7 @@
 		E34099801B62126500FF5257 /* GtopScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GtopScrollView.h; sourceTree = "<group>"; };
 		E34099811B62126500FF5257 /* GtopScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GtopScrollView.m; sourceTree = "<group>"; };
 		E34099841B6245BD00FF5257 /* gbtnGray@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gbtnGray@2x.png"; sourceTree = "<group>"; };
-		E34099851B6245BD00FF5257 /* gBtnWhite@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gBtnWhite@2x.png"; sourceTree = "<group>"; };
+		E34099851B6245BD00FF5257 /* gbtnWhite@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gbtnWhite@2x.png"; sourceTree = "<group>"; };
 		E34099891B6271CB00FF5257 /* ClassView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClassView.h; sourceTree = "<group>"; };
 		E340998A1B6271CB00FF5257 /* ClassView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ClassView.m; sourceTree = "<group>"; };
 		E340998C1B6272F000FF5257 /* ClassDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClassDetailViewController.h; sourceTree = "<group>"; };
@@ -1270,7 +1270,7 @@
 			isa = PBXGroup;
 			children = (
 				E34099841B6245BD00FF5257 /* gbtnGray@2x.png */,
-				E34099851B6245BD00FF5257 /* gBtnWhite@2x.png */,
+				E34099851B6245BD00FF5257 /* gbtnWhite@2x.png */,
 			);
 			path = "分类";
 			sourceTree = "<group>";
@@ -1848,7 +1848,7 @@
 				13EB1EA01B623E3600E5CA57 /* my_√@2x.png in Resources */,
 				139457371B46296F00C45EB6 /* homepage_qianggou_back@2x.png in Resources */,
 				139457381B46296F00C45EB6 /* homepage_qianggou_banner_bottom_bg@2x.png in Resources */,
-				E34099871B6245BD00FF5257 /* gBtnWhite@2x.png in Resources */,
+				E34099871B6245BD00FF5257 /* gbtnWhite@2x.png in Resources */,
 				E3D0801C1B3D51A500E4F87D /* SVProgressHUD.bundle in Resources */,
 				1394574F1B46296F00C45EB6 /* register_password2@2x.PNG in Resources */,
 				139457431B46296F00C45EB6 /* homepage_bottom_home_green@2x.png in Resources */,
