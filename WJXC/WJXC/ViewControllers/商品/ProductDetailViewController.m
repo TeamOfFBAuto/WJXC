@@ -184,6 +184,7 @@
     jiaruBtn.layer.cornerRadius = 4;
     jiaruBtn.layer.masksToBounds = YES;
     jiaruBtn.backgroundColor = RGBCOLOR(247, 143, 0);
+    [jiaruBtn addTarget:self action:@selector(jiarugouwuche) forControlEvents:UIControlEventTouchUpInside];
     [downView addSubview:jiaruBtn];
     
     
@@ -350,12 +351,17 @@
 }
 
 
-#pragma mark - 购物车
+#pragma mark - 跳转购物车
 
 -(void)gouwuche{
     
 }
 
+#pragma mark - 加入购物车
+
+-(void)jiarugouwuche{
+    
+}
 
 
 
