@@ -180,7 +180,7 @@
     [jiaruBtn setTitle:@"加入购物车" forState:UIControlStateNormal];
     jiaruBtn.titleLabel.textColor = [UIColor whiteColor];
     jiaruBtn.titleLabel.font = [UIFont systemFontOfSize:13];
-    [jiaruBtn setFrame:CGRectMake(CGRectGetMaxX(lianximaijiaBtn.frame)+12, lianximaijiaBtn.frame.origin.y+5, 110,31)];
+    [jiaruBtn setFrame:CGRectMake(DEVICE_WIDTH - 210, lianximaijiaBtn.frame.origin.y+5, 110,31)];
     jiaruBtn.layer.cornerRadius = 4;
     jiaruBtn.layer.masksToBounds = YES;
     jiaruBtn.backgroundColor = RGBCOLOR(247, 143, 0);
