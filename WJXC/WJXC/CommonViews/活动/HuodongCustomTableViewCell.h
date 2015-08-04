@@ -7,13 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "HuodongModel.h"
+#import "HuodongDetailModel.h"
 
 @interface HuodongCustomTableViewCell : UITableViewCell
 
 
 
--(CGFloat)loadCustomViewWithModel:(HuodongModel*)theModel index:(NSIndexPath*)theIndexpath;
+-(CGFloat)loadCustomViewWithModel:(HuodongDetailModel*)theModel index:(NSIndexPath*)theIndexpath;
 
 
 @end

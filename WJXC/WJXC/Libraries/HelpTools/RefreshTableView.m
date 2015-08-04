@@ -251,6 +251,20 @@
     [self performSelector:@selector(finishReloadigData) withObject:nil afterDelay:0];
 }
 
+//成功加载数据 隐藏加载更多
+- (void)reloadDataSuccess:(NSArray *)data isHaveMore:(BOOL)isHave{
+    self.isHaveMoreData = isHave;
+    
+    if (self.isReloadData) {
+        
+        [self.dataArray removeAllObjects];
+        
+    }
+    [self.dataArray addObjectsFromArray:data];
+    
+    [self performSelector:@selector(finishReloadigDataAndHiddenMore) withObject:nil afterDelay:0];
+}
+
 //成功加载
 - (void)reloadData:(NSArray *)data pageSize:(int)pageSize
 {
@@ -378,6 +392,49 @@
     [self setValue:[NSNumber numberWithInteger:_dataArray.count] forKey:@"_dataArrayCount"];
 
 }
+
+
+//完成数据加载 隐藏加载更多
+- (void)finishReloadigDataAndHiddenMore
+{
+    NSLog(@"finishReloadigData完成加载");
+    
+    
+    
+    _reloading = NO;
+    if (_refreshHeaderView) {
+        [self.refreshHeaderView egoRefreshScrollViewDataSourceDidFinishedLoading:self];
+        self.isReloadData = NO;
+    }
+    
+    self.tableFooterView = nil;
+    
+    @try {
+        
+        [self reloadData];
+        
+    }
+    @catch (NSException *exception) {
+        
+        NSLog(@"%@",exception);
+    }
+    @finally {
+        
+    }
+    
+    [self stopLoading:100];
+    
+    self.userInteractionEnabled = YES;
+    
+    //设置数据个数
+    [self setValue:[NSNumber numberWithInteger:_dataArray.count] forKey:@"_dataArrayCount"];
+    
+}
+
+
+
+
+
 
 - (BOOL)egoRefreshTableDataSourceIsLoading:(UIView*)view
 {

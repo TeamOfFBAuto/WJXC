@@ -94,9 +94,17 @@
         _gouwucheModel = [[ProductModel alloc]initWithDictionary:detail];
         
         
+        _isfavor = _theProductModel.is_favor;
+        
+        if ([_isfavor intValue] == 0) {//未收藏
+            [_shoucangBtn setImage:[UIImage imageNamed:@"homepage_qianggou_collect.png"] forState:UIControlStateNormal];
+        }else if ([_isfavor intValue] == 1){//已收藏
+            [_shoucangBtn setImage:[UIImage imageNamed:@"homepage_qianggou_collect_y.png"] forState:UIControlStateNormal];
+        }
+        
         _shoucangBtn.hidden = NO;
         
-        _isfavor = _theProductModel.is_favor;
+        
         
         
         [_tableView reloadData];
@@ -198,7 +206,7 @@
     [jiaruBtn setTitle:@"加入购物车" forState:UIControlStateNormal];
     jiaruBtn.titleLabel.textColor = [UIColor whiteColor];
     jiaruBtn.titleLabel.font = [UIFont systemFontOfSize:13];
-    [jiaruBtn setFrame:CGRectMake(DEVICE_WIDTH - 210, lianximaijiaBtn.frame.origin.y+5, 110,31)];
+    [jiaruBtn setFrame:CGRectMake(CGRectGetMaxX(lianximaijiaBtn.frame)+40, lianximaijiaBtn.frame.origin.y+5, 110,31)];
     jiaruBtn.layer.cornerRadius = 4;
     jiaruBtn.layer.masksToBounds = YES;
     jiaruBtn.backgroundColor = RGBCOLOR(247, 143, 0);
@@ -501,9 +509,10 @@
             [GMAPI showAutoHiddenMBProgressWithText:[result stringValueForKey:@"msg"] addToView:self.view];
             
             _isfavor = @"1";
+            [_shoucangBtn setImage:[UIImage imageNamed:@"homepage_qianggou_collect_y.png"] forState:UIControlStateNormal];
             
         } failBlock:^(NSDictionary *result) {
-             NSLog(@"我操");
+            
         }];
     }else if ([_isfavor intValue] == 1){
         NSString *product_id = _theProductModel.product_id;
@@ -517,10 +526,10 @@
             [GMAPI showAutoHiddenMBProgressWithText:[result stringValueForKey:@"msg"] addToView:self.view];
             
             _isfavor = @"0";
+            [_shoucangBtn setImage:[UIImage imageNamed:@"homepage_qianggou_collect.png"] forState:UIControlStateNormal];
             
         } failBlock:^(NSDictionary *result) {
             
-            NSLog(@"我操");
         }];
     }
     

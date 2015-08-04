@@ -27,6 +27,8 @@ static int seconds = 60;//计时60s
     
     [self setMyViewControllerLeftButtonType:MyViewControllerLeftbuttonTypeBack WithRightButtonType:MyViewControllerRightbuttonTypeNull];
     
+    self.myTitle = @"注册";
+    
     [self creatUpView];
     
     [self creatDownInfoView];

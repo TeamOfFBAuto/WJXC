@@ -41,7 +41,7 @@
     
     UILabel *nameLabel = [[UILabel alloc]initWithFrame:CGRectMake(10, CGRectGetMaxY(imv.frame)+5, DEVICE_WIDTH - 10, 0)];
     nameLabel.font = [UIFont systemFontOfSize:13];
-    nameLabel.text = model.product_desc;
+    nameLabel.text = model.product_name;
     nameLabel.textColor = [UIColor blackColor];
     [nameLabel setMatchedFrame4LabelWithOrigin:CGPointMake(10, CGRectGetMaxY(imv.frame)+5) width:DEVICE_WIDTH - 10];
     [self.contentView addSubview:nameLabel];

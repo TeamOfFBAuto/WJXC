@@ -25,5 +25,6 @@
 @property(nonatomic,strong)NSString *avatar;
 @property(nonatomic,strong)NSArray *comment_pic;
 @property(nonatomic,strong)NSArray *comment_reply;
+@property(nonatomic,strong)NSString *is_anony;
 
 @end

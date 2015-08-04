@@ -8,6 +8,9 @@
 
 #import "AddCommentViewController.h"
 
+#import "AddCommentDetailViewController.h"
+#import "ProductDetailViewController.h"
+
 @interface AddCommentViewController ()<UITableViewDataSource,UITableViewDelegate>
 {
     UITableView *_tab;
@@ -69,7 +72,7 @@
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    return 2;
+    return 1;
 }
 
 
@@ -111,11 +114,17 @@
         btn.layer.borderColor = [RGBCOLOR(238, 115, 0)CGColor];
         [btn setTitleColor:RGBCOLOR(238, 115, 0) forState:UIControlStateNormal];
         [cell.contentView addSubview:btn];
+        
+        btn.tag = indexPath.row +100;
+        
+        [btn addTarget:self action:@selector(pingjiashaidan:) forControlEvents:UIControlEventTouchUpInside];
+        
+        
     }else{
-        UILabel *tt = [[UILabel alloc]initWithFrame:CGRectMake(10, 10, 80, 20) title:@"服务评价" font:15 align:NSTextAlignmentLeft textColor:[UIColor blackColor]];
-        [cell.contentView addSubview:tt];
-        UILabel *ttt = [[UILabel alloc]initWithFrame:CGRectMake(DEVICE_WIDTH - 120, 10, 100, 20) title:@"满意请给5星" font:12 align:NSTextAlignmentRight textColor:[UIColor blackColor]];
-        [cell.contentView addSubview:ttt];
+//        UILabel *tt = [[UILabel alloc]initWithFrame:CGRectMake(10, 10, 80, 20) title:@"服务评价" font:15 align:NSTextAlignmentLeft textColor:[UIColor blackColor]];
+//        [cell.contentView addSubview:tt];
+//        UILabel *ttt = [[UILabel alloc]initWithFrame:CGRectMake(DEVICE_WIDTH - 120, 10, 100, 20) title:@"满意请给5星" font:12 align:NSTextAlignmentRight textColor:[UIColor blackColor]];
+//        [cell.contentView addSubview:ttt];
     }
     
     
@@ -127,6 +136,28 @@
     return cell;
 }
 
+
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    ProductDetailViewController *cc = [[ProductDetailViewController alloc]init];
+    ProductModel *model = _dataArray[indexPath.row];
+    cc.product_id = model.product_id;
+    [self.navigationController pushViewController:cc animated:YES];
+}
+
+
+
+-(void)pingjiashaidan:(UIButton *)sender{
+    NSInteger tag = sender.tag - 100;
+    ProductModel *model = _dataArray[tag];
+    
+    AddCommentDetailViewController *cc = [[AddCommentDetailViewController alloc]init];
+    cc.theModel = model;
+    cc.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:cc animated:YES];
+    
+}
 
 
 

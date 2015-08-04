@@ -8,14 +8,17 @@
 
 #import "HuodongViewController.h"
 #import "HuodongCustomTableViewCell.h"
+#import "HuodongDetailModel.h"
+#import "RefreshTableView.h"
 
-@interface HuodongViewController ()<UITableViewDataSource,UITableViewDelegate>
+@interface HuodongViewController ()<UITableViewDataSource,RefreshDelegate>
 {
-    UITableView *_tab;
+    RefreshTableView *_tab;
     
-    NSArray *_dataArray;
     
     HuodongCustomTableViewCell *_tmpCell;
+    
+    HuodongDetailModel *_theModel;//数据源
     
 }
 @end
@@ -31,17 +34,32 @@
     
     self.myTitle = @"活动详情";
     
-    
+    [self creatTab];
 }
 
 
+#pragma mark - MyMethod
 
+-(void)prepareNetData{
+    NSDictionary *dic = @{
+                          @"activity_id":self.huodongId
+                          };
+    [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodGet api:HUODONGXIANGQING parameters:dic constructingBodyBlock:nil completion:^(NSDictionary *result) {
+        NSDictionary *detail = [result dictionaryValueForKey:@"detail"];
+        _theModel = [[HuodongDetailModel alloc]initWithDictionary:detail];
+        [_tab reloadDataSuccess:nil isHaveMore:NO];
+    } failBlock:^(NSDictionary *result) {
+        [_tab loadFail];
+    }];
+}
 
 -(void)creatTab{
-    _tab = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, DEVICE_HEIGHT) style:UITableViewStylePlain];
-    _tab.delegate = self;
+    _tab = [[RefreshTableView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, DEVICE_HEIGHT) style:UITableViewStylePlain];
+    _tab.separatorStyle = UITableViewCellSeparatorStyleNone;
+    _tab.refreshDelegate = self;
     _tab.dataSource = self;
     [self.view addSubview:_tab];
+    [_tab showRefreshHeader:YES];
     
 }
 
@@ -52,21 +70,29 @@
 }
 
 
-#pragma mark - UITableViewDelegate && UITableViewDataSource
+#pragma mark - RefreshDelegate && UITableViewDataSource
 
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return _dataArray.count;
+
+- (void)loadNewDataForTableView:(UITableView *)tableView{
+    [self prepareNetData];
 }
-
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+- (void)loadMoreDataForTableView:(UITableView *)tableView{
+    
+}
+- (CGFloat)heightForRowIndexPath:(NSIndexPath *)indexPath{
     if (!_tmpCell) {
         static  NSString *identifier = @"ddddd";
         _tmpCell = [[HuodongCustomTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
     }
     
-    CGFloat height = [_tmpCell loadCustomViewWithModel:_dataArray[indexPath.row] index:indexPath];
+    CGFloat height = [_tmpCell loadCustomViewWithModel:_theModel index:indexPath];
     return height;
-    
+}
+
+
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    NSArray *dataArray = _theModel.desc_format;
+    return dataArray.count+1;
 }
 
 
@@ -77,7 +103,16 @@
         cell = [[HuodongCustomTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
     }
     
-    [cell loadCustomViewWithModel:_dataArray[indexPath.row] index:indexPath];
+    
+    for (UIView *view in cell.contentView.subviews) {
+        [view removeFromSuperview];
+    }
+    
+    
+    [cell loadCustomViewWithModel:_theModel index:indexPath];
+    
+    
+    
     
     return cell;
     

@@ -264,6 +264,7 @@
     
     UIImageView *imv = [[UIImageView alloc]initWithFrame:CGRectMake(5, 5, DEVICE_WIDTH-10, 130 -5)];
     imv.backgroundColor = [UIColor whiteColor];
+    [imv setImage:[UIImage imageNamed:@"homepage_bg.png"]];
     [cell.contentView addSubview:imv];
     
     
@@ -331,7 +332,7 @@
 - (UIView *)viewForHeaderInSection:(NSInteger)section tableView:(UITableView *)tableView{
     UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, 35)];
     view.backgroundColor = [UIColor whiteColor];
-    UIView *line = [[UIView alloc]initWithFrame:CGRectMake(2.5, 6, 2, 30)];
+    UIView *line = [[UIView alloc]initWithFrame:CGRectMake(5, 6, 2, 30)];
     line.backgroundColor = RGBCOLOR(123, 170, 0);
     [view addSubview:line];
     UILabel *tt = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMaxX(line.frame)+5, line.frame.origin.y, 60, line.frame.size.height) title:@"精选" font:15 align:NSTextAlignmentLeft textColor:[UIColor blackColor]];
@@ -447,7 +448,7 @@
             
             UILabel *miaoshajiaLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(nameLabel.frame), backImv.frame.size.width, 24) title:nil font:15 align:NSTextAlignmentCenter textColor:[UIColor redColor]];
             [backImv addSubview:miaoshajiaLabel];
-            NSString *dld = [product_info stringValueForKey:@"current_price"];
+            NSString *dld = [relative_info stringValueForKey:@"seckill_price"];
             NSString *miaoshajia = [NSString stringWithFormat:@"秒杀价%@元",dld];
             NSMutableAttributedString  *aaa = [[NSMutableAttributedString alloc]initWithString:miaoshajia];
             [aaa addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15] range:NSMakeRange(0, 3)];
@@ -504,16 +505,17 @@
     adverModel *model = _TopDataArray[index];
     if ([model.type intValue] == 1) {//活动
         
-//        HuodongViewController *cc = [[HuodongViewController alloc]init];
-//        cc.hidesBottomBarWhenPushed = YES;
-//        [self.navigationController pushViewController:cc animated:YES];
-        
-        
-        //测试评价晒单
-        AddCommentViewController *cc = [[AddCommentViewController alloc]init];
-        cc.theModelArray = _tableView.dataArray;
+        HuodongViewController *cc = [[HuodongViewController alloc]init];
+        cc.huodongId = model.adver_id;
         cc.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:cc animated:YES];
+        
+        
+//        //测试评价晒单
+//        AddCommentViewController *cc = [[AddCommentViewController alloc]init];
+//        cc.theModelArray = _tableView.dataArray;
+//        cc.hidesBottomBarWhenPushed = YES;
+//        [self.navigationController pushViewController:cc animated:YES];
         
         
     }else if ([model.type intValue] == 2){//秒杀
