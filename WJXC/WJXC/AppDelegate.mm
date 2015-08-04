@@ -16,6 +16,8 @@
 
 #import "BMapKit.h"//百度地图
 
+#import "SimpleMessage.h"
+
 
 @interface AppDelegate ()<UMFeedbackDataDelegate,GgetllocationDelegate,BMKGeneralDelegate,WXApiDelegate,RCIMReceiveMessageDelegate,RCIMUserInfoDataSource>
 {
@@ -50,7 +52,13 @@
     //头像样式
     [[RCIM sharedRCIM] setGlobalMessageAvatarStyle:RC_USER_AVATAR_CYCLE];
     
+    
+    //SDK 初始化方法 initWithAppKey 之后后注册消息类型
+    [[RCIMClient sharedRCIMClient]registerMessageType:SimpleMessage.class];
+    
+    
     //开始融云登录
+    _getRongTokenTime = 5;
     [self startLoginRongTimer];
     
     //监控登录通知
@@ -682,7 +690,6 @@
 - (void)startLoginRongTimer
 {
     [self getRongCloudToken];//先登录一次
-    _getRongTokenTime = 5;
     _getRongTokenTimer = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(getRongCloudToken) userInfo:nil repeats:YES];
 }
 

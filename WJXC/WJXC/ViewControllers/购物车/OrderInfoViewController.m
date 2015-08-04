@@ -225,6 +225,9 @@
  */
 - (void)clickToChat:(UIButton *)sender
 {
+    RCMessageContent *content = [[RCMessageContent alloc]init];
+    
+    
     RCDChatViewController *chatService = [[RCDChatViewController alloc] init];
     chatService.userName = @"客服";
     chatService.targetId = SERVICE_ID;

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		131A6F291B706D8A0097201D /* SimpleMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 131A6F281B706D8A0097201D /* SimpleMessage.m */; };
+		131A6F2C1B706DA20097201D /* SimpleMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 131A6F2B1B706DA20097201D /* SimpleMessageCell.m */; };
 		13241E771B63925A00D42737 /* my_paySuccess@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 13241E761B63925A00D42737 /* my_paySuccess@2x.png */; };
 		13241E7A1B6396E200D42737 /* OrderInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13241E791B6396E200D42737 /* OrderInfoViewController.m */; };
 		135F85DF1B4CBDB500B5E5AD /* OrderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 135F85DE1B4CBDB500B5E5AD /* OrderViewController.m */; };
@@ -266,6 +268,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		131A6F271B706D8A0097201D /* SimpleMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleMessage.h; sourceTree = "<group>"; };
+		131A6F281B706D8A0097201D /* SimpleMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SimpleMessage.m; sourceTree = "<group>"; };
+		131A6F2A1B706DA20097201D /* SimpleMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleMessageCell.h; sourceTree = "<group>"; };
+		131A6F2B1B706DA20097201D /* SimpleMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SimpleMessageCell.m; sourceTree = "<group>"; };
 		13241E761B63925A00D42737 /* my_paySuccess@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "my_paySuccess@2x.png"; sourceTree = "<group>"; };
 		13241E781B6396E200D42737 /* OrderInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrderInfoViewController.h; sourceTree = "<group>"; };
 		13241E791B6396E200D42737 /* OrderInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrderInfoViewController.m; sourceTree = "<group>"; };
@@ -735,6 +741,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		131A6F261B706D8A0097201D /* RoncCloudCustomClass */ = {
+			isa = PBXGroup;
+			children = (
+				131A6F271B706D8A0097201D /* SimpleMessage.h */,
+				131A6F281B706D8A0097201D /* SimpleMessage.m */,
+				131A6F2A1B706DA20097201D /* SimpleMessageCell.h */,
+				131A6F2B1B706DA20097201D /* SimpleMessageCell.m */,
+			);
+			path = RoncCloudCustomClass;
+			sourceTree = "<group>";
+		};
 		139456AC1B46296F00C45EB6 /* 登录 */ = {
 			isa = PBXGroup;
 			children = (
@@ -1060,6 +1077,7 @@
 		13A64C3D1B3BEB7100D9A106 /* HelpTools */ = {
 			isa = PBXGroup;
 			children = (
+				131A6F261B706D8A0097201D /* RoncCloudCustomClass */,
 				E3F1A01D1B6F49E600102989 /* garea.sqlite */,
 				E34099801B62126500FF5257 /* GtopScrollView.h */,
 				E34099811B62126500FF5257 /* GtopScrollView.m */,
@@ -1991,6 +2009,7 @@
 				1384071B1B578C120008CAC3 /* ProductModel.m in Sources */,
 				13A64BFD1B3BDF5D00D9A106 /* AppDelegate.mm in Sources */,
 				1375AD621B4D3F29001631CE /* OrderCell.m in Sources */,
+				131A6F291B706D8A0097201D /* SimpleMessage.m in Sources */,
 				E340998B1B6271CB00FF5257 /* ClassView.m in Sources */,
 				E3C15F941B4CA45000C30039 /* GRegisterViewController.m in Sources */,
 				139457711B4678D200C45EB6 /* UIView+Additions.m in Sources */,
@@ -2041,6 +2060,7 @@
 				13FEA48D1B4BCE2A009BD01D /* LRefreshTableHeaderView.m in Sources */,
 				13241E7A1B6396E200D42737 /* OrderInfoViewController.m in Sources */,
 				13A2087F1B5CD81C00CC4EC0 /* SelectAddressCell.m in Sources */,
+				131A6F2C1B706DA20097201D /* SimpleMessageCell.m in Sources */,
 				E3D080241B3D51D000E4F87D /* LTools.m in Sources */,
 				E3DE39BB1B592A2F0015EEF6 /* MJPhotoProgressView.m in Sources */,
 				13A64BFA1B3BDF5D00D9A106 /* main.m in Sources */,
