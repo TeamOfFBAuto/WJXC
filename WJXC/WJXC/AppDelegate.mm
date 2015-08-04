@@ -38,7 +38,7 @@
     
     //微信支付
     NSString *version = [[NSString alloc] initWithString:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]];
-    NSString *name = [NSString stringWithFormat:@"万聚鲜城 %@",version];
+    NSString *name = [NSString stringWithFormat:@"万聚鲜城%@",version];
     [WXApi registerApp:WXAPPID withDescription:name];
     
     //融云
@@ -328,7 +328,7 @@
     [UMSocialQQHandler setSupportWebView:YES];
     
     //设置微信AppId，设置分享url，默认使用友盟的网址
-//    [UMSocialWechatHandler setWXAppId:WXAPPID appSecret:WXAPPSECRET url:@"http://www.umeng.com/social"];
+    [UMSocialWechatHandler setWXAppId:WXAPPID appSecret:WXAPPSECRET url:@"http://www.umeng.com/social"];
     
     //    [UMSocialTencentWeiboHandler openSSOWithRedirectUrl:@"http://sns.whalecloud.com/tencent2/callback"];
     
@@ -633,7 +633,9 @@
 
     NSString *user_id = [GMAPI getUid];
     
-    if (!user_id || user_id.length == 0) {
+    if (!user_id || user_id.length == 0 || [user_id isEqualToString:@"(null)"] || [user_id isKindOfClass:[NSNull class]]) {
+        
+        [self stopRongTimer];
         
         return;
     }

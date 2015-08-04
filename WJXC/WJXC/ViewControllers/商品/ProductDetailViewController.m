@@ -34,7 +34,7 @@
     
     NSString *_isfavor;//是否收藏
     
-    
+    UILabel *_numLabel;//购物车数量
 }
 @end
 
@@ -216,7 +216,13 @@
     [gouwuche addTarget:self action:@selector(gouwuche) forControlEvents:UIControlEventTouchUpInside];
     [downView addSubview:gouwuche];
     
+    _numLabel = [[UILabel alloc]initWithFrame:CGRectMake(gouwuche.width - 15, - 5, 20, 20) title:nil font:10 align:NSTextAlignmentCenter textColor:[UIColor whiteColor]];
+    _numLabel.backgroundColor = [UIColor redColor];
+    [gouwuche addSubview:_numLabel];
+    [_numLabel addRoundCorner];
+    _numLabel.hidden = YES;
     
+    [self getShoppingCarNum];
 }
 
 
@@ -403,14 +409,14 @@
  */
 - (void)clickToChat:(UIButton *)sender
 {
-    [self sendProductDetailMessage];
+//    [self sendProductDetailMessage];
     
     RCDChatViewController *chatService = [[RCDChatViewController alloc] init];
     chatService.userName = @"客服";
     chatService.targetId = SERVICE_ID;
     chatService.conversationType = ConversationType_CUSTOMERSERVICE;
     chatService.title = chatService.userName;
-    [self.navigationController showViewController:chatService sender:nil];
+    [self.navigationController pushViewController:chatService animated:YES];
 }
 
 
@@ -497,6 +503,7 @@
         return;
     }
     
+    __weak typeof(self)weakSelf = self;
     NSDictionary*dic = @{@"authcode":authcode,
                          @"product_id":aModel.product_id,
                          @"product_num":[NSNumber numberWithInt:product_num]};
@@ -506,12 +513,48 @@
         
         [[NSNotificationCenter defaultCenter]postNotificationName:NOTIFICATION_UPDATE_TO_CART object:nil];
         
+        [weakSelf getShoppingCarNum];
+        
     } failBlock:^(NSDictionary *result) {
         
         
     }];
     
 }
+
+/**
+ *  获取购物车数量
+ */
+- (void)getShoppingCarNum
+{
+    NSString *authcode = [GMAPI getAuthkey];
+    if (authcode.length == 0) {
+        return;
+    }
+    
+    __weak typeof(UILabel *)weakLabel = _numLabel;
+    NSDictionary*dic = @{@"authcode":authcode};
+    [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodPost api:GET_SHOPPINGCAR_NUM parameters:dic constructingBodyBlock:nil completion:^(NSDictionary *result) {
+        
+        NSLog(@"result %@",result);
+        
+        int num = [[result objectForKey:@"num"] intValue];
+        if (num > 0) {
+            weakLabel.hidden = NO;
+            weakLabel.text = [NSString stringWithFormat:@"%d",num];
+        }else
+        {
+            weakLabel.hidden = YES;
+        }
+        
+    } failBlock:^(NSDictionary *result) {
+        
+        NSLog(@"result fail %@",result);
+        
+    }];
+
+}
+
 
 #pragma mark - 收藏
 -(void)gshoucang{

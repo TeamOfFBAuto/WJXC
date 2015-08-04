@@ -27,7 +27,7 @@
     if (self.isPaySuccess) {
         
         //成功
-        UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake((DEVICE_WIDTH - 143) / 2.f, 50, 104, 35)];
+        UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake((DEVICE_WIDTH - 141) / 2.f, 50, 104, 24)];
         imageView.image = [UIImage imageNamed:@"my_paySuccess"];
         [self.view addSubview:imageView];
         imageView.centerX = DEVICE_WIDTH / 2.f;
@@ -62,9 +62,9 @@
         [btn2 setTitleColor:[UIColor orangeColor] forState:UIControlStateNormal];
     }else
     {
-        //成功
-        UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake((DEVICE_WIDTH - 143) / 2.f, 50, 104, 35)];
-        imageView.image = [UIImage imageNamed:@"my_paySuccess"];
+        //失败
+        UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake((DEVICE_WIDTH - 141) / 2.f, 50, 104, 24)];
+        imageView.image = [UIImage imageNamed:@"my_payFail"];
         [self.view addSubview:imageView];
         imageView.centerX = DEVICE_WIDTH / 2.f;
         

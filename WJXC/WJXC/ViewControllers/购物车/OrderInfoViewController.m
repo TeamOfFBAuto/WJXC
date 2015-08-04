@@ -663,6 +663,8 @@
         cell.contentLabel.text = _orderModel.order_no;
     }
     
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    
     return cell;
 }
 

@@ -138,6 +138,7 @@
 		13B2DBCF1B552B2800EE2B6C /* AddAddressController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B2DBCE1B552B2800EE2B6C /* AddAddressController.m */; };
 		13EB1EA01B623E3600E5CA57 /* my_√@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 13EB1E9F1B623E3600E5CA57 /* my_√@2x.png */; };
 		13EB1EA61B623E8B00E5CA57 /* PayResultViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13EB1EA51B623E8B00E5CA57 /* PayResultViewController.m */; };
+		13F1F8AB1B70DA2800831BF9 /* my_payFail@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 13F1F8AA1B70DA2800831BF9 /* my_payFail@2x.png */; };
 		13FEA4781B4A28E1009BD01D /* PersonalCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 13FEA4761B4A28E1009BD01D /* PersonalCell.m */; };
 		13FEA4791B4A28E1009BD01D /* PersonalCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13FEA4771B4A28E1009BD01D /* PersonalCell.xib */; };
 		13FEA47B1B4A35BD009BD01D /* my_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 13FEA47A1B4A35BD009BD01D /* my_bg@2x.png */; };
@@ -453,6 +454,7 @@
 		13EB1E9F1B623E3600E5CA57 /* my_√@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "my_√@2x.png"; sourceTree = "<group>"; };
 		13EB1EA41B623E8B00E5CA57 /* PayResultViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PayResultViewController.h; sourceTree = "<group>"; };
 		13EB1EA51B623E8B00E5CA57 /* PayResultViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PayResultViewController.m; sourceTree = "<group>"; };
+		13F1F8AA1B70DA2800831BF9 /* my_payFail@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "my_payFail@2x.png"; sourceTree = "<group>"; };
 		13FEA4751B4A28E1009BD01D /* PersonalCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonalCell.h; sourceTree = "<group>"; };
 		13FEA4761B4A28E1009BD01D /* PersonalCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonalCell.m; sourceTree = "<group>"; };
 		13FEA4771B4A28E1009BD01D /* PersonalCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PersonalCell.xib; sourceTree = "<group>"; };
@@ -819,6 +821,7 @@
 				13A147111B6B6A6900B6A3DB /* order_chat@2x.png */,
 				13A147121B6B6A6900B6A3DB /* order_phone@2x.png */,
 				13241E761B63925A00D42737 /* my_paySuccess@2x.png */,
+				13F1F8AA1B70DA2800831BF9 /* my_payFail@2x.png */,
 				13EB1E9F1B623E3600E5CA57 /* my_√@2x.png */,
 				13A208841B608E8700CC4EC0 /* my_weixin@2x.png */,
 				13A208851B608E8700CC4EC0 /* my_zhifubao@2x.png */,
@@ -1897,6 +1900,7 @@
 				139457091B46296F00C45EB6 /* login_user@2x.png in Resources */,
 				139457061B46296F00C45EB6 /* login_password@2x.png in Resources */,
 				1394573F1B46296F00C45EB6 /* homepage_xq_bottom_+@2x.png in Resources */,
+				13F1F8AB1B70DA2800831BF9 /* my_payFail@2x.png in Resources */,
 				E34099861B6245BD00FF5257 /* gbtnGray@2x.png in Resources */,
 				E3D685111B5B5D820048C044 /* gsearch_down@2x.png in Resources */,
 				13A147141B6B6A6900B6A3DB /* order_phone@2x.png in Resources */,
