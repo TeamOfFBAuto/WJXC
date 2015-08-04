@@ -156,5 +156,9 @@
 //53、用户取消或删除订单
 #define ORDER_HANDLE_ORDER @"/index.php?d=api&c=order&m=handle_order"
 
+//获取购物车数量
+
+#define GET_SHOPPINGCAR_NUM @"/index.php?d=api&c=order&m=get_cart_pro_num"
+
 
 #endif

@@ -37,7 +37,7 @@
 			<string>sina</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>sina.fe596bc4ac8c92316ad5f255fbc49432</string>
+				<string>sina.d0ff7ad37ad8014b207c2a1eced4fdd0</string>
 			</array>
 		</dict>
 		<dict>
@@ -57,7 +57,7 @@
 			<string>Weixin</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>wx47f54e431de32846</string>
+				<string>wx509a0740cca6f939</string>
 			</array>
 		</dict>
 		<dict>

@@ -16,6 +16,8 @@
 
 #import "BMapKit.h"//百度地图
 
+#import "SimpleMessage.h"
+
 
 @interface AppDelegate ()<UMFeedbackDataDelegate,GgetllocationDelegate,BMKGeneralDelegate,WXApiDelegate,RCIMReceiveMessageDelegate,RCIMUserInfoDataSource>
 {
@@ -36,7 +38,7 @@
     
     //微信支付
     NSString *version = [[NSString alloc] initWithString:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]];
-    NSString *name = [NSString stringWithFormat:@"万聚鲜城 %@",version];
+    NSString *name = [NSString stringWithFormat:@"万聚鲜城%@",version];
     [WXApi registerApp:WXAPPID withDescription:name];
     
     //融云
@@ -50,7 +52,13 @@
     //头像样式
     [[RCIM sharedRCIM] setGlobalMessageAvatarStyle:RC_USER_AVATAR_CYCLE];
     
+    
+    //SDK 初始化方法 initWithAppKey 之后后注册消息类型
+    [[RCIMClient sharedRCIMClient]registerMessageType:SimpleMessage.class];
+    
+    
     //开始融云登录
+    _getRongTokenTime = 5;
     [self startLoginRongTimer];
     
     //监控登录通知
@@ -320,7 +328,7 @@
     [UMSocialQQHandler setSupportWebView:YES];
     
     //设置微信AppId，设置分享url，默认使用友盟的网址
-//    [UMSocialWechatHandler setWXAppId:WXAPPID appSecret:WXAPPSECRET url:@"http://www.umeng.com/social"];
+    [UMSocialWechatHandler setWXAppId:WXAPPID appSecret:WXAPPSECRET url:@"http://www.umeng.com/social"];
     
     //    [UMSocialTencentWeiboHandler openSSOWithRedirectUrl:@"http://sns.whalecloud.com/tencent2/callback"];
     
@@ -625,7 +633,9 @@
 
     NSString *user_id = [GMAPI getUid];
     
-    if (!user_id || user_id.length == 0) {
+    if (!user_id || user_id.length == 0 || [user_id isEqualToString:@"(null)"] || [user_id isKindOfClass:[NSNull class]]) {
+        
+        [self stopRongTimer];
         
         return;
     }
@@ -682,7 +692,6 @@
 - (void)startLoginRongTimer
 {
     [self getRongCloudToken];//先登录一次
-    _getRongTokenTime = 5;
     _getRongTokenTimer = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(getRongCloudToken) userInfo:nil repeats:YES];
 }
 

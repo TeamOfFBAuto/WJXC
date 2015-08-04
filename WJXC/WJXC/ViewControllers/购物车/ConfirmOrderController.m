@@ -16,6 +16,8 @@
 #import "FBActionSheet.h"
 #import "PayActionViewController.h"//支付页面
 
+#import "ProductDetailViewController.h"//单品详情
+
 #define ALIPAY @"支付宝支付"
 #define WXPAY  @"微信支付"
 
@@ -486,6 +488,10 @@
         ProductModel *aModel = [self.productArray objectAtIndex:indexPath.row];
         
         NSLog(@"点击商品name = %@",aModel.product_name);
+        
+        ProductDetailViewController *cc = [[ProductDetailViewController alloc]init];
+        cc.product_id = aModel.product_id;
+        [self.navigationController pushViewController:cc animated:YES];
     }
 }
 
@@ -537,7 +543,8 @@
     if (indexPath.section == 1) {
         static NSString *identify = @"ProductCell";
         ProductCell *cell = (ProductCell *)[LTools cellForIdentify:identify cellName:identify forTable:tableView];
-        
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+
         ProductModel *aModel = [self.productArray objectAtIndex:indexPath.row];
         
         [cell setCellWithModel:aModel];
@@ -557,6 +564,7 @@
             [cell.contentView addSubview:_inputTf];
             _inputTf.clearButtonMode = UITextFieldViewModeWhileEditing;
         }
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         
         return cell;
     }
@@ -590,6 +598,8 @@
             cell.contentLabel.text = _payStyle;
         }
     }
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+
     
     return cell;
 }

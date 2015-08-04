@@ -13,6 +13,7 @@
 #import "RCDChatViewController.h"
 #import "ProductModel.h"
 #import "ShoppingCarController.h"
+#import "SimpleMessage.h"
 
 @interface ProductDetailViewController ()<GCycleScrollViewDelegate,GCycleScrollViewDatasource,UITableViewDataSource,UITableViewDelegate>
 {
@@ -33,7 +34,7 @@
     
     NSString *_isfavor;//是否收藏
     
-    
+    UILabel *_numLabel;//购物车数量
 }
 @end
 
@@ -223,7 +224,13 @@
     [gouwuche addTarget:self action:@selector(gouwuche) forControlEvents:UIControlEventTouchUpInside];
     [downView addSubview:gouwuche];
     
+    _numLabel = [[UILabel alloc]initWithFrame:CGRectMake(gouwuche.width - 15, - 5, 20, 20) title:nil font:10 align:NSTextAlignmentCenter textColor:[UIColor whiteColor]];
+    _numLabel.backgroundColor = [UIColor redColor];
+    [gouwuche addSubview:_numLabel];
+    [_numLabel addRoundCorner];
+    _numLabel.hidden = YES;
     
+    [self getShoppingCarNum];
 }
 
 
@@ -410,14 +417,43 @@
  */
 - (void)clickToChat:(UIButton *)sender
 {
+//    [self sendProductDetailMessage];
+    
     RCDChatViewController *chatService = [[RCDChatViewController alloc] init];
     chatService.userName = @"客服";
     chatService.targetId = SERVICE_ID;
     chatService.conversationType = ConversationType_CUSTOMERSERVICE;
     chatService.title = chatService.userName;
-    //    RCHandShakeMessage* textMsg = [[RCHandShakeMessage alloc] init];
-    //    [[RongUIKit sharedKit] sendMessage:ConversationType_CUSTOMERSERVICE targetId:SERVICE_ID content:textMsg delegate:nil];
-    [self.navigationController showViewController:chatService sender:nil];
+    [self.navigationController pushViewController:chatService animated:YES];
+}
+
+
+//发送产品图文链接
+
+-(void)sendProductDetailMessage
+{
+    /**
+     *  发送消息。可以发送任何类型的消息。
+     *  注：如果通过该接口发送图片消息，需要自己实现上传图片，把imageUrl传入content（注意它将是一个RCImageMessage）。
+     *  @param conversationType 会话类型。
+     *  @param targetId         目标 Id。根据不同的 conversationType，可能是聊天 Id、讨论组 Id、群组 Id 或聊天室 Id。
+     *  @param content          消息内容。
+     *  @param pushContent      推送消息内容
+     *  @param successBlock     调用完成的处理。
+     *  @param errorBlock       调用返回的错误信息。
+     *
+     *  @return 发送的消息实体。
+     */
+    
+    SimpleMessage *msg = [SimpleMessage messageWithContent:@"哈哈可以发送任何类型的消息,自定义的消息😄来了"];
+    msg.extra = @"http://pic.nipic.com/2007-11-09/2007119122519868_2.jpg";
+    
+    [[RCIMClient sharedRCIMClient]sendMessage:ConversationType_CUSTOMERSERVICE targetId:SERVICE_ID content:msg pushContent:@"推送自定义" success:^(long messageId) {
+        NSLog(@"messageid %ld",messageId);
+    } error:^(RCErrorCode nErrorCode, long messageId) {
+        NSLog(@"nErrorCode %ld",nErrorCode);
+        
+    }];
 }
 
 /**
@@ -475,6 +511,7 @@
         return;
     }
     
+    __weak typeof(self)weakSelf = self;
     NSDictionary*dic = @{@"authcode":authcode,
                          @"product_id":aModel.product_id,
                          @"product_num":[NSNumber numberWithInt:product_num]};
@@ -484,12 +521,48 @@
         
         [[NSNotificationCenter defaultCenter]postNotificationName:NOTIFICATION_UPDATE_TO_CART object:nil];
         
+        [weakSelf getShoppingCarNum];
+        
     } failBlock:^(NSDictionary *result) {
         
         
     }];
     
 }
+
+/**
+ *  获取购物车数量
+ */
+- (void)getShoppingCarNum
+{
+    NSString *authcode = [GMAPI getAuthkey];
+    if (authcode.length == 0) {
+        return;
+    }
+    
+    __weak typeof(UILabel *)weakLabel = _numLabel;
+    NSDictionary*dic = @{@"authcode":authcode};
+    [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodPost api:GET_SHOPPINGCAR_NUM parameters:dic constructingBodyBlock:nil completion:^(NSDictionary *result) {
+        
+        NSLog(@"result %@",result);
+        
+        int num = [[result objectForKey:@"num"] intValue];
+        if (num > 0) {
+            weakLabel.hidden = NO;
+            weakLabel.text = [NSString stringWithFormat:@"%d",num];
+        }else
+        {
+            weakLabel.hidden = YES;
+        }
+        
+    } failBlock:^(NSDictionary *result) {
+        
+        NSLog(@"result fail %@",result);
+        
+    }];
+
+}
+
 
 #pragma mark - 收藏
 -(void)gshoucang{

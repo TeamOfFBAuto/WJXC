@@ -225,6 +225,9 @@
  */
 - (void)clickToChat:(UIButton *)sender
 {
+    RCMessageContent *content = [[RCMessageContent alloc]init];
+    
+    
     RCDChatViewController *chatService = [[RCDChatViewController alloc] init];
     chatService.userName = @"客服";
     chatService.targetId = SERVICE_ID;
@@ -659,6 +662,8 @@
         cell.contentLabel.left = DEVICE_WIDTH - cell.contentLabel.width - 20;
         cell.contentLabel.text = _orderModel.order_no;
     }
+    
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
     return cell;
 }

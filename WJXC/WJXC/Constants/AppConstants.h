@@ -50,7 +50,7 @@
 #define USERLocation @"locationInfo"
 
 //两个登陆标识
-#define LOGIN_SERVER_STATE @"user_login_state" //登陆衣加衣服务器 no是未登陆  yes是已登陆
+#define LOGIN_SERVER_STATE @"user_login_state" //服务器 no是未登陆  yes是已登陆
 #define LOGIN_RONGCLOUD_STATE @"rongcloudLoginState"//融云登陆状态
 
 #define USER_AUTHOD @"user_authod"
@@ -72,32 +72,17 @@
 #define NSStringFromInt(int) [NSString stringWithFormat:@"%d",(int)]
 
 
-/**
- *  测试
- */
 #define UmengAppkey @"558d25c867e58e9366002e68"//正式 umeng后台：wjxc2015@qq.com wjxc2015
 
-#define SinaAppKey @"2208620241" //正式审核通过 微博开放平台账号szkyaojiayou@163.com 密码：mobile2014
-#define SinaAppSecret @"fe596bc4ac8c92316ad5f255fbc49432"
+#define SinaAppKey @"2480371284"
+#define SinaAppSecret @"d0ff7ad37ad8014b207c2a1eced4fdd0"
+
 #define QQAPPID @"1104757360" //tencent1104757360 十六进制:QQ41d94270; 生成方法:NSString *str = [ [NSString alloc] initWithFormat:@"%x",1104757360];
 #define QQAPPKEY @"m7DlzFpxeDxRBULc"
-//#define WXAPPID @"wx509a0740cca6f939" //万鲜正式
-//#define WXAPPSECRET @"9a5909e5af9621847e80c1dc5bae52e3"
+
+#define WXAPPID @"wx509a0740cca6f939" //万鲜正式
+#define WXAPPSECRET @"9a5909e5af9621847e80c1dc5bae52e3"
 #define RedirectUrl @"http://sns.whalecloud.com/sina2/callback" //回调地址
-
-//test 衣加衣
-#define WXAPPID @"wx47f54e431de32846" //正式
-#define WXAPPSECRET @"a71699732e3bef01aefdaf324e2f522c"
-
-/**
- *  支付宝支付
- */
-
-//合作商户ID。用签约支付宝账号登录ms.alipay.com后，在账户信息页面获取。
-#define Alipay_PartnerID @"2088911787623114"
-//账户ID。用签约支付宝账号登录ms.alipay.com后，在账户信息页面获取。
-#define Alipay_SellerID  @"yjy@alayy.com"
-
 
 /**
  *  融云

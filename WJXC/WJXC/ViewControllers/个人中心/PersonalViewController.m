@@ -79,7 +79,7 @@
     _tableView.dataSource = self;
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.view addSubview:_tableView];
-    _tableView.bounces = NO;
+//    _tableView.bounces = NO;
     
     [self tableviewHeaderView];//tableView 头部
     
@@ -512,7 +512,7 @@
             chatService.conversationType = ConversationType_CUSTOMERSERVICE;
             chatService.title = chatService.userName;
             chatService.hidesBottomBarWhenPushed = YES;
-            [self.navigationController showViewController:chatService sender:nil];
+            [self.navigationController pushViewController:chatService animated:YES];
             
         }
             break;
