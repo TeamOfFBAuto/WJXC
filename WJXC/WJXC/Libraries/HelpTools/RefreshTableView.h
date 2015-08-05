@@ -91,4 +91,7 @@
 - (id)initWithFrame:(CGRect)frame style:(UITableViewStyle)theStyle;
 - (void)reloadData1:(NSArray *)data1 pageSize:(int)pageSize;
 
+//万聚鲜城活动详情扩展
+- (void)reloadDataSuccess:(NSArray *)data isHaveMore:(BOOL)isHave;
+
 @end

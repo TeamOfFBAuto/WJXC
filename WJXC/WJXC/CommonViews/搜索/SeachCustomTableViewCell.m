@@ -26,7 +26,7 @@
     [imv sd_setImageWithURL:[NSURL URLWithString:theModel.cover_pic] placeholderImage:nil];
     [self.contentView addSubview:imv];
     
-    UILabel *titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMaxX(imv.frame)+10, imv.frame.origin.y, DEVICE_WIDTH - 90, 30) title:theModel.product_desc font:14 align:NSTextAlignmentLeft textColor:[UIColor blackColor]];
+    UILabel *titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMaxX(imv.frame)+10, imv.frame.origin.y, DEVICE_WIDTH - 90, 30) title:theModel.product_name font:14 align:NSTextAlignmentLeft textColor:[UIColor blackColor]];
     titleLabel.numberOfLines = 2;
     
     [self.contentView addSubview:titleLabel];

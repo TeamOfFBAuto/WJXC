@@ -62,6 +62,8 @@
 //获取商品评论(参数product_id=1  商品id 必填 comment_level=1 选填 评论级别 1差评 2中评 3好评  0或不传将获取所有级别评论 page=1 当前评论页perpage=1 评论每页显示数目 order=comment_id   排序字段 direction=  排序顺序  [desc:降序   asc：升序])
 #define GET_PRODUCT_COMMENT @"/index.php?d=api&c=products&m=get_product_comment"
 
+
+
 //获取商品分类
 #define GET_PRODUCT_CLASS @"/index.php?d=api&c=products&m=get_product_category"
 
@@ -77,6 +79,8 @@
 //搜索
 #define SEACHERPRODUCT @"/index.php?d=api&c=products&m=search_product"
 
+//活动详情
+#define HUODONGXIANGQING @"/index.php?d=api&c=activity&m=get_activity_detail"
 
 //收货地址相关接口==================
 

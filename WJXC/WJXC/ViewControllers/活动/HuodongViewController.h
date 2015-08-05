@@ -11,5 +11,6 @@
 @interface HuodongViewController : MyViewController
 
 
+@property(nonatomic,strong)NSString *huodongId;
 
 @end

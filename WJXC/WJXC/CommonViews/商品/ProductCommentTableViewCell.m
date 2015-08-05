@@ -31,14 +31,23 @@
     self.headerImv = [[UIImageView alloc]initWithFrame:CGRectMake(10, 10, 36, 36)];
     self.headerImv.layer.cornerRadius = 18;
     self.headerImv.backgroundColor = [UIColor grayColor];
-    [self.headerImv sd_setImageWithURL:[NSURL URLWithString:model.avatar] placeholderImage:nil];
+    if ([model.is_anony intValue] == 1) {//匿名
+        [self.headerImv setImage:[UIImage imageNamed:@"default.png"]];
+    }else if ([model.is_anony intValue] == 0){
+        [self.headerImv sd_setImageWithURL:[NSURL URLWithString:model.avatar] placeholderImage:[UIImage imageNamed:@"default.png"]];
+    }
+    
     self.headerImv.layer.masksToBounds = YES;
     [self.contentView addSubview:self.headerImv];
     
     self.userNameLabel = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMaxX(self.headerImv.frame)+10, self.headerImv.frame.origin.y+5, DEVICE_WIDTH - CGRectGetMaxX(self.headerImv.frame)-5-10-10 - 70, 13)];
-//    self.userNameLabel.backgroundColor = [UIColor orangeColor];
     self.userNameLabel.font = [UIFont systemFontOfSize:12];
-    self.userNameLabel.text = model.username;
+    if ([model.is_anony intValue] == 1) {//匿名
+        self.userNameLabel.text = @"匿名";
+    }else if ([model.is_anony intValue] == 0){
+        self.userNameLabel.text = model.username;
+    }
+    
     [self.contentView addSubview:self.userNameLabel];
     
     
