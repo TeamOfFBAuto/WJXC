@@ -557,6 +557,9 @@ static NSString *kPhotoCellIdentifier = @"kPhotoCellIdentifier";
 -(void)pingjiaSuccessToGoBack{
     
     
+    [[NSNotificationCenter defaultCenter]postNotificationName:NOTIFICATION_COMMENTSUCCESS object:nil];
+    
+    
     [self.delegate updateView_pingjiaSuccessWithIndex:self.theIndex_row];
     
     //上传成功 返回到上一个vc

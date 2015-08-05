@@ -28,5 +28,6 @@
 
 #define NOTIFICATION_GO_TO_PAY @"goToPayOrder" //去支付订单
 
+#define NOTIFICATION_COMMENTSUCCESS @"NOTIFICATION_COMMENTSUCCESS"//评价成功
 
 #endif
