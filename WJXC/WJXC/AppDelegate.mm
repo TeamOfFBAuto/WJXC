@@ -18,6 +18,8 @@
 
 #import "SimpleMessage.h"
 
+#import "APService.h"//极光推送
+
 
 @interface AppDelegate ()<UMFeedbackDataDelegate,GgetllocationDelegate,BMKGeneralDelegate,WXApiDelegate,RCIMReceiveMessageDelegate,RCIMUserInfoDataSource>
 {
@@ -32,6 +34,11 @@
 @end
 
 @implementation AppDelegate
+
+- (void)notificationForJPush:(NSNotification *)notifiy
+{
+    NSLog(@"JPush %@ %@",notifiy.userInfo,notifiy.object);
+}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
@@ -58,7 +65,6 @@
     
     
     //开始融云登录
-    _getRongTokenTime = 5;
     [self startLoginRongTimer];
     
     //监控登录通知
@@ -74,29 +80,56 @@
     
 #pragma mark 远程通知
     
-    if (IOS7_OR_LATER) {
-        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
-        [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
+    
+    // Required
+    if ([[UIDevice currentDevice].systemVersion floatValue] >= 8.0) {
+        //可以添加自定义categories
+        [APService registerForRemoteNotificationTypes:(UIUserNotificationTypeBadge |
+                                                       UIUserNotificationTypeSound |
+                                                       UIUserNotificationTypeAlert)
+                                           categories:nil];
+    } else {
+        //categories 必须为nil
+        [APService registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge |
+                                                       UIRemoteNotificationTypeSound |
+                                                       UIRemoteNotificationTypeAlert)
+                                           categories:nil];
     }
     
-    if ([[[UIDevice currentDevice] systemVersion] doubleValue] > 8.0)
-    {
-        if ([application respondsToSelector:@selector(registerUserNotificationSettings:)]) {
-            UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:(UIRemoteNotificationTypeBadge
-                                                                                                 |UIRemoteNotificationTypeSound
-                                                                                                 |UIRemoteNotificationTypeAlert) categories:nil];
-            [application registerUserNotificationSettings:settings];
-        }else{
-            
-            //注册推送, iOS 8
-            UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert) categories:nil];
-            [application registerUserNotificationSettings:settings];
-        }
-    }else
-    {
-        // 注册苹果推送，申请推送权限。
-        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound];
-    }
+    // Required
+    [APService setupWithOption:launchOptions];
+    
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(notificationForJPush:) name:kJPFNetworkDidSetupNotification object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(notificationForJPush:) name:kJPFNetworkDidCloseNotification object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(notificationForJPush:) name:kJPFNetworkDidRegisterNotification object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(notificationForJPush:) name:kJPFNetworkDidLoginNotification object:nil];
+    
+    //非APNS消息
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(notificationForJPush:) name:kJPFNetworkDidReceiveMessageNotification object:nil];
+    
+//    if (IOS7_OR_LATER) {
+//        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
+//        [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
+//    }
+//    
+//    if ([[[UIDevice currentDevice] systemVersion] doubleValue] > 8.0)
+//    {
+//        if ([application respondsToSelector:@selector(registerUserNotificationSettings:)]) {
+//            UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:(UIRemoteNotificationTypeBadge
+//                                                                                                 |UIRemoteNotificationTypeSound
+//                                                                                                 |UIRemoteNotificationTypeAlert) categories:nil];
+//            [application registerUserNotificationSettings:settings];
+//        }else{
+//            
+//            //注册推送, iOS 8
+//            UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert) categories:nil];
+//            [application registerUserNotificationSettings:settings];
+//        }
+//    }else
+//    {
+//        // 注册苹果推送，申请推送权限。
+//        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound];
+//    }
     
     
     //UIApplicationLaunchOptionsRemoteNotificationKey,判断是通过推送消息启动的
@@ -157,11 +190,6 @@
 // 获取苹果推送权限成功。
 - (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)deviceToken
 {
-    
-    NSLog(@"My token is: %@", deviceToken);
-    
-    
-    
     NSString *string_pushtoken=[NSString stringWithFormat:@"%@",deviceToken];
     
     while ([string_pushtoken rangeOfString:@"<"].length||[string_pushtoken rangeOfString:@">"].length||[string_pushtoken rangeOfString:@" "].length) {
@@ -170,16 +198,13 @@
         string_pushtoken=[string_pushtoken stringByReplacingOccurrencesOfString:@" " withString:@""];
         
     }
-    NSLog(@"mytoken==%@",string_pushtoken);
-    
+    NSLog(@"deviceToken==%@",string_pushtoken);
     
     [LTools cache:string_pushtoken ForKey:USER_DEVICE_TOKEN];
     
-    //给服务器token
-    
     //融云服务器
     [[RCIMClient sharedRCIMClient]setDeviceToken:string_pushtoken];
-    
+    [APService registerDeviceToken:deviceToken];
 }
 
 /**
@@ -229,18 +254,52 @@
     if ([url.host isEqualToString:@"pay"]) {
         
         return  [WXApi handleOpenURL:url delegate:self];
-
     }
     
     return  [UMSocialSnsService handleOpenURL:url wxApiDelegate:nil];
 }
 
-
-
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url
 {
     return  [WXApi handleOpenURL:url delegate:self];
 }
+
+- (void)applicationWillResignActive:(UIApplication *)application {
+    
+}
+
+- (void)applicationWillEnterForeground:(UIApplication *)application {
+    
+    [LTools updateTabbarUnreadMessageNumber];
+}
+
+- (void)applicationDidEnterBackground:(UIApplication *)application {
+    
+    //未读消息
+    int unreadMsgCount = [[RCIMClient sharedRCIMClient]getUnreadCount: @[@(ConversationType_CUSTOMERSERVICE)]];;
+    application.applicationIconBadgeNumber = unreadMsgCount;
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
+    
+    // IOS 7 Support Required
+    [APService handleRemoteNotification:userInfo];
+    completionHandler(UIBackgroundFetchResultNewData);
+    
+    NSLog(@"JPush1 remote %@",userInfo);
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
+{
+    [LTools updateTabbarUnreadMessageNumber];
+    
+    //极光推送
+    [APService handleRemoteNotification:userInfo];
+    
+    NSLog(@"JPush2 remote %@",userInfo);
+
+}
+
 
 #pragma mark - UMFeedbackDataDelegate <NSObject>
 
@@ -387,72 +446,6 @@
         NSLog(@"failBlock result %@",result[Erro_Info]);
         
     }];
-}
-
-#pragma - mark 网络请求例子
-
-/**
- *  get请求
- */
-- (void)requestForGet
-{
-    //网络请求例子
-    
-    //get
-    
-    NSDictionary *params = @{@"uid":@"11"};
-    [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodGet api:GET_USERINFO_WITHID parameters:params constructingBodyBlock:nil completion:^(NSDictionary *result) {
-        
-        NSLog(@"result %@ %@",result[Erro_Info],result);
-        
-    } failBlock:^(NSDictionary *result) {
-        
-        NSLog(@"result %@",result[Erro_Info]);
-        
-    }];
-    
-}
-
-/**
- *  post请求
- */
-- (void)requestForPost
-{
-//    参数:product_id、authcode
-    
-    NSDictionary *params = @{@"product_id":@"25",
-                             @"authcode":@"WyQBeAd+B+FW7QeaXu4J3geiAOJTpgv6V3oHNlcyUWYBMlNhUzVUY1ViBT0DYQx8UWc="};
-    [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodPost api:HOME_PRODUCT_COLLECT_ADD parameters:params constructingBodyBlock:nil completion:^(NSDictionary *result) {
-        
-        NSLog(@"result %@ %@",result[Erro_Info],result);
-        
-    } failBlock:^(NSDictionary *result) {
-        
-        NSLog(@"result %@",result[Erro_Info]);
-        
-    }];
-}
-
-- (void)applicationWillResignActive:(UIApplication *)application {
-    // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
-    // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
-}
-
-- (void)applicationWillEnterForeground:(UIApplication *)application {
-
-    [LTools updateTabbarUnreadMessageNumber];
-}
-
-- (void)applicationDidEnterBackground:(UIApplication *)application {
-
-    //未读消息
-    int unreadMsgCount = [[RCIMClient sharedRCIMClient]getUnreadCount: @[@(ConversationType_CUSTOMERSERVICE)]];;
-    application.applicationIconBadgeNumber = unreadMsgCount;
-}
-
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
-{
-    [LTools updateTabbarUnreadMessageNumber];
 }
 
 #pragma - mark RCIMReceiveMessageDelegate <NSObject>
@@ -691,6 +684,7 @@
 
 - (void)startLoginRongTimer
 {
+    _getRongTokenTime = 5;
     [self getRongCloudToken];//先登录一次
     _getRongTokenTimer = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(getRongCloudToken) userInfo:nil repeats:YES];
 }
