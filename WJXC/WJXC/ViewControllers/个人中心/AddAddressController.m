@@ -48,11 +48,7 @@
     
     self.myTitle = @"新建收货地址";
     [self setMyViewControllerLeftButtonType:MyViewControllerLeftbuttonTypeBack WithRightButtonType:MyViewControllerRightbuttonTypeNull];
-    
-    
-    
-    
-    
+
     self.view.backgroundColor = [UIColor whiteColor];
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(clickToHidderKeyboard)];
@@ -83,7 +79,13 @@
             }else if (i == 1){
                 tf.text = self.addressModel.mobile;
             }else if (i == 2){
-                tf.text = self.addressModel.address;
+                
+                NSString *add = [NSString stringWithFormat:@"%@%@",[GMAPI cityNameForId:[self.addressModel.pro_id intValue]],[GMAPI cityNameForId:[self.addressModel.city_id intValue]]];
+                tf.text = add;
+                
+                self.provinceIn = [self.addressModel.pro_id integerValue];
+                self.cityIn = [self.addressModel.city_id integerValue];
+                
             }else if (i == 3){
                 tf.text = self.addressModel.street;
             }
@@ -111,8 +113,6 @@
             btn.frame = tf.frame;
             [self.view addSubview:btn];
             [btn addTarget:self action:@selector(clickToSelectArea:) forControlEvents:UIControlEventTouchUpInside];
-            
-            tf.text = @"北京市东城区";
         }
         
         UIView *line = [[UIView alloc]initWithFrame:CGRectMake(0, label.bottom, DEVICE_WIDTH, 0.5)];
@@ -165,19 +165,6 @@
  */
 - (void)addAddress
 {
-//http://182.92.106.193:85/index.php?d=api&c=user&m=add_user_address
-//    post参数调取参数：
-//    authcode
-//    省份id
-//    城市id
-//    具体的地址
-//    收货人姓名
-//    收货人手机号
-//    收货人电话（可不填）
-//    邮编（可不填）
-//    是否设为默认地址 1=》是 0=》不是
-    
-    
     NSString *street = [self textFieldForTag:103].text;
     NSString *receiver_username = [self textFieldForTag:100].text;
     NSString *mobile = [self textFieldForTag:101].text;
@@ -185,6 +172,13 @@
     if (![LTools isValidateMobile:mobile]) {
         
         [LTools showMBProgressWithText:@"请填写有效手机号" addToView:self.view];
+        
+        return;
+    }
+    
+    if ([self textFieldForTag:102].text.length == 0) {
+        
+        [LTools showMBProgressWithText:@"请选择地区" addToView:self.view];
         
         return;
     }
@@ -200,8 +194,8 @@
         api = USER_ADDRESS_EDIT;
         params = @{@"authcode":[GMAPI getAuthkey],
                                  @"address_id":self.addressModel.address_id,
-                                 @"pro_id":@"1000",
-                                 @"city_id":@"1001",
+                                 @"pro_id":[NSNumber numberWithInteger:self.provinceIn],
+                                 @"city_id":[NSNumber numberWithInteger:self.cityIn],
                                  @"street":street,
                                  @"receiver_username":receiver_username,
                                  @"mobile":mobile,
@@ -210,8 +204,8 @@
     {
         api = USER_ADDRESS_ADD;
         params = @{@"authcode":[GMAPI getAuthkey],
-                                 @"pro_id":@"1000",
-                                 @"city_id":@"1001",
+                                 @"pro_id":[NSNumber numberWithInteger:self.provinceIn],
+                                 @"city_id":[NSNumber numberWithInteger:self.cityIn],
                                  @"street":street,
                                  @"receiver_username":receiver_username,
                                  @"mobile":mobile,
@@ -284,6 +278,8 @@
  */
 - (void)clickToSelectArea:(UIButton *)sender
 {
+    
+    [self clickToHidderKeyboard];//隐藏键盘
     [self areaShow];
 }
 
@@ -327,6 +323,8 @@
     if (iPhone4) {
         self.view.top = 64 - textField.top;
     }
+    
+    [self areaHidden];
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField
@@ -337,10 +335,9 @@
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     [self clickToHidderKeyboard];
+    
     return YES;
 }
-
-
 
 #pragma mark - 地区选择相关
 
@@ -359,29 +356,35 @@
     quxiaoBtn.titleLabel.font = [UIFont systemFontOfSize:15];
     [quxiaoBtn setTitle:@"取消" forState:UIControlStateNormal];
     [quxiaoBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    quxiaoBtn.frame = CGRectMake(10, 5, 60, 40);
-    quxiaoBtn.layer.borderWidth = 1;
-    quxiaoBtn.layer.borderColor = [[UIColor blackColor]CGColor];
-    quxiaoBtn.layer.cornerRadius = 5;
-    [quxiaoBtn addTarget:self action:@selector(areaHidden) forControlEvents:UIControlEventTouchUpInside];
-    
-    
-    
+    quxiaoBtn.frame = CGRectMake(10, 5, 60, 30);
+    [quxiaoBtn addTarget:self action:@selector(clickToCancel:) forControlEvents:UIControlEventTouchUpInside];
+    [quxiaoBtn setBorderWidth:1 borderColor:DEFAULT_TEXTCOLOR];
+    [quxiaoBtn addCornerRadius:3.f];
     
     //确定按钮
     UIButton *quedingBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     quedingBtn.titleLabel.font = [UIFont systemFontOfSize:15];
     [quedingBtn setTitle:@"确定" forState:UIControlStateNormal];
     [quedingBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    quedingBtn.frame = CGRectMake(DEVICE_WIDTH-70, 5, 60, 40);
-    quedingBtn.layer.borderWidth = 1;
-    quedingBtn.layer.borderColor = [[UIColor blackColor]CGColor];
-    quedingBtn.layer.cornerRadius = 5;
-    [quedingBtn addTarget:self action:@selector(areaHidden) forControlEvents:UIControlEventTouchUpInside];
+    quedingBtn.frame = CGRectMake(DEVICE_WIDTH - 70, 5, 60, 30);
+    [quedingBtn setBorderWidth:1 borderColor:DEFAULT_TEXTCOLOR];
+    [quedingBtn addCornerRadius:3.f];
+
+    [quedingBtn addTarget:self action:@selector(clickToSure:) forControlEvents:UIControlEventTouchUpInside];
     
     //地区选择
     self.backPickView = [[UIView alloc]initWithFrame:CGRectMake(0, DEVICE_HEIGHT, DEVICE_WIDTH, 310)];
     self.backPickView .backgroundColor = [UIColor whiteColor];
+    
+    //上线
+    UIView *line = [[UIView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, 40)];
+    line.backgroundColor = DEFAULT_LINECOLOR;
+    [self.backPickView addSubview:line];
+    
+    //下线
+    UIView *line2 = [[UIView alloc]initWithFrame:CGRectMake(0, 40, DEVICE_WIDTH, 0.5f)];
+    line2.backgroundColor = DEFAULT_LINECOLOR;
+    [self.backPickView addSubview:line2];
     
     [self.backPickView addSubview:quedingBtn];
     [self.backPickView addSubview:quxiaoBtn];
@@ -392,10 +395,7 @@
     _data = [NSArray arrayWithContentsOfFile:path];
     
     [self.view addSubview:self.backPickView];
-    
-    
 }
-
 
 
 //地区出现
@@ -405,8 +405,24 @@
     [UIView animateWithDuration:0.3 animations:^{
         bself.backPickView.frame = CGRectMake(0,DEVICE_HEIGHT-310, DEVICE_WIDTH, 310);
     }];
+}
+
+- (void)clickToCancel:(UIButton *)sender
+{
+    [self areaHidden];
+}
+
+- (void)clickToSure:(UIButton *)sender
+{
+    [self controlSaveButton];
     
+    [self areaHidden];
     
+    self.provinceIn = [GMAPI cityIdForName:self.province];
+    self.cityIn = [GMAPI cityIdForName:self.city];
+    
+    NSLog(@"在这里  省:%@ id %ld   市:%@ id:%ld",self.province,self.provinceIn,self.city,self.cityIn);
+    [self textFieldForTag:102].text = [NSString stringWithFormat:@"%@%@",self.province,self.city];
 }
 
 -(void)areaHidden{//地区隐藏
@@ -416,7 +432,7 @@
     self.provinceIn = [GMAPI cityIdForName:self.province];
     self.cityIn = [GMAPI cityIdForName:self.city];
     
-    NSLog(@"在这里  省:%@ id %d   市:%@ id:%d",self.province,self.provinceIn,self.city,self.cityIn);
+    NSLog(@"在这里  省:%@ id %ld   市:%@ id:%ld",self.province,self.provinceIn,self.city,self.cityIn);
     
     [UIView animateWithDuration:0.3 animations:^{
         bself.backPickView.frame = CGRectMake(0, DEVICE_HEIGHT, DEVICE_WIDTH, 310);

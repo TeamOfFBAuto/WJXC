@@ -12,6 +12,7 @@
 #import "PayActionViewController.h"//支付页面
 #import "OrderInfoViewController.h"//订单详情
 #import "ConfirmOrderController.h"//确认订单
+#import "AddCommentViewController.h"//评价晒单
 
 #define kPadding_One 1000 //去支付
 #define kPadding_Two 2000 //确认收货
@@ -352,9 +353,21 @@
     }];
 }
 
+//评价晒单
 - (void)clickToComment:(UIButton *)sender
 {
-    
+    OrderModel *ordelModel = [[self refreshTableForIndex:2].dataArray objectAtIndex:sender.tag - kPadding_Three];
+    NSMutableArray *temp = [NSMutableArray arrayWithCapacity:ordelModel.products.count];
+    for (NSDictionary *aDic in ordelModel.products) {
+        
+        ProductModel *aModel = [[ProductModel alloc]initWithDictionary:aDic];
+        aModel.is_recommend = @"0";
+        [temp addObject:aModel];
+    }
+    AddCommentViewController *addComment = [[AddCommentViewController alloc]init];
+    addComment.dingdanhao = ordelModel.order_no;
+    addComment.theModelArray = temp;
+    [self.navigationController pushViewController:addComment animated:YES];
 }
 
 #pragma - mark 视图创建

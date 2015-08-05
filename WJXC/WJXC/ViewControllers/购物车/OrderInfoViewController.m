@@ -18,6 +18,7 @@
 
 #import "RCDChatViewController.h"
 #import "ConfirmOrderController.h"//确认订单
+#import "AddCommentViewController.h"//评价晒图
 
 #import "OrderModel.h"
 
@@ -193,6 +194,17 @@
         
     }else if ([text isEqualToString:@"评价晒图"]){
         
+        NSMutableArray *temp = [NSMutableArray arrayWithCapacity:_orderModel.products.count];
+        for (NSDictionary *aDic in _orderModel.products) {
+            
+            ProductModel *aModel = [[ProductModel alloc]initWithDictionary:aDic];
+//            aModel.is_recommend
+            [temp addObject:aModel];
+        }
+        AddCommentViewController *addComment = [[AddCommentViewController alloc]init];
+        addComment.dingdanhao = _orderModel.order_no;
+        addComment.theModelArray = temp;
+        [self.navigationController pushViewController:addComment animated:YES];
     }
 }
 
@@ -233,9 +245,7 @@
     chatService.targetId = SERVICE_ID;
     chatService.conversationType = ConversationType_CUSTOMERSERVICE;
     chatService.title = chatService.userName;
-    //    RCHandShakeMessage* textMsg = [[RCHandShakeMessage alloc] init];
-    //    [[RongUIKit sharedKit] sendMessage:ConversationType_CUSTOMERSERVICE targetId:SERVICE_ID content:textMsg delegate:nil];
-    [self.navigationController showViewController:chatService sender:nil];
+    [self.navigationController pushViewController:chatService animated:YES];
 }
 
 /**
