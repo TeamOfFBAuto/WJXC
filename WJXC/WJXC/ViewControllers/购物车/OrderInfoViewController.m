@@ -19,6 +19,7 @@
 #import "RCDChatViewController.h"
 #import "ConfirmOrderController.h"//确认订单
 #import "AddCommentViewController.h"//评价晒图
+#import "ProductDetailViewController.h"//订单详情
 
 #import "OrderModel.h"
 
@@ -221,8 +222,6 @@
     pay.payStyle = [_orderModel.pay_type intValue];//支付类型
     pay.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:pay animated:YES];
-    
-    //    self.navigationController.viewControllers
 }
 
 - (void)clickToHidderkeyboard
@@ -537,14 +536,14 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
-    NSLog(@"点击商品name = ");
-    
+        
     if (indexPath.section == 1) {
+
+        ProductModel *aModel = [[ProductModel alloc]initWithDictionary:[_orderModel.products objectAtIndex:indexPath.row]] ;
         
-//        ProductModel *aModel = [self.productArray objectAtIndex:indexPath.row];
-        
-//        NSLog(@"点击商品name = %@",aModel.product_name);
+        ProductDetailViewController *cc = [[ProductDetailViewController alloc]init];
+        cc.product_id = aModel.product_id;
+        [self.navigationController pushViewController:cc animated:YES];
     }
 }
 

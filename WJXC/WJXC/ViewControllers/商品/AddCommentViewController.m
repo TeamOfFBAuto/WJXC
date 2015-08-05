@@ -23,6 +23,32 @@
 
 @implementation AddCommentViewController
 
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    self.navigationController.navigationBarHidden = YES;
+    self.navigationController.navigationBarHidden = NO;
+}
+
+-(void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    //在navigationController中移除 确认订单viewController
+    
+    //确认订单之后到支付页面,这时候不能再返回到确认订单页面
+    
+    NSArray *vcArray = self.navigationController.viewControllers;
+    
+    for (UIViewController *viewController in vcArray) {
+        
+        if ([viewController isKindOfClass:NSClassFromString(@"OrderInfoViewController")]) {
+            
+            [viewController removeFromParentViewController];
+        }
+    }
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -43,11 +69,7 @@
         }
         
     }
-    
-    
     [self creatTableView];
-    
-    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -59,6 +81,7 @@
     _tab = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, DEVICE_HEIGHT-64) style:UITableViewStylePlain];
     _tab.delegate = self;
     _tab.dataSource = self;
+    _tab.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.view addSubview:_tab];
 }
 
@@ -101,8 +124,6 @@
     for (UIView *view in cell.contentView.subviews) {
         [view removeFromSuperview];
     }
-    
-    
     if (indexPath.section == 0) {
         UIView *line = [[UIView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, 5)];
         line.backgroundColor = RGBCOLOR(241, 242, 244);
@@ -120,10 +141,10 @@
         
         
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [btn setFrame:CGRectMake(CGRectGetMaxX(tt.frame)+10, 80-10-30, 70, 30)];
+        [btn setFrame:CGRectMake(DEVICE_WIDTH - 10 - 55, 80-10-30 + 5, 55, 25)];
         [tt setMatchedFrame4LabelWithOrigin:CGPointMake(CGRectGetMaxX(imv.frame)+10, imv.frame.origin.y) width:DEVICE_WIDTH - 80 - 90];
         [btn setTitle:@"评价晒单" forState:UIControlStateNormal];
-        btn.titleLabel.font = [UIFont systemFontOfSize:15];
+        btn.titleLabel.font = [UIFont systemFontOfSize:12];
         btn.layer.cornerRadius = 4;
         btn.layer.borderWidth = 0.5;
         btn.layer.borderColor = [RGBCOLOR(238, 115, 0)CGColor];
@@ -140,24 +161,12 @@
         }
         
         
-        
-        
-        
-        
-        
-        
     }else{
 //        UILabel *tt = [[UILabel alloc]initWithFrame:CGRectMake(10, 10, 80, 20) title:@"服务评价" font:15 align:NSTextAlignmentLeft textColor:[UIColor blackColor]];
 //        [cell.contentView addSubview:tt];
 //        UILabel *ttt = [[UILabel alloc]initWithFrame:CGRectMake(DEVICE_WIDTH - 120, 10, 100, 20) title:@"满意请给5星" font:12 align:NSTextAlignmentRight textColor:[UIColor blackColor]];
 //        [cell.contentView addSubview:ttt];
     }
-    
-    
-    
-    
-    
-    
     
     return cell;
 }

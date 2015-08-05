@@ -93,6 +93,7 @@
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(notificationForRecieveConfirm:) name:NOTIFICATION_RECIEVE_CONFIRM object:nil];//确认收货
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(notificationForCancelOrder:) name:NOTIFICATION_ORDER_CANCEL object:nil];//取消订单
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(notificationForDelOrder:) name:NOTIFICATION_ORDER_DEL object:nil];//删除订单
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(notificationForComment:) name:NOTIFICATION_COMMENTSUCCESS object:nil];//评价成功
 }
 
 - (void)didReceiveMemoryWarning {
@@ -137,6 +138,15 @@
  *  删除订单通知
  */
 - (void)notificationForDelOrder:(NSNotification *)notify
+{
+    [[self refreshTableForIndex:2]showRefreshHeader:YES];//待评价
+    [[self refreshTableForIndex:3]showRefreshHeader:YES];//已完成
+}
+
+/**
+ *  评论订单通知
+ */
+- (void)notificationForComment:(NSNotification *)notify
 {
     [[self refreshTableForIndex:2]showRefreshHeader:YES];//待评价
     [[self refreshTableForIndex:3]showRefreshHeader:YES];//已完成
@@ -243,6 +253,18 @@
         //评价晒单
         kadding = kPadding_Three;
         
+        OrderModel *ordelModel = [[self refreshTableForIndex:2].dataArray objectAtIndex:sender.tag - kPadding_Three];
+        NSMutableArray *temp = [NSMutableArray arrayWithCapacity:ordelModel.products.count];
+        for (NSDictionary *aDic in ordelModel.products) {
+            
+            ProductModel *aModel = [[ProductModel alloc]initWithDictionary:aDic];
+            aModel.is_recommend = @"0";
+            [temp addObject:aModel];
+        }
+        AddCommentViewController *addComment = [[AddCommentViewController alloc]init];
+        addComment.dingdanhao = ordelModel.order_no;
+        addComment.theModelArray = temp;
+        [self.navigationController pushViewController:addComment animated:YES];
         
     }else if (index >= kPadding_Two){
         //确认收货
@@ -253,28 +275,10 @@
             return;
         }
         
-        OrderModel *aModel = [[self refreshTableForIndex:1].dataArray objectAtIndex:index - kadding];
-
-        __weak typeof(RefreshTableView)*weakTable = [self refreshTableForIndex:1];
-        __weak typeof(RefreshTableView)*weakTable2 = [self refreshTableForIndex:2];
-
-        NSDictionary *params = @{@"authcode":authey,
-                                 @"order_id":aModel.order_id};
-        [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodGet api:ORDER_RECEIVING_CONFIRM parameters:params constructingBodyBlock:nil completion:^(NSDictionary *result) {
-            
-            NSLog(@"result确认收货 %@",result);
-            
-            //刷新配送中列表
-            [weakTable showRefreshHeader:YES];
-            
-            //刷新待评价列表
-            [weakTable2 showRefreshHeader:YES];
-            
-        } failBlock:^(NSDictionary *result) {
-            
-            
-        }];
-
+        NSString *msg = [NSString stringWithFormat:@"收货成功之后再确定,避免不必要损失!"];
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"确认收货" message:msg delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+        alert.tag = index - kPadding_Two;
+        [alert show];
         
     }else if (index >= kPadding_One){
         //支付
@@ -353,26 +357,43 @@
     }];
 }
 
-//评价晒单
-- (void)clickToComment:(UIButton *)sender
-{
-    OrderModel *ordelModel = [[self refreshTableForIndex:2].dataArray objectAtIndex:sender.tag - kPadding_Three];
-    NSMutableArray *temp = [NSMutableArray arrayWithCapacity:ordelModel.products.count];
-    for (NSDictionary *aDic in ordelModel.products) {
-        
-        ProductModel *aModel = [[ProductModel alloc]initWithDictionary:aDic];
-        aModel.is_recommend = @"0";
-        [temp addObject:aModel];
-    }
-    AddCommentViewController *addComment = [[AddCommentViewController alloc]init];
-    addComment.dingdanhao = ordelModel.order_no;
-    addComment.theModelArray = temp;
-    [self.navigationController pushViewController:addComment animated:YES];
-}
-
 #pragma - mark 视图创建
 
 #pragma - 代理
+
+#pragma - mark UIAlertViewDelegate <NSObject>
+// Called when a button is clicked. The view will be automatically dismissed after this call returns
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 1) {
+        
+        NSString *authey = [GMAPI getAuthkey];
+
+        OrderModel *aModel = [[self refreshTableForIndex:1].dataArray objectAtIndex:alertView.tag];
+        
+        __weak typeof(RefreshTableView)*weakTable = [self refreshTableForIndex:1];
+        __weak typeof(RefreshTableView)*weakTable2 = [self refreshTableForIndex:2];
+        
+        NSDictionary *params = @{@"authcode":authey,
+                                 @"order_id":aModel.order_id};
+        [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodGet api:ORDER_RECEIVING_CONFIRM parameters:params constructingBodyBlock:nil completion:^(NSDictionary *result) {
+            
+            NSLog(@"result确认收货 %@",result);
+            
+            //刷新配送中列表
+            [weakTable showRefreshHeader:YES];
+            
+            //刷新待评价列表
+            [weakTable2 showRefreshHeader:YES];
+            
+        } failBlock:^(NSDictionary *result) {
+            
+            
+        }];
+
+    }
+}
+
 
 #pragma mark - RefreshDelegate
 
