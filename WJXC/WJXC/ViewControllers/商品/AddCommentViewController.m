@@ -11,10 +11,13 @@
 #import "AddCommentDetailViewController.h"
 #import "ProductDetailViewController.h"
 
+
 @interface AddCommentViewController ()<UITableViewDataSource,UITableViewDelegate>
 {
     UITableView *_tab;
     NSArray *_dataArray;
+    
+    int _pingjiaSuccess[1000];
 }
 @end
 
@@ -29,6 +32,18 @@
     [self setMyViewControllerLeftButtonType:MyViewControllerLeftbuttonTypeBack WithRightButtonType:MyViewControllerRightbuttonTypeNull];
     
     _dataArray = self.theModelArray;
+    
+    
+    for (int i = 0; i<self.theModelArray.count; i++) {
+        ProductModel *amodel = self.theModelArray[i];
+        if ([amodel.is_recommend intValue] == 1) {
+            _pingjiaSuccess[i] = 1;
+        }else{
+            _pingjiaSuccess[i] = 0;
+        }
+        
+    }
+    
     
     [self creatTableView];
     
@@ -117,7 +132,18 @@
         
         btn.tag = indexPath.row +100;
         
-        [btn addTarget:self action:@selector(pingjiashaidan:) forControlEvents:UIControlEventTouchUpInside];
+        
+        if (_pingjiaSuccess[indexPath.row] == 1) {//评价过了
+            [btn setTitle:@"已评价" forState:UIControlStateNormal];
+        }else{
+            [btn addTarget:self action:@selector(pingjiashaidan:) forControlEvents:UIControlEventTouchUpInside];
+        }
+        
+        
+        
+        
+        
+        
         
         
     }else{
@@ -154,9 +180,20 @@
     
     AddCommentDetailViewController *cc = [[AddCommentDetailViewController alloc]init];
     cc.theModel = model;
+    cc.delegate = self;
+    cc.dingdanhao = self.dingdanhao;
+    cc.theIndex_row = tag;
+    
     cc.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:cc animated:YES];
     
+}
+
+
+
+-(void)updateView_pingjiaSuccessWithIndex:(NSInteger)index_row{
+    _pingjiaSuccess[index_row] = 1;
+    [_tab reloadData];
 }
 
 

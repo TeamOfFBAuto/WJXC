@@ -11,11 +11,14 @@
 
 #import "MyViewController.h"
 #import "ProductModel.h"
+@class AddCommentViewController;
 
 @interface AddCommentDetailViewController : MyViewController
 
 //必传
 @property(nonatomic,strong)ProductModel *theModel;//商品model
 @property(nonatomic,strong)NSString *dingdanhao;//订单号
+@property(nonatomic,assign)NSInteger theIndex_row;//第几个
+@property(nonatomic,assign)AddCommentViewController *delegate;
 
 @end

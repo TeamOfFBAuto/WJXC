@@ -16,7 +16,9 @@
 @interface AddCommentViewController : MyViewController
 
 
-@property(nonatomic,strong)NSArray *theModelArray;
+@property(nonatomic,strong)NSString *dingdanhao;//订单号
+@property(nonatomic,strong)NSArray *theModelArray;//商品model数组 ：productModel 
 
+-(void)updateView_pingjiaSuccessWithIndex:(NSInteger)index_row;
 
 @end

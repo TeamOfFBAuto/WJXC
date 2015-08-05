@@ -12,6 +12,7 @@
 #import "PhotoCell.h"
 #import "AFNetworking.h"
 #import "TQStarRatingView.h"
+#import "AddCommentViewController.h"
 
 //添加商品评论
 #define ADD_PRODUCT_PINGLUN @"http://182.92.106.193:85/index.php?d=api&c=products&m=add_comment"
@@ -414,7 +415,7 @@ static NSString *kPhotoCellIdentifier = @"kPhotoCellIdentifier";
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         
         if ([[result stringValueForKey:@"errorcode"]intValue]==0) {
-            [self performSelector:@selector(fabuyifuSuccessToGoBack) withObject:[NSNumber numberWithBool:YES] afterDelay:1];
+            [self performSelector:@selector(pingjiaSuccessToGoBack) withObject:[NSNumber numberWithBool:YES] afterDelay:1];
             
         }
     } failBlock:^(NSDictionary *result) {
@@ -527,7 +528,7 @@ static NSString *kPhotoCellIdentifier = @"kPhotoCellIdentifier";
                                        NSLog(@"mydic == %@ err0 = %@",mydic,myerr);
                                        
                                        if ([[mydic objectForKey:@"errorcode"]intValue]==0) {
-                                           [self performSelector:@selector(fabuyifuSuccessToGoBack) withObject:[NSNumber numberWithBool:YES] afterDelay:1];
+                                           [self performSelector:@selector(pingjiaSuccessToGoBack) withObject:[NSNumber numberWithBool:YES] afterDelay:1];
                                            
                                        }
                                        
@@ -553,8 +554,13 @@ static NSString *kPhotoCellIdentifier = @"kPhotoCellIdentifier";
 
 
 
--(void)fabuyifuSuccessToGoBack{
+-(void)pingjiaSuccessToGoBack{
+    
+    
+    [self.delegate updateView_pingjiaSuccessWithIndex:self.theIndex_row];
+    
     //上传成功 返回到上一个vc
+    [self.navigationController popViewControllerAnimated:YES];
     
 }
 
