@@ -8,11 +8,29 @@
 
 #import "AddAddressController.h"
 
-@interface AddAddressController ()<UITextFieldDelegate>
+@interface AddAddressController ()<UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewDataSource>
 {
     UIButton *_saveButton;//保存按钮
     UIButton *_defaultButton;//设为默认按钮
+    
+    
+    
+    //地区选择
+    UIPickerView *_pickeView;
+    NSArray *_data;//地区数据
+    NSInteger _flagRow;//pickerView地区标志位
+    //地区数据字符串拼接
+    NSString *_str3;
+    NSString *_str1;
+    NSString *_str2;
+    BOOL _isChooseArea;//是否修改了地区
 }
+
+@property(nonatomic,strong)UIView *backPickView;//地区选择pickerView后面的背景view
+@property(nonatomic,strong)NSString *province;//省
+@property(nonatomic,strong)NSString *city;//城市
+@property(nonatomic,assign)NSInteger provinceIn;//省份对应id
+@property(nonatomic,assign)NSInteger cityIn;//市区对应id
 
 @end
 
@@ -30,6 +48,10 @@
     
     self.myTitle = @"新建收货地址";
     [self setMyViewControllerLeftButtonType:MyViewControllerLeftbuttonTypeBack WithRightButtonType:MyViewControllerRightbuttonTypeNull];
+    
+    
+    
+    
     
     self.view.backgroundColor = [UIColor whiteColor];
     
@@ -125,6 +147,10 @@
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(controlSaveButton) name:UITextFieldTextDidBeginEditingNotification object:nil];
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(controlSaveButton) name:UITextFieldTextDidEndEditingNotification object:nil];
+    
+    
+    
+    [self createAreaPickView];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -258,7 +284,7 @@
  */
 - (void)clickToSelectArea:(UIButton *)sender
 {
-    
+    [self areaShow];
 }
 
 /**
@@ -313,5 +339,154 @@
     [self clickToHidderKeyboard];
     return YES;
 }
+
+
+
+#pragma mark - 地区选择相关
+
+-(void)createAreaPickView{
+    //地区pickview
+    _pickeView = [[UIPickerView alloc]initWithFrame:CGRectMake(0, 40, DEVICE_WIDTH, 216)];
+    _pickeView.delegate = self;
+    _pickeView.dataSource = self;
+    _isChooseArea = NO;
+    
+    
+    NSLog(@"%@",NSStringFromCGRect(_pickeView.frame));
+    
+    //取消按钮
+    UIButton *quxiaoBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    quxiaoBtn.titleLabel.font = [UIFont systemFontOfSize:15];
+    [quxiaoBtn setTitle:@"取消" forState:UIControlStateNormal];
+    [quxiaoBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    quxiaoBtn.frame = CGRectMake(10, 5, 60, 40);
+    quxiaoBtn.layer.borderWidth = 1;
+    quxiaoBtn.layer.borderColor = [[UIColor blackColor]CGColor];
+    quxiaoBtn.layer.cornerRadius = 5;
+    [quxiaoBtn addTarget:self action:@selector(areaHidden) forControlEvents:UIControlEventTouchUpInside];
+    
+    
+    
+    
+    //确定按钮
+    UIButton *quedingBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    quedingBtn.titleLabel.font = [UIFont systemFontOfSize:15];
+    [quedingBtn setTitle:@"确定" forState:UIControlStateNormal];
+    [quedingBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    quedingBtn.frame = CGRectMake(DEVICE_WIDTH-70, 5, 60, 40);
+    quedingBtn.layer.borderWidth = 1;
+    quedingBtn.layer.borderColor = [[UIColor blackColor]CGColor];
+    quedingBtn.layer.cornerRadius = 5;
+    [quedingBtn addTarget:self action:@selector(areaHidden) forControlEvents:UIControlEventTouchUpInside];
+    
+    //地区选择
+    self.backPickView = [[UIView alloc]initWithFrame:CGRectMake(0, DEVICE_HEIGHT, DEVICE_WIDTH, 310)];
+    self.backPickView .backgroundColor = [UIColor whiteColor];
+    
+    [self.backPickView addSubview:quedingBtn];
+    [self.backPickView addSubview:quxiaoBtn];
+    [self.backPickView addSubview:_pickeView];
+    
+    
+    NSString *path = [[NSBundle mainBundle]pathForResource:@"garea" ofType:@"plist"];
+    _data = [NSArray arrayWithContentsOfFile:path];
+    
+    [self.view addSubview:self.backPickView];
+    
+    
+}
+
+
+
+//地区出现
+-(void)areaShow{
+    NSLog(@"_backPickView");
+    __weak typeof (self)bself = self;
+    [UIView animateWithDuration:0.3 animations:^{
+        bself.backPickView.frame = CGRectMake(0,DEVICE_HEIGHT-310, DEVICE_WIDTH, 310);
+    }];
+    
+    
+}
+
+-(void)areaHidden{//地区隐藏
+    __weak typeof (self)bself = self;
+    
+    
+    self.provinceIn = [GMAPI cityIdForName:self.province];
+    self.cityIn = [GMAPI cityIdForName:self.city];
+    
+    NSLog(@"在这里  省:%@ id %d   市:%@ id:%d",self.province,self.provinceIn,self.city,self.cityIn);
+    
+    [UIView animateWithDuration:0.3 animations:^{
+        bself.backPickView.frame = CGRectMake(0, DEVICE_HEIGHT, DEVICE_WIDTH, 310);
+    }];
+    
+}
+
+#pragma mark - UIPickerViewDataSource
+
+- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView{
+    return 2;
+}
+
+- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component{
+    
+    if (component == 0) {
+        return _data.count;
+    } else if (component == 1) {
+        NSArray * cities = _data[_flagRow][@"Cities"];
+        return cities.count;
+    }
+    return 0;
+    
+}
+
+- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component{
+    
+    if (component == 0) {
+        if ([_data[row][@"State"] isEqualToString:@"省份"]) {
+            self.province = @"";
+        }else{
+            self.province = _data[row][@"State"];
+        }
+        
+        NSString *provinceStr = [NSString stringWithFormat:@"%@",_data[row][@"State"]];
+        //字符转id
+        self.provinceIn = [GMAPI cityIdForName:provinceStr];//上传
+        return provinceStr;
+        
+        
+    } else if (component == 1) {
+        NSArray * cities = _data[_flagRow][@"Cities"];
+        if ([cities[row][@"city"] isEqualToString:@"市区县"]) {
+            self.city = @"";
+        }else{
+            self.city = cities[row][@"city"];
+        }
+        NSString *cityStr = [NSString stringWithFormat:@"%@",cities[row][@"city"]];
+        //字符转id
+        NSString *pppccc = [NSString stringWithFormat:@"%@%@",self.province,self.city];
+        self.cityIn = [GMAPI cityIdForName:pppccc];//上传
+        
+        return cityStr;
+    }
+    return 0;
+}
+
+- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component{
+    
+    if (component == 0) {
+        _flagRow = row;
+        _isChooseArea = YES;
+    }else if (component == 1){
+        _isChooseArea = YES;
+    }
+    
+    [pickerView reloadAllComponents];
+}
+
+
+
 
 @end

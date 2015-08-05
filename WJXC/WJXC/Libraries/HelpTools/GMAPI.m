@@ -57,9 +57,6 @@
     NSString *str_authkey=[NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults]objectForKey:USER_AUTHOD]];
 
     
-    
-
-    
     if (str_authkey.length == 0 || [str_authkey isEqualToString:@"(null)"]) {
         return @"";
     }

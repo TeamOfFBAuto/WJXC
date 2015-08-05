@@ -24,7 +24,13 @@
 -(CGFloat)loadCustomViewWithModel:(HuodongDetailModel*)theModel index:(NSIndexPath*)theIndexpath{
     CGFloat height = 0.0f;
     if (theIndexpath.row == 0) {//封面图
-        UIImageView *coverImv = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, 180)];
+        CGFloat bili = 1;
+        if (theModel.cover_width && theModel.cover_height) {
+            CGFloat cor_width = [theModel.cover_width floatValue];
+            CGFloat cor_height = [theModel.cover_height floatValue];
+            bili = cor_width/cor_height;
+        }
+        UIImageView *coverImv = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, 180*bili)];
         [coverImv sd_setImageWithURL:[NSURL URLWithString:theModel.cover_pic] placeholderImage:[UIImage imageNamed:@"default02.png"]];
         [self.contentView addSubview:coverImv];
         //标题
@@ -52,14 +58,30 @@
         NSArray *desc_format = theModel.desc_format;
         NSDictionary *dic = desc_format[theIndexpath.row - 1];
         if ([[dic stringValueForKey:@"type"]intValue] == 1) {//文字
-            UILabel *tt = [[UILabel alloc]initWithFrame:CGRectMake(10, 10, DEVICE_WIDTH-20, 0) title:[dic stringValueForKey:@"content"] font:12 align:NSTextAlignmentLeft textColor:[UIColor blackColor]];
+            UILabel *tt = [[UILabel alloc]initWithFrame:CGRectMake(10, 5, DEVICE_WIDTH-20, 0) title:[dic stringValueForKey:@"content"] font:12 align:NSTextAlignmentLeft textColor:[UIColor blackColor]];
             [self.contentView addSubview:tt];
-            [tt setMatchedFrame4LabelWithOrigin:CGPointMake(10, 10) width:DEVICE_WIDTH-20];
-            height = CGRectGetMaxY(tt.frame)+10;
+            [tt setMatchedFrame4LabelWithOrigin:CGPointMake(10, 5) width:DEVICE_WIDTH-20];
+            height = CGRectGetMaxY(tt.frame);
+            
         }else if ([[dic stringValueForKey:@"type"]intValue] == 2){//图片
-            UIImageView *imv = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, 180)];
+            
+            CGFloat bili = 1;
+            if (theModel.cover_width && theModel.cover_height) {
+                CGFloat cor_width = [theModel.cover_width floatValue];
+                CGFloat cor_height = [theModel.cover_height floatValue];
+                bili = cor_width/cor_height;
+            }
+            
+            UIImageView *imv = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, 180*bili)];
             [imv sd_setImageWithURL:[NSURL URLWithString:[dic stringValueForKey:@"src"]] placeholderImage:[UIImage imageNamed:@"homepage_activity_clock.png"]];
-            height = 185;
+            [self.contentView addSubview:imv];
+            
+            if (bili == 1) {
+                height = 180;
+            }else{
+                height = CGRectGetMaxY(imv.frame);
+            }
+            
         }
     }
     

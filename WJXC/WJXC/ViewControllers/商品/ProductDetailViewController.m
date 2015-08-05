@@ -42,7 +42,7 @@
 
 
 -(void)viewWillAppear:(BOOL)animated{
-    [self.navigationController setNavigationBarHidden:YES animated:YES];
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 
 
@@ -50,6 +50,10 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    [self setMyViewControllerLeftButtonType:MyViewControllerLeftbuttonTypeText WithRightButtonType:MyViewControllerRightbuttonTypeNull];
+    
+    
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(prepareNetData) name:NOTIFICATION_LOGIN object:nil];
     
     [self creatTableView];
     
@@ -76,10 +80,21 @@
 }
 
 -(void)prepareNetData{
+    NSDictionary *parame;
+    NSString *authcode = [GMAPI getAuthkey];
+    if (authcode.length == 0) {
+        parame  = @{
+                    @"product_id":self.product_id,
+                    };
+    }else{
+        parame  = @{
+                    @"product_id":self.product_id,
+                    @"authcode":[GMAPI getAuthkey]
+                    };
+    }
     
-    NSDictionary *parame = @{
-                             @"product_id":self.product_id
-                             };
+    
+    
     
     [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodGet api:GET_PRODUCTDETAIL parameters:parame constructingBodyBlock:nil completion:^(NSDictionary *result) {
         
@@ -567,7 +582,18 @@
 #pragma mark - 收藏
 -(void)gshoucang{
     
-    
+    NSString *authcode = [GMAPI getAuthkey];
+    if (authcode.length == 0) {
+        LoginViewController *login = [[LoginViewController alloc]init];
+        
+        UINavigationController *unVc = [[UINavigationController alloc]initWithRootViewController:login];
+        
+        [self presentViewController:unVc animated:YES completion:nil];
+        
+        return;
+    }else{
+        
+    }
     
     
     if ([_isfavor intValue] == 0) {
