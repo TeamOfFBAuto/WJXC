@@ -478,7 +478,7 @@
  */
 - (void)clickToPhone:(UIButton *)sender
 {
-    NSString *phoneNum = @"010-999999999";
+    NSString *phoneNum = _theProductModel.merchant_phone;
     NSString *msg = [NSString stringWithFormat:@"拨打:%@",phoneNum];
     UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:msg delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
     [alert show];

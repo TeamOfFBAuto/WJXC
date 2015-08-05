@@ -28,6 +28,7 @@
 @property(nonatomic,strong)NSString *discount;
 @property(nonatomic,strong)NSString *cover_pic;
 @property(nonatomic,strong)NSString *is_favor;
+@property(nonatomic,strong)NSString *merchant_phone;//联系电话
 
 
 @end
