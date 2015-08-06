@@ -197,7 +197,7 @@
         }else //代表请求结果有错误,或者特殊操作结果
         {
             //大于2000的可以正常提示错误,小于2000的为内部错误 参数错误等
-            if (erroCode > 2000) {
+            if (erroCode >= 2000) {
                 
                 NSDictionary *result = @{Erro_Info:erroInfo,
                                          Erro_Code:[NSString stringWithFormat:@"%d",erroCode]};

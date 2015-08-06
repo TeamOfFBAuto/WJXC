@@ -188,7 +188,8 @@
     
     NSDictionary *params = @{@"authcode":authey,
                              @"status":status,
-                             @"per_page":[NSNumber numberWithInt:20]};
+                             @"per_page":[NSNumber numberWithInt:10],
+                             @"page":[NSNumber numberWithInt:weakTable.pageNum]};
     [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodGet api:ORDER_GET_MY_ORDERS parameters:params constructingBodyBlock:nil completion:^(NSDictionary *result) {
         
         NSArray *list = result[@"list"];
@@ -198,12 +199,57 @@
             OrderModel *aModel = [[OrderModel alloc]initWithDictionary:aDic];
             [temp addObject:aModel];
         }
-        [weakTable reloadData:temp pageSize:20];
+        
+        [weakTable reloadData:temp pageSize:10 noDataView:[self noDataView]];
         
     } failBlock:^(NSDictionary *result) {
         
         [weakTable loadFail];
     }];
+}
+
+/**
+ *  没有数据自定义view
+ *
+ *  @return
+ */
+- (UIView *)noDataView
+{
+    UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, 135)];
+    view.backgroundColor = [UIColor clearColor];
+    //图标
+    
+    UIImageView *imageV = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 73, 80)];
+    imageV.image = [UIImage imageNamed:@"my_indent_no"];
+    [view addSubview:imageV];
+    imageV.centerX = view.width/2.f;
+    
+    UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(0, imageV.bottom + 20, DEVICE_WIDTH, 30) title:@"您还没有相关订单哦" font:14 align:NSTextAlignmentCenter textColor:[UIColor colorWithHexString:@"646464"]];
+    [view addSubview:label];
+    
+    return view;
+}
+
+/**
+ *  没有数据自定义view
+ *
+ *  @return
+ */
+- (UIView *)erroView
+{
+    UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, 135)];
+    view.backgroundColor = [UIColor clearColor];
+    //图标
+    
+    UIImageView *imageV = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 73, 80)];
+    imageV.image = [UIImage imageNamed:@"my_indent_no"];
+    [view addSubview:imageV];
+    imageV.centerX = view.width/2.f;
+    
+    UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(0, imageV.bottom + 20, DEVICE_WIDTH, 30) title:@"您还没有相关订单哦" font:14 align:NSTextAlignmentCenter textColor:[UIColor colorWithHexString:@"646464"]];
+    [view addSubview:label];
+    
+    return view;
 }
 
 #pragma - mark 事件处理

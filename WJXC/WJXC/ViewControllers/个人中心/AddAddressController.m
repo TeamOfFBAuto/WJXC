@@ -13,24 +13,23 @@
     UIButton *_saveButton;//保存按钮
     UIButton *_defaultButton;//设为默认按钮
     
-    
-    
     //地区选择
     UIPickerView *_pickeView;
     NSArray *_data;//地区数据
     NSInteger _flagRow;//pickerView地区标志位
     //地区数据字符串拼接
-    NSString *_str3;
-    NSString *_str1;
-    NSString *_str2;
     BOOL _isChooseArea;//是否修改了地区
+    
+    NSInteger _selectProvinceId;//选择或者修改后省id
+    NSInteger _selectCityId;//选择或者修改后 城市id
 }
 
 @property(nonatomic,strong)UIView *backPickView;//地区选择pickerView后面的背景view
-@property(nonatomic,strong)NSString *province;//省
-@property(nonatomic,strong)NSString *city;//城市
-@property(nonatomic,assign)NSInteger provinceIn;//省份对应id
-@property(nonatomic,assign)NSInteger cityIn;//市区对应id
+@property(nonatomic,strong)NSString *provinceName;//省
+@property(nonatomic,strong)NSString *cityName;//城市
+
+@property(nonatomic,assign)NSInteger provinceId;//省份对应id
+@property(nonatomic,assign)NSInteger cityId;//市区对应id
 
 @end
 
@@ -83,8 +82,20 @@
                 NSString *add = [NSString stringWithFormat:@"%@%@",[GMAPI cityNameForId:[self.addressModel.pro_id intValue]],[GMAPI cityNameForId:[self.addressModel.city_id intValue]]];
                 tf.text = add;
                 
-                self.provinceIn = [self.addressModel.pro_id integerValue];
-                self.cityIn = [self.addressModel.city_id integerValue];
+                NSString *pro_id = self.addressModel.pro_id;
+                NSString *city_id = self.addressModel.city_id;
+                NSString *pro_name = [GMAPI cityNameForId:[pro_id intValue]];
+                NSString *city_name = [GMAPI cityNameForId:[city_id intValue]];
+                
+                self.provinceId = [pro_id integerValue];
+                self.cityId = [city_id integerValue];
+                self.provinceName = pro_name;
+                self.cityName = city_name;
+                
+                _selectProvinceId = [pro_id integerValue];
+                _selectCityId = [city_id integerValue];
+                
+                NSLog(@"\nproId:%ld proName:%@\n cityId:%ld cityName:%@",self.provinceId,self.provinceName,self.cityId,self.cityName);
                 
             }else if (i == 3){
                 tf.text = self.addressModel.street;
@@ -113,6 +124,12 @@
             btn.frame = tf.frame;
             [self.view addSubview:btn];
             [btn addTarget:self action:@selector(clickToSelectArea:) forControlEvents:UIControlEventTouchUpInside];
+        }
+        
+        if (i == 3) {
+            
+            tf.returnKeyType = UIReturnKeyDone;
+
         }
         
         UIView *line = [[UIView alloc]initWithFrame:CGRectMake(0, label.bottom, DEVICE_WIDTH, 0.5)];
@@ -188,14 +205,16 @@
     NSDictionary *params;
     NSString *api;
     
+    NSLog(@"proId:%ld proName:%@\n cityId:%ld cityName:%@",self.provinceId,self.provinceName,self.cityId,self.cityName);
+    
     //编辑
     if (self.isEditAddress) {
         
         api = USER_ADDRESS_EDIT;
         params = @{@"authcode":[GMAPI getAuthkey],
                                  @"address_id":self.addressModel.address_id,
-                                 @"pro_id":[NSNumber numberWithInteger:self.provinceIn],
-                                 @"city_id":[NSNumber numberWithInteger:self.cityIn],
+                                 @"pro_id":[NSNumber numberWithInteger:_selectProvinceId],
+                                 @"city_id":[NSNumber numberWithInteger:_selectCityId],
                                  @"street":street,
                                  @"receiver_username":receiver_username,
                                  @"mobile":mobile,
@@ -204,8 +223,8 @@
     {
         api = USER_ADDRESS_ADD;
         params = @{@"authcode":[GMAPI getAuthkey],
-                                 @"pro_id":[NSNumber numberWithInteger:self.provinceIn],
-                                 @"city_id":[NSNumber numberWithInteger:self.cityIn],
+                                 @"pro_id":[NSNumber numberWithInteger:_selectProvinceId],
+                                 @"city_id":[NSNumber numberWithInteger:_selectCityId],
                                  @"street":street,
                                  @"receiver_username":receiver_username,
                                  @"mobile":mobile,
@@ -223,7 +242,7 @@
         
         [[NSNotificationCenter defaultCenter]postNotificationName:NOTIFICATION_ADDADDRESS object:nil];
         
-        [weakSelf performSelector:@selector(leftButtonTap:) withObject:self afterDelay:0.3];
+        [weakSelf performSelector:@selector(backAction) withObject:self afterDelay:0.3];
         
     } failBlock:^(NSDictionary *result) {
         
@@ -233,7 +252,45 @@
 
 }
 
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    
+    NSLog(@"alertView proId:%ld proName:%@\n cityId:%ld cityName:%@",self.provinceId,self.provinceName,self.cityId,self.cityName);
+    
+    if (buttonIndex == 1) {
+        
+        [self addAddress];
+    }else
+    {
+        [self backAction];
+    }
+}
+
 #pragma - mark 事件处理
+
+/**
+ *  点击返回按钮时 自动保存
+ */
+-(void)leftButtonTap:(UIButton *)sender
+{
+    if ([self allTextFieldIsOK]) {
+        //需要保存
+        
+        NSLog(@"proId:%ld proName:%@\n cityId:%ld cityName:%@",self.provinceId,self.provinceName,self.cityId,self.cityName);
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:@"是否保存当前编辑信息" delegate:self cancelButtonTitle:@"否" otherButtonTitles:@"是", nil];
+        [alert show];
+        
+        return;
+    }
+    
+    [self backAction];
+}
+
+- (void)backAction
+{
+    [self.navigationController popViewControllerAnimated:YES];
+
+}
 
 - (UITextField *)textFieldForTag:(int)tag
 {
@@ -298,6 +355,22 @@
     }
     
     return YES;
+}
+
+/**
+ *  检查内容只要有一个编辑了
+ */
+- (BOOL)oneTextFieldIsOK
+{
+    for (int i = 0; i < 4; i ++) {
+        
+        //只要有一个为空就 NO
+        if ([self textFieldForTag:100 + i].text.length > 0) {
+            
+            return YES;
+        }
+    }
+    return NO;
 }
 
 /**
@@ -418,22 +491,19 @@
     
     [self areaHidden];
     
-    self.provinceIn = [GMAPI cityIdForName:self.province];
-    self.cityIn = [GMAPI cityIdForName:self.city];
+    self.provinceId = [GMAPI cityIdForName:self.provinceName];
+    self.cityId = [GMAPI cityIdForName:self.cityName];
     
-    NSLog(@"在这里  省:%@ id %ld   市:%@ id:%ld",self.province,self.provinceIn,self.city,self.cityIn);
-    [self textFieldForTag:102].text = [NSString stringWithFormat:@"%@%@",self.province,self.city];
+    //确定才修改select值
+    _selectProvinceId = self.provinceId;
+    _selectCityId = self.cityId;
+    
+    NSLog(@"在这里  省:%@ id %ld   市:%@ id:%ld",self.provinceName,self.provinceId,self.cityName,self.cityId);
+    [self textFieldForTag:102].text = [NSString stringWithFormat:@"%@%@",self.provinceName,self.cityName];
 }
 
 -(void)areaHidden{//地区隐藏
     __weak typeof (self)bself = self;
-    
-    
-    self.provinceIn = [GMAPI cityIdForName:self.province];
-    self.cityIn = [GMAPI cityIdForName:self.city];
-    
-    NSLog(@"在这里  省:%@ id %ld   市:%@ id:%ld",self.province,self.provinceIn,self.city,self.cityIn);
-    
     [UIView animateWithDuration:0.3 animations:^{
         bself.backPickView.frame = CGRectMake(0, DEVICE_HEIGHT, DEVICE_WIDTH, 310);
     }];
@@ -462,28 +532,28 @@
     
     if (component == 0) {
         if ([_data[row][@"State"] isEqualToString:@"省份"]) {
-            self.province = @"";
+            self.provinceName = @"";
         }else{
-            self.province = _data[row][@"State"];
+            self.provinceName = _data[row][@"State"];
         }
         
         NSString *provinceStr = [NSString stringWithFormat:@"%@",_data[row][@"State"]];
         //字符转id
-        self.provinceIn = [GMAPI cityIdForName:provinceStr];//上传
+        self.provinceId = [GMAPI cityIdForName:provinceStr];//上传
         return provinceStr;
         
         
     } else if (component == 1) {
         NSArray * cities = _data[_flagRow][@"Cities"];
         if ([cities[row][@"city"] isEqualToString:@"市区县"]) {
-            self.city = @"";
+            self.cityName = @"";
         }else{
-            self.city = cities[row][@"city"];
+            self.cityName = cities[row][@"city"];
         }
         NSString *cityStr = [NSString stringWithFormat:@"%@",cities[row][@"city"]];
         //字符转id
-        NSString *pppccc = [NSString stringWithFormat:@"%@%@",self.province,self.city];
-        self.cityIn = [GMAPI cityIdForName:pppccc];//上传
+        NSString *pppccc = [NSString stringWithFormat:@"%@%@",self.provinceName,self.cityName];
+        self.cityId = [GMAPI cityIdForName:pppccc];//上传
         
         return cityStr;
     }
