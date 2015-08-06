@@ -15,7 +15,7 @@
 #import "ShoppingCarController.h"
 #import "SimpleMessage.h"
 
-@interface ProductDetailViewController ()<GCycleScrollViewDelegate,GCycleScrollViewDatasource,UITableViewDataSource,UITableViewDelegate>
+@interface ProductDetailViewController ()<UITableViewDataSource,UITableViewDelegate>
 {
     GCycleScrollView *_gscrollView;//上方循环滚动的scrollview
     
@@ -133,22 +133,6 @@
 }
 
 
-//创建循环滚动的scrollview
--(UIView*)creatGscrollView{
-//    _gscrollView = [[GCycleScrollView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, 180*GscreenRatio_568)];
-//    _gscrollView.theGcycelScrollViewType = GCYCELNORMORL;
-//    [_gscrollView loadGcycleScrollView];
-//    _gscrollView.tag = 200;
-//    _gscrollView.delegate = self;
-//    _gscrollView.datasource = self;
-//    return _gscrollView;
-    
-    UIImageView *imv = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, 180*GscreenRatio_568)];
-    [imv setImage:[UIImage imageNamed:_theProductModel.cover_pic]];
-    return imv;
-    
-    
-}
 
 
 
@@ -273,62 +257,10 @@
 
 
 
-#pragma mark - GCycleScrollViewDelegate && GCycleScrollViewDatasource
 
-//滚动总共几页
-- (NSInteger)numberOfPagesWithScrollView:(GCycleScrollView*)theGCycleScrollView
-{
-    
-    NSInteger num = 0;
-    if (theGCycleScrollView.tag == 200) {
-        num = _theProductModel.image.count;
-        if (num == 0) {
-            num = 1;
-        }
-    }
-    return num;
-    
-}
 
-//每一页
-- (UIView *)pageAtIndex:(NSInteger)index ScrollView:(GCycleScrollView *)theGCycleScrollView
-{
-    
-    
-    if (theGCycleScrollView.tag == 200) {
-        
-        
-        if (!_theProductModel.image) {
-            UIImageView *imv = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, 180*GscreenRatio_568)];
-            imv.userInteractionEnabled = YES;
-            [imv setImage:[UIImage imageNamed:@"default02.png"]];
-            return imv;
-        }
-        
-        
-        UIImageView *imv = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, 180*GscreenRatio_568)];
-        imv.userInteractionEnabled = YES;
-        
-        NSDictionary *dic = _theProductModel.image[index];
-        NSString *str = nil;
-        if ([dic isKindOfClass:[NSDictionary class]]) {
-            str = [dic objectForKey:@"pic"];
-        }
-        
-        [imv sd_setImageWithURL:[NSURL URLWithString:str] placeholderImage:[UIImage imageNamed:@"default02.png"]];
-        return imv;
-    }
-    
-    return [UIView new];
-    
-}
 
-//点击的哪一页
-- (void)didClickPage:(GCycleScrollView *)csView atIndex:(NSInteger)index
-{
 
-    
-}
 
 
 
@@ -369,7 +301,9 @@
     
     
     if (indexPath.row == 0) {
-        [cell.contentView addSubview:[self creatGscrollView]];
+        UIImageView *imv = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, 180*GscreenRatio_568)];
+        [imv sd_setImageWithURL:[NSURL URLWithString:_theProductModel.cover_pic] placeholderImage:[UIImage imageNamed:@"default02.png"]];
+        [cell.contentView addSubview:imv];
         return cell;
     }
     
