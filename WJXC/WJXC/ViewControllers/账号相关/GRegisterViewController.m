@@ -355,7 +355,7 @@ static int seconds = 60;//计时60s
     NSString *password = self.mimaTf.text;
     Gender sex = Gender_Girl;//默认女
     Register_Type type = Register_Phone;//默认手机号方式
-    int code = [self.mimaTf.text intValue];
+    int code = [self.yanzhengmaTf.text intValue];
     NSString *mobile = self.phoneTF.text;
     
     if (![LTools isValidateMobile:mobile]) {

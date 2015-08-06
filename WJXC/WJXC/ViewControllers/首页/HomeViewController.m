@@ -48,6 +48,9 @@
     // Do any additional setup after loading the view.
     
     
+    _timer_daojishi = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(ggggg) userInfo:nil repeats:YES];
+    [_timer_daojishi fire];
+    
     _cellHeight = 130;
     
     
@@ -376,7 +379,12 @@
             [_TopDataArray addObject:model];
         }
         
-        [_gscrollView reloadData];
+        if (list.count>0) {
+            _tableView.tableHeaderView = [self creatGscrollView];
+        }
+        
+        
+//        [_gscrollView reloadData];
         
     } failBlock:^(NSDictionary *result) {
         
@@ -394,6 +402,7 @@
     if (theGCycleScrollView.tag == 200) {
         num = _TopDataArray.count;
     }
+    
     return num;
     
 }
@@ -403,7 +412,11 @@
 {
     
     
+    
+    
     if (theGCycleScrollView.tag == 200) {
+        
+        
         UIImageView *imv = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, 180)];
         imv.userInteractionEnabled = YES;
         
@@ -466,13 +479,17 @@
 
             //秒杀倒计时
             _endTime = [relative_info stringValueForKey:@"end_time"];
-            _timer_daojishi = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(ggggg) userInfo:nil repeats:YES];
-            [_timer_daojishi fire];
+            
             UILabel *miaoshaTitle = [[UILabel alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(yuanjiaLabel.frame), backImv.frame.size.width, 20) title:@"倒计时" font:12 align:NSTextAlignmentCenter textColor:RGBCOLOR(93, 87, 96)];
             [backImv addSubview:miaoshaTitle];
-
-            _daojishiLabel = [[UILabel alloc]initWithFrame:CGRectMake(miaoshaTitle.frame.origin.x, CGRectGetMaxY(miaoshaTitle.frame), miaoshaTitle.frame.size.width, miaoshaTitle.frame.size.height) title:nil font:12 align:NSTextAlignmentCenter textColor:[UIColor redColor]];
+            
+            if (!_daojishiLabel) {
+                 _daojishiLabel = [[UILabel alloc]initWithFrame:CGRectMake(miaoshaTitle.frame.origin.x, CGRectGetMaxY(miaoshaTitle.frame), miaoshaTitle.frame.size.width, miaoshaTitle.frame.size.height) title:nil font:12 align:NSTextAlignmentCenter textColor:[UIColor redColor]];
+                
+            }
             [backImv addSubview:_daojishiLabel];
+            
+            NSLog(@"创建时候的倒计时Label%@",_daojishiLabel);
             
             
             
@@ -491,6 +508,11 @@
     
     NSString *haha = [GMAPI daojishi:_endTime];
     _daojishiLabel.text = haha;
+    
+//    NSLog(@"haha%@",haha);
+//    NSLog(@"倒计时label%@", _daojishiLabel.text);
+//    NSLog(@"倒计时Label%@", _daojishiLabel);
+    
 }
 
 
@@ -542,9 +564,7 @@
     _tableView.dataSource = self;
     [self.view addSubview:_tableView];
     
-    UIView *tabHeaderView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, DEVICE_WIDTH *375.0/750)];
-    tabHeaderView.backgroundColor = [UIColor orangeColor];
-    _tableView.tableHeaderView = [self creatGscrollView];
+    
     
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [_tableView showRefreshHeader:YES];

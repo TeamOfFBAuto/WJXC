@@ -521,6 +521,8 @@ static NSString *kPhotoCellIdentifier = @"kPhotoCellIdentifier";
                                        
                                        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
                                        
+                                       
+                                       
                                        NSLog(@"operation.responseString:%@",operation.responseString);
                                        NSLog(@"失败 : %@",error);
                                        

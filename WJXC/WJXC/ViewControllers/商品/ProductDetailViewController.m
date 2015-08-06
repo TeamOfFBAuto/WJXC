@@ -135,13 +135,19 @@
 
 //创建循环滚动的scrollview
 -(UIView*)creatGscrollView{
-    _gscrollView = [[GCycleScrollView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, 180*GscreenRatio_568)];
-    _gscrollView.theGcycelScrollViewType = GCYCELNORMORL;
-    [_gscrollView loadGcycleScrollView];
-    _gscrollView.tag = 200;
-    _gscrollView.delegate = self;
-    _gscrollView.datasource = self;
-    return _gscrollView;
+//    _gscrollView = [[GCycleScrollView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, 180*GscreenRatio_568)];
+//    _gscrollView.theGcycelScrollViewType = GCYCELNORMORL;
+//    [_gscrollView loadGcycleScrollView];
+//    _gscrollView.tag = 200;
+//    _gscrollView.delegate = self;
+//    _gscrollView.datasource = self;
+//    return _gscrollView;
+    
+    UIImageView *imv = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, 180*GscreenRatio_568)];
+    [imv setImage:[UIImage imageNamed:_theProductModel.cover_pic]];
+    return imv;
+    
+    
 }
 
 
