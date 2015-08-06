@@ -94,4 +94,25 @@
 //万聚鲜城活动详情扩展
 - (void)reloadDataSuccess:(NSArray *)data isHaveMore:(BOOL)isHave;
 
+/**
+ *  成功加载数据reload 
+ *  1、没有数据时显示自定义view
+ *  2、当数据大于0小于一页时不显示底部加载view
+ *
+ *  @param data       每次请求数据
+ *  @param pageSize   每页个数
+ *  @param noDataView 自定义没有数据时view
+ */
+- (void)reloadData:(NSArray *)data
+          pageSize:(int)pageSize
+        noDataView:(UIView *)noDataView;
+
+/**
+ *  请求数据失败 显示自定义view
+ *
+ *  @param view
+ */
+- (void)loadFailWithView:(UIView *)view
+                pageSize:(int)pageSize;
+
 @end
