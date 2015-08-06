@@ -385,7 +385,11 @@ static int seconds = 60;//计时60s
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodPost api:USER_REGISTER_ACTION parameters:params constructingBodyBlock:nil completion:^(NSDictionary *result) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-        [self performSelector:@selector(clickToClose) withObject:nil afterDelay:0.2];
+        
+        
+        [GMAPI showAutoHiddenMBProgressWithText:@"注册成功" addToView:self.view];
+        
+        [self performSelector:@selector(clickToClose) withObject:nil afterDelay:1.5];
     } failBlock:^(NSDictionary *result) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         NSLog(@"failDic %@",result);
