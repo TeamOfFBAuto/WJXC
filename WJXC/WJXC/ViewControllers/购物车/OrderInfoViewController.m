@@ -238,6 +238,17 @@
 {
     RCMessageContent *content = [[RCMessageContent alloc]init];
     
+//    RCRichContentMessage
+//    
+//    SimpleMessage *msg = [SimpleMessage messageWithContent:@"哈哈可以发送任何类型的消息,自定义的消息😄来了"];
+//    msg.extra = @"http://pic.nipic.com/2007-11-09/2007119122519868_2.jpg";
+//    
+//    [[RCIMClient sharedRCIMClient]sendMessage:ConversationType_CUSTOMERSERVICE targetId:SERVICE_ID content:msg pushContent:@"推送自定义" success:^(long messageId) {
+//        NSLog(@"messageid %ld",messageId);
+//    } error:^(RCErrorCode nErrorCode, long messageId) {
+//        NSLog(@"nErrorCode %ld",nErrorCode);
+//        
+//    }];
     
     RCDChatViewController *chatService = [[RCDChatViewController alloc] init];
     chatService.userName = @"客服";

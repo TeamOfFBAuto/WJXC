@@ -102,9 +102,9 @@
 //    
 //    [self sendImageMessage:msg pushContent:@"小龙虾"];
     
-    SimpleMessage *msg = [[SimpleMessage alloc]init];
-    msg.content = @"哈哈哈";
-    [self sendMessage:msg pushContent:@"hah:123456678"];
+//    SimpleMessage *msg = [[SimpleMessage alloc]init];
+//    msg.content = @"哈哈哈";
+//    [self sendMessage:msg pushContent:@"hah:123456678"];
     
     
 }
