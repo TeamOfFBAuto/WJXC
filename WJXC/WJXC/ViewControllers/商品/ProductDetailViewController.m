@@ -404,11 +404,12 @@
      */
     
     NSString *imageUrl = _theProductModel.cover_pic;
-    NSString *digest = [NSString stringWithFormat:@"%@\n现价:%.2f\n原价:%.2f",_theProductModel.product_name,[_theProductModel.current_price floatValue],[_theProductModel.original_price floatValue]];
+    NSString *digest = [NSString stringWithFormat:@"\n现价:%.2f元\n原价:%.2f元",[_theProductModel.current_price floatValue],[_theProductModel.original_price floatValue]];
     NSString *productId = [NSString stringWithFormat:@"productId:%@",_theProductModel.product_id];
     
-    RCRichContentMessage *msg = [RCRichContentMessage messageWithTitle:@"我在看:" digest:digest imageURL:imageUrl extra:productId];
+    NSString *title = [NSString stringWithFormat:@"我在看:[%@]",_theProductModel.product_name];
     
+    RCRichContentMessage *msg = [RCRichContentMessage messageWithTitle:title digest:digest imageURL:imageUrl extra:productId];
     [[RCIMClient sharedRCIMClient]sendMessage:ConversationType_CUSTOMERSERVICE targetId:SERVICE_ID content:msg pushContent:@"客服消息" success:^(long messageId) {
         NSLog(@"messageid %ld",messageId);
     } error:^(RCErrorCode nErrorCode, long messageId) {

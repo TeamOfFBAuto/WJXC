@@ -235,9 +235,7 @@
  *  @param sender
  */
 - (void)clickToChat:(UIButton *)sender
-{
-    RCMessageContent *content = [[RCMessageContent alloc]init];
-    
+{    
 //    RCRichContentMessage
 //    
 //    SimpleMessage *msg = [SimpleMessage messageWithContent:@"哈哈可以发送任何类型的消息,自定义的消息😄来了"];
@@ -249,6 +247,22 @@
 //        NSLog(@"nErrorCode %ld",nErrorCode);
 //        
 //    }];
+    
+//    NSString *imageUrl = _theProductModel.cover_pic;
+//    NSString *digest = [NSString stringWithFormat:@"%@\n现价:%.2f\n原价:%.2f",_theProductModel.product_name,[_theProductModel.current_price floatValue],[_theProductModel.original_price floatValue]];
+//    NSString *productId = [NSString stringWithFormat:@"productId:%@",_theProductModel.product_id];
+    
+    NSString *text = [NSString stringWithFormat:@"订单编号:%@",_orderModel.order_no];
+    RCTextMessage *msg = [[RCTextMessage alloc]init];
+    msg.content = text;
+    msg.extra = @"订单编号:";
+    
+    [[RCIMClient sharedRCIMClient]sendMessage:ConversationType_CUSTOMERSERVICE targetId:SERVICE_ID content:msg pushContent:@"客服消息" success:^(long messageId) {
+        NSLog(@"messageid %ld",messageId);
+    } error:^(RCErrorCode nErrorCode, long messageId) {
+        NSLog(@"nErrorCode %ld",nErrorCode);
+        
+    }];
     
     RCDChatViewController *chatService = [[RCDChatViewController alloc] init];
     chatService.userName = @"客服";
