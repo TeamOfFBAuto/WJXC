@@ -157,7 +157,13 @@
                                  
                                  };
     
+    
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    
+    
     [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodGet api:GET_PRODUCT_CLASS parameters:parameters constructingBodyBlock:nil completion:^(NSDictionary *result) {
+        
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         
         NSLog(@"%@",result);
         
@@ -181,7 +187,7 @@
     
         
     } failBlock:^(NSDictionary *result) {
-        
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
     }];
 }
 

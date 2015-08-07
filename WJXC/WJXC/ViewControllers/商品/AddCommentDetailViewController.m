@@ -512,7 +512,10 @@ static NSString *kPhotoCellIdentifier = @"kPhotoCellIdentifier";
                                        NSLog(@"mydic == %@ err0 = %@",mydic,myerr);
                                        
                                        if ([[mydic objectForKey:@"errorcode"]intValue]==0) {
-                                           [self performSelector:@selector(pingjiaSuccessToGoBack) withObject:[NSNumber numberWithBool:YES] afterDelay:1];
+                                           
+                                           [GMAPI showAutoHiddenMBProgressWithText:@"评价成功" addToView:self.view];
+                                           
+                                           [self performSelector:@selector(pingjiaSuccessToGoBack) withObject:[NSNumber numberWithBool:YES] afterDelay:2];
                                            
                                        }
                                        
@@ -521,7 +524,7 @@ static NSString *kPhotoCellIdentifier = @"kPhotoCellIdentifier";
                                        
                                        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
                                        
-                                       
+                                       [GMAPI showAutoHiddenMBProgressWithText:@"评价失败，请重新提交" addToView:self.view];
                                        
                                        NSLog(@"operation.responseString:%@",operation.responseString);
                                        NSLog(@"失败 : %@",error);
