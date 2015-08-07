@@ -2471,7 +2471,7 @@
 					"$(PROJECT_DIR)/WJXC/Libraries/ThirdClass/lib",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "722d2561-f984-4505-a82a-4e20d29f4088";
+				PROVISIONING_PROFILE = "94bfdcce-35c3-436e-933c-8ade63bba394";
 				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/**";
 				VALID_ARCHS = "arm64 armv7";
 			};
@@ -2504,7 +2504,7 @@
 					"$(PROJECT_DIR)/WJXC/Libraries/ThirdClass/lib",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "722d2561-f984-4505-a82a-4e20d29f4088";
+				PROVISIONING_PROFILE = "94bfdcce-35c3-436e-933c-8ade63bba394";
 				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/**";
 				VALID_ARCHS = "arm64 armv7";
 			};
