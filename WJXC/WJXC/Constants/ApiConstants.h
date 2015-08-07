@@ -35,7 +35,7 @@
 //获取验证码
 #define USER_GET_SECURITY_CODE @"/index.php?d=api&c=user&m=get_code"
 //找回密码
-#define USER_GETBACK_PASSWORD @"/index.php?d=api&c=user&m=get_back_password&mobile=%@&code=%d&new_password=%@&confirm_password=%@"
+#define USER_GETBACK_PASSWORD @"/index.php?d=api&c=user&m=get_back_password"
 //修改密码
 #define USER_UPDATE_PASSWORD @"/index.php?d=api&c=user&m=change_password"
 

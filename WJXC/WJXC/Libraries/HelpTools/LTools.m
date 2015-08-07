@@ -49,8 +49,8 @@
  */
 + (NSString *)md5Phone:(NSString *)phone
 {
-//    13718570646_ala-yy@_2015
-    NSString *mdPhone = [NSString stringWithFormat:@"%@_ala-yy@_2015",phone];
+//    13718570646_sea-food@_2015
+    NSString *mdPhone = [NSString stringWithFormat:@"%@_sea-food@_2015",phone];
     
     return [self md5:mdPhone];
 }

@@ -97,7 +97,7 @@ static int seconds = 60;//计时60s
  */
 - (IBAction)clickToSecurityCode:(id)sender {
     
-    SecurityCode_Type type = SecurityCode_FindPWD;//找回密码
+//    SecurityCode_Type type = SecurityCode_FindPWD;//找回密码
     NSString *mobile = self.phoneTF.text;
     
     if (![LTools isValidateMobile:mobile]) {
@@ -110,23 +110,20 @@ static int seconds = 60;//计时60s
     
     __weak typeof(self)weakSelf = self;
     
-    NSString *url = [NSString stringWithFormat:USER_GET_SECURITY_CODE,mobile,type,[LTools md5Phone:mobile]];
     
-    LTools *tool = [[LTools alloc]initWithUrl:url isPost:NO postData:nil];
-    [tool requestCompletion:^(NSDictionary *result, NSError *erro) {
+    NSDictionary *dic = @{
+                          @"mobile":mobile,
+                          @"type":@"2",
+                          @"encryptcode":[LTools md5Phone:mobile]
+                          };
+    
+    [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodGet api:USER_GET_SECURITY_CODE parameters:dic constructingBodyBlock:nil completion:^(NSDictionary *result) {
         
-        NSLog(@"result %@ erro %@",result,erro);
-        
-        [LTools showMBProgressWithText:result[RESULT_INFO] addToView:self.view];
-        
-        
-    } failBlock:^(NSDictionary *failDic, NSError *erro) {
-        
-        NSLog(@"failDic %@ erro %@",failDic,erro);
-        
-        [weakSelf renewTimer];
-        
+    } failBlock:^(NSDictionary *result) {
+         [weakSelf renewTimer];
     }];
+    
+
     
 }
 
@@ -160,7 +157,7 @@ static int seconds = 60;//计时60s
     
     if (![self.passwordTF.text isEqualToString:self.secondPassword.text]) {
         
-        [LTools alertText:ALERT_ERRO_SECURITYCODE viewController:self];
+        [LTools alertText:ALERT_ERRO_FINDPWD viewController:self];
         
         return;
     }
@@ -172,24 +169,42 @@ static int seconds = 60;//计时60s
     }
     
     
-    NSString *url = [NSString stringWithFormat:USER_GETBACK_PASSWORD,mobile,code,password,secondPassword];
     
-    LTools *tool = [[LTools alloc]initWithUrl:url isPost:NO postData:nil];
-    [tool requestCompletion:^(NSDictionary *result, NSError *erro) {
+    NSDictionary *dic = @{
+                          @"mobile":mobile,
+                          @"code":self.securityTF.text,
+                          @"new_password":password,
+                          @"confirm_password":self.secondPassword.text
+                          };
+    
+    
+    [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodGet api:USER_GETBACK_PASSWORD parameters:dic constructingBodyBlock:nil completion:^(NSDictionary *result) {
         
-        NSLog(@"result %@ erro %@",result,erro);
+        [GMAPI showAutoHiddenMBProgressWithText:@"找回密码成功" addToView:self.view];
         
-        [LTools showMBProgressWithText:result[RESULT_INFO] addToView:self.view];
-        
-        
-        [self performSelector:@selector(clickToClose:) withObject:nil afterDelay:1];
-        
-        
-    } failBlock:^(NSDictionary *failDic, NSError *erro) {
-        
-        NSLog(@"failDic %@ erro %@",failDic,erro);
+        [self performSelector:@selector(clickToClose:) withObject:nil afterDelay:2];
+    } failBlock:^(NSDictionary *result) {
         
     }];
+    
+    
+    
+//    LTools *tool = [[LTools alloc]initWithUrl:url isPost:NO postData:nil];
+//    [tool requestCompletion:^(NSDictionary *result, NSError *erro) {
+//        
+//        NSLog(@"result %@ erro %@",result,erro);
+//        
+//        [LTools showMBProgressWithText:result[RESULT_INFO] addToView:self.view];
+//        
+//        
+//        [self performSelector:@selector(clickToClose:) withObject:nil afterDelay:1];
+//        
+//        
+//    } failBlock:^(NSDictionary *failDic, NSError *erro) {
+//        
+//        NSLog(@"failDic %@ erro %@",failDic,erro);
+//        
+//    }];
     
 }
 

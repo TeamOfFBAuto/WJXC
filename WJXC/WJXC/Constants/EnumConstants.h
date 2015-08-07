@@ -34,7 +34,6 @@ typedef enum{
 //验证码用途 1=》注册 2=》商店短信验证 3=》找回密码 4⇒申请成为搭配师获取验证码 默认为1) int
 typedef enum{
     SecurityCode_Register = 1,
-    SecurityCode_Shop,
     SecurityCode_FindPWD,
     SecurityCode_Match
 }SecurityCode_Type;

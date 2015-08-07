@@ -230,11 +230,13 @@ static int seconds = 60;//计时60s
             self.mimaTf = [[UITextField alloc]initWithFrame:CGRectMake(10, 49.5*i, mimaView.frame.size.width-20, 49)];
             self.mimaTf.font = [UIFont systemFontOfSize:12];
             self.mimaTf.placeholder = @"输入密码";
+            self.mimaTf.secureTextEntry = YES;
             [mimaView addSubview:self.mimaTf];
         }else if (i == 1){
             self.mima2Tf = [[UITextField alloc]initWithFrame:CGRectMake(10, 49.5*i, mimaView.frame.size.width-20, 49)];
             self.mima2Tf.font = [UIFont systemFontOfSize:12];
             self.mima2Tf.placeholder = @"再次输入密码";
+            self.mima2Tf.secureTextEntry = YES;
             [mimaView addSubview:self.mima2Tf];
         }
         
@@ -291,7 +293,9 @@ static int seconds = 60;//计时60s
         [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         
         NSDictionary *param = @{
-                                @"mobile":mobile
+                                @"mobile":mobile,
+                                @"type":@"1",
+                                @"encryptcode":[LTools md5Phone:mobile]
                                 };
         [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodGet api:USER_GET_SECURITY_CODE parameters:param constructingBodyBlock:nil completion:^(NSDictionary *result) {
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
@@ -305,7 +309,7 @@ static int seconds = 60;//计时60s
             
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
             NSLog(@"failDic %@",result);
-            [GMAPI showAutoHiddenMBProgressWithText:[result objectForKey:@"msg"] addToView:self.view];
+//            [GMAPI showAutoHiddenMBProgressWithText:[result objectForKey:@"msg"] addToView:self.view];
             [weakSelf renewTimer];
         }];
         
