@@ -42,9 +42,6 @@
     rect.size.height = 30;
     _pageControl = [[UIPageControl alloc] initWithFrame:rect];
     _pageControl.userInteractionEnabled = NO;
-    if (self.theGcycelScrollViewType == GCYCELNEARSTORE) {
-        _pageControl.hidden = NO;
-    }
     
     [self addSubview:_pageControl];
     
@@ -146,32 +143,17 @@
 #pragma mark - UIScrollViewDelegate
 - (void)scrollViewDidScroll:(UIScrollView *)aScrollView {
     
-    if (self.theGcycelScrollViewType == GCYCELNEARSTORE) {
-        int x = aScrollView.contentOffset.x;
-        //往下翻一张
-        if(x >= (2*self.frame.size.width)) {
-            
-            [self loadData];
-        }
-        
-        //往上翻
-        if(x <= 0) {
-            
-            [self loadData];
-        }
-    }else{
-        int x = aScrollView.contentOffset.x;
-        //往下翻一张
-        if(x >= (2*self.frame.size.width)) {
-            _curPage = [self validPageValue:_curPage+1];
-            [self loadData];
-        }
-        
-        //往上翻
-        if(x <= 0) {
-            _curPage = [self validPageValue:_curPage-1];
-            [self loadData];
-        }
+    int x = aScrollView.contentOffset.x;
+    //往下翻一张
+    if(x >= (2*self.frame.size.width)) {
+        _curPage = [self validPageValue:_curPage+1];
+        [self loadData];
+    }
+    
+    //往上翻
+    if(x <= 0) {
+        _curPage = [self validPageValue:_curPage-1];
+        [self loadData];
     }
     
 }

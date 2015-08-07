@@ -16,10 +16,12 @@
 #import "HuodongViewController.h"
 #import "GstartView.h"
 
+#import "CycleScrollView.h"
+
 //测试
 #import "AddCommentViewController.h"
 
-@interface HomeViewController ()<UITableViewDataSource,RefreshDelegate,GCycleScrollViewDelegate,GCycleScrollViewDatasource>
+@interface HomeViewController ()<UITableViewDataSource,RefreshDelegate>
 {
     NSDictionary *_locationDic;
     
@@ -29,16 +31,23 @@
     
     GCycleScrollView *_gscrollView;
     
+    UIView *_topShowView;
+    
     NSMutableArray *_TopDataArray;
     
     
-    UILabel *_daojishiLabel;//倒计时label
+    NSMutableArray *_daojishiArray;//倒计时label
     
     NSTimer *_timer_daojishi;//倒计时timer
     
-    NSString *_endTime;//结束时间
+    UIPageControl *_pageControl;
+    
     
 }
+
+@property (nonatomic ,strong) CycleScrollView *mainScorllView;
+
+
 @end
 
 @implementation HomeViewController
@@ -351,13 +360,136 @@
 
 //创建循环滚动的scrollview
 -(UIView*)creatGscrollView{
-    _gscrollView = [[GCycleScrollView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, 180)];
-    _gscrollView.theGcycelScrollViewType = GCYCELNORMORL;
-    [_gscrollView loadGcycleScrollView];
-    _gscrollView.tag = 200;
-    _gscrollView.delegate = self;
-    _gscrollView.datasource = self;
-    return _gscrollView;
+
+    NSMutableArray *viewsArray = [NSMutableArray arrayWithCapacity:1];
+    _daojishiArray = [NSMutableArray arrayWithCapacity:1];
+    for (int i = 0; i<_TopDataArray.count; i++) {
+        UIImageView *imv = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, 180)];
+        imv.userInteractionEnabled = YES;
+        adverModel *amodel = _TopDataArray[i];
+        NSString *str = amodel.cover_pic;
+        [imv sd_setImageWithURL:[NSURL URLWithString:str] placeholderImage:[UIImage imageNamed:@"default02.png"]];
+        
+        if ([amodel.type intValue] == 2) {//秒杀
+            NSDictionary *relative_info = amodel.relative_info;
+            NSDictionary *product_info = [relative_info dictionaryValueForKey:@"product_info"];
+            NSString *product_name = [product_info stringValueForKey:@"product_name"];
+            
+            UIImageView *backImv = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 200, 170)];
+            backImv.center = CGPointMake(imv.center.x, imv.center.y - 15);
+            [backImv setImage:[UIImage imageNamed:@"homepage_banner_miaosha.png"]];
+            [imv addSubview:backImv];
+            
+            //商品分类
+            NSString *fenf = [NSString stringWithFormat:@"········%@········",[product_info stringValueForKey:@"category_name"]];
+            UILabel *fenleiLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 15, backImv.frame.size.width, 20) title:fenf font:13 align:NSTextAlignmentCenter textColor:RGBCOLOR(78, 82, 89)];
+            [backImv addSubview:fenleiLabel];
+            
+            //商品名称
+            UILabel *nameLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(fenleiLabel.frame)-5, backImv.frame.size.width, 40) title:product_name font:20 align:NSTextAlignmentCenter textColor:[UIColor blackColor]];
+            [backImv addSubview:nameLabel];
+            
+            
+            //秒杀价
+            UILabel *miaoshajiaLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(nameLabel.frame), backImv.frame.size.width, 24) title:nil font:15 align:NSTextAlignmentCenter textColor:[UIColor redColor]];
+            [backImv addSubview:miaoshajiaLabel];
+            NSString *dld = [relative_info stringValueForKey:@"seckill_price"];
+            NSString *miaoshajia = [NSString stringWithFormat:@"秒杀价%@元",dld];
+            NSMutableAttributedString  *aaa = [[NSMutableAttributedString alloc]initWithString:miaoshajia];
+            [aaa addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15] range:NSMakeRange(0, 3)];
+            [aaa addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:21] range:NSMakeRange(3, dld.length)];
+            miaoshajiaLabel.attributedText = aaa;
+            
+            //原价
+            UILabel *yuanjiaLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(miaoshajiaLabel.frame)-3, backImv.frame.size.width, miaoshajiaLabel.frame.size.height) title:nil font:15 align:NSTextAlignmentCenter textColor:RGBCOLOR(93, 87, 96)];
+            NSString *ddle = [product_info stringValueForKey:@"original_price"];
+            NSString *yuanjia = [NSString stringWithFormat:@"原价%@元",ddle];
+            NSMutableAttributedString  *yyy = [[NSMutableAttributedString alloc]initWithString:yuanjia];
+            [yyy addAttribute:NSStrikethroughStyleAttributeName value:@(NSUnderlinePatternSolid | NSUnderlineStyleSingle) range:NSMakeRange(2, ddle.length)];
+            yuanjiaLabel.attributedText = yyy;
+            [backImv addSubview:yuanjiaLabel];
+            
+            //秒杀倒计时
+            
+            
+            UILabel *miaoshaTitle = [[UILabel alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(yuanjiaLabel.frame), backImv.frame.size.width, 20) title:@"倒计时" font:12 align:NSTextAlignmentCenter textColor:RGBCOLOR(93, 87, 96)];
+            [backImv addSubview:miaoshaTitle];
+            
+            NSString *endTime = [relative_info stringValueForKey:@"end_time"];
+            
+            UILabel *daojishiLabel = [[UILabel alloc]initWithFrame:CGRectMake(miaoshaTitle.frame.origin.x, CGRectGetMaxY(miaoshaTitle.frame), miaoshaTitle.frame.size.width, miaoshaTitle.frame.size.height) title:nil font:12 align:NSTextAlignmentCenter textColor:[UIColor redColor]];
+            daojishiLabel.tag = 200+i;
+            [backImv addSubview:daojishiLabel];
+            
+            
+            NSDictionary*dic = @{
+                                 @"time":endTime,
+                                 @"label":daojishiLabel
+                                 };
+            
+            [_daojishiArray addObject:dic];
+            
+        }
+        
+        [viewsArray addObject:imv];
+        
+        
+    }
+    
+    self.mainScorllView = [[CycleScrollView alloc] initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, 180) animationDuration:4];
+    self.mainScorllView.scrollView.showsHorizontalScrollIndicator = FALSE;
+    
+    self.mainScorllView.fetchContentViewAtIndex = ^UIView *(NSInteger pageIndex){
+        return viewsArray[pageIndex];
+    };
+    
+    NSInteger count = _TopDataArray.count;
+    self.mainScorllView.totalPagesCount = ^NSInteger(void){
+        return count;
+    };
+    
+    __weak typeof (self)bself = self;
+    self.mainScorllView.TapActionBlock = ^(NSInteger pageIndex){
+        [bself cycleScrollDidClickedWithIndex:pageIndex];
+    };
+    
+    
+    
+    
+    return self.mainScorllView;
+    
+    
+}
+
+
+
+-(void)cycleScrollDidClickedWithIndex:(NSInteger)index{
+    adverModel *model = _TopDataArray[index];
+    if ([model.type intValue] == 1) {//活动
+        
+        HuodongViewController *cc = [[HuodongViewController alloc]init];
+        cc.huodongId = model.adver_id;
+        cc.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:cc animated:YES];
+        
+        
+        //        //测试评价晒单
+        //        AddCommentViewController *cc = [[AddCommentViewController alloc]init];
+        //        cc.theModelArray = _tableView.dataArray;
+        //        cc.hidesBottomBarWhenPushed = YES;
+        //        [self.navigationController pushViewController:cc animated:YES];
+        
+        
+    }else if ([model.type intValue] == 2){//秒杀
+        ProductDetailViewController *cc = [[ProductDetailViewController alloc]init];
+        NSDictionary *relative_info = model.relative_info;
+        NSDictionary *product_info = [relative_info dictionaryValueForKey:@"product_info"];
+        cc.product_id = [product_info stringValueForKey:@"product_id"];
+        cc.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:cc animated:YES];
+        
+        
+    }
 }
 
 
@@ -382,9 +514,7 @@
         if (list.count>0) {
             _tableView.tableHeaderView = [self creatGscrollView];
         }
-        
-        
-//        [_gscrollView reloadData];
+
         
     } failBlock:^(NSDictionary *result) {
         
@@ -392,168 +522,23 @@
 }
 
 
-#pragma mark - GCycleScrollViewDelegate && GCycleScrollViewDatasource
 
-//滚动总共几页
-- (NSInteger)numberOfPagesWithScrollView:(GCycleScrollView*)theGCycleScrollView
-{
-    
-    NSInteger num = 0;
-    if (theGCycleScrollView.tag == 200) {
-        num = _TopDataArray.count;
-    }
-    
-    return num;
-    
-}
-
-//每一页
-- (UIView *)pageAtIndex:(NSInteger)index ScrollView:(GCycleScrollView *)theGCycleScrollView
-{
-    
-    
-    
-    
-    if (theGCycleScrollView.tag == 200) {
-        
-        
-        UIImageView *imv = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, 180)];
-        imv.userInteractionEnabled = YES;
-        
-        NSLog(@"%@",NSStringFromCGRect(imv.frame));
-        
-        adverModel *amodel = _TopDataArray[index];
-        NSString *str = amodel.cover_pic;
-        [imv sd_setImageWithURL:[NSURL URLWithString:str] placeholderImage:[UIImage imageNamed:@"default02.png"]];
-        
-        if ([amodel.type intValue] == 2) {//秒杀
-            
-            
-            NSDictionary *relative_info = amodel.relative_info;
-            NSDictionary *product_info = [relative_info dictionaryValueForKey:@"product_info"];
-            NSString *product_name = [product_info stringValueForKey:@"product_name"];
-            
-            
-            
-            
-            
-            
-            UIImageView *backImv = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 200, 170)];
-            backImv.center = CGPointMake(imv.center.x, imv.center.y - 15);
-            [backImv setImage:[UIImage imageNamed:@"homepage_banner_miaosha.png"]];
-            [imv addSubview:backImv];
-            
-            
-            
-            
-            //商品分类
-            NSString *fenf = [NSString stringWithFormat:@"········%@········",[product_info stringValueForKey:@"category_name"]];
-            UILabel *fenleiLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 15, backImv.frame.size.width, 20) title:fenf font:13 align:NSTextAlignmentCenter textColor:RGBCOLOR(78, 82, 89)];
-            [backImv addSubview:fenleiLabel];
-            
-            //商品名称
-            UILabel *nameLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(fenleiLabel.frame)-5, backImv.frame.size.width, 40) title:product_name font:20 align:NSTextAlignmentCenter textColor:[UIColor blackColor]];
-            [backImv addSubview:nameLabel];
-            
-
-            //秒杀价
-            
-            
-            UILabel *miaoshajiaLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(nameLabel.frame), backImv.frame.size.width, 24) title:nil font:15 align:NSTextAlignmentCenter textColor:[UIColor redColor]];
-            [backImv addSubview:miaoshajiaLabel];
-            NSString *dld = [relative_info stringValueForKey:@"seckill_price"];
-            NSString *miaoshajia = [NSString stringWithFormat:@"秒杀价%@元",dld];
-            NSMutableAttributedString  *aaa = [[NSMutableAttributedString alloc]initWithString:miaoshajia];
-            [aaa addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15] range:NSMakeRange(0, 3)];
-            [aaa addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:21] range:NSMakeRange(3, dld.length)];
-            miaoshajiaLabel.attributedText = aaa;
-            
-            //原价
-            UILabel *yuanjiaLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(miaoshajiaLabel.frame)-3, backImv.frame.size.width, miaoshajiaLabel.frame.size.height) title:nil font:15 align:NSTextAlignmentCenter textColor:RGBCOLOR(93, 87, 96)];
-            NSString *ddle = [product_info stringValueForKey:@"original_price"];
-            NSString *yuanjia = [NSString stringWithFormat:@"原价%@元",ddle];
-            NSMutableAttributedString  *yyy = [[NSMutableAttributedString alloc]initWithString:yuanjia];
-            [yyy addAttribute:NSStrikethroughStyleAttributeName value:@(NSUnderlinePatternSolid | NSUnderlineStyleSingle) range:NSMakeRange(2, ddle.length)];
-            yuanjiaLabel.attributedText = yyy;
-            [backImv addSubview:yuanjiaLabel];
-
-            //秒杀倒计时
-            _endTime = [relative_info stringValueForKey:@"end_time"];
-            
-            UILabel *miaoshaTitle = [[UILabel alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(yuanjiaLabel.frame), backImv.frame.size.width, 20) title:@"倒计时" font:12 align:NSTextAlignmentCenter textColor:RGBCOLOR(93, 87, 96)];
-            [backImv addSubview:miaoshaTitle];
-            
-            if (!_daojishiLabel) {
-                 _daojishiLabel = [[UILabel alloc]initWithFrame:CGRectMake(miaoshaTitle.frame.origin.x, CGRectGetMaxY(miaoshaTitle.frame), miaoshaTitle.frame.size.width, miaoshaTitle.frame.size.height) title:nil font:12 align:NSTextAlignmentCenter textColor:[UIColor redColor]];
-                
-            }
-            [backImv addSubview:_daojishiLabel];
-            
-            NSLog(@"创建时候的倒计时Label%@",_daojishiLabel);
-            
-            
-            
-        }
-        
-        return imv;
-    }
-    
-    return [UIView new];
-    
-}
 
 
 
 -(void)ggggg{
     
-    NSString *haha = [GMAPI daojishi:_endTime];
-    _daojishiLabel.text = haha;
     
-//    NSLog(@"haha%@",haha);
-//    NSLog(@"倒计时label%@", _daojishiLabel.text);
-//    NSLog(@"倒计时Label%@", _daojishiLabel);
-    
-}
-
-
-
-
-//点击的哪一页
-- (void)didClickPage:(GCycleScrollView *)csView atIndex:(NSInteger)index
-{
-    NSLog(@"%s",__FUNCTION__);
-    NSLog(@"%d",index);
-    
-    adverModel *model = _TopDataArray[index];
-    if ([model.type intValue] == 1) {//活动
-        
-        HuodongViewController *cc = [[HuodongViewController alloc]init];
-        cc.huodongId = model.adver_id;
-        cc.hidesBottomBarWhenPushed = YES;
-        [self.navigationController pushViewController:cc animated:YES];
-        
-        
-//        //测试评价晒单
-//        AddCommentViewController *cc = [[AddCommentViewController alloc]init];
-//        cc.theModelArray = _tableView.dataArray;
-//        cc.hidesBottomBarWhenPushed = YES;
-//        [self.navigationController pushViewController:cc animated:YES];
-        
-        
-    }else if ([model.type intValue] == 2){//秒杀
-        ProductDetailViewController *cc = [[ProductDetailViewController alloc]init];
-        NSDictionary *relative_info = model.relative_info;
-        NSDictionary *product_info = [relative_info dictionaryValueForKey:@"product_info"];
-        cc.product_id = [product_info stringValueForKey:@"product_id"];
-        cc.hidesBottomBarWhenPushed = YES;
-        [self.navigationController pushViewController:cc animated:YES];
-
-        
+    for (NSDictionary *dic in _daojishiArray) {
+        NSString *endTime = [dic stringValueForKey:@"time"];
+        UILabel *lab = [dic objectForKey:@"label"];
+        NSString *haha = [GMAPI daojishi:endTime];
+        lab.text = haha;
     }
     
-    
-    
 }
+
+
 
 
 
@@ -563,9 +548,6 @@
     _tableView.refreshDelegate = self;
     _tableView.dataSource = self;
     [self.view addSubview:_tableView];
-    
-    
-    
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [_tableView showRefreshHeader:YES];
     
