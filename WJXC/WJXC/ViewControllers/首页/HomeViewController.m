@@ -544,7 +544,7 @@
 
 
 -(void)creatTableView{
-    _tableView = [[RefreshTableView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, DEVICE_HEIGHT - 64) style:UITableViewStyleGrouped];
+    _tableView = [[RefreshTableView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, DEVICE_HEIGHT - 64 - 44) style:UITableViewStyleGrouped];
     _tableView.refreshDelegate = self;
     _tableView.dataSource = self;
     [self.view addSubview:_tableView];

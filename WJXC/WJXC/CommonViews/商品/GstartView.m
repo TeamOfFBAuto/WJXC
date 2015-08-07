@@ -36,7 +36,7 @@
     
     for (int i = 0; i<5; i++) {
         UIImageView *imv = [[UIImageView alloc]initWithFrame:CGRectMake(0+i*kuan, 0, kuan, self.frame.size.height)];
-        [imv setImage:[UIImage imageNamed:@"homepage_star.png"]];
+        [imv setImage:[UIImage imageNamed:@"homepage_star1.png"]];
         [self addSubview:imv];
     }
     

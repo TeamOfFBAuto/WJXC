@@ -151,13 +151,13 @@
     int contentOffsetX = scrollView.contentOffset.x;
     if(contentOffsetX >= (2 * CGRectGetWidth(scrollView.frame))) {
         self.currentPageIndex = [self getValidNextPageIndexWithPageIndex:self.currentPageIndex + 1];
-        NSLog(@"next，当前页:%ld",(long)self.currentPageIndex);
+//        NSLog(@"next，当前页:%ld",(long)self.currentPageIndex);
         [self configContentViews];
         
     }
     if(contentOffsetX <= 0) {
         self.currentPageIndex = [self getValidNextPageIndexWithPageIndex:self.currentPageIndex - 1];
-        NSLog(@"previous，当前页:%ld",(long)self.currentPageIndex);
+//        NSLog(@"previous，当前页:%ld",(long)self.currentPageIndex);
         [self configContentViews];
     }
     
