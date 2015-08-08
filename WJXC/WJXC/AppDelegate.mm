@@ -20,6 +20,10 @@
 
 #import "APService.h"//极光推送
 
+#import "ProductDetailViewController.h"//单品详情
+#import "HuodongViewController.h"//活动详情
+
+#define kTag_active 100 //正在前台
 
 @interface AppDelegate ()<UMFeedbackDataDelegate,GgetllocationDelegate,BMKGeneralDelegate,WXApiDelegate,RCIMReceiveMessageDelegate,RCIMUserInfoDataSource>
 {
@@ -30,15 +34,12 @@
     
     int _getRongTokenTime;//获取融云token次数
     NSTimer *_getRongTokenTimer;//获取融云token计时器
+    
+    NSDictionary *_remoteMessageDic;//远程推送消息
 }
 @end
 
 @implementation AppDelegate
-
-- (void)notificationForJPush:(NSNotification *)notifiy
-{
-    NSLog(@"JPush %@ %@",notifiy.userInfo,notifiy.object);
-}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
@@ -48,6 +49,8 @@
     NSString *name = [NSString stringWithFormat:@"万聚鲜城%@",version];
     [WXApi registerApp:WXAPPID withDescription:name];
     
+    
+#pragma - mark 融云
     //融云
     
     [[RCIM sharedRCIM] initWithAppKey:RONGCLOUD_IM_APPKEY];
@@ -59,10 +62,8 @@
     //头像样式
     [[RCIM sharedRCIM] setGlobalMessageAvatarStyle:RC_USER_AVATAR_CYCLE];
     
-    
     //SDK 初始化方法 initWithAppKey 之后后注册消息类型
     [[RCIMClient sharedRCIMClient]registerMessageType:SimpleMessage.class];
-    
     
     //开始融云登录
     [self startLoginRongTimer];
@@ -78,8 +79,9 @@
     RootViewController *root = [[RootViewController alloc]init];
     self.window.rootViewController = root;
     
-#pragma mark 远程通知
+#pragma mark JPush远程通知
     
+    [APService crashLogON];
     
     // Required
     if ([[UIDevice currentDevice].systemVersion floatValue] >= 8.0) {
@@ -98,6 +100,20 @@
     
     // Required
     [APService setupWithOption:launchOptions];
+    
+    //UIApplicationLaunchOptionsRemoteNotificationKey,判断是通过推送消息启动的
+    
+    NSDictionary *userInfo = [launchOptions objectForKey:@"UIApplicationLaunchOptionsRemoteNotificationKey"];
+    if (userInfo)
+    {
+        //test
+        NSLog(@"didFinishLaunch : userInfo %@",userInfo);
+        
+        NSString *type = userInfo[@"type"];
+        NSString *theme_id = userInfo[@"theme_id"];
+        
+        [self pushToMessageDetail:[type intValue] detailId:theme_id];
+    }
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(notificationForJPush:) name:kJPFNetworkDidSetupNotification object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(notificationForJPush:) name:kJPFNetworkDidCloseNotification object:nil];
@@ -130,19 +146,7 @@
 //        // 注册苹果推送，申请推送权限。
 //        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound];
 //    }
-    
-    
-    //UIApplicationLaunchOptionsRemoteNotificationKey,判断是通过推送消息启动的
-    
-    NSDictionary *infoDic = [launchOptions objectForKey:@"UIApplicationLaunchOptionsRemoteNotificationKey"];
-    if (infoDic)
-    {
-        //test
-        NSLog(@"didFinishLaunch : infoDic %@",infoDic);
-        
-    }
-    
-    
+
     
 #pragma mark 百度地图相关
     
@@ -280,14 +284,14 @@
     application.applicationIconBadgeNumber = unreadMsgCount;
 }
 
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
-    
-    // IOS 7 Support Required
-    [APService handleRemoteNotification:userInfo];
-    completionHandler(UIBackgroundFetchResultNewData);
-    
-    NSLog(@"JPush1 remote %@",userInfo);
-}
+//- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
+//    
+//    // IOS 7 Support Required
+//    [APService handleRemoteNotification:userInfo];
+//    completionHandler(UIBackgroundFetchResultNewData);
+//    
+//    NSLog(@"JPush1 remote %@",userInfo);
+//}
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
@@ -297,6 +301,42 @@
     [APService handleRemoteNotification:userInfo];
     
     NSLog(@"JPush2 remote %@",userInfo);
+
+    UIApplicationState state = [application applicationState];
+    if (state == UIApplicationStateInactive){
+        NSLog(@"UIApplicationStateInactive %@",userInfo);
+        //程序在后台运行 点击消息进入走此处,做相应处理
+        
+        NSDictionary *aps = userInfo[@"aps"];
+        NSString *alert = aps[@"alert"];
+        alert = [NSString stringWithFormat:@"Inactive:%@",alert];
+        
+        //直接查看
+        
+        NSString *type = userInfo[@"type"];
+        NSString *theme_id = userInfo[@"theme_id"];
+        
+        [self pushToMessageDetail:[type intValue] detailId:theme_id];
+        
+    }
+    if (state == UIApplicationStateActive) {
+        NSLog(@"UIApplicationStateActive %@",userInfo);
+        //程序就在前台
+        
+        _remoteMessageDic = userInfo;
+        
+        NSDictionary *aps = userInfo[@"aps"];
+        NSString *alertMessage = aps[@"alert"];//消息内容
+        
+        //提示之后再查看
+        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"消息通知" message:alertMessage delegate:self cancelButtonTitle:@"忽略" otherButtonTitles:@"查看", nil];
+        alertView.tag = kTag_active;
+        [alertView show];
+    }
+    if (state == UIApplicationStateBackground)
+    {
+        NSLog(@"UIApplicationStateBackground %@",userInfo);
+    }
 
 }
 
@@ -693,6 +733,93 @@
 {
     [_getRongTokenTimer invalidate];
     _getRongTokenTimer = nil;
+}
+
+#pragma - mark 极光推送 接受推送消息
+
+- (void)notificationForJPush:(NSNotification *)notifiy
+{
+    NSLog(@"JPush %@ %@",notifiy.userInfo,notifiy.object);
+    
+    NSDictionary *userInfo = _remoteMessageDic;
+    
+    //直接查看
+    
+    NSString *type = userInfo[@"type"];
+    NSString *theme_id = userInfo[@"theme_id"];
+    
+    
+    NSLog(@"APService registrationID%@",[APService registrationID]);
+}
+
+#pragma - mark UIAlertViewDelegate <NSObject>
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    
+    if (alertView.tag == kTag_active) {
+        
+        if (buttonIndex == 1) {
+            //查看消息
+            
+            NSDictionary *userInfo = _remoteMessageDic;
+            
+            //直接查看
+            
+            NSString *type = userInfo[@"type"];
+            NSString *theme_id = userInfo[@"theme_id"];
+            
+            [self pushToMessageDetail:[type intValue] detailId:theme_id];
+            
+        }else
+        {
+            NSLog(@"忽略");
+        }
+    }
+}
+
+/**
+ *  处理活动推送和抢购推送
+ *
+ *  @param type     判断消息类型
+ *  @param detailId 消息id
+ */
+- (void)pushToMessageDetail:(int)type
+                   detailId:(NSString *)detailId
+{
+    UITabBarController *root = (UITabBarController *)self.window.rootViewController;
+    int selectIndex = (int)root.selectedIndex;
+    UINavigationController *unVc = [root.viewControllers objectAtIndex:selectIndex];
+    
+    NSLog(@"unVc %@",unVc.viewControllers);
+    
+    int viewsCount = (int)unVc.viewControllers.count;
+    
+    //添加 和 修改活动
+    if (type == 1 || type == 2) {
+        //活动页面
+        
+        HuodongViewController *huodong = [[HuodongViewController alloc]init];
+        huodong.huodongId = detailId;
+        
+        if (viewsCount == 1) {
+            huodong.hidesBottomBarWhenPushed = YES;
+        }
+        [unVc pushViewController:huodong animated:YES];
+        
+    }else if (type == 3 || type == 4){
+        //添加 和 修改 限时抢购或者秒杀
+        
+        if (detailId.length) {
+
+            ProductDetailViewController *cc = [[ProductDetailViewController alloc]init];
+            cc.product_id = detailId;
+            if (viewsCount == 1) {
+                cc.hidesBottomBarWhenPushed = YES;
+            }
+            [unVc pushViewController:cc animated:YES];
+        }
+    }
 }
 
 @end

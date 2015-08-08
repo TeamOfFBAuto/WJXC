@@ -541,11 +541,16 @@
     
     NSLog(@"--%d %d",[[RCIMClient sharedRCIMClient]getTotalUnreadCount],unreadMsgCount);
     
-    UINavigationController *unvc = [((UITabBarController *)ROOTVIEWCONTROLLER).viewControllers objectAtIndex:3];
+    UITabBarController *root = (UITabBarController *)[UIApplication sharedApplication].keyWindow.rootViewController;
     
-    unvc.tabBarItem.badgeValue = number_str;
-    
-    [UIApplication sharedApplication].applicationIconBadgeNumber = [number_str intValue];
+    if ([root isKindOfClass:[UITabBarController class]]) {
+        UINavigationController *unvc = [root.viewControllers objectAtIndex:3];
+        
+        unvc.tabBarItem.badgeValue = number_str;
+        
+        [UIApplication sharedApplication].applicationIconBadgeNumber = [number_str intValue];
+    }
+
 }
 
 + (void)cacheRongCloudUserName:(NSString *)userName forUserId:(NSString *)userId
