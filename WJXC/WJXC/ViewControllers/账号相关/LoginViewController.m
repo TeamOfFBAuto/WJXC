@@ -12,6 +12,7 @@
 #import "UserInfo.h"
 #import "WXApi.h"
 #import "LTools.h"
+#import "APService.h"//JPush推送
 
 @interface LoginViewController ()
 
@@ -264,7 +265,10 @@
     
     NSString *token = [LTools cacheForKey:USER_DEVICE_TOKEN];
     
-    token = @"test";
+    NSString *registration_id = [APService registrationID];
+    if (!registration_id || registration_id.length == 0) {
+        registration_id = @"JPush";
+    }
     
     NSDictionary *params;
     if ([type isEqualToString:@"normal"]) {
@@ -272,7 +276,9 @@
                    @"type":type,
                    @"mobile":mobile,
                    @"password":password,
-                   @"devicetoken":token
+                   @"devicetoken":token,
+                   @"login_source":@"iOS",
+                   @"registration_id":registration_id
                    };
     }else{
         params = @{
@@ -282,7 +288,8 @@
                    @"third_photo":thirdphoto,
                    @"gender":[NSString stringWithFormat:@"%d",gender],
                    @"devicetoken":token,
-                   @"login_source":@"iOS"
+                   @"login_source":@"iOS",
+                   @"registration_id":registration_id
                    };
     }
     

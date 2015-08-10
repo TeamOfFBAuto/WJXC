@@ -42,8 +42,8 @@
 //修改用户头像
 #define USER_UPLOAD_HEADIMAGE @"/index.php?d=api&c=user&m=update_user_photo"
 
-//修改用户名字
-#define USER_UPDATE_USERNAME @"/index.php?d=api&c=user&m=update_user_info"
+//修改用户信息
+#define USER_UPDATE_USEINFO @"/index.php?d=api&c=user&m=update_user_info"
 
 //关于我们
 #define ABOUT_US_URL @"http://www.baidu.com"

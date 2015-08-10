@@ -115,13 +115,15 @@
         [self pushToMessageDetail:[type intValue] detailId:theme_id];
     }
     
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(notificationForJPush:) name:kJPFNetworkDidSetupNotification object:nil];
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(notificationForJPush:) name:kJPFNetworkDidCloseNotification object:nil];
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(notificationForJPush:) name:kJPFNetworkDidRegisterNotification object:nil];
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(notificationForJPush:) name:kJPFNetworkDidLoginNotification object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(notificationForDidSetupNotification:) name:kJPFNetworkDidSetupNotification object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(notificationForDidCloseNotification:) name:kJPFNetworkDidCloseNotification object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(notificationForDidRegisterNotification:) name:kJPFNetworkDidRegisterNotification object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(notificationForDidLoginNotification:) name:kJPFNetworkDidLoginNotification object:nil];
     
     //非APNS消息
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(notificationForJPush:) name:kJPFNetworkDidReceiveMessageNotification object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(notificationForDidReceiveMessageNotification:) name:kJPFNetworkDidReceiveMessageNotification object:nil];
+    //错误提示
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(notificationForErrorNotification:) name:kJPFServiceErrorNotification object:nil];
     
 //    if (IOS7_OR_LATER) {
 //        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
@@ -480,6 +482,7 @@
         
         [LTools cacheBool:NO ForKey:USER_UPDATEHEADIMAGE];//不需要更新头像
         
+        [[NSNotificationCenter defaultCenter]postNotificationName:NOTIFICATION_UPDATEHEADIMAGE_SUCCESS object:nil];//更新头像成功
         
     } failBlock:^(NSDictionary *result) {
         
@@ -735,21 +738,52 @@
     _getRongTokenTimer = nil;
 }
 
-#pragma - mark 极光推送 接受推送消息
+#pragma - mark 极光推送
 
-- (void)notificationForJPush:(NSNotification *)notifiy
+//建立连接
+- (void)notificationForDidSetupNotification:(NSNotification *)notify
 {
-    NSLog(@"JPush %@ %@",notifiy.userInfo,notifiy.object);
+    NSLog(@"建立连接 JPush %@ %@",notify.userInfo,notify.object);
+}
+
+//关闭连接
+- (void)notificationForDidCloseNotification:(NSNotification *)notify
+{
+    NSLog(@"关闭连接 JPush %@ %@",notify.userInfo,notify.object);
+}
+
+//注册成功
+- (void)notificationForDidRegisterNotification:(NSNotification *)notify
+{
+    NSLog(@"注册成功 JPush %@ %@",notify.userInfo,notify.object);
+}
+
+//登录成功
+- (void)notificationForDidLoginNotification:(NSNotification *)notify
+{
+    NSLog(@"登录成功 JPush %@ %@",notify.userInfo,notify.object);
+    
+    [self uploadRegisterId];
+}
+
+//收到消息(非APNS)
+- (void)notificationForDidReceiveMessageNotification:(NSNotification *)notify
+{
+    NSLog(@"收到消息(非APNS) JPush %@ %@",notify.userInfo,notify.object);
     
     NSDictionary *userInfo = _remoteMessageDic;
     
     //直接查看
     
-    NSString *type = userInfo[@"type"];
-    NSString *theme_id = userInfo[@"theme_id"];
-    
-    
-    NSLog(@"APService registrationID%@",[APService registrationID]);
+//    NSString *type = userInfo[@"type"];
+//    NSString *theme_id = userInfo[@"theme_id"];
+}
+
+//错误提示
+- (void)notificationForErrorNotification:(NSNotification *)notify
+{
+    NSLog(@"错误提示 JPush %@ %@",notify.userInfo,notify.object);
+
 }
 
 #pragma - mark UIAlertViewDelegate <NSObject>
@@ -820,6 +854,30 @@
             [unVc pushViewController:cc animated:YES];
         }
     }
+}
+
+/**
+ *  上传JPush registerId
+ */
+- (void)uploadRegisterId
+{
+    NSString *authkey = [GMAPI getAuthkey];
+    if (authkey.length == 0) {
+        
+        return;
+    }
+    NSString *registration_id = [APService registrationID];
+    if (!registration_id || registration_id.length == 0) {
+        registration_id = @"JPush";
+    }
+    
+    NSDictionary *params = @{@"authcode":authkey,
+                             @"registration_id":registration_id};
+    [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodPost api:USER_UPDATE_USEINFO parameters:params constructingBodyBlock:nil completion:^(NSDictionary *result) {
+        NSLog(@"更新register_id%@",result);
+    } failBlock:^(NSDictionary *result) {
+        NSLog(@"失败register_id%@",result);
+    }];
 }
 
 @end

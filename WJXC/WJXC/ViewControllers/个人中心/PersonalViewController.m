@@ -74,7 +74,7 @@
                     @"我的订单",
                     @"客服中心",
                     @"设置"];
-    _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, DEVICE_HEIGHT) style:UITableViewStylePlain];
+    _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, DEVICE_HEIGHT - 49) style:UITableViewStylePlain];
     _tableView.delegate = self;
     _tableView.dataSource = self;
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -93,6 +93,8 @@
     
     //监控退出登录通知
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(notificatonForLogout:) name:NOTIFICATION_LOGOUT object:nil];
+    
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(notificationForHeadImage:) name:NOTIFICATION_UPDATEHEADIMAGE_SUCCESS object:nil];
     
     UINavigationController *unvc = [((UITabBarController *)ROOTVIEWCONTROLLER).viewControllers objectAtIndex:3];
     [unvc.tabBarItem addObserver:self forKeyPath:@"badgeValue" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
@@ -163,6 +165,7 @@
  */
 - (void)uploadHeadImage:(UIImage *)aImage
 {
+    __weak typeof(self)weakSelf = self;
     NSDictionary *params = @{@"authcode":[LTools cacheForKey:USER_AUTHOD]};
     [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodPost api:USER_UPLOAD_HEADIMAGE parameters:params constructingBodyBlock:^(id<AFMultipartFormData> formData) {
         
@@ -176,7 +179,8 @@
         NSLog(@"completion result %@",result[Erro_Info]);
 
         [LTools cacheBool:NO ForKey:USER_UPDATEHEADIMAGE];//不需要更新头像
-
+        
+        [weakSelf getUserInfo];
         
     } failBlock:^(NSDictionary *result) {
         
@@ -198,7 +202,7 @@
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     
     __weak typeof(self)weakSelf = self;
-    [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodPost api:USER_UPDATE_USERNAME parameters:params constructingBodyBlock:nil completion:^(NSDictionary *result) {
+    [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodPost api:USER_UPDATE_USEINFO parameters:params constructingBodyBlock:nil completion:^(NSDictionary *result) {
         
         NSLog(@"result %@ %@",result[Erro_Info],result);
         
@@ -224,6 +228,11 @@
 - (void)notificatonForLogout:(NSNotification *)notification
 {
     [self updateLoginState];
+}
+
+- (void)notificationForHeadImage:(NSNotification *)notification
+{
+    [self getUserInfo];
 }
 
 - (void)setViewWithUserInfo:(UserInfo *)userInfo
@@ -406,7 +415,10 @@
     
     [self uploadHeadImage:image];
     
-    self.iconImageView.image = image;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.iconImageView.image = image;
+
+    });
     
     [picker dismissViewControllerAnimated:YES completion:^{
         
