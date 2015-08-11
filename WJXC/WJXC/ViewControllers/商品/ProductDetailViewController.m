@@ -216,6 +216,9 @@
     jiaruBtn.titleLabel.textColor = [UIColor whiteColor];
     jiaruBtn.titleLabel.font = [UIFont systemFontOfSize:13];
     [jiaruBtn setFrame:CGRectMake(CGRectGetMaxX(lianximaijiaBtn.frame)+40, lianximaijiaBtn.frame.origin.y+5, 110,31)];
+    if (DEVICE_WIDTH == 320) {
+        [jiaruBtn setFrame:CGRectMake(CGRectGetMaxX(lianximaijiaBtn.frame)+15, lianximaijiaBtn.frame.origin.y+5, 110,31)];
+    }
     jiaruBtn.layer.cornerRadius = 4;
     jiaruBtn.layer.masksToBounds = YES;
     jiaruBtn.backgroundColor = RGBCOLOR(247, 143, 0);

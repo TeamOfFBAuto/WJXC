@@ -7,7 +7,6 @@
 //
 
 #import "GRegisterViewController.h"
-static int seconds = 60;//计时60s
 @interface GRegisterViewController ()
 {
     NSMutableArray *_yuanViewArray;
@@ -57,9 +56,13 @@ static int seconds = 60;//计时60s
     
     self.upThreeStepView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, 90)];
     self.upThreeStepView.backgroundColor = RGBCOLOR(235, 236, 238);
+    [self.view addSubview:self.upThreeStepView];
+    
     UIControl *control = [[UIControl alloc]initWithFrame:self.upThreeStepView.bounds];
     [control addTarget:self action:@selector(gShou) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:self.upThreeStepView];
+    [self.upThreeStepView addSubview:control];
+    
+    
     
     NSArray *titleArray = @[@"输入手机号",@"输入验证码",@"设置密码"];
     for (int i = 0; i<3; i++) {
@@ -153,7 +156,11 @@ static int seconds = 60;//计时60s
     [_downScrollView setContentSize:CGSizeMake(DEVICE_WIDTH*3, self.downInfoView.frame.size.height)];
     [self.view addSubview:_downScrollView];
     
+    UIControl *tt = [[UIControl alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH*3, _downScrollView.frame.size.height)];
+    [tt addTarget:self action:@selector(gShou) forControlEvents:UIControlEventTouchUpInside];
+    [_downScrollView addSubview:tt];
     
+    _downScrollView.scrollEnabled = NO;
     
     
     //输入手机号
@@ -171,8 +178,6 @@ static int seconds = 60;//计时60s
     
     UIButton *getYanzhengmaBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [getYanzhengmaBtn setFrame:CGRectMake(10, CGRectGetMaxY(phoneNumView.frame)+20, DEVICE_WIDTH-20, 47)];
-//    [getYanzhengmaBtn setBackgroundColor:RGBCOLOR(207, 208, 209)];
-//    [getYanzhengmaBtn setTitleColor:RGBCOLOR(155, 156, 157) forState:UIControlStateNormal];
     [getYanzhengmaBtn setBackgroundColor:RGBCOLOR(122, 172, 0)];
     [getYanzhengmaBtn setTitle:@"获取验证码" forState:UIControlStateNormal];
     [getYanzhengmaBtn addTarget:self action:@selector(getYanzhengmaBtnClicked) forControlEvents:UIControlEventTouchUpInside];
@@ -180,6 +185,11 @@ static int seconds = 60;//计时60s
     getYanzhengmaBtn.layer.cornerRadius = 4;
     getYanzhengmaBtn.titleLabel.font = [UIFont systemFontOfSize:15];
     [_downScrollView addSubview:getYanzhengmaBtn];
+    
+    
+    
+    
+    
     
     
     
@@ -263,6 +273,8 @@ static int seconds = 60;//计时60s
 -(void)gShou{
     [self.phoneTF resignFirstResponder];
     [self.yanzhengmaTf resignFirstResponder];
+    [self.mimaTf resignFirstResponder];
+    [self.mima2Tf resignFirstResponder];
 }
 
 
