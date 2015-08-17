@@ -176,8 +176,9 @@
 		E35015081B678D4000A6B9DE /* adverModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E35015071B678D4000A6B9DE /* adverModel.m */; };
 		E350150B1B68CD6800A6B9DE /* buy_jiantou_d@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E35015091B68CD6800A6B9DE /* buy_jiantou_d@2x.png */; };
 		E350150C1B68CD6800A6B9DE /* buy_jiantou_u@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E350150A1B68CD6800A6B9DE /* buy_jiantou_u@2x.png */; };
-		E393D3591B7364B20022E665 /* CycleScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = E393D3561B7364B20022E665 /* CycleScrollView.m */; };
-		E393D35A1B7364B20022E665 /* NSTimer+Addition.m in Sources */ = {isa = PBXBuildFile; fileRef = E393D3581B7364B20022E665 /* NSTimer+Addition.m */; };
+		E351AFE91B82042A00C78EC4 /* CycleScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = E351AFE41B82042A00C78EC4 /* CycleScrollView.m */; };
+		E351AFEA1B82042A00C78EC4 /* CycleScrollView1.m in Sources */ = {isa = PBXBuildFile; fileRef = E351AFE61B82042A00C78EC4 /* CycleScrollView1.m */; };
+		E351AFEB1B82042A00C78EC4 /* NSTimer+Addition.m in Sources */ = {isa = PBXBuildFile; fileRef = E351AFE81B82042A00C78EC4 /* NSTimer+Addition.m */; };
 		E3C15F8E1B4CA3BD00C30039 /* DataBase.m in Sources */ = {isa = PBXBuildFile; fileRef = E3C15F871B4CA3BD00C30039 /* DataBase.m */; };
 		E3C15F8F1B4CA3BD00C30039 /* FBCity.m in Sources */ = {isa = PBXBuildFile; fileRef = E3C15F891B4CA3BD00C30039 /* FBCity.m */; };
 		E3C15F901B4CA3BD00C30039 /* GMAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = E3C15F8B1B4CA3BD00C30039 /* GMAPI.m */; };
@@ -548,10 +549,12 @@
 		E35015071B678D4000A6B9DE /* adverModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = adverModel.m; sourceTree = "<group>"; };
 		E35015091B68CD6800A6B9DE /* buy_jiantou_d@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "buy_jiantou_d@2x.png"; sourceTree = "<group>"; };
 		E350150A1B68CD6800A6B9DE /* buy_jiantou_u@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "buy_jiantou_u@2x.png"; sourceTree = "<group>"; };
-		E393D3551B7364B20022E665 /* CycleScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CycleScrollView.h; sourceTree = "<group>"; };
-		E393D3561B7364B20022E665 /* CycleScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CycleScrollView.m; sourceTree = "<group>"; };
-		E393D3571B7364B20022E665 /* NSTimer+Addition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSTimer+Addition.h"; sourceTree = "<group>"; };
-		E393D3581B7364B20022E665 /* NSTimer+Addition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSTimer+Addition.m"; sourceTree = "<group>"; };
+		E351AFE31B82042A00C78EC4 /* CycleScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CycleScrollView.h; sourceTree = "<group>"; };
+		E351AFE41B82042A00C78EC4 /* CycleScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CycleScrollView.m; sourceTree = "<group>"; };
+		E351AFE51B82042A00C78EC4 /* CycleScrollView1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CycleScrollView1.h; sourceTree = "<group>"; };
+		E351AFE61B82042A00C78EC4 /* CycleScrollView1.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CycleScrollView1.m; sourceTree = "<group>"; };
+		E351AFE71B82042A00C78EC4 /* NSTimer+Addition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSTimer+Addition.h"; sourceTree = "<group>"; };
+		E351AFE81B82042A00C78EC4 /* NSTimer+Addition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSTimer+Addition.m"; sourceTree = "<group>"; };
 		E3C15F861B4CA3BD00C30039 /* DataBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataBase.h; sourceTree = "<group>"; };
 		E3C15F871B4CA3BD00C30039 /* DataBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataBase.m; sourceTree = "<group>"; };
 		E3C15F881B4CA3BD00C30039 /* FBCity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBCity.h; sourceTree = "<group>"; };
@@ -1184,7 +1187,7 @@
 		13A64C3D1B3BEB7100D9A106 /* HelpTools */ = {
 			isa = PBXGroup;
 			children = (
-				E393D3541B7364B20022E665 /* cycelscrollview */,
+				E351AFE21B82042A00C78EC4 /* Cycelscrollview */,
 				E3126DB81B7153D8003D8321 /* TQStarRatingView.h */,
 				E3126DB91B7153D8003D8321 /* TQStarRatingView.m */,
 				E3F1A07C1B70F0DA00102989 /* GImagePicker */,
@@ -1440,15 +1443,18 @@
 			path = "首页";
 			sourceTree = "<group>";
 		};
-		E393D3541B7364B20022E665 /* cycelscrollview */ = {
+		E351AFE21B82042A00C78EC4 /* Cycelscrollview */ = {
 			isa = PBXGroup;
 			children = (
-				E393D3551B7364B20022E665 /* CycleScrollView.h */,
-				E393D3561B7364B20022E665 /* CycleScrollView.m */,
-				E393D3571B7364B20022E665 /* NSTimer+Addition.h */,
-				E393D3581B7364B20022E665 /* NSTimer+Addition.m */,
+				E351AFE31B82042A00C78EC4 /* CycleScrollView.h */,
+				E351AFE41B82042A00C78EC4 /* CycleScrollView.m */,
+				E351AFE51B82042A00C78EC4 /* CycleScrollView1.h */,
+				E351AFE61B82042A00C78EC4 /* CycleScrollView1.m */,
+				E351AFE71B82042A00C78EC4 /* NSTimer+Addition.h */,
+				E351AFE81B82042A00C78EC4 /* NSTimer+Addition.m */,
 			);
-			path = cycelscrollview;
+			name = Cycelscrollview;
+			path = ../../../../../YIYIProject0107/YiYiProject/YiYiProject/PersonalApi/GMAPI/Gutils/Cycelscrollview;
 			sourceTree = "<group>";
 		};
 		E3C15F951B4CA4CF00C30039 /* BaiduMap_IOSSDK_v2.6.0_Lib */ = {
@@ -2227,11 +2233,10 @@
 				13A64C561B3BF3E700D9A106 /* MyViewController.m in Sources */,
 				E3C15F901B4CA3BD00C30039 /* GMAPI.m in Sources */,
 				E3D080331B3D523200E4F87D /* RegisterViewController.m in Sources */,
-				E393D35A1B7364B20022E665 /* NSTimer+Addition.m in Sources */,
 				13FEA47E1B4A55BE009BD01D /* FBActionSheet.m in Sources */,
 				E3F1A0A51B70F0DA00102989 /* JKAssets.m in Sources */,
 				1394576C1B4678D200C45EB6 /* NSDate+Additons.m in Sources */,
-				E393D3591B7364B20022E665 /* CycleScrollView.m in Sources */,
+				E351AFE91B82042A00C78EC4 /* CycleScrollView.m in Sources */,
 				E3D080311B3D523200E4F87D /* LoginViewController.m in Sources */,
 				1375AD5E1B4D0E67001631CE /* NickNameSheet.m in Sources */,
 				E3CE7F7C1B4D600F0012940C /* ProductCommentTableViewCell.m in Sources */,
@@ -2257,6 +2262,7 @@
 				E3F1A0311B6FC29000102989 /* Gbtn.m in Sources */,
 				13FEA4941B4BD198009BD01D /* CollectCell.m in Sources */,
 				E3F1A0AE1B70F0DA00102989 /* JKPromptView.m in Sources */,
+				E351AFEB1B82042A00C78EC4 /* NSTimer+Addition.m in Sources */,
 				E3D0801B1B3D51A500E4F87D /* SVIndefiniteAnimatedView.m in Sources */,
 				138407221B5798660008CAC3 /* ShoppingCartCell.m in Sources */,
 				13A64C5A1B3BF6A800D9A106 /* UIView+Frame.m in Sources */,
@@ -2276,6 +2282,7 @@
 				E3D685151B5B5F7D0048C044 /* LocationChooseViewController.m in Sources */,
 				13A2087A1B5C96C800CC4EC0 /* ConfirmInfoCell.m in Sources */,
 				E3D0801D1B3D51A500E4F87D /* SVProgressHUD.m in Sources */,
+				E351AFEA1B82042A00C78EC4 /* CycleScrollView1.m in Sources */,
 				E3DE39BD1B592A2F0015EEF6 /* MJPhotoView.m in Sources */,
 				E3F1A0731B70D11800102989 /* AddCommentDetailViewController.m in Sources */,
 				E3D080131B3D510C00E4F87D /* BaseModel.m in Sources */,

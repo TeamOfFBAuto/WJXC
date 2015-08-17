@@ -1,47 +1,51 @@
 //
-//  CycleScrollView.m
-//  PagedScrollView
+//  CycleScrollView1.m
+//  YiYiProject
 //
-//  Created by 陈政 on 14-1-23.
-//  Copyright (c) 2014年 Apple Inc. All rights reserved.
+//  Created by gaomeng on 15/8/12.
+//  Copyright (c) 2015年 lcw. All rights reserved.
 //
 
-#import "CycleScrollView.h"
-#import "NSTimer+Addition.h"
+#import "CycleScrollView1.h"
 
-@interface CycleScrollView () <UIScrollViewDelegate>
+@interface CycleScrollView1 () <UIScrollViewDelegate>
 
 @property (nonatomic , assign) NSInteger currentPageIndex;
 @property (nonatomic , assign) NSInteger totalPageCount;
 @property (nonatomic , strong) NSMutableArray *contentViews;
 @property (nonatomic , strong) UIScrollView *scrollView;
 
-@property (nonatomic , strong) NSTimer *animationTimer;
+//@property (nonatomic , strong) NSTimer *animationTimer;
 @property (nonatomic , assign) NSTimeInterval animationDuration;
 
 @property(nonatomic,strong)UIPageControl *pageControl;
 
 @end
 
-@implementation CycleScrollView
+
+
+@implementation CycleScrollView1
 
 - (void)setTotalPagesCount:(NSInteger (^)(void))totalPagesCount
 {
     _totalPageCount = totalPagesCount();
-    if (_totalPageCount > 0) {
+    if (_totalPageCount == 1) {
+        [self configContentViews];
+    }else if (_totalPageCount > 0) {
         [self configContentViews];
         [self.animationTimer resumeTimerAfterTimeInterval:self.animationDuration];
     }
+    if (!self.isPageControlHidden) {
+        CGRect rect = self.frame;
+        rect.origin.y = rect.size.height - 30;
+        rect.size.height = 30;
+        self.pageControl = [[UIPageControl alloc] initWithFrame:rect];
+        self.pageControl.userInteractionEnabled = NO;
+        
+        [self addSubview:self.pageControl];
+        self.pageControl.numberOfPages = _totalPageCount;
+    }
     
-    
-    CGRect rect = self.frame;
-    rect.origin.y = rect.size.height - 30;
-    rect.size.height = 30;
-    self.pageControl = [[UIPageControl alloc] initWithFrame:rect];
-    self.pageControl.userInteractionEnabled = NO;
-    
-    [self addSubview:self.pageControl];
-    self.pageControl.numberOfPages = _totalPageCount;
     
     
     
@@ -71,9 +75,9 @@
         self.scrollView = [[UIScrollView alloc] initWithFrame:self.bounds];
         self.scrollView.autoresizingMask = 0xFF;
         self.scrollView.contentMode = UIViewContentModeCenter;
-        self.scrollView.contentSize = CGSizeMake(3 * CGRectGetWidth(self.scrollView.frame), CGRectGetHeight(self.scrollView.frame));
+        self.scrollView.contentSize = CGSizeMake(CGRectGetWidth(self.scrollView.frame), 3 * CGRectGetHeight(self.scrollView.frame));
         self.scrollView.delegate = self;
-        self.scrollView.contentOffset = CGPointMake(CGRectGetWidth(self.scrollView.frame), 0);
+        self.scrollView.contentOffset = CGPointMake(0, CGRectGetHeight(self.scrollView.frame));
         self.scrollView.pagingEnabled = YES;
         [self addSubview:self.scrollView];
         self.currentPageIndex = 0;
@@ -95,12 +99,12 @@
         UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(contentViewTapAction:)];
         [contentView addGestureRecognizer:tapGesture];
         CGRect rightRect = contentView.frame;
-        rightRect.origin = CGPointMake(CGRectGetWidth(self.scrollView.frame) * (counter ++), 0);
+        rightRect.origin = CGPointMake(0, CGRectGetHeight(self.scrollView.frame) * (counter ++));
         
         contentView.frame = rightRect;
         [self.scrollView addSubview:contentView];
     }
-    [_scrollView setContentOffset:CGPointMake(_scrollView.frame.size.width, 0)];
+    [_scrollView setContentOffset:CGPointMake(0, _scrollView.frame.size.height)];
 }
 
 /**
@@ -108,18 +112,37 @@
  */
 - (void)setScrollViewContentDataSource
 {
-    NSInteger previousPageIndex = [self getValidNextPageIndexWithPageIndex:self.currentPageIndex - 1];
-    NSInteger rearPageIndex = [self getValidNextPageIndexWithPageIndex:self.currentPageIndex + 1];
-    if (self.contentViews == nil) {
-        self.contentViews = [@[] mutableCopy];
-    }
-    [self.contentViews removeAllObjects];
     
-    if (self.fetchContentViewAtIndex) {
-        [self.contentViews addObject:self.fetchContentViewAtIndex(previousPageIndex)];
-        [self.contentViews addObject:self.fetchContentViewAtIndex(_currentPageIndex)];
-        [self.contentViews addObject:self.fetchContentViewAtIndex(rearPageIndex)];
+    
+    if (_totalPageCount == 1) {
+        
+        NSInteger rearPageIndex = [self getValidNextPageIndexWithPageIndex:self.currentPageIndex + 1];
+        if (self.contentViews == nil) {
+            self.contentViews = [@[] mutableCopy];
+        }
+        [self.contentViews removeAllObjects];
+        
+        if (self.fetchContentViewAtIndex) {
+            [self.contentViews addObject:self.fetchContentViewAtIndex(_currentPageIndex)];
+            [self.contentViews addObject:self.fetchContentViewAtIndex(rearPageIndex)];
+            self.scrollView.scrollEnabled = NO;
+        }
+    }else{
+        NSInteger previousPageIndex = [self getValidNextPageIndexWithPageIndex:self.currentPageIndex - 1];
+        NSInteger rearPageIndex = [self getValidNextPageIndexWithPageIndex:self.currentPageIndex + 1];
+        if (self.contentViews == nil) {
+            self.contentViews = [@[] mutableCopy];
+        }
+        [self.contentViews removeAllObjects];
+        
+        if (self.fetchContentViewAtIndex) {
+            [self.contentViews addObject:self.fetchContentViewAtIndex(previousPageIndex)];
+            [self.contentViews addObject:self.fetchContentViewAtIndex(_currentPageIndex)];
+            [self.contentViews addObject:self.fetchContentViewAtIndex(rearPageIndex)];
+        }
     }
+    
+    
 }
 
 - (NSInteger)getValidNextPageIndexWithPageIndex:(NSInteger)currentPageIndex;
@@ -148,16 +171,14 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    int contentOffsetX = scrollView.contentOffset.x;
-    if(contentOffsetX >= (2 * CGRectGetWidth(scrollView.frame))) {
+    int contentOffsetY = scrollView.contentOffset.y;
+    if(contentOffsetY >= (2 * CGRectGetHeight(scrollView.frame))) {
         self.currentPageIndex = [self getValidNextPageIndexWithPageIndex:self.currentPageIndex + 1];
-//        NSLog(@"next，当前页:%ld",(long)self.currentPageIndex);
         [self configContentViews];
         
     }
-    if(contentOffsetX <= 0) {
+    if(contentOffsetY <= 0) {
         self.currentPageIndex = [self getValidNextPageIndexWithPageIndex:self.currentPageIndex - 1];
-//        NSLog(@"previous，当前页:%ld",(long)self.currentPageIndex);
         [self configContentViews];
     }
     
@@ -169,7 +190,7 @@
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
-    [scrollView setContentOffset:CGPointMake(CGRectGetWidth(scrollView.frame), 0) animated:YES];
+    [scrollView setContentOffset:CGPointMake(0, CGRectGetHeight(scrollView.frame)) animated:YES];
 }
 
 #pragma mark -
@@ -177,7 +198,7 @@
 
 - (void)animationTimerDidFired:(NSTimer *)timer
 {
-    CGPoint newOffset = CGPointMake(self.scrollView.contentOffset.x + CGRectGetWidth(self.scrollView.frame), self.scrollView.contentOffset.y);
+    CGPoint newOffset = CGPointMake(self.scrollView.contentOffset.x,self.scrollView.contentOffset.y + CGRectGetHeight(self.scrollView.frame));
     [self.scrollView setContentOffset:newOffset animated:YES];
 }
 
@@ -187,14 +208,5 @@
         self.TapActionBlock(self.currentPageIndex);
     }
 }
-
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect
-{
-    // Drawing code
-}
-*/
-
 @end
+

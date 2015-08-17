@@ -1,14 +1,15 @@
 //
-//  CycleScrollView.h
-//  PagedScrollView
+//  CycleScrollView1.h
+//  YiYiProject
 //
-//  Created by 陈政 on 14-1-23.
-//  Copyright (c) 2014年 Apple Inc. All rights reserved.
+//  Created by gaomeng on 15/8/12.
+//  Copyright (c) 2015年 lcw. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
+#import "NSTimer+Addition.h"
 
-@interface CycleScrollView : UIView
+@interface CycleScrollView1 : UIView
 
 @property (nonatomic , readonly) UIScrollView *scrollView;
 /**
@@ -20,6 +21,9 @@
  *  @return instance
  */
 - (id)initWithFrame:(CGRect)frame animationDuration:(NSTimeInterval)animationDuration;
+
+//新加 是否隐藏pageControl
+@property(nonatomic,assign)BOOL isPageControlHidden;
 
 /**
  数据源：获取总的page个数
@@ -33,5 +37,11 @@
  当点击的时候，执行的block
  **/
 @property (nonatomic , copy) void (^TapActionBlock)(NSInteger pageIndex);
+
+
+
+//计时器
+@property (nonatomic , strong) NSTimer *animationTimer;
+
 
 @end
