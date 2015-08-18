@@ -11,7 +11,7 @@
 #ifndef WJXC_ApiConstants_h
 #define WJXC_ApiConstants_h
 
-#define SERVER_URL @"http://182.92.106.193:85" //域名地址
+#define SERVER_URL @"http://123.57.51.27:85" //域名地址
 
 //接口的去掉域名、去掉参数部分
 

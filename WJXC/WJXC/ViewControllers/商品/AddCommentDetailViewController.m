@@ -15,7 +15,7 @@
 #import "AddCommentViewController.h"
 
 //添加商品评论
-#define ADD_PRODUCT_PINGLUN @"http://182.92.106.193:85/index.php?d=api&c=products&m=add_comment"
+#define ADD_PRODUCT_PINGLUN @"http://123.57.51.27:85/index.php?d=api&c=products&m=add_comment"
 #define ADD_PRODUCT_PINGLUN_TEXT @"/index.php?d=api&c=products&m=add_comment"
 
 
