@@ -124,7 +124,6 @@
 		13A64C141B3BDF5E00D9A106 /* WJXCTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 13A64C131B3BDF5E00D9A106 /* WJXCTests.m */; };
 		13A64C201B3BE2F800D9A106 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13A64C1F1B3BE2F800D9A106 /* RootViewController.m */; };
 		13A64C431B3BEB7100D9A106 /* UIColor+ConvertColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 13A64C401B3BEB7100D9A106 /* UIColor+ConvertColor.m */; };
-		13A64C4C1B3BF1D600D9A106 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 13A64C4B1B3BF1D600D9A106 /* Default-568h@2x.png */; };
 		13A64C4F1B3BF2AE00D9A106 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 13A64C4D1B3BF2AE00D9A106 /* Main.storyboard */; };
 		13A64C561B3BF3E700D9A106 /* MyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13A64C551B3BF3E700D9A106 /* MyViewController.m */; };
 		13A64C5A1B3BF6A800D9A106 /* UIView+Frame.m in Sources */ = {isa = PBXBuildFile; fileRef = 13A64C591B3BF6A800D9A106 /* UIView+Frame.m */; };
@@ -468,7 +467,6 @@
 		13A64C481B3BECB000D9A106 /* ColorConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ColorConstants.h; sourceTree = "<group>"; };
 		13A64C491B3BECCD00D9A106 /* ImageConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImageConstants.h; sourceTree = "<group>"; };
 		13A64C4A1B3BED6700D9A106 /* ApiConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ApiConstants.h; sourceTree = "<group>"; };
-		13A64C4B1B3BF1D600D9A106 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		13A64C4E1B3BF2AE00D9A106 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		13A64C541B3BF3E700D9A106 /* MyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyViewController.h; sourceTree = "<group>"; };
 		13A64C551B3BF3E700D9A106 /* MyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyViewController.m; sourceTree = "<group>"; };
@@ -1068,7 +1066,6 @@
 		13A64BEB1B3BDF5D00D9A106 = {
 			isa = PBXGroup;
 			children = (
-				13A64C4B1B3BF1D600D9A106 /* Default-568h@2x.png */,
 				13A64BF61B3BDF5D00D9A106 /* WJXC */,
 				13A64C101B3BDF5D00D9A106 /* WJXCTests */,
 				13A64BF51B3BDF5D00D9A106 /* Products */,
@@ -2046,7 +2043,6 @@
 				E3D07FFB1B3D4A9100E4F87D /* TencentOpenApi_IOS_Bundle.bundle in Resources */,
 				139D43A11B5A65E40036DC3B /* SelectCell.xib in Resources */,
 				E3D07FEF1B3D4A9100E4F87D /* UMSCommentDetailController.xib in Resources */,
-				13A64C4C1B3BF1D600D9A106 /* Default-568h@2x.png in Resources */,
 				139457301B46296F00C45EB6 /* shopping cart_dd_top_name@2x.png in Resources */,
 				13A208871B608E8700CC4EC0 /* my_zhifubao@2x.png in Resources */,
 				E3F1A0B41B70F0DA00102989 /* compose_pic_add@2x.png in Resources */,
@@ -2427,7 +2423,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "58ab30fe-a6ce-48e7-9c7d-6744a6645a02";
+				PROVISIONING_PROFILE = "ec615eaa-f00a-4d5d-818b-2129e36be890";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -2465,7 +2461,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PROVISIONING_PROFILE = "58ab30fe-a6ce-48e7-9c7d-6744a6645a02";
+				PROVISIONING_PROFILE = "ec615eaa-f00a-4d5d-818b-2129e36be890";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};

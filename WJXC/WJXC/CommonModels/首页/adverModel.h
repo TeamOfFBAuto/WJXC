@@ -18,7 +18,7 @@
 @property(nonatomic,strong)NSString *title;
 @property(nonatomic,strong)NSString *status;
 @property(nonatomic,strong)NSString *add_time;
-@property(nonatomic,strong)NSString *relative_id;
+@property(nonatomic,strong)NSString *relative_id;//活动id
 @property(nonatomic,strong)NSString *cover_pic;
 @property(nonatomic,strong)NSString *cover_picsize;
 @property(nonatomic,strong)NSString *display_order;

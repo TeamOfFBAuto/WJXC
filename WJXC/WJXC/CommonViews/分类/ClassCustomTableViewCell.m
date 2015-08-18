@@ -50,7 +50,7 @@
     UILabel *priceLabel = [[UILabel alloc]initWithFrame:CGRectMake(10, CGRectGetMaxY(nameLabel.frame)+10, DEVICE_WIDTH - 20 - 50, 15)];
     priceLabel.textColor = RGBCOLOR(240, 114, 0);
     priceLabel.font = [UIFont systemFontOfSize:13];
-    priceLabel.text = model.current_price;
+    priceLabel.text = [NSString stringWithFormat:@"￥%@",model.current_price];
     [self.contentView addSubview:priceLabel];
     
     

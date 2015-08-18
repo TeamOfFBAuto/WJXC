@@ -468,7 +468,7 @@
     if ([model.type intValue] == 1) {//活动
         
         HuodongViewController *cc = [[HuodongViewController alloc]init];
-        cc.huodongId = model.adver_id;
+        cc.huodongId = model.relative_id;
         cc.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:cc animated:YES];
         

@@ -265,6 +265,10 @@
     
     NSString *token = [LTools cacheForKey:USER_DEVICE_TOKEN];
     
+    if (token.length == 0) {
+        token = @"noToken";
+    }
+    
     NSString *registration_id = [APService registrationID];
     if (!registration_id || registration_id.length == 0) {
         registration_id = @"JPush";
