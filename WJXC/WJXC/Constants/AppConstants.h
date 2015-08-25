@@ -31,12 +31,20 @@
 //根视图
 #define ROOTVIEWCONTROLLER (UITabBarController *)[UIApplication sharedApplication].keyWindow.rootViewController
 
+//图片比例
+
+#define W_H_RATIO 200/320  //宽高比
+
 //错误提示信息 
 
 #define ALERT_ERRO_PHONE @"请输入有效手机号"
 #define ALERT_ERRO_PASSWORD @"密码格式有误,请输入6~32位英文字母或数字"
 #define ALERT_ERRO_SECURITYCODE @"验证码格式有误,请输入6位数字"
 #define ALERT_ERRO_FINDPWD @"两次密码不一致"
+
+//秒杀相关描述语
+#define MIAOSHAO_END_TEXT @"秒杀已结束"
+#define MIAOSHAO_PRE_TEXT @"秒杀结束倒计时:"
 
 //保存用户信息设备信息相关
 

@@ -61,5 +61,7 @@
 @property(nonatomic,retain)NSString *product_pic_width;//图片宽度
 @property(nonatomic,retain)NSString *product_pic_height;
 
+@property(nonatomic,retain)NSDictionary *seckill_info;//秒杀信息 end_time
+
 
 @end

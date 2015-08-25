@@ -14,6 +14,7 @@
 #import "ProductModel.h"
 #import "ShoppingCarController.h"
 #import "SimpleMessage.h"
+#import "ConfirmOrderController.h"//确认订单
 
 @interface ProductDetailViewController ()<UITableViewDataSource,UITableViewDelegate>
 {
@@ -31,10 +32,15 @@
     
     int _theNum;
     
-    
     NSString *_isfavor;//是否收藏
     
     UILabel *_numLabel;//购物车数量
+    
+    NSString *_endTime;//秒杀倒计时
+    UILabel *_miaoShaLabel;//秒杀时间
+    NSTimer *_miaoShaTimer;//秒杀计时器
+    
+    UIButton *_jiaruBtn;//加入购物车或者立即秒杀
 }
 @end
 
@@ -59,9 +65,6 @@
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(prepareNetData) name:NOTIFICATION_LOGIN object:nil];
     
     [self creatTableView];
-    
-    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    
     
     [self creatUpView];
     
@@ -96,13 +99,13 @@
                     };
     }
     
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     
-    
-    
+    __weak typeof(self)weakSelf = self;
     [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodGet api:GET_PRODUCTDETAIL parameters:parame constructingBodyBlock:nil completion:^(NSDictionary *result) {
         
         
-        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        [MBProgressHUD hideAllHUDsForView:weakSelf.view animated:YES];
         
         NSLog(@"%@",result);
         
@@ -110,8 +113,20 @@
         
         _theProductModel = [[ProductDetailModel alloc]initWithDictionary:detail];
         
-        _gouwucheModel = [[ProductModel alloc]initWithDictionary:detail];
+        NSString *text = nil;
+        //秒杀判断
+        if ([_theProductModel.is_seckill intValue] == 1) {
+            
+            text = @"立即秒杀";
+
+            [weakSelf miaoShaTimer];
+        }else
+        {
+            text = @"加入购物车";
+        }
+        [_jiaruBtn setTitle:text forState:UIControlStateNormal];
         
+        _gouwucheModel = [[ProductModel alloc]initWithDictionary:detail];
         
         _isfavor = _theProductModel.is_favor;
         
@@ -123,9 +138,6 @@
         
         _shoucangBtn.hidden = NO;
         
-        
-        
-        
         [_tableView reloadData];
         
         
@@ -134,9 +146,6 @@
         NSLog(@"%@",result);
     }];
 }
-
-
-
 
 
 //创建上面返回收藏分享按钮
@@ -175,16 +184,15 @@
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.view addSubview:_tableView];
     
-    
-    
-    
-    
     UIImageView *downView = [[UIImageView alloc]initWithFrame:CGRectMake(0, DEVICE_HEIGHT - 45, DEVICE_WIDTH, 45)];
     downView.userInteractionEnabled = YES;
     [downView setImage:[UIImage imageNamed:@"homepage_qiangou_bottom_bg.png"]];
     [self.view addSubview:downView];
     
-    
+    //线条
+    UIView *topLine = [[UIView alloc]initWithFrame:CGRectMake(0, 0, downView.width, 0.5)];
+    topLine.backgroundColor = [UIColor colorWithHexString:@"8ab800"];
+    [downView addSubview:topLine];
     
     UIButton *phoneBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [phoneBtn setFrame:CGRectMake(10, 0, 45, 45)];
@@ -207,31 +215,37 @@
     [lianximaijiaBtn addTarget:self action:@selector(lianximaijia) forControlEvents:UIControlEventTouchUpInside];
     [lianximaijiaBtn setImageEdgeInsets:UIEdgeInsetsMake(5, 10, 20, 0)];
     [lianximaijiaBtn setTitleEdgeInsets:UIEdgeInsetsMake(15, -15, 0, 0)];
-    
     [downView addSubview:lianximaijiaBtn];
     
-    
-    UIButton *jiaruBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [jiaruBtn setTitle:@"加入购物车" forState:UIControlStateNormal];
-    jiaruBtn.titleLabel.textColor = [UIColor whiteColor];
-    jiaruBtn.titleLabel.font = [UIFont systemFontOfSize:13];
-    [jiaruBtn setFrame:CGRectMake(CGRectGetMaxX(lianximaijiaBtn.frame)+40, lianximaijiaBtn.frame.origin.y+5, 110,31)];
-    if (DEVICE_WIDTH == 320) {
-        [jiaruBtn setFrame:CGRectMake(CGRectGetMaxX(lianximaijiaBtn.frame)+15, lianximaijiaBtn.frame.origin.y+5, 110,31)];
+    NSString *text = nil;
+    if ([_theProductModel.is_seckill intValue] == 1) {
+        text = @"加入购物车";
+    }else
+    {
+        text = @"立即秒杀";
     }
-    jiaruBtn.layer.cornerRadius = 4;
-    jiaruBtn.layer.masksToBounds = YES;
-    jiaruBtn.backgroundColor = RGBCOLOR(247, 143, 0);
-    [jiaruBtn addTarget:self action:@selector(jiarugouwuche) forControlEvents:UIControlEventTouchUpInside];
-    [downView addSubview:jiaruBtn];
+    
+    _jiaruBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [_jiaruBtn setTitle:text forState:UIControlStateNormal];
+    _jiaruBtn.titleLabel.textColor = [UIColor whiteColor];
+    _jiaruBtn.titleLabel.font = [UIFont systemFontOfSize:13];
+    [_jiaruBtn setFrame:CGRectMake(CGRectGetMaxX(lianximaijiaBtn.frame)+40, lianximaijiaBtn.frame.origin.y+5, 110,31)];
+    if (DEVICE_WIDTH == 320) {
+        [_jiaruBtn setFrame:CGRectMake(CGRectGetMaxX(lianximaijiaBtn.frame)+15, lianximaijiaBtn.frame.origin.y+5, 110,31)];
+    }
+    _jiaruBtn.layer.cornerRadius = 4;
+    _jiaruBtn.layer.masksToBounds = YES;
+    _jiaruBtn.backgroundColor = RGBCOLOR(247, 143, 0);
+    [_jiaruBtn addTarget:self action:@selector(jiarugouwuche) forControlEvents:UIControlEventTouchUpInside];
+    [downView addSubview:_jiaruBtn];
     
     
     
     UIButton *gouwuche = [UIButton buttonWithType:UIButtonTypeCustom];
-    [gouwuche setFrame:CGRectMake(DEVICE_WIDTH - 60, -10, 50, 50)];
+    [gouwuche setFrame:CGRectMake(DEVICE_WIDTH - 64.5 - 10, -20 - 4, 64.5, 64)];
     gouwuche.layer.cornerRadius = 25;
-    gouwuche.backgroundColor = RGBCOLOR(122, 171, 0);
-    [gouwuche setImage:[UIImage imageNamed:@"homgpage_qianggou_bottom_shopping cart.png"] forState:UIControlStateNormal];
+//    gouwuche.backgroundColor = [UIColor whiteColor];
+    [gouwuche setBackgroundImage:[UIImage imageNamed:@"homepage_xq_gwc"] forState:UIControlStateNormal];
     [gouwuche addTarget:self action:@selector(gouwuche) forControlEvents:UIControlEventTouchUpInside];
     [downView addSubview:gouwuche];
     
@@ -243,8 +257,6 @@
     
     [self getShoppingCarNum];
 }
-
-
 
 -(void)gJian{
     
@@ -262,14 +274,6 @@
 }
 
 
-
-
-
-
-
-
-
-
 #pragma makr - UITableViewDelegate && UITabelViewDataSource
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -277,7 +281,9 @@
     
     
     if (indexPath.row == 0) {//循环滚动
-        return 180*GscreenRatio_568;
+//        return 180*GscreenRatio_568;
+        
+        return DEVICE_WIDTH * W_H_RATIO;
     }
     
     if (!_tmpCell) {
@@ -299,25 +305,24 @@
     if (!cell) {
         cell = [[ProductDetailTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
     }
-    
-    
     for (UIView *view in cell.contentView.subviews) {
         [view removeFromSuperview];
     }
     
-    
     if (indexPath.row == 0) {
-        UIImageView *imv = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, 180*GscreenRatio_568)];
+        UIImageView *imv = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, DEVICE_WIDTH * W_H_RATIO)];
         [imv sd_setImageWithURL:[NSURL URLWithString:_theProductModel.cover_pic] placeholderImage:[UIImage imageNamed:@"default02.png"]];
         [cell.contentView addSubview:imv];
         return cell;
     }
     
-    
     [cell loadCustomViewWithIndex:indexPath theModel:_theProductModel];
     
-    
-    
+    if (indexPath.row == 1) {
+        
+        _miaoShaLabel = cell.miaoShaLabel;//没有秒杀时为nil
+
+    }
     
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
@@ -344,15 +349,54 @@
     }
 }
 
+#pragma - mark 秒杀倒计时
 
+- (void)miaoShaTimer
+{
+    _endTime = [_theProductModel.seckill_info stringValueForKey:@"end_time"];
+    
+    NSString *endString = MIAOSHAO_END_TEXT;
+    NSString *timeString = [GMAPI daojishi:_endTime endString:endString];
+    
+    //秒杀活动已结束
+    if ([endString isEqualToString:timeString]) {
+        
+        _miaoShaLabel.text = endString;
+        return;
+    }
+    
+    _miaoShaTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(updateTime) userInfo:nil repeats:YES];
+    [[NSRunLoop currentRunLoop] addTimer:_miaoShaTimer forMode:NSRunLoopCommonModes];
+}
+
+-(void)updateTime{
+    
+    NSString *endString = MIAOSHAO_END_TEXT;
+    NSString *timeString = [GMAPI daojishi:_endTime endString:endString];
+    
+    //秒杀互动已经结束
+    if ([endString isEqualToString:timeString]) {
+        
+        _miaoShaLabel.text = endString;
+        
+        [_miaoShaTimer isValid];
+        _miaoShaTimer = nil;
+        
+        [self prepareNetData];
+        
+        return;
+    }
+
+    NSString *haha = [NSString stringWithFormat:@"%@%@",MIAOSHAO_PRE_TEXT,[GMAPI daojishi:_endTime endString:endString]];
+    _miaoShaLabel.text = haha;
+    
+}
 
 #pragma mark - 拨打电话
 -(void)bodadianhua{
     
     [self clickToPhone:nil];
 }
-
-
 #pragma mark - 联系卖家
 -(void)lianximaijia{
     
@@ -436,10 +480,33 @@
 
 #pragma mark - 加入购物车
 
--(void)jiarugouwuche{
+- (void)jiarugouwuche{
     
-    
-    [self clickToAddProduct];
+    if ([_theProductModel.is_seckill intValue] == 1) {
+        
+        //秒杀 直接跳转至提交订单
+        
+        //需要登录
+        if (![LTools isLogin:self]) {
+            
+            return;
+        }
+        
+        ProductModel *aModel = _gouwucheModel;
+        aModel.product_num = @"1";//秒杀只能一件
+        aModel.is_seckill = @"1";//是秒杀
+        
+        CGFloat price = [[_theProductModel.seckill_info stringValueForKey:@"seckill_price"] floatValue];
+        
+        ConfirmOrderController *confirm = [[ConfirmOrderController alloc]init];
+        confirm.productArray = @[aModel];
+        confirm.sumPrice = price;
+        [self.navigationController pushViewController:confirm animated:YES];
+        
+    }else
+    {
+        [self clickToAddProduct];
+    }
 }
 
 #pragma - mark UIAlertViewDelegate <NSObject>
@@ -449,8 +516,14 @@
 {
         if (buttonIndex == 1) {
             
-            NSString *phoneNum = @"010-999999999";
-            [[UIApplication sharedApplication]openURL:[NSURL URLWithString:[NSString stringWithFormat:@"tel://%@",phoneNum]]];
+            NSString *phone = _theProductModel.merchant_phone;
+            
+            if (phone) {
+                
+                NSString *phoneNum = phone;
+                [[UIApplication sharedApplication]openURL:[NSURL URLWithString:[NSString stringWithFormat:@"tel://%@",phoneNum]]];
+            }
+            
         }
 }
 
@@ -461,7 +534,8 @@
 {
     ProductModel *aModel = _gouwucheModel;
     
-    int product_num = 1;//测试
+    int product_num = 1;//每次加一个
+    
     NSString *authcode = [GMAPI getAuthkey];
     
     if (authcode.length == 0) {
@@ -472,6 +546,15 @@
         
         [[NSNotificationCenter defaultCenter]postNotificationName:NOTIFICATION_UPDATE_TO_CART object:nil];
         
+        
+        int num = [[DBManager shareInstance]QueryAllDataNum];
+        if (num > 0) {
+            _numLabel.hidden = NO;
+            _numLabel.text = [NSString stringWithFormat:@"%d",num];
+        }else
+        {
+            _numLabel.hidden = YES;
+        }
         
         return;
     }
@@ -502,6 +585,16 @@
 {
     NSString *authcode = [GMAPI getAuthkey];
     if (authcode.length == 0) {
+        
+        int num = [[DBManager shareInstance]QueryAllDataNum];
+        if (num > 0) {
+            _numLabel.hidden = NO;
+            _numLabel.text = [NSString stringWithFormat:@"%d",num];
+        }else
+        {
+            _numLabel.hidden = YES;
+        }
+        
         return;
     }
     

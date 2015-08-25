@@ -23,6 +23,10 @@
 
 -(NSArray *)QueryData;
 
+//单品总个数
+
+-(int)QueryAllDataNum;
+
 //２.查询是否有未同步数据
 
 -(BOOL)isExistUnsyncProduct;

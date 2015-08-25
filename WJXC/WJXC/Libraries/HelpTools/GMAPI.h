@@ -225,8 +225,17 @@
 
 #pragma mark - 新加
 
-+(NSString*)daojishi:(NSString*)test;
-
+//+(NSString*)daojishi:(NSString*)test;
+/**
+ *  倒计时剩余时间
+ *
+ *  @param test      结束时间
+ *  @param endString 结束时返回内容
+ *
+ *  @return
+ */
++(NSString*)daojishi:(NSString*)test
+           endString:(NSString *)endString;
 
 
 @end

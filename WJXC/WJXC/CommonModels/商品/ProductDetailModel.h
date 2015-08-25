@@ -30,5 +30,8 @@
 @property(nonatomic,strong)NSString *is_favor;
 @property(nonatomic,strong)NSString *merchant_phone;//联系电话
 
+@property(nonatomic,retain)NSDictionary *seckill_info;//秒杀信息 end_time
+@property(nonatomic,retain)NSString *is_seckill;//是否是秒杀
+
 
 @end

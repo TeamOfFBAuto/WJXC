@@ -25,7 +25,17 @@
 {
     [self.iconImageView sd_setImageWithURL:[NSURL URLWithString:model.cover_pic] placeholderImage:DEFAULT_YIJIAYI];
     self.productNameLabel.text = model.product_name;
-    self.priceLabel.text = [NSString stringWithFormat:@"￥%@",model.current_price];
+    
+    NSString *price = nil;
+    if ([model.is_seckill intValue] == 1) {
+        
+        price = [model.seckill_info stringValueForKey:@"seckill_price"];
+    }else
+    {
+        price = model.current_price;
+    }
+    
+    self.priceLabel.text = [NSString stringWithFormat:@"￥%@",price];
     self.numLabel.text = [NSString stringWithFormat:@"x %@",model.product_num];
 }
 

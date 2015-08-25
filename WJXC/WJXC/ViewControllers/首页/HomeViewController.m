@@ -57,10 +57,10 @@
     // Do any additional setup after loading the view.
     
     
-    _timer_daojishi = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(ggggg) userInfo:nil repeats:YES];
+    _timer_daojishi = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(updateTime) userInfo:nil repeats:YES];
     [_timer_daojishi fire];
     
-    _cellHeight = 130;
+    _cellHeight = (DEVICE_WIDTH/2- 5)  * W_H_RATIO;
     
     
     self.myTitle = @"万聚鲜城";
@@ -111,13 +111,6 @@
         [self getjingweidu];
         
     }
-    
-    
-    
-    
-    
-    
-    
     
     [self getScrollviewNetData];
     
@@ -218,10 +211,6 @@
         [tableView loadFail];
     }];
     
-    
-    
-    
-    
 }
 
 
@@ -236,7 +225,7 @@
 
 - (CGFloat)heightForRowIndexPath:(NSIndexPath *)indexPath tableView:(UITableView *)tableView{
     
-    return _cellHeight;
+    return _cellHeight + 10;
 }
 
 
@@ -272,17 +261,25 @@
     
     ProductModel *model = _tableView.dataArray[indexPath.row];
     
-    
-    
-    UIImageView *imv = [[UIImageView alloc]initWithFrame:CGRectMake(5, 5, DEVICE_WIDTH-10, 130 -5)];
+    UIImageView *imv = [[UIImageView alloc]initWithFrame:CGRectMake(5, 5, DEVICE_WIDTH-10, _cellHeight)];
     imv.backgroundColor = [UIColor whiteColor];
     [imv setImage:[UIImage imageNamed:@"homepage_bg.png"]];
     [cell.contentView addSubview:imv];
     
     
-    UIImageView *picImv = [[UIImageView alloc]initWithFrame:CGRectMake(5, 5, imv.frame.size.width*0.5, imv.frame.size.height)];
+    UIImageView *picImv = [[UIImageView alloc]initWithFrame:CGRectMake(5, 5, imv.frame.size.width*0.5, imv.frame.size.width*0.5 * W_H_RATIO)];
     [picImv sd_setImageWithURL:[NSURL URLWithString:model.cover_pic] placeholderImage:[UIImage imageNamed:@"default01.png"]];
     [cell.contentView addSubview:picImv];
+    
+    //标识是否是秒杀
+    
+    int is_seckill = [model.is_seckill intValue];
+    if (is_seckill == 1) {
+        
+        UIImageView *miaosha = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 32, 32)];
+        miaosha.image = [UIImage imageNamed:@"homepage_miaosha"];
+        [picImv addSubview:miaosha];
+    }
     
     
     UIView *infoView = [[UIView alloc]initWithFrame:CGRectMake(imv.frame.size.width*0.5, 0, imv.frame.size.width*0.5-10, imv.frame.size.height)];
@@ -364,10 +361,11 @@
     NSMutableArray *viewsArray = [NSMutableArray arrayWithCapacity:1];
     _daojishiArray = [NSMutableArray arrayWithCapacity:1];
     for (int i = 0; i<_TopDataArray.count; i++) {
-        UIImageView *imv = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, 180)];
+        UIImageView *imv = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, DEVICE_WIDTH *W_H_RATIO)];
         imv.userInteractionEnabled = YES;
         adverModel *amodel = _TopDataArray[i];
         NSString *str = amodel.cover_pic;
+//        imv.backgroundColor = [UIColor orangeColor];
         [imv sd_setImageWithURL:[NSURL URLWithString:str] placeholderImage:[UIImage imageNamed:@"default02.png"]];
         
         if ([amodel.type intValue] == 2) {//秒杀
@@ -436,7 +434,7 @@
         
     }
     
-    self.mainScorllView = [[CycleScrollView alloc] initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, 180) animationDuration:4];
+    self.mainScorllView = [[CycleScrollView alloc] initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, DEVICE_WIDTH * W_H_RATIO) animationDuration:4];
     self.mainScorllView.scrollView.showsHorizontalScrollIndicator = FALSE;
     
     self.mainScorllView.fetchContentViewAtIndex = ^UIView *(NSInteger pageIndex){
@@ -488,7 +486,6 @@
         cc.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:cc animated:YES];
         
-        
     }
 }
 
@@ -521,30 +518,18 @@
     }];
 }
 
-
-
-
-
-
--(void)ggggg{
-    
-    
+-(void)updateTime{
     for (NSDictionary *dic in _daojishiArray) {
         NSString *endTime = [dic stringValueForKey:@"time"];
         UILabel *lab = [dic objectForKey:@"label"];
-        NSString *haha = [GMAPI daojishi:endTime];
+        NSString *haha = [GMAPI daojishi:endTime endString:nil];
         lab.text = haha;
     }
     
 }
 
-
-
-
-
-
 -(void)creatTableView{
-    _tableView = [[RefreshTableView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, DEVICE_HEIGHT - 64 - 44) style:UITableViewStyleGrouped];
+    _tableView = [[RefreshTableView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, DEVICE_HEIGHT - 64 - 49) style:UITableViewStyleGrouped];
     _tableView.refreshDelegate = self;
     _tableView.dataSource = self;
     [self.view addSubview:_tableView];

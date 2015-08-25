@@ -13,7 +13,7 @@
 
 @interface ProductDetailTableViewCell : UITableViewCell
 
-
+@property(nonatomic,retain)UILabel *miaoShaLabel;
 
 -(CGFloat)loadCustomViewWithIndex:(NSIndexPath*)theIndexPath theModel:(ProductDetailModel*)model;
 

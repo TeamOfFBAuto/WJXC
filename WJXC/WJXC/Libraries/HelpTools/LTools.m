@@ -38,6 +38,36 @@
     return (UINavigationController *)[LTools appDelegate].window.rootViewController;
 }
 
+#pragma - mark 图片比例计算
+
+/**
+ *  计算等比例高度
+ *
+ *  @param image_height   图片的高度
+ *  @param image_width    图片的宽度
+ *  @param show_Width     实际显示宽度
+ *
+ *  @return 实际显示高度
+ */
++ (CGFloat)heightForImageHeight:(CGFloat)image_height
+                     imageWidth:(CGFloat)image_width
+                      showWidth:(CGFloat)show_Width
+{
+    float rate;
+    
+    if (image_width == 0.0 || image_height == 0.0) {
+        image_width = image_height;
+    }else
+    {
+        rate = image_height/image_width;
+    }
+    
+    CGFloat imageHeight = show_Width * rate;
+    
+    return imageHeight;
+    
+}
+
 #pragma - mark MD5 加密
 
 /**

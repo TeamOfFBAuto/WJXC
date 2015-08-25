@@ -779,9 +779,16 @@
 }
 
 
-
-
-+(NSString*)daojishi:(NSString*)test{
+/**
+ *  倒计时剩余时间
+ *
+ *  @param test      结束时间
+ *  @param endString 结束时返回内容
+ *
+ *  @return
+ */
++(NSString*)daojishi:(NSString*)test
+           endString:(NSString *)endString{
     
     NSDate *date1 = [NSDate dateWithTimeIntervalSince1970:[test doubleValue]];
     NSDate *date2 = [NSDate date];
@@ -804,8 +811,10 @@
         aa = [NSString stringWithFormat:@"%ld分%ld秒",min,ss];
     }else if (day == 0 && hour == 0 && min == 0) {
         aa = [NSString stringWithFormat:@"%ld秒",ss];
-    }else if (day == 0 && hour == 0 && min == 0 && ss == 0) {
-        aa = @"已结束";
+    }
+    //已结束判断
+    if (day < 0 || hour < 0 || min < 0 || ss < 0) {
+        aa = endString ? : @"已结束";
     }
     
     return aa;

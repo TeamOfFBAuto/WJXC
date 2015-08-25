@@ -135,6 +135,32 @@
 }
 
 
+-(int)QueryAllDataNum
+{
+    //获取数据 单品总数
+    
+    int sum = 0;
+
+    if ([_dataBase open]) {
+        
+        FMResultSet *rs = [_dataBase executeQuery:@"SELECT * FROM ShoppingCar"];
+        
+        while ([rs next]){
+            
+            int x = [rs intForColumn:@"product_num"];
+            
+            sum += x;
+            
+        }
+        
+        [rs close];
+        
+        [_dataBase close];
+        
+    }
+    return sum;
+}
+
 //３.更新数据 数量
 
 -(void)udpateProductId:(NSString *)productId

@@ -14,11 +14,6 @@
 #import "TQStarRatingView.h"
 #import "AddCommentViewController.h"
 
-//添加商品评论
-#define ADD_PRODUCT_PINGLUN @"http://123.57.51.27:85/index.php?d=api&c=products&m=add_comment"
-#define ADD_PRODUCT_PINGLUN_TEXT @"/index.php?d=api&c=products&m=add_comment"
-
-
 @interface AddCommentDetailViewController ()<JKImagePickerControllerDelegate,UICollectionViewDataSource,UICollectionViewDelegate,UITextViewDelegate,StarRatingViewDelegate>
 {
     UIScrollView *_mainScrollView;
@@ -440,7 +435,7 @@ static NSString *kPhotoCellIdentifier = @"kPhotoCellIdentifier";
     
     
     //上传的url
-    NSString *uploadImageUrlStr = ADD_PRODUCT_PINGLUN;
+    NSString *uploadImageUrlStr = [NSString stringWithFormat:@"%@%@",SERVER_URL,ADD_PRODUCT_PINGLUN];
     
     NSString *is_anony;
     if (_isniming) {

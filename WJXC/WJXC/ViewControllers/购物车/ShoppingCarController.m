@@ -613,15 +613,6 @@
  */
 - (void)getCartList
 {
-//    43、获取购物车记录
-//http://182.92.106.193:85/index.php?d=api&c=order&m=get_cart_products&authcode=***
-//    get方式
-//    参数：
-//    authcode
-//    page 页码
-//    per_page 每页多少条记录
-    
-    
     NSString *authkey = [GMAPI getAuthkey];
     
     if (authkey.length == 0) {

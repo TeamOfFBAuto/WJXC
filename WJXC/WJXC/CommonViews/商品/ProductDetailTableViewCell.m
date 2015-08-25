@@ -20,20 +20,62 @@
     // Configure the view for the selected state
 }
 
-
-
 -(CGFloat)loadCustomViewWithIndex:(NSIndexPath*)theIndexPath theModel:(ProductDetailModel*)model{
     CGFloat height = 0;
      if (theIndexPath.row == 1) {//产品名字
         UILabel *productNameLable = [[UILabel alloc]initWithFrame:CGRectMake(10, 10, DEVICE_WIDTH-10, 32)];
         productNameLable.text = model.product_name;
-        productNameLable.font = [UIFont systemFontOfSize:11];
+        productNameLable.font = [UIFont systemFontOfSize:14];
         [productNameLable setMatchedFrame4LabelWithOrigin:CGPointMake(10, 10) width:DEVICE_WIDTH-20];
         [self.contentView addSubview:productNameLable];
          
-        UILabel *priceLabel = [[UILabel alloc]initWithFrame:CGRectMake(10, CGRectGetMaxY(productNameLable.frame)+5, DEVICE_WIDTH - 20, 15)];
-        NSString *yuanjia = model.original_price;
-        NSString *xianjia = model.current_price;
+         //是否是秒杀 秒杀加上倒计时
+         
+         CGFloat priceTop = productNameLable.bottom + 5;
+         if ([model.is_seckill intValue] == 1) {
+
+            NSString *time = [model.seckill_info stringValueForKey:@"end_time"];
+
+             NSString *endString = MIAOSHAO_END_TEXT;
+             NSString *timeString = [GMAPI daojishi:time endString:endString];
+             
+             //秒杀活动已结束
+             if ([endString isEqualToString:timeString]) {
+                 
+                 _miaoShaLabel.text = endString;
+             }
+             
+             timeString = [NSString stringWithFormat:@"%@%@",MIAOSHAO_PRE_TEXT,timeString];
+             self.miaoShaLabel = [[UILabel alloc]initWithFrame:CGRectMake(10, productNameLable.bottom + 5, 300, 15) title:timeString font:12 align:NSTextAlignmentLeft textColor:RGBCOLOR(238, 115, 0)];
+             [self.contentView addSubview:_miaoShaLabel];
+             
+             priceTop = _miaoShaLabel.bottom + 5;
+         }else
+         {
+             if (self.miaoShaLabel) {
+                 [self.miaoShaLabel removeFromSuperview];
+                 self.miaoShaLabel = nil;
+             }
+         }
+         
+         //有秒杀显示秒杀价格  没有秒杀时判断是否有打折
+         
+         NSString *yuanjia = model.original_price;
+         NSString *xianjia = model.current_price;
+         if ([model.is_seckill intValue] == 1) {
+             
+             xianjia = model.seckill_info[@"seckill_price"];
+             
+         }else
+         {
+             int discount = [model.discount intValue];
+             if (discount == 100 || discount == 0) {
+                 //没有打折
+                 yuanjia = @"";
+             }
+         }
+         
+        UILabel *priceLabel = [[UILabel alloc]initWithFrame:CGRectMake(10, priceTop, DEVICE_WIDTH - 20, 15)];
         NSString *price = [NSString stringWithFormat:@"￥%@ %@",xianjia,yuanjia];
         NSMutableAttributedString  *aaa = [[NSMutableAttributedString alloc]initWithString:price];
         [aaa addAttribute:NSForegroundColorAttributeName value:RGBCOLOR(238, 115, 0) range:NSMakeRange(0, xianjia.length+1)];
@@ -45,16 +87,15 @@
         priceLabel.attributedText = aaa;
         [self.contentView addSubview:priceLabel];
         
-        
-        
-        UILabel *kucenLabel = [[UILabel alloc]initWithFrame:CGRectMake(10, CGRectGetMaxY(priceLabel.frame)+5, DEVICE_WIDTH-20, 15)];
-        kucenLabel.font = [UIFont systemFontOfSize:12];
-        kucenLabel.text = [NSString stringWithFormat:@"库存：%@件",model.discount];
-        [self.contentView addSubview:kucenLabel];
+        //库存
+//        UILabel *kucenLabel = [[UILabel alloc]initWithFrame:CGRectMake(10, CGRectGetMaxY(priceLabel.frame)+5, DEVICE_WIDTH-20, 15)];
+//        kucenLabel.font = [UIFont systemFontOfSize:12];
+//        kucenLabel.text = [NSString stringWithFormat:@"库存：%@件",model.discount];
+//        [self.contentView addSubview:kucenLabel];
 
-         height = CGRectGetMaxY(kucenLabel.frame)+10;
+         height = CGRectGetMaxY(priceLabel.frame)+10;
          
-         UIView *fengeView = [[UIView alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(kucenLabel.frame)+9.5, DEVICE_WIDTH, 0.5)];
+         UIView *fengeView = [[UIView alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(priceLabel.frame)+9.5, DEVICE_WIDTH, 0.5)];
          fengeView.backgroundColor = RGBCOLOR(220, 221, 223);
          [self.contentView addSubview:fengeView];
         

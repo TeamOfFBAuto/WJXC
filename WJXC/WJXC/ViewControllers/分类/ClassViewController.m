@@ -104,7 +104,6 @@
 - (void)getProductList
 {
 //    25、获取商品列表
-//http://182.92.106.193:85/index.php?d=api&c=products&m=get_product_list
 //    get方式
 //    参数：
 //    =1000  省份id 必填

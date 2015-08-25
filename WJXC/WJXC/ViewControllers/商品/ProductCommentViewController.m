@@ -184,6 +184,11 @@
 - (void)loadNewDataForTableView:(RefreshTableView *)tableView
 {
     NSLog(@"%s",__FUNCTION__);
+    
+    if (!self.model.product_id) {
+        return;
+    }
+    
     NSDictionary *parame;
     if (tableView.tag == 200) {//全部评论
         parame = @{
