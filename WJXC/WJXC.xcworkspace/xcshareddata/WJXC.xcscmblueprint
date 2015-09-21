@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "B749755763A68D303388A97D88AE767A4B18E66A",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "B17D34269DFBBFFD1B28E5067E72F14F24527419" : 0,
+    "B749755763A68D303388A97D88AE767A4B18E66A" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "89D8B2D7-1FD2-41A1-8849-B25E4597EB7B",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "B17D34269DFBBFFD1B28E5067E72F14F24527419" : "YIYIProject0107",
+    "B749755763A68D303388A97D88AE767A4B18E66A" : "WJXC"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "WJXC",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "WJXC\/WJXC.xcworkspace",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/TeamOfFBAuto\/YIYIProject0107.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "B17D34269DFBBFFD1B28E5067E72F14F24527419"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/TeamOfFBAuto\/WJXC.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "B749755763A68D303388A97D88AE767A4B18E66A"
+    }
+  ]
+}
