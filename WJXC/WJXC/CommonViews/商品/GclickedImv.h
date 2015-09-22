@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-typedef void (^kuangBlock)(UIImageView *imv,NSString *url);//定义block
+typedef void (^kuangBlock)(UIImageView *imv,NSString *url,NSMutableArray *urls);//定义block
 
 @interface GclickedImv : UIImageView
 
@@ -16,6 +16,7 @@ typedef void (^kuangBlock)(UIImageView *imv,NSString *url);//定义block
 @property(nonatomic,copy)kuangBlock kuangBlock;//弄成属性
 
 @property(nonatomic,strong)NSString *url;
+@property(nonatomic,strong)NSMutableArray *urls;//一组url
 
 -(id)initWithFrame:(CGRect)frame;
 

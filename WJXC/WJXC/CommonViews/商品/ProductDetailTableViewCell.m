@@ -99,7 +99,34 @@
          fengeView.backgroundColor = RGBCOLOR(220, 221, 223);
          [self.contentView addSubview:fengeView];
         
-    }else if (theIndexPath.row == 2){//评价晒单
+     }else if (theIndexPath.row == 2){//店铺优惠券
+         UILabel *titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(10, 0, 65, 35)];
+         titleLabel.font = [UIFont systemFontOfSize:12];
+         titleLabel.text = @"店铺优惠券";
+         [self.contentView addSubview:titleLabel];
+         
+         UIView *fengeView = [[UIView alloc]initWithFrame:CGRectMake(0, 35-0.5, DEVICE_WIDTH, 0.5)];
+         fengeView.backgroundColor = RGBCOLOR(220, 221, 223);
+         [self.contentView addSubview:fengeView];
+         
+         CGFloat xx = DEVICE_WIDTH*325/750;
+         UIView *couponsBackView = [[UIView alloc]initWithFrame:CGRectMake(xx, 2, DEVICE_WIDTH-10-xx, 31)];
+         couponsBackView.backgroundColor = [UIColor orangeColor];
+         [self.contentView addSubview:couponsBackView];
+         
+         
+         
+         
+         
+         
+         height = 35;
+         
+         
+         
+         
+         
+         
+     }else if (theIndexPath.row == 3){//评价晒单
         UILabel *titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(10, 10, DEVICE_WIDTH - 20, 15)];
         titleLabel.text = @"评价晒单";
         titleLabel.font = [UIFont systemFontOfSize:12];
@@ -117,7 +144,7 @@
         
         height = 32;
         
-    }else if (theIndexPath.row == 3){//产品详情
+    }else if (theIndexPath.row == 4){//产品详情
         
         UILabel *titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(10, 10, DEVICE_WIDTH-20, 15)];
         titleLabel.text = @"产品详情：";
@@ -126,7 +153,7 @@
         height = 32;
         
     }else{
-        NSDictionary *dic = model.product_desc[theIndexPath.row -4];
+        NSDictionary *dic = model.product_desc[theIndexPath.row -5];
         if ([[dic stringValueForKey:@"type"]intValue] == 1) {//文字
             NSString *content = [dic stringValueForKey:@"content"];
             UILabel *contentLabel = [[UILabel alloc]initWithFrame:CGRectZero];

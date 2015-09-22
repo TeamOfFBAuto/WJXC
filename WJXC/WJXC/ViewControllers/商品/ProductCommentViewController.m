@@ -368,9 +368,21 @@
     
     __weak typeof (self)bself = self;
     
+    
+    
+    
+    
+//    for (GclickedImv *imv in cell.imvArray) {
+//        
+//        [imv setKuangBlock:^(UIImageView *imv, NSString *url NSMutableArray) {
+//            [bself tapImage:imv url:url];
+//        }];
+//    }
+    
+    
     for (GclickedImv *imv in cell.imvArray) {
-        [imv setKuangBlock:^(UIImageView *imv, NSString *url) {
-            [bself tapImage:imv url:url];
+        [imv setKuangBlock:^(UIImageView *imv, NSString *url, NSMutableArray *urls) {
+            [bself tapImage:imv url:url theUrls:urls];
         }];
     }
     
@@ -397,7 +409,7 @@
 
 
 
-- (void)tapImage:(UIImageView *)theImv url:(NSString *)imageUrl
+- (void)tapImage:(UIImageView *)theImv url:(NSString *)imageUrl theUrls:(NSMutableArray*)urls
 {
     
     
@@ -407,11 +419,20 @@
     NSMutableArray *photos = [NSMutableArray arrayWithCapacity:1];
     
     // 替换为中等尺寸图片
-    NSString *url = imageUrl;
-    MJPhoto *photo = [[MJPhoto alloc] init];
-    photo.url = [NSURL URLWithString:url]; // 图片路径
-    photo.srcImageView = aImageView; // 来源于哪个UIImageView
-    [photos addObject:photo];
+//    NSString *url = imageUrl;
+//    MJPhoto *photo = [[MJPhoto alloc] init];
+//    photo.url = [NSURL URLWithString:url]; // 图片路径
+//    photo.srcImageView = aImageView; // 来源于哪个UIImageView
+//    [photos addObject:photo];
+    
+    for (NSString *url in urls) {
+        MJPhoto *photo = [[MJPhoto alloc]init];
+        photo.url = [NSURL URLWithString:url];
+        photo.srcImageView = aImageView;
+        [photos addObject:photo];
+    }
+    
+    
     
     
     // 2.显示相册

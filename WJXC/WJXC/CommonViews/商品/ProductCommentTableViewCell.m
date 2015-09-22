@@ -52,7 +52,6 @@
     
     
     self.startView = [[UIView alloc]initWithFrame:CGRectMake(DEVICE_WIDTH - 10 - 60, self.userNameLabel.frame.origin.y, 70, self.userNameLabel.frame.size.height)];
-//    self.startView.backgroundColor = [UIColor purpleColor];
     GstartView *cc = [[GstartView alloc]initWithFrame:self.startView.bounds];
     cc.maxStartNum = 5;
     cc.startNum = [model.star_level floatValue];
@@ -63,7 +62,6 @@
     
     self.contentLabel = [[UILabel alloc]initWithFrame:CGRectMake(self.userNameLabel.frame.origin.x, CGRectGetMaxY(self.userNameLabel.frame)+10, self.userNameLabel.frame.size.width, 0)];
     self.contentLabel.font = [UIFont systemFontOfSize:12];
-//    self.contentLabel.backgroundColor = [UIColor blueColor];
     self.contentLabel.text = model.content;
     [self.contentLabel setMatchedFrame4LabelWithOrigin:CGPointMake(self.userNameLabel.frame.origin.x, CGRectGetMaxY(self.userNameLabel.frame)+10) width:self.userNameLabel.frame.size.width];
     [self.contentView addSubview:self.contentLabel];
@@ -74,7 +72,6 @@
         
         //一行
         self.showImvView = [[UIView alloc]initWithFrame:CGRectMake(self.userNameLabel.frame.origin.x, CGRectGetMaxY(self.contentLabel.frame)+10, self.userNameLabel.frame.size.width, (self.userNameLabel.frame.size.width-10)/3)];
-//        self.showImvView.backgroundColor = [UIColor blackColor];
         [self.contentView addSubview:self.showImvView];
         CGFloat oneImvWithd = self.showImvView.frame.size.height;
         
@@ -89,13 +86,21 @@
         }
         
         
+        NSMutableArray *tmpArray = [NSMutableArray arrayWithCapacity:1];
+        
+        
+        for (int i = 0; i<count; i++) {
+            NSDictionary *dic = model.comment_pic[i];
+            [tmpArray addObject:[dic stringValueForKey:@"pic"]];
+        }
+        
         for (int i = 0; i<count; i++) {
             GclickedImv *imv = [[GclickedImv alloc]initWithFrame:CGRectMake(i%3*(oneImvWithd+5), i/3*(oneImvWithd+5), oneImvWithd, oneImvWithd)];
-//            imv.backgroundColor = [UIColor redColor];
             NSDictionary *dic = model.comment_pic[i];
             [imv sd_setImageWithURL:[NSURL URLWithString:[dic stringValueForKey:@"pic"]] placeholderImage:nil];
             imv.userInteractionEnabled = YES;
             imv.url = [dic stringValueForKey:@"pic"];
+            imv.urls = tmpArray;
             [self.imvArray addObject:imv];
             
             [self.showImvView addSubview:imv];

@@ -34,7 +34,7 @@
 -(void)doTap:(UITapGestureRecognizer *)sender{
     GclickedImv *cimv = (GclickedImv*)sender.view;
     if (self.kuangBlock) {
-        self.kuangBlock((UIImageView*)cimv,cimv.url);
+        self.kuangBlock((UIImageView*)cimv,cimv.url,cimv.urls);
     }
 }
 
