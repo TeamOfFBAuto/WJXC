@@ -151,6 +151,9 @@
 		13A64C6A1B3BFD0200D9A106 /* YJYRequstManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 13A64C691B3BFD0200D9A106 /* YJYRequstManager.m */; };
 		13AD17941B676D8D0091CE10 /* RCDChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13AD17931B676D8D0091CE10 /* RCDChatViewController.m */; };
 		13AD17961B6785870091CE10 /* my_service@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 13AD17951B6785870091CE10 /* my_service@2x.png */; };
+		13B11D161BB178B5005C933B /* OrderOtherInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B11D151BB178B5005C933B /* OrderOtherInfoCell.m */; settings = {ASSET_TAGS = (); }; };
+		13B11D191BB183F9005C933B /* youhui_yilingqu@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 13B11D171BB183F9005C933B /* youhui_yilingqu@2x.png */; settings = {ASSET_TAGS = (); }; };
+		13B11D1A1BB183F9005C933B /* youhui_lingqu@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 13B11D181BB183F9005C933B /* youhui_lingqu@2x.png */; settings = {ASSET_TAGS = (); }; };
 		13B2DBCF1B552B2800EE2B6C /* AddAddressController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B2DBCE1B552B2800EE2B6C /* AddAddressController.m */; };
 		13C32C531B71C3FF004B9105 /* libPushSDK-1.8.5.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 13C32C521B71C3FF004B9105 /* libPushSDK-1.8.5.a */; };
 		13C32C551B71C41C004B9105 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 13C32C541B71C41C004B9105 /* CFNetwork.framework */; };
@@ -525,6 +528,10 @@
 		13AD17921B676D8D0091CE10 /* RCDChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCDChatViewController.h; sourceTree = "<group>"; };
 		13AD17931B676D8D0091CE10 /* RCDChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCDChatViewController.m; sourceTree = "<group>"; };
 		13AD17951B6785870091CE10 /* my_service@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "my_service@2x.png"; sourceTree = "<group>"; };
+		13B11D141BB178B5005C933B /* OrderOtherInfoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrderOtherInfoCell.h; sourceTree = "<group>"; };
+		13B11D151BB178B5005C933B /* OrderOtherInfoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrderOtherInfoCell.m; sourceTree = "<group>"; };
+		13B11D171BB183F9005C933B /* youhui_yilingqu@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "youhui_yilingqu@2x.png"; sourceTree = "<group>"; };
+		13B11D181BB183F9005C933B /* youhui_lingqu@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "youhui_lingqu@2x.png"; sourceTree = "<group>"; };
 		13B2DBCD1B552B2800EE2B6C /* AddAddressController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddAddressController.h; sourceTree = "<group>"; };
 		13B2DBCE1B552B2800EE2B6C /* AddAddressController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddAddressController.m; sourceTree = "<group>"; };
 		13C32C511B71C3FF004B9105 /* APService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APService.h; sourceTree = "<group>"; };
@@ -897,6 +904,8 @@
 		136C03DD1BB168B900E5395D /* 优惠劵 */ = {
 			isa = PBXGroup;
 			children = (
+				13B11D171BB183F9005C933B /* youhui_yilingqu@2x.png */,
+				13B11D181BB183F9005C933B /* youhui_lingqu@2x.png */,
 				136C03DE1BB168B900E5395D /* my_collect_youhuiquan@2x.png */,
 				136C03DF1BB168B900E5395D /* youhuiquan_b_48@2x.png */,
 				136C03E01BB168B900E5395D /* youhuiquan_b_56@2x.png */,
@@ -1405,6 +1414,8 @@
 				E3CE7F641B4CFF980012940C /* GCycleScrollView.m */,
 				136C03D71BB1616C00E5395D /* CoupeView.h */,
 				136C03D81BB1616C00E5395D /* CoupeView.m */,
+				13B11D141BB178B5005C933B /* OrderOtherInfoCell.h */,
+				13B11D151BB178B5005C933B /* OrderOtherInfoCell.m */,
 				136C03DA1BB1619300E5395D /* ButtonProperty.h */,
 				136C03DB1BB1619300E5395D /* ButtonProperty.m */,
 				13FEA47C1B4A55BE009BD01D /* FBActionSheet.h */,
@@ -2164,6 +2175,7 @@
 				13EB1EA01B623E3600E5CA57 /* my_√@2x.png in Resources */,
 				139457371B46296F00C45EB6 /* homepage_qianggou_back@2x.png in Resources */,
 				139457381B46296F00C45EB6 /* homepage_qianggou_banner_bottom_bg@2x.png in Resources */,
+				13B11D191BB183F9005C933B /* youhui_yilingqu@2x.png in Resources */,
 				E34099871B6245BD00FF5257 /* gbtnWhite@2x.png in Resources */,
 				E3D0801C1B3D51A500E4F87D /* SVProgressHUD.bundle in Resources */,
 				1394574F1B46296F00C45EB6 /* register_password2@2x.PNG in Resources */,
@@ -2175,6 +2187,7 @@
 				E3F1A02D1B6FA46100102989 /* bodadianhua@2x.png in Resources */,
 				139457071B46296F00C45EB6 /* login_qq@2x.png in Resources */,
 				139457261B46296F00C45EB6 /* my_setting@2x.png in Resources */,
+				13B11D1A1BB183F9005C933B /* youhui_lingqu@2x.png in Resources */,
 				13A147161B6B865000B6A3DB /* default@2x.png in Resources */,
 				13FEA49D1B4BD590009BD01D /* AddressCell.xib in Resources */,
 				1375AD5B1B4D054D001631CE /* my_password_line_green.png in Resources */,
@@ -2334,6 +2347,7 @@
 				13A208831B5FA7DC00CC4EC0 /* PayActionViewController.m in Sources */,
 				136C03D61BB1614400E5395D /* CouponModel.m in Sources */,
 				E3F1A0221B6F52EE00102989 /* HuodongViewController.m in Sources */,
+				13B11D161BB178B5005C933B /* OrderOtherInfoCell.m in Sources */,
 				E3F1A0311B6FC29000102989 /* Gbtn.m in Sources */,
 				13FEA4941B4BD198009BD01D /* CollectCell.m in Sources */,
 				E3F1A0AE1B70F0DA00102989 /* JKPromptView.m in Sources */,

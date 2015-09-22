@@ -113,7 +113,7 @@
         NSString *discount = [NSString stringWithFormat:@"%.1f",[aModel.discount_num floatValue] * 10];
         discount = [NSString stringWithFormat:@"%@",[discount stringByRemoveTrailZero]];
         title_minus = @"优惠券";
-        title_full = [NSString stringWithFormat:@"本店享%@折优惠",discount];
+        title_full = [NSString stringWithFormat:@"尊享%@折优惠",discount];
         title = [NSString stringWithFormat:@"%@折",discount];
     }
     
@@ -143,8 +143,8 @@
         
     }else if (_userStyle == USESTYLE_Use){
         
-        image_normal = [UIImage imageNamed:@"myaddress_normal"];
-        image_selected = [UIImage imageNamed:@"myaddress_selected"];
+        image_normal = [UIImage imageNamed:@"shopping cart_normal"];
+        image_selected = [UIImage imageNamed:@"shopping cart_selected"];
     }
     
     //点击获取优惠劵

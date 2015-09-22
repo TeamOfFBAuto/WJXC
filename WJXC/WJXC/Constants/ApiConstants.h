@@ -145,6 +145,9 @@
 
 #define ORDER_GET_EXPRESS_FEE @"/index.php?d=api&c=order&m=get_express_fee"
 
+//获取可用优惠劵
+#define ORDER_GET_USECOUPONLIST @"/index.php?d=api&c=order&m=use_coupon_list"
+
 //48、获取支付宝签名或者微信生成预订单
 #define ORDER_GET_SIGN @"/index.php?d=api&c=order&m=get_sign"
 

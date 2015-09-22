@@ -67,7 +67,7 @@
     _images_arr = @[[UIImage imageNamed:@"my_collect"],
                     [UIImage imageNamed:@"my_address"],
                     [UIImage imageNamed:@"my_indent"],
-                    [UIImage imageNamed:@"my_indent"],
+                    [UIImage imageNamed:@"my_collect_youhuiquan"],
                     [UIImage imageNamed:@"my_service"],
                     [UIImage imageNamed:@"my_setting"]];
     _titles_arr = @[@"我的收藏",

@@ -17,11 +17,14 @@
 #import "PayActionViewController.h"//支付页面
 
 #import "ProductDetailViewController.h"//单品详情
+#import "CouponModel.h"//优惠劵
+#import "CoupeView.h"//优惠劵view
+#import "OrderOtherInfoCell.h"
 
 #define ALIPAY @"支付宝支付"
 #define WXPAY  @"微信支付"
 
-@interface ConfirmOrderController ()<UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate,UIGestureRecognizerDelegate>
+@interface ConfirmOrderController ()<UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate,UIGestureRecognizerDelegate,UITextFieldDelegate>
 {
     UITableView *_table;
     NSArray *_titles;
@@ -40,10 +43,14 @@
     
     float _expressFee;//邮费
     UILabel *_priceLabel;//邮费加产品价格
+    CGFloat _realPrice;//记录最终支付价格
     
     MBProgressHUD *_loading;//加载
     
     UILabel *_addressHintLabel;//收货地址提示
+    NSArray *_couponList;//优惠劵列表
+    CouponModel *_selectCoupon;//选中的优惠劵
+    
 }
 
 @end
@@ -67,7 +74,7 @@
     self.myTitle = @"确认订单";
     [self setMyViewControllerLeftButtonType:MyViewControllerLeftbuttonTypeBack WithRightButtonType:MyViewControllerRightbuttonTypeNull];
     
-    _titles = @[@"备注信息",@"商品清单",@"价格清单"];
+    _titles = @[@"商品清单",@"备注信息",@"优惠劵",@"价格清单"];
 
     _table = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, DEVICE_HEIGHT - 64) style:UITableViewStylePlain];
     _table.delegate = self;
@@ -82,9 +89,9 @@
     
     _loading = [LTools MBProgressWithText:@"生成订单中..." addToView:self.view];
     
-    
     [self getAddressAndFee];//获取收货地址和邮费
     
+    [self getCouponList];//获取优惠劵
 }
 
 - (void)didReceiveMemoryWarning {
@@ -123,6 +130,43 @@
         
     }];
 
+}
+/**
+ *  获取可用优惠劵
+ */
+- (void)getCouponList
+{
+    NSString *authkey = [GMAPI getAuthkey];
+    
+    float weight = [self sumWeight];//总重
+    
+    NSDictionary *params = @{@"authcode":authkey,
+                             @"total_price":[NSNumber numberWithFloat:self.sumPrice]};
+    
+    __weak typeof(_table)weakTable = _table;
+    __weak typeof(self)weakSelf = self;
+    [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodGet api:ORDER_GET_USECOUPONLIST parameters:params constructingBodyBlock:nil completion:^(NSDictionary *result) {
+        
+        NSLog(@"获取可用优惠劵%@ %@",result[RESULT_INFO],result);
+        NSDictionary *couponDic = [result objectForKey:@"coupon_list"];
+        NSArray *coupon_list = [couponDic allValues];
+        if (coupon_list) {
+            NSMutableArray *temp = [NSMutableArray arrayWithCapacity:coupon_list.count];
+            for (NSDictionary *aDic in coupon_list) {
+                
+                CouponModel *aModel = [[CouponModel alloc]initWithDictionary:aDic];
+                [temp addObject:aModel];
+            }
+            _couponList = [NSArray arrayWithArray:temp];
+            [weakTable reloadData];
+        }
+        
+        
+    } failBlock:^(NSDictionary *result) {
+        
+        NSLog(@"获取可用优惠劵 失败 %@",result[RESULT_INFO]);
+        
+    }];
 }
 
 /**
@@ -228,6 +272,51 @@
 
 #pragma mark - 事件处理
 
+/**
+ *  更新价格 (更改优惠劵,价格跟着变)
+ */
+- (void)updateSumPrice
+{
+    CGFloat sum_minus = 0.f;
+
+    CouponModel *c_model = _selectCoupon;
+    if (c_model) {
+        //1满减 2打折 3：新人优惠
+        int type = [c_model.type intValue];
+        if (type == 1) {
+            
+            //判断是否满足满减条件
+            if (self.sumPrice  >= [c_model.full_money floatValue]) {
+                
+                sum_minus += [c_model.minus_money floatValue];//减掉
+            }
+            
+        }else if (type == 2){
+            
+            sum_minus += (self.sumPrice *  (1 - [c_model.discount_num floatValue]));
+        }
+    }
+
+    //判断是否有收单减优惠劵
+//    NSString *other = @"";
+//    if (_couponModel_first) {
+//        
+//        other = [NSString stringWithFormat:@"(首单立减￥%@)",_couponModel_first.newer_money];
+//    }
+    
+    _priceLabel.text = [NSString stringWithFormat:@"￥%.2f",self.sumPrice - sum_minus + _expressFee];
+    
+    _realPrice = self.sumPrice - sum_minus + _expressFee;//记录支付价格
+    
+//    CGFloat minus_first = 0.f;
+//    if (_couponModel_first) {
+//        
+//        minus_first = [_couponModel_first.newer_money floatValue];
+//    }
+//    
+//    _sumPrice_pay = _priceSum - sum_minus - minus_first + _expressFee;//实际付款价格
+}
+
 - (void)updateExpressFeeAndSumPrice:(CGFloat)express
 {
     //产品加邮费
@@ -272,6 +361,8 @@
 
 - (void)clickToHidderkeyboard
 {
+    [_table setContentOffset:CGPointZero animated:YES];
+
     [_inputTf resignFirstResponder];
 }
 
@@ -344,6 +435,8 @@
 }
 
 #pragma mark - 创建视图
+
+
 /**
  *  底部工具条
  */
@@ -362,6 +455,8 @@
     
     //产品加邮费
     NSString *price = [NSString stringWithFormat:@"￥%.2f",self.sumPrice + _expressFee];
+    
+    _realPrice = self.sumPrice +_expressFee;//初始支付价格
     
     _priceLabel = [[UILabel alloc]initWithFrame:CGRectMake(label.right + 10, 0, 100, 50) title:price font:12 align:NSTextAlignmentLeft textColor:[UIColor colorWithHexString:@"f98700"]];
     [bottom addSubview:_priceLabel];
@@ -482,10 +577,10 @@
 
 #pragma mark - UIScrollViewDelegate
 
--(void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
-    [self clickToHidderkeyboard];
-}
+//-(void)scrollViewDidScroll:(UIScrollView *)scrollView
+//{
+//    [self clickToHidderkeyboard];
+//}
 
 #pragma mark - UITableViewDelegate
 
@@ -494,7 +589,7 @@
     
     NSLog(@"点击商品name = ");
 
-    if (indexPath.section == 1) {
+    if (indexPath.section == 0) {
         
         ProductModel *aModel = [self.productArray objectAtIndex:indexPath.row];
         
@@ -508,11 +603,15 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 0 || indexPath.section == 2) {
-        return 30;
-    }
-    if (indexPath.section == 1) {
+    NSString *title = _titles[indexPath.section];
+    if ([title isEqualToString:@"商品清单"]) {
         return 85;
+    }else if ([title isEqualToString:@"备注信息"]){
+        return 30;
+    }else if ([title isEqualToString:@"优惠劵"]){
+        return 50;
+    }else if ([title isEqualToString:@"价格清单"]){
+        return 30;
     }
     
     return 44;
@@ -538,32 +637,35 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (section == 0) {
-        
+    NSString *title = _titles[section];
+    if ([title isEqualToString:@"商品清单"]) {
+        return _productArray.count;
+    }else if ([title isEqualToString:@"备注信息"]){
         return 1;
+    }else if ([title isEqualToString:@"优惠劵"]){
+        return 1;
+    }else if ([title isEqualToString:@"价格清单"]){
+        return 2;
     }
-    if (section == 1) {
-        
-        return self.productArray.count;
-    }
-    return 2;
+    return 0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 1) {
+    NSString *title = _titles[indexPath.section];
+    if ([title isEqualToString:@"商品清单"]) {
+        
         static NSString *identify = @"ProductCell";
         ProductCell *cell = (ProductCell *)[LTools cellForIdentify:identify cellName:identify forTable:tableView];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-
+        
         ProductModel *aModel = [self.productArray objectAtIndex:indexPath.row];
         
         [cell setCellWithModel:aModel];
         
         return cell;
-    }
-    
-    if (indexPath.section == 0) {
+        
+    }else if ([title isEqualToString:@"备注信息"]){
         
         static NSString *identify = @"tableCell";
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identify];
@@ -574,13 +676,38 @@
             _inputTf.font = [UIFont systemFontOfSize:12];
             [cell.contentView addSubview:_inputTf];
             _inputTf.clearButtonMode = UITextFieldViewModeWhileEditing;
+            _inputTf.delegate = self;
         }
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         
         return cell;
-    }
-    
-    if (indexPath.section == 2) {
+
+        
+    }else if ([title isEqualToString:@"优惠劵"]){
+        
+        static NSString *identify = @"OrderOtherInfoCell";
+        OrderOtherInfoCell *cell = (OrderOtherInfoCell *)[tableView cellForRowAtIndexPath:indexPath];
+        if (!cell) {
+            cell = [[OrderOtherInfoCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identify];
+        }
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        
+        [cell setCellWithModel:_selectCoupon couponList:_couponList];
+        
+        __weak typeof(self)weakSelf = self;
+        __weak typeof(tableView)weakTable = tableView;
+        //更新优惠劵了
+        cell.updateCouponBlock = ^(id model){
+            
+            _selectCoupon = model;
+            //更新价格
+            [weakSelf updateSumPrice];
+            [weakTable reloadData];
+        };
+        
+        return cell;
+        
+    }else if ([title isEqualToString:@"价格清单"]){
         
         static NSString *identify = @"ConfirmInfoCell";
         ConfirmInfoCell *cell = (ConfirmInfoCell *)[LTools cellForIdentify:identify cellName:identify forTable:tableView];
@@ -617,7 +744,30 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 3;
+    return _titles.count;
+}
+
+#pragma - mark UITextFieldDelegate <NSObject>
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField{
+    
+    //避免键盘遮挡
+    CGPoint origin = textField.frame.origin;
+    CGPoint point = [textField.superview convertPoint:origin toView:_table];
+    float navBarHeight = self.navigationController.navigationBar.frame.size.height;
+    CGPoint offset = _table.contentOffset;
+    // Adjust the below value as you need
+    offset.y = (point.y - navBarHeight - 100);
+    [_table setContentOffset:offset animated:YES];
+}
+- (void)textFieldDidEndEditing:(UITextField *)textField
+{
+}
+
+-(BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [textField resignFirstResponder];
+    return YES;
 }
 
 @end
