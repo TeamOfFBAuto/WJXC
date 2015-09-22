@@ -16,6 +16,9 @@
     // Initialization code
     [self.commentButton setBorderWidth:0.5 borderColor:[UIColor colorWithHexString:@"f98702"]];
     [self.commentButton addCornerRadius:3.f];
+    
+    [self.delayButton setBorderWidth:0.5 borderColor:[UIColor lightGrayColor]];
+    [self.delayButton addCornerRadius:3.f];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

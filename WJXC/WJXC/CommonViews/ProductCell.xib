@@ -59,7 +59,7 @@
                 <outlet property="priceLabel" destination="Imf-i8-UCL" id="6Zz-UR-0cl"/>
                 <outlet property="productNameLabel" destination="wP0-3g-Kd5" id="XWQ-3F-I0I"/>
             </connections>
-            <point key="canvasLocation" x="111" y="197.5"/>
+            <point key="canvasLocation" x="-163" y="109.5"/>
         </tableViewCell>
     </objects>
     <resources>

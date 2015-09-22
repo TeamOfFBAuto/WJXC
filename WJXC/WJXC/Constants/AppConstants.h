@@ -96,18 +96,21 @@
  *  融云
  */
 
-//开发
-#define RONGCLOUD_IM_APPKEY    @"8luwapkvuf1nl" //融云账号 wjcx2015@qq.com
-#define RONGCLOUD_IM_APPSECRET @"bl6uUMP8HdpsU"
-//融云客服id
-#define SERVICE_ID @"KEFU1438066005020"
+////开发
+//#define RONGCLOUD_IM_APPKEY    @"8luwapkvuf1nl" //融云账号 wjcx2015@qq.com
+//#define RONGCLOUD_IM_APPSECRET @"bl6uUMP8HdpsU"
+////融云客服id
+//#define SERVICE_ID @"KEFU1438066005020"
 
+//正式环境
+#define RONGCLOUD_IM_APPKEY    @"8brlm7ufr42x3" //融云账号 wjcx2015@qq.com
+#define RONGCLOUD_IM_APPSECRET @"PIKhQ5NndKx"
+//融云客服id
+#define SERVICE_ID @"KEFU1440670948804"
 
 
 //百度地图
 #define baiduMapAk @"bBsNsfsiH9MBaiYs4XtuNgID"
-
-
 
 
 #endif

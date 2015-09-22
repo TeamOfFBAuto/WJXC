@@ -378,7 +378,7 @@
 /**
  *  支付成功
  */
-- (void)payResultSuccess:(BOOL)success
+- (void)payResultSuccess:(PAY_RESULT_TYPE)result
                 erroInfo:(NSString *)erroInfo
 {
     //更新购物车
@@ -387,14 +387,14 @@
     //支付成功通知
     [[NSNotificationCenter defaultCenter]postNotificationName:NOTIFICATION_PAY_SUCCESS object:nil];
 
-    PayResultViewController *result = [[PayResultViewController alloc]init];
-    result.orderId = self.orderId;
-    result.orderNum = self.orderNum;
-    result.sumPrice = self.sumPrice;
-    result.isPaySuccess = success;
-    result.erroInfo = erroInfo;
-    result.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:result animated:YES];
+//    PayResultViewController *result = [[PayResultViewController alloc]init];
+//    result.orderId = self.orderId;
+//    result.orderNum = self.orderNum;
+//    result.sumPrice = self.sumPrice;
+//    result.isPaySuccess = success;
+//    result.erroInfo = erroInfo;
+//    result.hidesBottomBarWhenPushed = YES;
+//    [self.navigationController pushViewController:result animated:YES];
 }
 
 /**

@@ -21,6 +21,7 @@
 @property (strong, nonatomic) IBOutlet UIButton *commentButton;
 
 @property (nonatomic,retain)UIScrollView *contentScroll;//放置多个商品
+@property (strong, nonatomic) IBOutlet UIButton *delayButton;
 
 - (void)setCellWithModel:(id)aModel;
 

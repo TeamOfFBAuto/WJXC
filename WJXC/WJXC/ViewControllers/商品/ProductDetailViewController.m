@@ -41,6 +41,8 @@
     NSTimer *_miaoShaTimer;//秒杀计时器
     
     UIButton *_jiaruBtn;//加入购物车或者立即秒杀
+
+    BOOL _isHiddenNavigation;//控制navigationBar显示
 }
 @end
 
@@ -48,9 +50,20 @@
 
 
 -(void)viewWillAppear:(BOOL)animated{
+    
     [self.navigationController setNavigationBarHidden:YES animated:YES];
 }
 
+-(void)viewWillDisappear:(BOOL)animated
+{
+    if (_isHiddenNavigation) {
+        
+        _isHiddenNavigation = NO;
+        return;
+    }
+    
+    [super viewWillDisappear:animated];
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -70,7 +83,7 @@
     
     [self prepareNetData];
     
-    
+    [self addVisitNum];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -78,13 +91,37 @@
     // Dispose of any resources that can be recreated.
 }
 
+#pragma - mark 网络请求
 
-#pragma mark - MyMethod
-
--(void)gGoback{
-    [self.navigationController popViewControllerAnimated:YES];
+/**
+ *  添加浏览量
+ */
+- (void)addVisitNum
+{
+    NSDictionary *param;
+    NSString *authcode = [GMAPI getAuthkey];
+    if (authcode.length == 0) {
+        param  = @{
+                    @"product_id":self.product_id,
+                    };
+    }else{
+        param  = @{
+                    @"product_id":self.product_id,
+                    @"authcode":[GMAPI getAuthkey]
+                    };
+    }
+    
+    [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodGet api:GET_PRODUCT_ADDVIEW parameters:param constructingBodyBlock:nil completion:^(NSDictionary *result) {
+        NSLog(@"浏览量+1 success");
+    } failBlock:^(NSDictionary *result) {
+       
+        NSLog(@"浏览量+1 fail");
+    }];
 }
 
+/**
+ *  请求单品详情
+ */
 -(void)prepareNetData{
     NSDictionary *parame;
     NSString *authcode = [GMAPI getAuthkey];
@@ -118,11 +155,14 @@
         if ([_theProductModel.is_seckill intValue] == 1) {
             
             text = @"立即秒杀";
-
+            
             [weakSelf miaoShaTimer];
         }else
         {
             text = @"加入购物车";
+            
+            [_miaoShaTimer isValid];
+            _miaoShaTimer = nil;
         }
         [_jiaruBtn setTitle:text forState:UIControlStateNormal];
         
@@ -145,6 +185,14 @@
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         NSLog(@"%@",result);
     }];
+}
+
+
+
+#pragma mark - MyMethod
+
+-(void)gGoback{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 
@@ -371,6 +419,11 @@
 
 -(void)updateTime{
     
+    if ([_theProductModel.is_seckill intValue] == 0) {
+        
+        return;
+    }
+    
     NSString *endString = MIAOSHAO_END_TEXT;
     NSString *timeString = [GMAPI daojishi:_endTime endString:endString];
     
@@ -485,6 +538,8 @@
     if ([_theProductModel.is_seckill intValue] == 1) {
         
         //秒杀 直接跳转至提交订单
+        
+        _isHiddenNavigation = YES;
         
         //需要登录
         if (![LTools isLogin:self]) {
@@ -627,6 +682,9 @@
     
     NSString *authcode = [GMAPI getAuthkey];
     if (authcode.length == 0) {
+        
+        _isHiddenNavigation = YES;
+        
         LoginViewController *login = [[LoginViewController alloc]init];
         
         UINavigationController *unVc = [[UINavigationController alloc]initWithRootViewController:login];

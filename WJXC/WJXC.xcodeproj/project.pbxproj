@@ -21,6 +21,7 @@
 		1375AD5E1B4D0E67001631CE /* NickNameSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 1375AD5D1B4D0E67001631CE /* NickNameSheet.m */; };
 		1375AD621B4D3F29001631CE /* OrderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1375AD601B4D3F29001631CE /* OrderCell.m */; };
 		1375AD631B4D3F29001631CE /* OrderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1375AD611B4D3F29001631CE /* OrderCell.xib */; };
+		137F85321BB0014C00FD44B2 /* TuiKuanViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 137F85311BB0014C00FD44B2 /* TuiKuanViewController.m */; settings = {ASSET_TAGS = (); }; };
 		1384071B1B578C120008CAC3 /* ProductModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 1384071A1B578C120008CAC3 /* ProductModel.m */; };
 		138407221B5798660008CAC3 /* ShoppingCartCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 138407201B5798660008CAC3 /* ShoppingCartCell.m */; };
 		138407231B5798660008CAC3 /* ShoppingCartCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 138407211B5798660008CAC3 /* ShoppingCartCell.xib */; };
@@ -332,6 +333,8 @@
 		1375AD5F1B4D3F29001631CE /* OrderCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrderCell.h; sourceTree = "<group>"; };
 		1375AD601B4D3F29001631CE /* OrderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrderCell.m; sourceTree = "<group>"; };
 		1375AD611B4D3F29001631CE /* OrderCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OrderCell.xib; sourceTree = "<group>"; };
+		137F85301BB0014C00FD44B2 /* TuiKuanViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuiKuanViewController.h; sourceTree = "<group>"; };
+		137F85311BB0014C00FD44B2 /* TuiKuanViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TuiKuanViewController.m; sourceTree = "<group>"; };
 		138407191B578C120008CAC3 /* ProductModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProductModel.h; sourceTree = "<group>"; };
 		1384071A1B578C120008CAC3 /* ProductModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProductModel.m; sourceTree = "<group>"; };
 		1384071F1B5798660008CAC3 /* ShoppingCartCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShoppingCartCell.h; sourceTree = "<group>"; };
@@ -1273,6 +1276,8 @@
 				13FEA4971B4BD520009BD01D /* ShoppingAddressController.m */,
 				135F85DD1B4CBDB500B5E5AD /* OrderViewController.h */,
 				135F85DE1B4CBDB500B5E5AD /* OrderViewController.m */,
+				137F85301BB0014C00FD44B2 /* TuiKuanViewController.h */,
+				137F85311BB0014C00FD44B2 /* TuiKuanViewController.m */,
 				135F85E01B4CBE5C00B5E5AD /* SettingsViewController.h */,
 				135F85E11B4CBE5C00B5E5AD /* SettingsViewController.m */,
 				135F85E31B4CC5ED00B5E5AD /* UpdatePWDController.h */,
@@ -2260,6 +2265,7 @@
 				139457711B4678D200C45EB6 /* UIView+Additions.m in Sources */,
 				E3CE7F681B4D1FE60012940C /* NSDictionary+GJson.m in Sources */,
 				E340998E1B6272F000FF5257 /* ClassDetailViewController.m in Sources */,
+				137F85321BB0014C00FD44B2 /* TuiKuanViewController.m in Sources */,
 				13A208831B5FA7DC00CC4EC0 /* PayActionViewController.m in Sources */,
 				E3F1A0221B6F52EE00102989 /* HuodongViewController.m in Sources */,
 				E3F1A0311B6FC29000102989 /* Gbtn.m in Sources */,
@@ -2481,6 +2487,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Chaowei Li (D8TKB68L88)";
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/WJXC/Libraries/ThirdClass/UMengShare/UMSocial_Sdk_Extra_Frameworks/TencentOpenAPI",
@@ -2514,6 +2521,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Chaowei Li (D8TKB68L88)";
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/WJXC/Libraries/ThirdClass/UMengShare/UMSocial_Sdk_Extra_Frameworks/TencentOpenAPI",
@@ -2556,7 +2564,7 @@
 				INFOPLIST_FILE = WJXCTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "94bfdcce-35c3-436e-933c-8ade63bba394";
+				PROVISIONING_PROFILE = "16e4a01f-e733-480e-b887-32979627e354";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WJXC.app/WJXC";
 			};
 			name = Debug;
@@ -2573,7 +2581,7 @@
 				INFOPLIST_FILE = WJXCTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "94bfdcce-35c3-436e-933c-8ade63bba394";
+				PROVISIONING_PROFILE = "16e4a01f-e733-480e-b887-32979627e354";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WJXC.app/WJXC";
 			};
 			name = Release;

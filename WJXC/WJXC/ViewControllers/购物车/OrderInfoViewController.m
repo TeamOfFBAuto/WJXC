@@ -30,6 +30,7 @@
 #define ALERT_TAG_CANCEL_ORDER 101 //取消订单
 #define ALERT_TAG_DEL_ORDER 102 //删除订单
 #define ALERT_TAG_RECIEVER_CONFIRM 103 //确认收货
+#define ALERT_TAG_Delay 104 //延长收货
 
 
 @interface OrderInfoViewController ()<UITableViewDataSource,UITableViewDelegate>
@@ -179,8 +180,23 @@
         alert.tag = ALERT_TAG_RECIEVER_CONFIRM;
         [alert show];
         
-    }else if ([text isEqualToString:@"查看物流"]){
-        //
+    }else if ([text isEqualToString:@"延长收货"]){
+        
+        //延长收货
+        OrderModel *aModel = _orderModel;
+        if ([aModel.show_delay_receive intValue] == 0) {
+            
+            NSString *msg = [NSString stringWithFormat:@"您已进行延长收货操作"];
+            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"延长收货" message:msg delegate:self cancelButtonTitle:@"知道了" otherButtonTitles:nil, nil];
+            [alert show];
+        }else
+        {
+            NSString *msg = [NSString stringWithFormat:@"订单只能延长收货一次"];
+            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"延长收货" message:msg delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+//            alert.tag = index;//根据这个来判断是 延长收货 还是 确认收货
+            [alert show];
+        }
+        
     }else if ([text isEqualToString:@"再次购买"]){
         
         //再次购买通知
@@ -206,6 +222,10 @@
         addComment.dingdanhao = _orderModel.order_no;
         addComment.theModelArray = temp;
         [self.navigationController pushViewController:addComment animated:YES];
+        
+    }else if ([text isEqualToString:@"申请退款"]){
+        
+        
     }
 }
 
@@ -286,6 +306,8 @@
 
 
 #pragma mark - 创建视图
+
+
 /**
  *  底部工具条
  */
@@ -303,56 +325,79 @@
     NSString *text2 = nil;
     
     //订单状态 1=》待付款 2=》已付款 3=》已发货 4=》已送达（已收货） 5=》已取消 6=》已删除
-
-    int status = [_orderModel.status intValue];
+    //退单状态 0=>未申请退款 1=》用户已提交申请退款 2=》同意退款（已提交微信/支付宝）3=》同意退款（退款成功） 4=》同意退款（退款失败） 5=》拒绝退款
     
-    if (status == 1) {
+    //    待付款：取消订单、去付款
+    //    待发货：申请退款
+    //    配送中:  确认收货
+    //    已完成: 删除订单、再次购买
+    //    退换：退款中、退款成功、退款失败
+    
+    int refund_status = [_orderModel.refund_status intValue];
+    
+    //代表有退款状态
+    if (refund_status > 0) {
         
-        //待支付
-        text1 = @"去支付";
-        text2 = @"取消订单";
-    }else if (status == 2 || status == 3){
-        //配送中
-        text1 = @"确认收货";
-        text2 = @"查看物流";
-    }else if (status == 4){
-        //已完成
-        text1 = @"再次购买";
-        text2 = @"删除订单";
+        if (refund_status == 1 || refund_status == 2) {
+            text1 = @"退款中";
+        }else if (refund_status == 3){
+            text1 = @"退款成功";
+        }else if (refund_status == 4 || refund_status == 5){
+            text1 = @"退款失败";
+        }
         
-        //接着判断是否评价
+    }else
+    {
+        int status = [_orderModel.status intValue];
+        
+        if (status == 1) {
+            //待支付
+            text1 = @"去支付";
+            text2 = @"取消订单";
+        }else if (status == 2){ //已付款就是待发货
+            //待发货
+            text1 = @"申请退款";
+            
+        }else if (status == 3){
+            //配送中
+            text1 = @"确认收货";
+            text2 = @"延长收货";
+            
+        }else if (status == 4){
+            
+            int is_comment = [_orderModel.is_comment intValue];
+            if (is_comment == 0)//待评价
+            {
+                text1 = @"再次购买";
+                text2 = @"评价晒单";
+                
+            }else //已评价
+            {
+                //已完成
+                text1 = @"再次购买";
+                text2 = @"删除订单";
+            }
+        }
     }
     
-    UIButton *button1 = [[UIButton alloc]initWithframe:CGRectMake(DEVICE_WIDTH - 15 - 80, 15, 80, 20) buttonType:UIButtonTypeRoundedRect normalTitle:text1 selectedTitle:nil target:self action:@selector(clickToAction:)];
-    [button1 addCornerRadius:3.f];
-    [button1 setTitleColor:[UIColor colorWithHexString:@"f98700"] forState:UIControlStateNormal];
+    CGFloat btn_width = 70;
+    CGFloat btn_height = 30;
+    CGFloat top = (bottom.height - btn_height)/2.f;
+    UIButton *button1 = [[UIButton alloc]initWithframe:CGRectMake(DEVICE_WIDTH - 15 - btn_width, top, btn_width, btn_height) buttonType:UIButtonTypeRoundedRect normalTitle:text1 selectedTitle:nil target:self action:@selector(clickToAction:)];
+    [button1 addCornerRadius:btn_height/2.f];
+    [button1 setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [button1 setBackgroundColor:DEFAULT_TEXTCOLOR];
     [button1.titleLabel setFont:[UIFont systemFontOfSize:13]];
-    [button1 setBorderWidth:0.5f borderColor:[UIColor colorWithHexString:@"f98700"]];
+    [button1 setBorderWidth:0.5f borderColor:DEFAULT_TEXTCOLOR];
     [bottom addSubview:button1];
     
-    UIButton *button2 = [[UIButton alloc]initWithframe:CGRectMake(button1.left - 15 - 80, 15, 80, 20) buttonType:UIButtonTypeRoundedRect normalTitle:text2 selectedTitle:nil target:self action:@selector(clickToAction:)];
-    [button2 addCornerRadius:3.f];
-    [button2 setTitleColor:[UIColor colorWithHexString:@"646464"] forState:UIControlStateNormal];
-    [button2.titleLabel setFont:[UIFont systemFontOfSize:13]];
-    [button2 setBorderWidth:0.5f borderColor:[UIColor colorWithHexString:@"646464"]];
-    [bottom addSubview:button2];
-    
-    if ([text2 isEqualToString:@"查看物流"]) {
-        
-        [button2 removeFromSuperview];
-        button2 = nil;
-    }
-    
-    if (status == 4 && [_orderModel.is_comment intValue] == 0) {
-        
-        //购买完成需要评论
-        
-        UIButton *button3 = [[UIButton alloc]initWithframe:CGRectMake(button2.left - 15 - 80, 15, 80, 20) buttonType:UIButtonTypeRoundedRect normalTitle:@"评价晒图" selectedTitle:nil target:self action:@selector(clickToAction:)];
-        [button3 addCornerRadius:3.f];
-        [button3 setTitleColor:[UIColor colorWithHexString:@"646464"] forState:UIControlStateNormal];
-        [button3.titleLabel setFont:[UIFont systemFontOfSize:13]];
-        [button3 setBorderWidth:0.5f borderColor:[UIColor colorWithHexString:@"646464"]];
-        [bottom addSubview:button3];
+    if (text2.length) {
+        UIButton *button2 = [[UIButton alloc]initWithframe:CGRectMake(button1.left - 15 - btn_width, top, btn_width, btn_height) buttonType:UIButtonTypeRoundedRect normalTitle:text2 selectedTitle:nil target:self action:@selector(clickToAction:)];
+        [button2 addCornerRadius:btn_height/2.f];
+        [button2 setTitleColor:DEFAULT_TEXTCOLOR forState:UIControlStateNormal];
+        [button2.titleLabel setFont:[UIFont systemFontOfSize:13]];
+        [button2 setBorderWidth:0.5f borderColor:DEFAULT_TEXTCOLOR];
+        [bottom addSubview:button2];
     }
 }
 

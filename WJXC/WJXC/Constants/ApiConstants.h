@@ -57,6 +57,9 @@
 //获取商品详情
 #define GET_PRODUCTDETAIL @"/index.php?d=api&c=products&m=get_product_detail"
 
+//添加商品浏览量
+#define GET_PRODUCT_ADDVIEW @"/index.php?d=api&c=statistic&m=add_product_view"
+
 //获取商品列表
 #define GET_PRODUCTlIST @"/index.php?d=api&c=products&m=get_product_list"
 
@@ -158,8 +161,14 @@
 //52、用户确认收货
 #define ORDER_RECEIVING_CONFIRM @"/index.php?d=api&c=order&m=receiving_confirm"
 
+//52、延长收货
+#define ORDER_RECEIVING_Delay @"/index.php?d=api&c=order&m=delay_receive"
+
 //53、用户取消或删除订单
 #define ORDER_HANDLE_ORDER @"/index.php?d=api&c=order&m=handle_order"
+
+//退款
+#define ORDER_REFUND @"/index.php?d=api&c=order&m=apply_refund"
 
 //获取购物车数量
 

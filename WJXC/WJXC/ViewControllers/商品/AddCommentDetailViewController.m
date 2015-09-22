@@ -408,6 +408,8 @@ static NSString *kPhotoCellIdentifier = @"kPhotoCellIdentifier";
             
         }
     } failBlock:^(NSDictionary *result) {
+       
+        [LTools showMBProgressWithText:[result stringValueForKey:@"msg"] addToView:self.view];
         
     }];
     

@@ -13,11 +13,29 @@
 #import "OrderInfoViewController.h"//订单详情
 #import "ConfirmOrderController.h"//确认订单
 #import "AddCommentViewController.h"//评价晒单
+#import "TuiKuanViewController.h"//退款页面
 
-#define kPadding_One 1000 //去支付
-#define kPadding_Two 2000 //确认收货
-#define kPadding_Three 3000 //评价晒单
-#define kPadding_Four  4000 //再次购买
+#define kPadding_ZhiFu 1000 //去支付
+#define kPadding_TuiKuan 2000 //申请退款
+#define kPadding_YanChang 3000 //延长收货
+#define kPadding_QueRen  4000 //确认收货
+#define kPadding_PingJia 5000 //评价晒单
+#define kPadding_WanCheng  6000 //再次购买
+
+//    待付款：去支付
+//    待发货：申请退款
+//    配送中：延长收货、确认收货
+//    待评价：评价晒单
+//    已完成：再次购买
+//    退    货：显示退货状态，字段为refund_status，  退款中（1和2）、退款成功
+
+//获取对应tableView
+#define TABLEVIEW_TAG_DaiFu 0 //待付款
+#define TABLEVIEW_TAG_DaiFaHuo 1 //待发货
+#define TABLEVIEW_TAG_PeiSong 2 //配送中
+#define TABLEVIEW_TAG_DaiPingJia 3 //待评价
+#define TABLEVIEW_TAG_WanCheng 4 //完成
+#define TABLEVIEW_TAG_TuiHuan 5 //退换
 
 @interface OrderViewController ()<RefreshDelegate,UITableViewDataSource,UIScrollViewDelegate>
 {
@@ -33,6 +51,11 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    if (self.lastPageNavigationHidden) {
+        self.navigationController.navigationBarHidden = NO;
+        return;
+    }
     self.navigationController.navigationBarHidden = YES;
     self.navigationController.navigationBarHidden = NO;
 }
@@ -44,7 +67,7 @@
     self.myTitle = @"我的订单";
     [self setMyViewControllerLeftButtonType:MyViewControllerLeftbuttonTypeBack WithRightButtonType:MyViewControllerRightbuttonTypeNull];
     
-    NSArray *titles = @[@"待付款",@"配送中",@"待评价",@"已完成"];
+    NSArray *titles = @[@"待付款",@"待发货",@"配送中",@"待评价",@"已完成",@"退换"];
     int count = (int)titles.count;
     CGFloat width = DEVICE_WIDTH / count;
     _buttonNum = count;
@@ -94,6 +117,7 @@
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(notificationForCancelOrder:) name:NOTIFICATION_ORDER_CANCEL object:nil];//取消订单
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(notificationForDelOrder:) name:NOTIFICATION_ORDER_DEL object:nil];//删除订单
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(notificationForComment:) name:NOTIFICATION_COMMENTSUCCESS object:nil];//评价成功
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(notificationForTuiKuan:) name:NOTIFICATION_TUIKUAN_SUCCESS object:nil];//退款
 }
 
 - (void)didReceiveMemoryWarning {
@@ -111,9 +135,8 @@
 - (void)notificationForPaySuccess:(NSNotification *)notify
 {
     //支付成功 更新
-    
-    [[self refreshTableForIndex:0]showRefreshHeader:YES];//待付款
-    [[self refreshTableForIndex:1]showRefreshHeader:YES];//配送中
+    [[self refreshTableForIndex:TABLEVIEW_TAG_DaiFu]showRefreshHeader:YES];//待付款
+    [[self refreshTableForIndex:TABLEVIEW_TAG_DaiFaHuo]showRefreshHeader:YES];//发货
 }
 
 /**
@@ -121,8 +144,18 @@
  */
 - (void)notificationForRecieveConfirm:(NSNotification *)notify
 {
-    [[self refreshTableForIndex:1]showRefreshHeader:YES];//待配送
-    [[self refreshTableForIndex:2]showRefreshHeader:YES];//待评价
+    [[self refreshTableForIndex:TABLEVIEW_TAG_PeiSong]showRefreshHeader:YES];//待配送
+    [[self refreshTableForIndex:TABLEVIEW_TAG_DaiPingJia]showRefreshHeader:YES];//待评价
+}
+
+/**
+ *  退款通知刷新配送和退换
+ *
+ */
+- (void)notificationForTuiKuan:(NSNotification *)notify
+{
+    [[self refreshTableForIndex:TABLEVIEW_TAG_PeiSong]showRefreshHeader:YES];//配送中
+    [[self refreshTableForIndex:TABLEVIEW_TAG_TuiHuan]showRefreshHeader:YES];//退货列表
 }
 
 /**
@@ -130,8 +163,7 @@
  */
 - (void)notificationForCancelOrder:(NSNotification *)notify
 {
-    [[self refreshTableForIndex:0]showRefreshHeader:YES];//待付款
-    [[self refreshTableForIndex:1]showRefreshHeader:YES];//配送中
+    [[self refreshTableForIndex:TABLEVIEW_TAG_DaiFu]showRefreshHeader:YES];//待付款
 }
 
 /**
@@ -139,8 +171,7 @@
  */
 - (void)notificationForDelOrder:(NSNotification *)notify
 {
-    [[self refreshTableForIndex:2]showRefreshHeader:YES];//待评价
-    [[self refreshTableForIndex:3]showRefreshHeader:YES];//已完成
+    [[self refreshTableForIndex:TABLEVIEW_TAG_WanCheng]showRefreshHeader:YES];//已完成
 }
 
 /**
@@ -148,8 +179,8 @@
  */
 - (void)notificationForComment:(NSNotification *)notify
 {
-    [[self refreshTableForIndex:2]showRefreshHeader:YES];//待评价
-    [[self refreshTableForIndex:3]showRefreshHeader:YES];//已完成
+    [[self refreshTableForIndex:TABLEVIEW_TAG_DaiPingJia]showRefreshHeader:YES];//待评价
+    [[self refreshTableForIndex:TABLEVIEW_TAG_WanCheng]showRefreshHeader:YES];//已完成
 }
 
 #pragma - mark 网络请求
@@ -161,16 +192,19 @@
  */
 - (void)getOrderListWithStatus:(ORDERTYPE)orderType
 {
-//    authcode
-//    status 我的订单状态（no_pay待付款，deliver配送中，no_comment待评价，complete已完成）
+//    authcode    
+    //status 我的订单状态（no_pay待付款，no_deliver待发货，deliver配送中，complete已完成,refund退款/售后，no_comment 待评价）
     NSString *authey = [GMAPI getAuthkey];
     if (authey.length == 0) {
         return;
     }
-    NSString *status = nil;
+    NSString *status = @"";
     switch (orderType) {
         case ORDERTYPE_DaiFu:
             status = @"no_pay";
+            break;
+        case ORDERTYPE_DaiFaHuo:
+            status = @"no_deliver";
             break;
         case ORDERTYPE_PeiSong:
             status = @"deliver";
@@ -180,6 +214,9 @@
             break;
         case ORDERTYPE_WanCheng:
             status = @"complete";
+            break;
+        case ORDERTYPE_TuiHuan:
+            status = @"refund";
             break;
         default:
             break;
@@ -204,7 +241,7 @@
         
     } failBlock:^(NSDictionary *result) {
         
-        [weakTable loadFail];
+        [weakTable reloadData:nil pageSize:10 noDataView:[self noDataView]];
     }];
 }
 
@@ -287,19 +324,25 @@
 {
     int index = (int)sender.tag;
     
+    //    待付款：去支付
+    //    待发货：申请退款
+    //    配送中：延长收货、确认收货
+    //    待评价：评价晒单
+    //    已完成：再次购买
+    //    退    货：显示退货状态，字段为refund_status，  退款中（1和2）、退款成功
+    
     int kadding = 0;
     
-    if (index >= kPadding_Four) {
+    if (index >= kPadding_WanCheng) {
         //再次购买
-        kadding = kPadding_Four;
-        OrderModel *aModel = [[self refreshTableForIndex:3].dataArray objectAtIndex:index - kadding];
+        kadding = kPadding_WanCheng;
+        OrderModel *aModel = [[self refreshTableForIndex:TABLEVIEW_TAG_WanCheng].dataArray objectAtIndex:index - kadding];
         [self buyAgain:aModel];
         
-    }else if (index >= kPadding_Three){
+    }else if (index >= kPadding_PingJia){
         //评价晒单
-        kadding = kPadding_Three;
-        
-        OrderModel *ordelModel = [[self refreshTableForIndex:2].dataArray objectAtIndex:sender.tag - kPadding_Three];
+        kadding = kPadding_PingJia;
+        OrderModel *ordelModel = [[self refreshTableForIndex:TABLEVIEW_TAG_DaiPingJia].dataArray objectAtIndex:sender.tag - kadding];
         NSMutableArray *temp = [NSMutableArray arrayWithCapacity:ordelModel.products.count];
         for (NSDictionary *aDic in ordelModel.products) {
             
@@ -312,28 +355,50 @@
         addComment.theModelArray = temp;
         [self.navigationController pushViewController:addComment animated:YES];
         
-    }else if (index >= kPadding_Two){
+    }else if (index >= kPadding_QueRen){
         //确认收货
-        kadding = kPadding_Two;
-        
+        kadding = kPadding_QueRen;
         NSString *authey = [GMAPI getAuthkey];
         if (authey.length == 0) {
             return;
         }
-        
         NSString *msg = [NSString stringWithFormat:@"收货成功之后再确定,避免不必要损失!"];
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"确认收货" message:msg delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
-        alert.tag = index - kPadding_Two;
+        alert.tag = index;
         [alert show];
         
-    }else if (index >= kPadding_One){
-        //支付
-        kadding = kPadding_One;
-        OrderModel *aModel = [[self refreshTableForIndex:0].dataArray objectAtIndex:index - kPadding_One];
-        [self pushToPayPageWithOrderId:aModel.order_id orderNum:aModel.order_no sumPrice:[aModel.total_fee floatValue] payStyle:[aModel.pay_type intValue]];
+    }else if (index >= kPadding_YanChang){
+        //延长收货
+        kadding = kPadding_YanChang;
+        OrderModel *aModel = [[self refreshTableForIndex:TABLEVIEW_TAG_PeiSong].dataArray objectAtIndex:index - kadding];
+        if ([aModel.show_delay_receive intValue] == 0) {
+            
+            NSString *msg = [NSString stringWithFormat:@"您已进行延长收货操作"];
+            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"延长收货" message:msg delegate:self cancelButtonTitle:@"知道了" otherButtonTitles:nil, nil];
+            [alert show];
+        }else
+        {
+            NSString *msg = [NSString stringWithFormat:@"订单只能延长收货一次"];
+            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"延长收货" message:msg delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+            alert.tag = index;//根据这个来判断是 延长收货 还是 确认收货
+            [alert show];
+        }
         
+    }else if (index >= kPadding_TuiKuan){
+        //退款
+        kadding = kPadding_TuiKuan;
+        OrderModel *aModel = [[self refreshTableForIndex:TABLEVIEW_TAG_DaiFaHuo].dataArray objectAtIndex:index - kadding];
+        TuiKuanViewController *tuiKuan = [[TuiKuanViewController alloc]init];
+        tuiKuan.tuiKuanPrice = [aModel.real_price floatValue];
+        tuiKuan.orderId = aModel.order_id;
+        [self.navigationController pushViewController:tuiKuan animated:YES];
+        
+    }else if (index >= kPadding_ZhiFu){
+        //支付
+        kadding = kPadding_ZhiFu;
+        OrderModel *aModel = [[self refreshTableForIndex:TABLEVIEW_TAG_DaiFu].dataArray objectAtIndex:index - kadding];
+        [self pushToPayPageWithOrderId:aModel.order_id orderNum:aModel.order_no sumPrice:[aModel.total_fee floatValue] payStyle:[aModel.pay_type intValue]];
     }
-    
 }
 
 /**
@@ -411,31 +476,68 @@
 // Called when a button is clicked. The view will be automatically dismissed after this call returns
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    if (buttonIndex == 1) {
+    int tag = (int)alertView.tag;
+    
+    int padding = 0;
+    
+    if (tag >= kPadding_QueRen) {
+        //确认收货
+        if (buttonIndex == 1) {
+            
+            NSString *authey = [GMAPI getAuthkey];
+            
+            padding = kPadding_QueRen;
+            OrderModel *aModel = [[self refreshTableForIndex:TABLEVIEW_TAG_PeiSong].dataArray objectAtIndex:tag - padding];
+            
+            __weak typeof(RefreshTableView)*weakTable = [self refreshTableForIndex:TABLEVIEW_TAG_PeiSong];
+            __weak typeof(RefreshTableView)*weakTable2 = [self refreshTableForIndex:TABLEVIEW_TAG_DaiPingJia];
+            
+            NSDictionary *params = @{@"authcode":authey,
+                                     @"order_id":aModel.order_id};
+            [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodGet api:ORDER_RECEIVING_CONFIRM parameters:params constructingBodyBlock:nil completion:^(NSDictionary *result) {
+                
+                NSLog(@"result确认收货 %@",result);
+                
+                //刷新配送中列表
+                [weakTable showRefreshHeader:YES];
+                
+                //刷新待评价列表
+                [weakTable2 showRefreshHeader:YES];
+                
+            } failBlock:^(NSDictionary *result) {
+                
+            }];
+        }
         
-        NSString *authey = [GMAPI getAuthkey];
+    }else if (tag >= kPadding_YanChang){
+        //延长收货
+        if (buttonIndex == 1) {
+            
+            NSString *authey = [GMAPI getAuthkey];
+            padding = kPadding_YanChang;
+            
+            OrderModel *aModel = [[self refreshTableForIndex:TABLEVIEW_TAG_PeiSong].dataArray objectAtIndex:alertView.tag - padding];
+            
+            __weak typeof(RefreshTableView)*weakTable = [self refreshTableForIndex:TABLEVIEW_TAG_PeiSong];
+            [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            NSDictionary *params = @{@"authcode":authey,
+                                     @"order_id":aModel.order_id};
+            __weak typeof(self)weakSelf = self;
+            [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodPost api:ORDER_RECEIVING_Delay parameters:params constructingBodyBlock:nil completion:^(NSDictionary *result) {
+                
+                NSLog(@"result延长收货 %@",result);
+                [MBProgressHUD hideAllHUDsForView:weakSelf.view animated:YES];
+                //刷新配送中列表
+                [weakTable showRefreshHeader:YES];
+                
+                aModel.show_delay_receive = @"0";//不能再次延长收货
+                
+            } failBlock:^(NSDictionary *result) {
+                NSLog(@"result %@",result[RESULT_INFO]);
+                [MBProgressHUD hideAllHUDsForView:weakSelf.view animated:YES];
 
-        OrderModel *aModel = [[self refreshTableForIndex:1].dataArray objectAtIndex:alertView.tag];
-        
-        __weak typeof(RefreshTableView)*weakTable = [self refreshTableForIndex:1];
-        __weak typeof(RefreshTableView)*weakTable2 = [self refreshTableForIndex:2];
-        
-        NSDictionary *params = @{@"authcode":authey,
-                                 @"order_id":aModel.order_id};
-        [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodGet api:ORDER_RECEIVING_CONFIRM parameters:params constructingBodyBlock:nil completion:^(NSDictionary *result) {
-            
-            NSLog(@"result确认收货 %@",result);
-            
-            //刷新配送中列表
-            [weakTable showRefreshHeader:YES];
-            
-            //刷新待评价列表
-            [weakTable2 showRefreshHeader:YES];
-            
-        } failBlock:^(NSDictionary *result) {
-            
-            
-        }];
+            }];
+        }
 
     }
 }
@@ -488,35 +590,83 @@
     static NSString *identify = @"OrderCell";
     OrderCell *cell = (OrderCell *)[LTools cellForIdentify:identify cellName:identify forTable:tableView];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    
+    RefreshTableView *table = (RefreshTableView *)tableView;
+    NSString *text = @"";
+    
+    int refund_status = 0;
+    
+    if (indexPath.row < table.dataArray.count) {
+        
+        OrderModel *aModel = [table.dataArray objectAtIndex:indexPath.row];
+        [cell setCellWithModel:aModel];
+        
+        
+        refund_status = [aModel.refund_status intValue];
+        
+        //代表有退款状态
+        if (refund_status > 0) {
+            
+            if (refund_status == 1 || refund_status == 2) {
+                text = @"退款中";
+            }else if (refund_status == 3){
+                text = @"退款成功";
+            }else if (refund_status == 4 || refund_status == 5){
+                text = @"退款失败";
+            }
+            
+        }
+    }
+
+    
     int tableViewTag = (int)tableView.tag;
+    
+//    待付款：去支付
+//    待发货：申请退款
+//    配送中：延长收货、确认收货
+//    待评价：评价晒单
+//    已完成：再次购买
+//    退    货：显示退货状态，字段为refund_status，  退款中（1和2）、退款成功
+    
     switch (tableViewTag) {
-        case 200:
+        case 200 + TABLEVIEW_TAG_DaiFu:
         {
             [cell.commentButton setTitle:@"去支付" forState:UIControlStateNormal];
-            cell.commentButton.tag = kPadding_One + indexPath.row;
+            cell.commentButton.tag = kPadding_ZhiFu + indexPath.row;
         }
             break;
-        case 201:
+        case 200 + TABLEVIEW_TAG_DaiFaHuo:
+        {
+            [cell.commentButton setTitle:@"申请退款" forState:UIControlStateNormal];
+            cell.commentButton.tag = kPadding_TuiKuan + indexPath.row;
+
+        }
+            break;
+        case 200 + TABLEVIEW_TAG_PeiSong:
         {
             [cell.commentButton setTitle:@"确认收货" forState:UIControlStateNormal];
-            cell.commentButton.tag = kPadding_Two + indexPath.row;
-
+            cell.commentButton.tag = kPadding_QueRen + indexPath.row;
+            
+            cell.delayButton.tag = kPadding_YanChang + indexPath.row;
+            cell.delayButton.hidden = NO;
+            [cell.delayButton addTarget:self action:@selector(clickToAction:) forControlEvents:UIControlEventTouchUpInside];
         }
             break;
-        case 202:
+        case 200 + TABLEVIEW_TAG_DaiPingJia:
         {
             [cell.commentButton setTitle:@"评价晒单" forState:UIControlStateNormal];
-            cell.commentButton.tag = kPadding_Three + indexPath.row;
-
-            
+            cell.commentButton.tag = kPadding_PingJia + indexPath.row;
         }
             break;
-        case 203:
+        case 200 + TABLEVIEW_TAG_WanCheng:
         {
             [cell.commentButton setTitle:@"再次购买" forState:UIControlStateNormal];
-            cell.commentButton.tag = kPadding_Four + indexPath.row;
-
-            
+            cell.commentButton.tag = kPadding_WanCheng + indexPath.row;
+        }
+            break;
+        case 200 + TABLEVIEW_TAG_TuiHuan:
+        {
+            [cell.commentButton setTitle:text forState:UIControlStateNormal];
         }
             break;
         default:
@@ -524,15 +674,6 @@
     }
     
     [cell.commentButton addTarget:self action:@selector(clickToAction:) forControlEvents:UIControlEventTouchUpInside];
-    
-    RefreshTableView *table = (RefreshTableView *)tableView;
-    
-    if (indexPath.row < table.dataArray.count) {
-        
-        OrderModel *aModel = [table.dataArray objectAtIndex:indexPath.row];
-        [cell setCellWithModel:aModel];
-    }
-    
     
     return cell;
 }

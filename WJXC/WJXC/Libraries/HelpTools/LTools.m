@@ -962,6 +962,30 @@
 #pragma - mark 小工具
 
 /**
+ *  根据6的屏幕计算比例宽度
+ *
+ *  @param aWidth 6上的宽
+ *
+ *  @return 等比例的宽
+ */
++ (CGFloat)fitWidth:(CGFloat)aWidth
+{
+    return (aWidth * DEVICE_WIDTH) / 375;
+}
+
+/**
+ *  根据6的屏幕计算比例高度
+ *
+ *  @param aWidth 6上的高
+ *
+ *  @return 等比例的高
+ */
++ (CGFloat)fitHeight:(CGFloat)aHeight
+{
+    return (aHeight * DEVICE_HEIGHT) / 667;
+}
+
+/**
  *  返回距离 大于1000 为km,小于m
  *
  *  @param distance 距离
