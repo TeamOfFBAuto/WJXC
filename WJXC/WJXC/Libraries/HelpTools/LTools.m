@@ -986,6 +986,26 @@
 }
 
 /**
+ *  根据color id获取优惠劵背景图
+ *
+ *  @param color color 的id
+ *
+ *  @return image
+ */
++ (UIImage *)imageForCoupeColorId:(NSString *)color
+{
+    UIImage *aImage = [UIImage imageNamed:@"youhuiquan_r_70"];
+    if ([color intValue] == 1) {
+        aImage = [UIImage imageNamed:@"youhuiquan_r_70"];
+    }else if ([color intValue] == 2){
+        aImage = [UIImage imageNamed:@"youhuiquan_y_70"];
+    }else if ([color intValue] == 3){
+        aImage = [UIImage imageNamed:@"youhuiquan_b_70"];
+    }
+    return aImage;
+}
+
+/**
  *  返回距离 大于1000 为km,小于m
  *
  *  @param distance 距离

@@ -169,6 +169,15 @@ typedef void(^versionBlock)(BOOL isNewVersion,NSString *updateUrl,NSString *upda
 #pragma mark - 小工具
 
 /**
+ *  根据color id获取优惠劵背景图
+ *
+ *  @param color color 的id
+ *
+ *  @return image
+ */
++ (UIImage *)imageForCoupeColorId:(NSString *)color;
+
+/**
  *  根据6的屏幕计算比例宽度
  *
  *  @param aWidth 6上的宽

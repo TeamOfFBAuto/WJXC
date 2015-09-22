@@ -20,6 +20,7 @@
 #import "ConfirmOrderController.h"//确认订单
 #import "AddCommentViewController.h"//评价晒图
 #import "ProductDetailViewController.h"//订单详情
+#import "TuiKuanViewController.h"//退款
 
 #import "OrderModel.h"
 
@@ -30,7 +31,7 @@
 #define ALERT_TAG_CANCEL_ORDER 101 //取消订单
 #define ALERT_TAG_DEL_ORDER 102 //删除订单
 #define ALERT_TAG_RECIEVER_CONFIRM 103 //确认收货
-#define ALERT_TAG_Delay 104 //延长收货
+#define ALERT_TAG_Delay_OK 104 //可以延长收货
 
 
 @interface OrderInfoViewController ()<UITableViewDataSource,UITableViewDelegate>
@@ -193,7 +194,7 @@
         {
             NSString *msg = [NSString stringWithFormat:@"订单只能延长收货一次"];
             UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"延长收货" message:msg delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
-//            alert.tag = index;//根据这个来判断是 延长收货 还是 确认收货
+            alert.tag = ALERT_TAG_Delay_OK;
             [alert show];
         }
         
@@ -225,7 +226,13 @@
         
     }else if ([text isEqualToString:@"申请退款"]){
         
-        
+        //退款
+        OrderModel *aModel = _orderModel;
+        TuiKuanViewController *tuiKuan = [[TuiKuanViewController alloc]init];
+        tuiKuan.tuiKuanPrice = [aModel.total_fee floatValue];
+        tuiKuan.orderId = aModel.order_id;
+        tuiKuan.lastVc = self;
+        [self.navigationController pushViewController:tuiKuan animated:YES];
     }
 }
 
@@ -369,7 +376,7 @@
             if (is_comment == 0)//待评价
             {
                 text1 = @"再次购买";
-                text2 = @"评价晒单";
+                text2 = @"评价晒图";
                 
             }else //已评价
             {
@@ -520,6 +527,33 @@
             }];
         }
 
+    }else if (alertView.tag == ALERT_TAG_Delay_OK){
+        //延长收货
+        if (buttonIndex == 1) {
+            
+            NSString *authey = [GMAPI getAuthkey];
+            
+            OrderModel *aModel = _orderModel;
+            
+            [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            NSDictionary *params = @{@"authcode":authey,
+                                     @"order_id":aModel.order_id};
+            __weak typeof(self)weakSelf = self;
+            [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodPost api:ORDER_RECEIVING_Delay parameters:params constructingBodyBlock:nil completion:^(NSDictionary *result) {
+                
+                NSLog(@"result延长收货 %@",result);
+                [MBProgressHUD hideAllHUDsForView:weakSelf.view animated:YES];
+                aModel.show_delay_receive = @"0";//不能再次延长收货
+                OrderModel *lasetModel = weakSelf.orderModel;
+                lasetModel.show_delay_receive = @"0";
+                
+            } failBlock:^(NSDictionary *result) {
+                NSLog(@"result %@",result[RESULT_INFO]);
+                [MBProgressHUD hideAllHUDsForView:weakSelf.view animated:YES];
+                
+            }];
+        }
+        
     }
     
 }

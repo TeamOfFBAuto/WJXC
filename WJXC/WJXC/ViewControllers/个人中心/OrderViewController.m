@@ -149,12 +149,12 @@
 }
 
 /**
- *  退款通知刷新配送和退换
+ *  退款通知待发货和退换
  *
  */
 - (void)notificationForTuiKuan:(NSNotification *)notify
 {
-    [[self refreshTableForIndex:TABLEVIEW_TAG_PeiSong]showRefreshHeader:YES];//配送中
+    [[self refreshTableForIndex:TABLEVIEW_TAG_DaiFaHuo]showRefreshHeader:YES];//待发货
     [[self refreshTableForIndex:TABLEVIEW_TAG_TuiHuan]showRefreshHeader:YES];//退货列表
 }
 
@@ -389,7 +389,7 @@
         kadding = kPadding_TuiKuan;
         OrderModel *aModel = [[self refreshTableForIndex:TABLEVIEW_TAG_DaiFaHuo].dataArray objectAtIndex:index - kadding];
         TuiKuanViewController *tuiKuan = [[TuiKuanViewController alloc]init];
-        tuiKuan.tuiKuanPrice = [aModel.real_price floatValue];
+        tuiKuan.tuiKuanPrice = [aModel.total_fee floatValue];
         tuiKuan.orderId = aModel.order_id;
         [self.navigationController pushViewController:tuiKuan animated:YES];
         
@@ -565,6 +565,7 @@
 
     OrderInfoViewController *orderInfo = [[OrderInfoViewController alloc]init];
     orderInfo.order_id = aModel.order_id;
+    orderInfo.orderModel = aModel;
     [self.navigationController pushViewController:orderInfo animated:YES];
 }
 - (CGFloat)heightForRowIndexPath:(NSIndexPath *)indexPath tableView:(UITableView *)tableView

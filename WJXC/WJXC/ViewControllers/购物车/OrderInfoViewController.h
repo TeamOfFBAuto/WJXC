@@ -13,5 +13,6 @@
 @interface OrderInfoViewController : MyViewController
 
 @property (nonatomic,retain)NSString *order_id;
+@property (nonatomic,retain)id orderModel;//订单model用于更新延长收货按钮状态
 
 @end

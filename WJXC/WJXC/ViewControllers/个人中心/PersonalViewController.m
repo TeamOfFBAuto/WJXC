@@ -67,11 +67,13 @@
     _images_arr = @[[UIImage imageNamed:@"my_collect"],
                     [UIImage imageNamed:@"my_address"],
                     [UIImage imageNamed:@"my_indent"],
+                    [UIImage imageNamed:@"my_indent"],
                     [UIImage imageNamed:@"my_service"],
                     [UIImage imageNamed:@"my_setting"]];
     _titles_arr = @[@"我的收藏",
                     @"我的地址",
                     @"我的订单",
+                    @"我的优惠劵",
                     @"客服中心",
                     @"设置"];
     _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, DEVICE_HEIGHT - 49) style:UITableViewStylePlain];
@@ -514,7 +516,13 @@
 
         }
             break;
-        case 3:
+        case 3:{
+            
+            NSLog(@"我的优惠劵");
+            
+        }
+            break;
+        case 4:
         {
             NSLog(@"客服中心");
             
@@ -528,7 +536,7 @@
             
         }
             break;
-        case 4:
+        case 5:
         {
             NSLog(@"设置");
             SettingsViewController *settings = [[SettingsViewController alloc]init];

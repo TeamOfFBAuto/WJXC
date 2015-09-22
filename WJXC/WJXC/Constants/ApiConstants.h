@@ -16,7 +16,6 @@
 
 //添加商品评论
 #define ADD_PRODUCT_PINGLUN @"/index.php?d=api&c=products&m=add_comment"
-#define ADD_PRODUCT_PINGLUN_TEXT @"/index.php?d=api&c=products&m=add_comment"
 
 //接口的去掉域名、去掉参数部分
 

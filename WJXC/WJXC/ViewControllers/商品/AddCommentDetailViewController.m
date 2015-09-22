@@ -399,7 +399,7 @@ static NSString *kPhotoCellIdentifier = @"kPhotoCellIdentifier";
                           @"is_anony":is_anony
                           };
     
-    [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodPost api:ADD_PRODUCT_PINGLUN_TEXT parameters:dic_upload constructingBodyBlock:nil completion:^(NSDictionary *result) {
+    [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodPost api:ADD_PRODUCT_PINGLUN parameters:dic_upload constructingBodyBlock:nil completion:^(NSDictionary *result) {
         
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         
