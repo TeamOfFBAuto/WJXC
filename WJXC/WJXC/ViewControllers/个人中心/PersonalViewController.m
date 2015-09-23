@@ -20,6 +20,8 @@
 
 #import "RCDChatViewController.h"//客服聊天
 
+#import "MyCouponViewController.h"//我的优惠券
+
 @interface PersonalViewController ()<UITableViewDataSource,UITableViewDelegate,UIActionSheetDelegate,UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 {
     UITableView *_tableView;
@@ -517,8 +519,17 @@
         }
             break;
         case 3:{
-            
+            if (!isLogin) {
+                [self presentLoginVc];
+                return;
+            }
             NSLog(@"我的优惠劵");
+            
+            MyCouponViewController *cc = [[MyCouponViewController alloc]init];
+            cc.hidesBottomBarWhenPushed = YES;
+            cc.lastPageNavigationHidden = YES;
+            [self.navigationController pushViewController:cc animated:YES];
+            
             
         }
             break;
@@ -570,7 +581,7 @@
     cell.iconImageView.image = _images_arr[indexPath.row];
     cell.titleLabel.text = _titles_arr[indexPath.row];
     
-    if (indexPath.row == 3) {
+    if (indexPath.row == 4) {
         
         int num = [[RCIMClient sharedRCIMClient]getUnreadCount: @[@(ConversationType_CUSTOMERSERVICE)]];
         if (num <= 0) {

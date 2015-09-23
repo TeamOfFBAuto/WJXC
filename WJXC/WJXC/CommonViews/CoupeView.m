@@ -49,7 +49,9 @@
             title = @"优惠劵";
             title_close = @"确定";
             color_close = DEFAULT_TEXTCOLOR;
+            
         }
+        color_close = RGBCOLOR(122, 172, 0);
         
         UILabel *titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, listView.width, [LTools fitHeight:40]) title:title font:15 align:NSTextAlignmentCenter textColor:[UIColor blackColor]];
         [listView addSubview:titleLabel];
@@ -261,7 +263,7 @@
     
     ButtonProperty *btn_get = [ButtonProperty buttonWithType:UIButtonTypeCustom];
     btn_get.frame = CGRectMake(view.width - [LTools fitWidth:10] - aWidth, [LTools fitHeight:16], aWidth, [LTools fitHeight:30]);
-    btn_get.backgroundColor = [UIColor orangeColor];
+//    btn_get.backgroundColor = [UIColor orangeColor];
     [btn_get setImage:image_normal forState:UIControlStateNormal];
     [btn_get setImage:image_selected forState:UIControlStateSelected];
     [btn_get addTarget:self action:@selector(clickToGetCoupe:) forControlEvents:UIControlEventTouchUpInside];

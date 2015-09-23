@@ -220,7 +220,7 @@
 + (NSString *)cityNameForId:(int)cityId;
 
 
-
++(NSString *)timechangeAll3:(NSString *)placetime;
 
 
 #pragma mark - 新加

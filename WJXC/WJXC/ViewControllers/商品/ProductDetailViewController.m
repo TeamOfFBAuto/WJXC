@@ -450,7 +450,6 @@
 - (void)netWorkForCouponModel:(CouponModel *)aModel
                        button:(UIButton *)sender
 {
-    //    __weak typeof(self)weakSelf = self;
     
     if (![LTools isLogin:self]) {
         
@@ -460,25 +459,22 @@
         return;
     }
     
-    NSString *authkey = [GMAPI getAuthkey];
-    
-    NSString *post = [NSString stringWithFormat:@"&coupon_id=%@&authcode=%@",aModel.coupon_id,authkey];
-    NSData *postData = [post dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
-    
-    LTools *tool = [[LTools alloc]initWithUrl:nil isPost:YES postData:postData];
-    
-    [tool requestCompletion:^(NSDictionary *result, NSError *erro) {
+    NSDictionary * parame  = @{
+                @"coupon_id":aModel.coupon_id,
+                @"authcode":[GMAPI getAuthkey]
+                };
+
+
+    [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodPost api:GET_COUPON parameters:parame constructingBodyBlock:nil completion:^(NSDictionary *result) {
         
         NSLog(@"result %@",result);
         aModel.enable_receive = @"0";
         sender.selected = YES;
         
-    } failBlock:^(NSDictionary *failDic, NSError *erro) {
-        
-        NSLog(@"failBlock == %@",failDic[RESULT_INFO]);
-        
-        
+    } failBlock:^(NSDictionary *result) {
+        NSLog(@"failBlock == %@",result);
     }];
+    
 }
 
 

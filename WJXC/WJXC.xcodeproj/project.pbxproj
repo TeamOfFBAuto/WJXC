@@ -197,6 +197,7 @@
 		E35015081B678D4000A6B9DE /* adverModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E35015071B678D4000A6B9DE /* adverModel.m */; };
 		E350150B1B68CD6800A6B9DE /* buy_jiantou_d@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E35015091B68CD6800A6B9DE /* buy_jiantou_d@2x.png */; };
 		E350150C1B68CD6800A6B9DE /* buy_jiantou_u@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E350150A1B68CD6800A6B9DE /* buy_jiantou_u@2x.png */; };
+		E39418091BB28BF1000AB3DC /* MyCouponViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E39418081BB28BF1000AB3DC /* MyCouponViewController.m */; settings = {ASSET_TAGS = (); }; };
 		E3C15F8E1B4CA3BD00C30039 /* DataBase.m in Sources */ = {isa = PBXBuildFile; fileRef = E3C15F871B4CA3BD00C30039 /* DataBase.m */; };
 		E3C15F8F1B4CA3BD00C30039 /* FBCity.m in Sources */ = {isa = PBXBuildFile; fileRef = E3C15F891B4CA3BD00C30039 /* FBCity.m */; };
 		E3C15F901B4CA3BD00C30039 /* GMAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = E3C15F8B1B4CA3BD00C30039 /* GMAPI.m */; };
@@ -205,6 +206,10 @@
 		E3C15FD81B4CA4CF00C30039 /* libbaidumapapi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E3C15FD51B4CA4CF00C30039 /* libbaidumapapi.a */; };
 		E3C15FD91B4CA4CF00C30039 /* mapapi.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E3C15FD61B4CA4CF00C30039 /* mapapi.bundle */; };
 		E3C15FDD1B4CDC2800C30039 /* ProductDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E3C15FDC1B4CDC2800C30039 /* ProductDetailViewController.m */; };
+		E3C5C0531BB2AB680057CD01 /* youhuiquankuang@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E3C5C0521BB2AB680057CD01 /* youhuiquankuang@2x.png */; settings = {ASSET_TAGS = (); }; };
+		E3C5C0551BB2B0230057CD01 /* youhuiquan_gray@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E3C5C0541BB2B0230057CD01 /* youhuiquan_gray@2x.png */; settings = {ASSET_TAGS = (); }; };
+		E3C5C0581BB2B03E0057CD01 /* yiguoqi@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E3C5C0561BB2B03E0057CD01 /* yiguoqi@2x.png */; settings = {ASSET_TAGS = (); }; };
+		E3C5C0591BB2B03E0057CD01 /* yishiyong@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E3C5C0571BB2B03E0057CD01 /* yishiyong@2x.png */; settings = {ASSET_TAGS = (); }; };
 		E3CE7F651B4CFF980012940C /* GCycleScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = E3CE7F641B4CFF980012940C /* GCycleScrollView.m */; };
 		E3CE7F681B4D1FE60012940C /* NSDictionary+GJson.m in Sources */ = {isa = PBXBuildFile; fileRef = E3CE7F671B4D1FE60012940C /* NSDictionary+GJson.m */; };
 		E3CE7F6B1B4D4C960012940C /* my_jiantou@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E3CE7F6A1B4D4C960012940C /* my_jiantou@2x.png */; };
@@ -596,6 +601,8 @@
 		E35015071B678D4000A6B9DE /* adverModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = adverModel.m; sourceTree = "<group>"; };
 		E35015091B68CD6800A6B9DE /* buy_jiantou_d@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "buy_jiantou_d@2x.png"; sourceTree = "<group>"; };
 		E350150A1B68CD6800A6B9DE /* buy_jiantou_u@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "buy_jiantou_u@2x.png"; sourceTree = "<group>"; };
+		E39418071BB28BF1000AB3DC /* MyCouponViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyCouponViewController.h; sourceTree = "<group>"; };
+		E39418081BB28BF1000AB3DC /* MyCouponViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyCouponViewController.m; sourceTree = "<group>"; };
 		E3C15F861B4CA3BD00C30039 /* DataBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataBase.h; sourceTree = "<group>"; };
 		E3C15F871B4CA3BD00C30039 /* DataBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataBase.m; sourceTree = "<group>"; };
 		E3C15F881B4CA3BD00C30039 /* FBCity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBCity.h; sourceTree = "<group>"; };
@@ -670,6 +677,10 @@
 		E3C15FD61B4CA4CF00C30039 /* mapapi.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = mapapi.bundle; sourceTree = "<group>"; };
 		E3C15FDB1B4CDC2800C30039 /* ProductDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProductDetailViewController.h; sourceTree = "<group>"; };
 		E3C15FDC1B4CDC2800C30039 /* ProductDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProductDetailViewController.m; sourceTree = "<group>"; };
+		E3C5C0521BB2AB680057CD01 /* youhuiquankuang@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "youhuiquankuang@2x.png"; sourceTree = "<group>"; };
+		E3C5C0541BB2B0230057CD01 /* youhuiquan_gray@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "youhuiquan_gray@2x.png"; sourceTree = "<group>"; };
+		E3C5C0561BB2B03E0057CD01 /* yiguoqi@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "yiguoqi@2x.png"; sourceTree = "<group>"; };
+		E3C5C0571BB2B03E0057CD01 /* yishiyong@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "yishiyong@2x.png"; sourceTree = "<group>"; };
 		E3CE7F631B4CFF980012940C /* GCycleScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCycleScrollView.h; sourceTree = "<group>"; };
 		E3CE7F641B4CFF980012940C /* GCycleScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCycleScrollView.m; sourceTree = "<group>"; };
 		E3CE7F661B4D1FE60012940C /* NSDictionary+GJson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+GJson.h"; sourceTree = "<group>"; };
@@ -904,6 +915,10 @@
 		136C03DD1BB168B900E5395D /* 优惠劵 */ = {
 			isa = PBXGroup;
 			children = (
+				E3C5C0561BB2B03E0057CD01 /* yiguoqi@2x.png */,
+				E3C5C0571BB2B03E0057CD01 /* yishiyong@2x.png */,
+				E3C5C0541BB2B0230057CD01 /* youhuiquan_gray@2x.png */,
+				E3C5C0521BB2AB680057CD01 /* youhuiquankuang@2x.png */,
 				13B11D171BB183F9005C933B /* youhui_yilingqu@2x.png */,
 				13B11D181BB183F9005C933B /* youhui_lingqu@2x.png */,
 				136C03DE1BB168B900E5395D /* my_collect_youhuiquan@2x.png */,
@@ -1343,6 +1358,8 @@
 				135F85E71B4CC63300B5E5AD /* AboutUsController.m */,
 				13B2DBCD1B552B2800EE2B6C /* AddAddressController.h */,
 				13B2DBCE1B552B2800EE2B6C /* AddAddressController.m */,
+				E39418071BB28BF1000AB3DC /* MyCouponViewController.h */,
+				E39418081BB28BF1000AB3DC /* MyCouponViewController.m */,
 			);
 			path = "个人中心";
 			sourceTree = "<group>";
@@ -2212,13 +2229,16 @@
 				139457091B46296F00C45EB6 /* login_user@2x.png in Resources */,
 				139457061B46296F00C45EB6 /* login_password@2x.png in Resources */,
 				1394573F1B46296F00C45EB6 /* homepage_xq_bottom_+@2x.png in Resources */,
+				E3C5C0591BB2B03E0057CD01 /* yishiyong@2x.png in Resources */,
 				13F1F8AB1B70DA2800831BF9 /* my_payFail@2x.png in Resources */,
 				E34099861B6245BD00FF5257 /* gbtnGray@2x.png in Resources */,
 				E3D685111B5B5D820048C044 /* gsearch_down@2x.png in Resources */,
+				E3C5C0551BB2B0230057CD01 /* youhuiquan_gray@2x.png in Resources */,
 				13A147141B6B6A6900B6A3DB /* order_phone@2x.png in Resources */,
 				136C03EE1BB168B900E5395D /* youhuiquan_r_70@2x.png in Resources */,
 				139457201B46296F00C45EB6 /* my_address_xg@2x.png in Resources */,
 				1394574B1B46296F00C45EB6 /* homepage_star@2x.png in Resources */,
+				E3C5C0531BB2AB680057CD01 /* youhuiquankuang@2x.png in Resources */,
 				139457481B46296F00C45EB6 /* homepage_bottom_shopping cart_grey@2x.png in Resources */,
 				1394570B1B46296F00C45EB6 /* login_weixin@2x.png in Resources */,
 				136C03F01BB168B900E5395D /* youhuiquan_y_56@2x.png in Resources */,
@@ -2243,6 +2263,7 @@
 				1394572F1B46296F00C45EB6 /* shopping cart_dd_top_line@2x.png in Resources */,
 				E3D685121B5B5D820048C044 /* gsearch_up@2x.png in Resources */,
 				1384072D1B58EC4A0008CAC3 /* shopping cart_icon@2x.png in Resources */,
+				E3C5C0581BB2B03E0057CD01 /* yiguoqi@2x.png in Resources */,
 				13C32C5D1B71C4AB004B9105 /* PushConfig.plist in Resources */,
 				139457211B46296F00C45EB6 /* my_collect@2x.png in Resources */,
 				E3126DB51B711B1D003D8321 /* homepage_bg@2x.png in Resources */,
@@ -2318,6 +2339,7 @@
 				13A64C561B3BF3E700D9A106 /* MyViewController.m in Sources */,
 				E3C15F901B4CA3BD00C30039 /* GMAPI.m in Sources */,
 				E3D080331B3D523200E4F87D /* RegisterViewController.m in Sources */,
+				E39418091BB28BF1000AB3DC /* MyCouponViewController.m in Sources */,
 				13FEA47E1B4A55BE009BD01D /* FBActionSheet.m in Sources */,
 				E3F1A0A51B70F0DA00102989 /* JKAssets.m in Sources */,
 				1394576C1B4678D200C45EB6 /* NSDate+Additons.m in Sources */,
@@ -2516,7 +2538,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "16e4a01f-e733-480e-b887-32979627e354";
+				PROVISIONING_PROFILE = "b3c285e3-b07d-4733-953c-6e34d741afe8";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -2554,7 +2576,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PROVISIONING_PROFILE = "16e4a01f-e733-480e-b887-32979627e354";
+				PROVISIONING_PROFILE = "b3c285e3-b07d-4733-953c-6e34d741afe8";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -2588,7 +2610,7 @@
 					"$(PROJECT_DIR)/WJXC/Libraries/ThirdClass/lib",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "16e4a01f-e733-480e-b887-32979627e354";
+				PROVISIONING_PROFILE = "b3c285e3-b07d-4733-953c-6e34d741afe8";
 				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/**";
 				VALID_ARCHS = "arm64 armv7";
 			};
@@ -2622,7 +2644,7 @@
 					"$(PROJECT_DIR)/WJXC/Libraries/ThirdClass/lib",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "16e4a01f-e733-480e-b887-32979627e354";
+				PROVISIONING_PROFILE = "b3c285e3-b07d-4733-953c-6e34d741afe8";
 				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/**";
 				VALID_ARCHS = "arm64 armv7";
 			};
@@ -2644,7 +2666,7 @@
 				INFOPLIST_FILE = WJXCTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "16e4a01f-e733-480e-b887-32979627e354";
+				PROVISIONING_PROFILE = "b3c285e3-b07d-4733-953c-6e34d741afe8";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WJXC.app/WJXC";
 			};
 			name = Debug;
@@ -2661,7 +2683,7 @@
 				INFOPLIST_FILE = WJXCTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "16e4a01f-e733-480e-b887-32979627e354";
+				PROVISIONING_PROFILE = "b3c285e3-b07d-4733-953c-6e34d741afe8";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WJXC.app/WJXC";
 			};
 			name = Release;
