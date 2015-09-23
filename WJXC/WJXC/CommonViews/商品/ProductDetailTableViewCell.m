@@ -7,6 +7,7 @@
 //
 
 #import "ProductDetailTableViewCell.h"
+#import "CouponModel.h"
 
 @implementation ProductDetailTableViewCell
 
@@ -110,13 +111,56 @@
          [self.contentView addSubview:fengeView];
          
          CGFloat xx = DEVICE_WIDTH*325/750;
-         UIView *couponsBackView = [[UIView alloc]initWithFrame:CGRectMake(xx, 2, DEVICE_WIDTH-10-xx, 31)];
-         couponsBackView.backgroundColor = [UIColor orangeColor];
+         UIView *couponsBackView = [[UIView alloc]initWithFrame:CGRectMake(xx, 3.5, DEVICE_WIDTH-5-xx, 28)];
          [self.contentView addSubview:couponsBackView];
          
          
+         NSMutableArray *coupont_modleListArray = [NSMutableArray arrayWithCapacity:1];
+         
+         for (NSDictionary *dic in model.coupon_list) {
+             CouponModel *model = [[CouponModel alloc]initWithDictionary:dic];
+             [coupont_modleListArray addObject:model];
+         }
          
          
+         CGFloat c_w = (DEVICE_WIDTH -5 - xx)/3.0;
+         for (int i = 0; i<coupont_modleListArray.count; i++) {
+             
+             CouponModel *model = coupont_modleListArray[i];
+             
+             UIImageView *imv = [[UIImageView alloc]initWithFrame:CGRectMake((2-i)*c_w, 0, c_w-2, couponsBackView.frame.size.height)];
+             
+             if ([model.color intValue] == 1) {//红色
+                 [imv setImage:[UIImage imageNamed:@"youhuiquan_r_48.png"]];
+             }else if ([model.color intValue] == 2){//黄色
+                 [imv setImage:[UIImage imageNamed:@"youhuiquan_y_48.png"]];
+             }else if ([model.color intValue] == 3){//蓝色
+                 [imv setImage:[UIImage imageNamed:@"youhuiquan_b_48.png"]];
+             }
+             
+             [couponsBackView addSubview:imv];
+             
+             
+             
+             UILabel *ttLabel = [[UILabel alloc]initWithFrame:imv.bounds];
+             ttLabel.font = [UIFont systemFontOfSize:10];
+             ttLabel.textColor = [UIColor whiteColor];
+             ttLabel.textAlignment = NSTextAlignmentCenter;
+             [imv addSubview:ttLabel];
+             
+             if ([model.type intValue] == 1) {//满减
+                 ttLabel.text = [NSString stringWithFormat:@"满%@减%@",model.full_money,model.minus_money];
+             }else if ([model.type intValue] == 2){//打折
+                 ttLabel.text = [NSString stringWithFormat:@"%.1f折优惠",[model.discount_num floatValue] * 10];
+             }
+             
+             
+             
+             if (i == 2) {
+                 break;
+             }
+             
+         }
          
          
          height = 35;

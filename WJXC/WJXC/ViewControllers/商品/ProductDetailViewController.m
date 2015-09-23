@@ -15,6 +15,9 @@
 #import "ShoppingCarController.h"
 #import "SimpleMessage.h"
 #import "ConfirmOrderController.h"//确认订单
+#import "CoupeView.h"
+#import "ButtonProperty.h"
+#import "CouponModel.h"
 
 @interface ProductDetailViewController ()<UITableViewDataSource,UITableViewDelegate>
 {
@@ -43,6 +46,8 @@
     UIButton *_jiaruBtn;//加入购物车或者立即秒杀
 
     BOOL _isHiddenNavigation;//控制navigationBar显示
+    
+    CoupeView *_coupeView;//领取优惠券view
 }
 @end
 
@@ -390,12 +395,93 @@
 
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    if (indexPath.row == 2) {
+    if (indexPath.row == 3) {
         ProductCommentViewController *ccc = [[ProductCommentViewController alloc]init];
         ccc.model = _theProductModel;
         [self.navigationController pushViewController:ccc animated:YES];
+    }else if (indexPath.row == 2){
+        NSLog(@"%s",__FUNCTION__);
+        
+        [self clickToCoupe];
+        
+        
     }
 }
+
+
+
+/**
+ *  点击去获取优惠劵
+ */
+- (void)clickToCoupe
+{
+    if (_coupeView) {
+        [_coupeView removeFromSuperview];
+        _coupeView = nil;
+    }
+    
+    NSMutableArray *tmp = [NSMutableArray arrayWithCapacity:1];
+    for (NSDictionary *dic in _theProductModel.coupon_list) {
+        CouponModel *amodel = [[CouponModel alloc]initWithDictionary:dic];
+        [tmp addObject:amodel];
+    }
+    
+    
+    _coupeView = [[CoupeView alloc]initWithCouponArray:tmp userStyle:USESTYLE_Get];
+    
+    __weak typeof(self)weakSelf = self;
+    
+    _coupeView.coupeBlock = ^(NSDictionary *params){
+        
+        ButtonProperty *btn = params[@"button"];
+        CouponModel *aModel = params[@"model"];
+        
+        [weakSelf netWorkForCouponModel:aModel button:btn];
+    };
+    [_coupeView show];
+}
+
+/**
+ *  领取优惠劵
+ *
+ *  @param aModel 优惠劵model
+ *  @param sender
+ */
+- (void)netWorkForCouponModel:(CouponModel *)aModel
+                       button:(UIButton *)sender
+{
+    //    __weak typeof(self)weakSelf = self;
+    
+    if (![LTools isLogin:self]) {
+        
+        [_coupeView removeFromSuperview];
+        _coupeView = nil;
+        
+        return;
+    }
+    
+    NSString *authkey = [GMAPI getAuthkey];
+    
+    NSString *post = [NSString stringWithFormat:@"&coupon_id=%@&authcode=%@",aModel.coupon_id,authkey];
+    NSData *postData = [post dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
+    
+    LTools *tool = [[LTools alloc]initWithUrl:nil isPost:YES postData:postData];
+    
+    [tool requestCompletion:^(NSDictionary *result, NSError *erro) {
+        
+        NSLog(@"result %@",result);
+        aModel.enable_receive = @"0";
+        sender.selected = YES;
+        
+    } failBlock:^(NSDictionary *failDic, NSError *erro) {
+        
+        NSLog(@"failBlock == %@",failDic[RESULT_INFO]);
+        
+        
+    }];
+}
+
+
 
 #pragma - mark 秒杀倒计时
 

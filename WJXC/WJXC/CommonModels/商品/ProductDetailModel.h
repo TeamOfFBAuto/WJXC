@@ -34,4 +34,6 @@
 @property(nonatomic,retain)NSString *is_seckill;//是否是秒杀
 
 
+@property(nonatomic,strong)NSArray *coupon_list;//优惠券数组
+
 @end

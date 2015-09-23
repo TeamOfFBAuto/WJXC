@@ -261,7 +261,7 @@
     
     ButtonProperty *btn_get = [ButtonProperty buttonWithType:UIButtonTypeCustom];
     btn_get.frame = CGRectMake(view.width - [LTools fitWidth:10] - aWidth, [LTools fitHeight:16], aWidth, [LTools fitHeight:30]);
-//    btn_get.backgroundColor = [UIColor orangeColor];
+    btn_get.backgroundColor = [UIColor orangeColor];
     [btn_get setImage:image_normal forState:UIControlStateNormal];
     [btn_get setImage:image_selected forState:UIControlStateSelected];
     [btn_get addTarget:self action:@selector(clickToGetCoupe:) forControlEvents:UIControlEventTouchUpInside];
