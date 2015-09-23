@@ -148,8 +148,16 @@
     [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodGet api:ORDER_GET_USECOUPONLIST parameters:params constructingBodyBlock:nil completion:^(NSDictionary *result) {
         
         NSLog(@"获取可用优惠劵%@ %@",result[RESULT_INFO],result);
-        NSDictionary *couponDic = [result objectForKey:@"coupon_list"];
-        NSArray *coupon_list = [couponDic allValues];
+        id coupon = [result objectForKey:@"coupon_list"];
+        NSArray *coupon_list = nil;
+        if ([coupon isKindOfClass:[NSDictionary class]]) {
+            
+            coupon_list = [coupon allValues];
+        }else
+        {
+            coupon_list = coupon;
+        }
+        
         if (coupon_list) {
             NSMutableArray *temp = [NSMutableArray arrayWithCapacity:coupon_list.count];
             for (NSDictionary *aDic in coupon_list) {
@@ -237,12 +245,26 @@
     
     [_loading show:YES];
     
-    NSDictionary *params = @{@"authcode":authkey,
-                             @"product_ids":ids,
-                             @"product_nums":nums,
-                             @"address_id":addressId,
-                             @"express_fee":expressFee,
-                             @"order_note":note};
+    NSDictionary *params = nil;
+    
+    if (_selectCoupon.coupon_id) { //选择优惠劵
+        
+        params = @{@"authcode":authkey,
+                   @"product_ids":ids,
+                   @"product_nums":nums,
+                   @"address_id":addressId,
+                   @"express_fee":expressFee,
+                   @"order_note":note,
+                   @"coupon_id":_selectCoupon.coupon_id};
+    }else
+    {
+        params = @{@"authcode":authkey,
+                   @"product_ids":ids,
+                   @"product_nums":nums,
+                   @"address_id":addressId,
+                   @"express_fee":expressFee,
+                   @"order_note":note};
+    }
     
     __weak typeof(_table)weakTable = _table;
     __weak typeof(self)weakSelf = self;
@@ -352,7 +374,7 @@
     PayActionViewController *pay = [[PayActionViewController alloc]init];
     pay.orderId = orderId;
     pay.orderNum = orderNum;
-    pay.sumPrice = self.sumPrice + _expressFee;
+    pay.sumPrice = _realPrice;
     pay.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:pay animated:YES];
     
@@ -375,10 +397,6 @@
 {
     //去生成订单
     [self postOrderInfo];
-    
-    //test
-
-//    [self pushToPayPageWithOrderId:@"1" orderNum:@"11"];
 }
 
 /**

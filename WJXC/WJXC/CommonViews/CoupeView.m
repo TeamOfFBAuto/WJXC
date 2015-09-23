@@ -13,6 +13,7 @@
 @implementation CoupeView
 
 //使用优惠劵
+//修改成可滑动
 
 -(instancetype)initWithCouponArray:(NSArray *)couponArray
                          userStyle:(USESTYLE)userStyle
@@ -43,7 +44,7 @@
             title = @"领取优惠劵";
             title_close = @"确定";
             color_close = [UIColor colorWithHexString:@"999999"];
-
+            
         }else if (userStyle == USESTYLE_Use){
             title = @"优惠劵";
             title_close = @"确定";
@@ -57,30 +58,138 @@
         line.backgroundColor = DEFAULT_LINECOLOR;
         [listView addSubview:line];
         
+        //加上个scrollView
+        
         CGFloat bottom = line.bottom;
         CGFloat top = line.bottom;
         NSInteger count = coupeList.count;
-        for (int i = 0; i < count; i ++) {
+        
+        if (count <= 3) {
             
-            CouponModel *aModel = coupeList[i];
-            UIView *aView = [self coupeViewWithCoupeModel:aModel frame:CGRectMake(0, top + [LTools fitHeight:50] * i, listView.width, [LTools fitHeight:50]) tag:100 + i];
-            [listView addSubview:aView];
-            bottom = aView.bottom;
+            for (int i = 0; i < count; i ++) {
+                
+                CouponModel *aModel = coupeList[i];
+                UIView *aView = [self coupeViewWithCoupeModel:aModel frame:CGRectMake(0, top + [LTools fitHeight:50] * i, listView.width, [LTools fitHeight:50]) tag:100 + i];
+                [listView addSubview:aView];
+                bottom = aView.bottom;
+            }
+            
+            UIButton *closeBtn = [[UIButton alloc]initWithframe:CGRectMake(0,bottom + [LTools fitHeight:15], [LTools fitWidth:173], [LTools fitHeight:25]) buttonType:UIButtonTypeCustom normalTitle:title_close selectedTitle:nil target:self action:@selector(clickToCloseCoupeView)];
+            [listView addSubview:closeBtn];
+            closeBtn.backgroundColor = color_close;
+            [closeBtn addCornerRadius:5.f];
+            [closeBtn.titleLabel setFont:[UIFont systemFontOfSize:14]];
+            closeBtn.centerX = listView.width / 2.f;
+            
+            listView.height = closeBtn.bottom + [LTools fitHeight:15];
+            
+        }else //多于3个
+        {
+            top = 0.f;
+            
+            CGFloat everyHeight = [LTools fitHeight:50 - 1];//每个优惠劵高度
+            listView.height = line.bottom + everyHeight * 3 + [LTools fitHeight:25] + [LTools fitHeight:15] * 2;
+            UIScrollView *scroll = [[UIScrollView alloc]initWithFrame:CGRectMake(0, line.bottom, listView.width, everyHeight * 3)];
+            scroll.contentSize = CGSizeMake(listView.width, everyHeight * count);
+            [listView addSubview:scroll];
+            
+            //放优惠劵
+            for (int i = 0; i < count; i ++) {
+                
+                CouponModel *aModel = coupeList[i];
+                UIView *aView = [self coupeViewWithCoupeModel:aModel frame:CGRectMake(0, top + everyHeight * i, listView.width, everyHeight) tag:100 + i];
+                [scroll addSubview:aView];
+                bottom = aView.bottom;
+            }
+            
+            line = [[UIView alloc]initWithFrame:CGRectMake(0, scroll.bottom, listView.width, 0.5)];
+            line.backgroundColor = DEFAULT_LINECOLOR;
+            [listView addSubview:line];
+            
+            CGFloat closeHeight = [LTools fitHeight:25];
+            UIButton *closeBtn = [[UIButton alloc]initWithframe:CGRectMake(0,line.bottom + [LTools fitHeight:15], [LTools fitWidth:173], closeHeight) buttonType:UIButtonTypeCustom normalTitle:title_close selectedTitle:nil target:self action:@selector(clickToCloseCoupeView)];
+            [listView addSubview:closeBtn];
+            closeBtn.backgroundColor = color_close;
+            [closeBtn addCornerRadius:5.f];
+            [closeBtn.titleLabel setFont:[UIFont systemFontOfSize:14]];
+            closeBtn.centerX = listView.width / 2.f;
+
         }
         
-        UIButton *closeBtn = [[UIButton alloc]initWithframe:CGRectMake(0,bottom + [LTools fitHeight:15], [LTools fitWidth:173], [LTools fitHeight:25]) buttonType:UIButtonTypeCustom normalTitle:title_close selectedTitle:nil target:self action:@selector(clickToCloseCoupeView)];
-        [listView addSubview:closeBtn];
-        closeBtn.backgroundColor = color_close;
-        [closeBtn addCornerRadius:5.f];
-        [closeBtn.titleLabel setFont:[UIFont systemFontOfSize:14]];
-        closeBtn.centerX = listView.width / 2.f;
-        
-        listView.height = closeBtn.bottom + [LTools fitHeight:15];
         listView.centerY = DEVICE_HEIGHT / 2.f;
+
         
     }
     return self;
 }
+
+//-(instancetype)initWithCouponArray:(NSArray *)couponArray
+//                         userStyle:(USESTYLE)userStyle
+//{
+//    self = [super initWithFrame:[UIScreen mainScreen].bounds];
+//    if (self) {
+//        
+//        self.backgroundColor = [[UIColor blackColor]colorWithAlphaComponent:0.5];
+//        
+//        CGFloat left = [LTools fitWidth:25];
+//        CGFloat aWidth = DEVICE_WIDTH - left * 2;
+//        
+//        NSArray *coupeList = couponArray;
+//        
+//        _coupeArray = couponArray;
+//        _userStyle = userStyle;
+//        
+//        UIView *listView = [[UIView alloc]initWithFrame:CGRectMake(left, 0, aWidth, 0)];
+//        [self addSubview:listView];
+//        listView.backgroundColor = [UIColor whiteColor];
+//        [listView addCornerRadius:5.f];
+//        
+//        NSString *title;
+//        NSString *title_close;
+//        UIColor *color_close;
+//        
+//        if (userStyle == USESTYLE_Get) {
+//            title = @"领取优惠劵";
+//            title_close = @"确定";
+//            color_close = [UIColor colorWithHexString:@"999999"];
+//
+//        }else if (userStyle == USESTYLE_Use){
+//            title = @"优惠劵";
+//            title_close = @"确定";
+//            color_close = DEFAULT_TEXTCOLOR;
+//        }
+//        
+//        UILabel *titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, listView.width, [LTools fitHeight:40]) title:title font:15 align:NSTextAlignmentCenter textColor:[UIColor blackColor]];
+//        [listView addSubview:titleLabel];
+//        
+//        UIView *line = [[UIView alloc]initWithFrame:CGRectMake(0, titleLabel.bottom, listView.width, 0.5)];
+//        line.backgroundColor = DEFAULT_LINECOLOR;
+//        [listView addSubview:line];
+//        
+//        CGFloat bottom = line.bottom;
+//        CGFloat top = line.bottom;
+//        NSInteger count = coupeList.count;
+//        for (int i = 0; i < count; i ++) {
+//            
+//            CouponModel *aModel = coupeList[i];
+//            UIView *aView = [self coupeViewWithCoupeModel:aModel frame:CGRectMake(0, top + [LTools fitHeight:50] * i, listView.width, [LTools fitHeight:50]) tag:100 + i];
+//            [listView addSubview:aView];
+//            bottom = aView.bottom;
+//        }
+//        
+//        UIButton *closeBtn = [[UIButton alloc]initWithframe:CGRectMake(0,bottom + [LTools fitHeight:15], [LTools fitWidth:173], [LTools fitHeight:25]) buttonType:UIButtonTypeCustom normalTitle:title_close selectedTitle:nil target:self action:@selector(clickToCloseCoupeView)];
+//        [listView addSubview:closeBtn];
+//        closeBtn.backgroundColor = color_close;
+//        [closeBtn addCornerRadius:5.f];
+//        [closeBtn.titleLabel setFont:[UIFont systemFontOfSize:14]];
+//        closeBtn.centerX = listView.width / 2.f;
+//        
+//        listView.height = closeBtn.bottom + [LTools fitHeight:15];
+//        listView.centerY = DEVICE_HEIGHT / 2.f;
+//        
+//    }
+//    return self;
+//}
 
 - (UIView *)coupeViewWithCoupeModel:(CouponModel *)aModel
                               frame:(CGRect)frame

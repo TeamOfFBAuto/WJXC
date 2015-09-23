@@ -23,6 +23,8 @@
 #import "TuiKuanViewController.h"//退款
 
 #import "OrderModel.h"
+#import "OrderOtherInfoCell.h"
+#import "CouponModel.h"
 
 #define ALIPAY @"支付宝支付"
 #define WXPAY  @"微信支付"
@@ -57,6 +59,9 @@
     
     UILabel *_addressHintLabel;//收货地址提示
     OrderModel *_orderModel;//订单model
+    
+    NSArray *_couponList;//优惠劵列表
+    CouponModel *_selectCoupon;//选中的优惠劵
 }
 
 @end
@@ -69,6 +74,8 @@
     self.myTitle = @"订单详情";
     [self setMyViewControllerLeftButtonType:MyViewControllerLeftbuttonTypeBack WithRightButtonType:MyViewControllerRightbuttonTypeNull];
     
+    _titles = @[@"商品清单",@"备注信息",@"优惠劵",@"价格清单"];
+
     _table = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, DEVICE_HEIGHT - 64) style:UITableViewStylePlain];
     _table.delegate = self;
     _table.dataSource = self;
@@ -116,6 +123,12 @@
         NSLog(@"获取订单详情%@ %@",result[RESULT_INFO],result);
         NSDictionary *info = result[@"info"];
         OrderModel *aModel = [[OrderModel alloc]initWithDictionary:info];
+        NSMutableArray *temp = [NSMutableArray arrayWithCapacity:aModel.coupons.count];
+        for (NSDictionary *aDic in aModel.coupons) {
+            CouponModel *c_model = [[CouponModel alloc]initWithDictionary:aDic];
+            [temp addObject:c_model];
+        }
+        aModel.couponsList = [NSArray arrayWithArray:temp];//订单使用的优惠券
         [weakSelf setViewsWithModel:aModel];
         
     } failBlock:^(NSDictionary *result) {
@@ -323,6 +336,15 @@
     UIView *bottom = [[UIView alloc]initWithFrame:CGRectMake(0, DEVICE_HEIGHT - 64 - 50, DEVICE_WIDTH, 50)];
     bottom.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:bottom];
+    
+    
+    UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(20, 0, 36, 50) title:@"合计:" font:15 align:NSTextAlignmentLeft textColor:[UIColor colorWithHexString:@"303030"]];
+    [bottom addSubview:label];
+    
+    //产品加邮费
+    NSString *price = [NSString stringWithFormat:@"￥%.2f",[_orderModel.total_fee floatValue]];
+    _priceLabel = [[UILabel alloc]initWithFrame:CGRectMake(label.right + 10, 0, 100, 50) title:price font:12 align:NSTextAlignmentLeft textColor:[UIColor colorWithHexString:@"f98700"]];
+    [bottom addSubview:_priceLabel];
     
     UIView *line = [[UIView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, 0.5f)];
     line.backgroundColor = [UIColor colorWithHexString:@"e4e4e4"];
@@ -567,6 +589,7 @@
 - (void)setViewsWithModel:(OrderModel *)aModel
 {
     _orderModel = aModel;
+    _selectCoupon = [aModel.couponsList lastObject];//一个订单只能使用一张优惠劵
     [self tableHeaderViewWithAddressModel:aModel];
     [self tableViewFooter];
     [self createBottomView];
@@ -641,7 +664,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
         
-    if (indexPath.section == 1) {
+    if (indexPath.section == 0) {
 
         ProductModel *aModel = [[ProductModel alloc]initWithDictionary:[_orderModel.products objectAtIndex:indexPath.row]] ;
         
@@ -653,11 +676,15 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 0 || indexPath.section == 2 || indexPath.section == 3) {
-        return 30;
-    }
-    if (indexPath.section == 1) {
+    NSString *title = _titles[indexPath.section];
+    if ([title isEqualToString:@"商品清单"]) {
         return 85;
+    }else if ([title isEqualToString:@"备注信息"]){
+        return 30;
+    }else if ([title isEqualToString:@"优惠劵"]){
+        return 50;
+    }else if ([title isEqualToString:@"价格清单"]){
+        return 30;
     }
     
     return 44;
@@ -672,18 +699,7 @@
     
     UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, 37.5)];
     
-    NSString *title = nil;
-    
-    if (section == 0) {
-        
-        title = @"支付信息";
-    }else if (section == 1){
-        title = @"商品清单";
-    }else if (section == 2){
-        title = @"价格清单";
-    }else if (section == 3){
-        title = @"订单信息";
-    }
+    NSString *title = _titles[section];
     
     UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(10, 0, 100, view.height) title:title font:12 align:NSTextAlignmentLeft textColor:[UIColor colorWithHexString:@"9d9d9d"]];
     [view addSubview:label];
@@ -696,89 +712,168 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (section == 0) {
-        
-        return 1;
-    }
-    if (section == 1) {
-        
+    NSString *title = _titles[section];
+    if ([title isEqualToString:@"商品清单"]) {
         return _orderModel.products.count;
-    }
-    
-    if (section == 3) {
+    }else if ([title isEqualToString:@"备注信息"]){
         return 1;
+    }else if ([title isEqualToString:@"优惠劵"]){
+        return 1;
+    }else if ([title isEqualToString:@"价格清单"]){
+        return 2;
     }
-    return 2;
+    return 0;
+
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 1) {
+    NSString *title = _titles[indexPath.section];
+    if ([title isEqualToString:@"商品清单"]) {
+        
         static NSString *identify = @"ProductCell";
         ProductCell *cell = (ProductCell *)[LTools cellForIdentify:identify cellName:identify forTable:tableView];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         
         ProductModel *aModel = [[ProductModel alloc]initWithDictionary:[_orderModel.products objectAtIndex:indexPath.row]] ;
         [cell setCellWithModel:aModel];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-
+        
         return cell;
-    }
-    
-    if (indexPath.section == 2) {
+        
+    }else if ([title isEqualToString:@"备注信息"]){
+        
+        static NSString *identify = @"tableCell";
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identify];
+        if (!cell) {
+            cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identify];
+            _inputTf = [[UITextField alloc]initWithFrame:CGRectMake(10, 0, DEVICE_WIDTH - 20, 30)];
+            _inputTf.placeholder = @"填写备注";
+            _inputTf.font = [UIFont systemFontOfSize:12];
+            [cell.contentView addSubview:_inputTf];
+            _inputTf.userInteractionEnabled = NO;
+        }
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        
+        NSString *note = _orderModel.order_note;
+        if (note) {
+            _inputTf.text = note;
+        }
+        return cell;
+        
+        
+    }else if ([title isEqualToString:@"优惠劵"]){
+        
+        static NSString *identify = @"OrderOtherInfoCell";
+        OrderOtherInfoCell *cell = (OrderOtherInfoCell *)[tableView cellForRowAtIndexPath:indexPath];
+        if (!cell) {
+            cell = [[OrderOtherInfoCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identify];
+        }
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        
+        [cell setCellWithModel:_selectCoupon couponList:_orderModel.couponsList];
+        cell.userInteractionEnabled = NO;
+        
+        return cell;
+        
+    }else if ([title isEqualToString:@"价格清单"]){
         
         static NSString *identify = @"ConfirmInfoCell";
         ConfirmInfoCell *cell = (ConfirmInfoCell *)[LTools cellForIdentify:identify cellName:identify forTable:tableView];
         if (indexPath.row == 0) {
-            
             cell.nameLabel.text = @"商品总价";
             cell.priceLabel.text = [NSString stringWithFormat:@"￥%.2f",[_orderModel.total_price floatValue]];
-            
+
         }else if (indexPath.row == 1){
             cell.nameLabel.text = @"运费";
             cell.priceLabel.text = [NSString stringWithFormat:@"￥%.2f",[_orderModel.express_fee floatValue]];
         }
-        
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         
         return cell;
     }
     
-    static NSString *identify = @"SelectCell";
-    SelectCell *cell = (SelectCell *)[LTools cellForIdentify:identify cellName:identify forTable:tableView];
-    cell.arrowImageView.hidden = YES;
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-
+    static NSString *identify1 = @"SelectCell";
+    SelectCell *cell1 = (SelectCell *)[LTools cellForIdentify:identify1 cellName:identify1 forTable:tableView];
     if (indexPath.section == 0) {
-        cell.nameLabel.text = @"支付方式";
-        cell.contentLabel.left = DEVICE_WIDTH - cell.contentLabel.width - 20;
+        cell1.nameLabel.text = @"支付方式";
+        
         if (indexPath.row == 0) {
             
-            NSLog(@"支付方式 --- %@",_orderModel.pay_type);
-            
-            int type = [_orderModel.pay_type intValue];
-            if (type == 1) {
-                
-                cell.contentLabel.text = @"支付宝支付";
-            }else if(type == 2)
-            {
-                cell.contentLabel.text = @"微信支付";
-            }else
-            {
-                cell.contentLabel.text = @"未选择";
-            }
+            cell1.contentLabel.text = _payStyle;
         }
     }
+    cell1.selectionStyle = UITableViewCellSelectionStyleNone;
     
-    if (indexPath.section == 3) {
-        
-        cell.nameLabel.text = @"订单编号";
-        cell.contentLabel.left = DEVICE_WIDTH - cell.contentLabel.width - 20;
-        cell.contentLabel.text = _orderModel.order_no;
-    }
     
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    return cell1;
+
     
-    return cell;
+//    if (indexPath.section == 1) {
+//        static NSString *identify = @"ProductCell";
+//        ProductCell *cell = (ProductCell *)[LTools cellForIdentify:identify cellName:identify forTable:tableView];
+//        
+//        ProductModel *aModel = [[ProductModel alloc]initWithDictionary:[_orderModel.products objectAtIndex:indexPath.row]] ;
+//        [cell setCellWithModel:aModel];
+//        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+//
+//        return cell;
+//    }
+//    
+//    if (indexPath.section == 2) {
+//        
+//        static NSString *identify = @"ConfirmInfoCell";
+//        ConfirmInfoCell *cell = (ConfirmInfoCell *)[LTools cellForIdentify:identify cellName:identify forTable:tableView];
+//        if (indexPath.row == 0) {
+//            
+//            cell.nameLabel.text = @"商品总价";
+//            cell.priceLabel.text = [NSString stringWithFormat:@"￥%.2f",[_orderModel.total_price floatValue]];
+//            
+//        }else if (indexPath.row == 1){
+//            cell.nameLabel.text = @"运费";
+//            cell.priceLabel.text = [NSString stringWithFormat:@"￥%.2f",[_orderModel.express_fee floatValue]];
+//        }
+//        
+//        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+//        
+//        return cell;
+//    }
+//    
+//    static NSString *identify = @"SelectCell";
+//    SelectCell *cell = (SelectCell *)[LTools cellForIdentify:identify cellName:identify forTable:tableView];
+//    cell.arrowImageView.hidden = YES;
+//    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+//
+//    if (indexPath.section == 0) {
+//        cell.nameLabel.text = @"支付方式";
+//        cell.contentLabel.left = DEVICE_WIDTH - cell.contentLabel.width - 20;
+//        if (indexPath.row == 0) {
+//            
+//            NSLog(@"支付方式 --- %@",_orderModel.pay_type);
+//            
+//            int type = [_orderModel.pay_type intValue];
+//            if (type == 1) {
+//                
+//                cell.contentLabel.text = @"支付宝支付";
+//            }else if(type == 2)
+//            {
+//                cell.contentLabel.text = @"微信支付";
+//            }else
+//            {
+//                cell.contentLabel.text = @"未选择";
+//            }
+//        }
+//    }
+//    
+//    if (indexPath.section == 3) {
+//        
+//        cell.nameLabel.text = @"订单编号";
+//        cell.contentLabel.left = DEVICE_WIDTH - cell.contentLabel.width - 20;
+//        cell.contentLabel.text = _orderModel.order_no;
+//    }
+//    
+//    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+//    
+//    return cell;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView

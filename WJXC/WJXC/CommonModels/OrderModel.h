@@ -40,6 +40,11 @@
 
 @property(nonatomic,retain)NSString *show_delay_receive;//1:显示延长收货按钮  0：不显示
 
+@property(nonatomic,retain)NSArray *coupons;//优惠劵
+@property(nonatomic,retain)NSArray *couponsList;//优惠劵model列表
+
+@property(nonatomic,retain)NSString *order_note;//订单备注
+
 -(instancetype)initWithDictionary:(NSDictionary *)dic;
 
 @end
