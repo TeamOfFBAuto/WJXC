@@ -796,6 +796,7 @@
         } failBlock:^(NSDictionary *result) {
             
         }];
+        
     }else if ([_isfavor intValue] == 1){
         NSString *product_id = _theProductModel.product_id;
         

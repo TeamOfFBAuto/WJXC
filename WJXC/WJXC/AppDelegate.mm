@@ -22,6 +22,7 @@
 
 #import "ProductDetailViewController.h"//单品详情
 #import "HuodongViewController.h"//活动详情
+#import "OrderInfoViewController.h" //订单详情
 
 #define kTag_active 100 //正在前台
 
@@ -853,6 +854,15 @@
             }
             [unVc pushViewController:cc animated:YES];
         }
+    }else if (type == 5){ //订单相关推送消息
+        
+        OrderInfoViewController *orderInfo = [[OrderInfoViewController alloc]init];
+        orderInfo.order_id = detailId;
+        if (viewsCount == 1) {
+            orderInfo.hidesBottomBarWhenPushed = YES;
+        }
+        [unVc pushViewController:orderInfo animated:YES];
+        
     }
 }
 
