@@ -427,6 +427,14 @@
     }
     
     
+    if (tmp.count == 0) {
+        
+        //没有优惠劵可领
+        [LTools showMBProgressWithText:@"暂无优惠劵可领" addToView:self.view];
+        
+        return;
+    }
+    
     _coupeView = [[CoupeView alloc]initWithCouponArray:tmp userStyle:USESTYLE_Get];
     
     __weak typeof(self)weakSelf = self;
@@ -774,8 +782,6 @@
         [self presentViewController:unVc animated:YES completion:nil];
         
         return;
-    }else{
-        
     }
     
     

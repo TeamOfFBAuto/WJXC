@@ -2538,7 +2538,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "b3c285e3-b07d-4733-953c-6e34d741afe8";
+				PROVISIONING_PROFILE = "45165e94-420c-430d-89d2-3ff20a09c13d";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -2576,7 +2576,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PROVISIONING_PROFILE = "b3c285e3-b07d-4733-953c-6e34d741afe8";
+				PROVISIONING_PROFILE = "45165e94-420c-430d-89d2-3ff20a09c13d";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -2610,7 +2610,7 @@
 					"$(PROJECT_DIR)/WJXC/Libraries/ThirdClass/lib",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "b3c285e3-b07d-4733-953c-6e34d741afe8";
+				PROVISIONING_PROFILE = "45165e94-420c-430d-89d2-3ff20a09c13d";
 				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/**";
 				VALID_ARCHS = "arm64 armv7";
 			};
@@ -2644,7 +2644,7 @@
 					"$(PROJECT_DIR)/WJXC/Libraries/ThirdClass/lib",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "b3c285e3-b07d-4733-953c-6e34d741afe8";
+				PROVISIONING_PROFILE = "45165e94-420c-430d-89d2-3ff20a09c13d";
 				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/**";
 				VALID_ARCHS = "arm64 armv7";
 			};
@@ -2666,7 +2666,7 @@
 				INFOPLIST_FILE = WJXCTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "b3c285e3-b07d-4733-953c-6e34d741afe8";
+				PROVISIONING_PROFILE = "45165e94-420c-430d-89d2-3ff20a09c13d";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WJXC.app/WJXC";
 			};
 			name = Debug;
@@ -2683,7 +2683,7 @@
 				INFOPLIST_FILE = WJXCTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "b3c285e3-b07d-4733-953c-6e34d741afe8";
+				PROVISIONING_PROFILE = "45165e94-420c-430d-89d2-3ff20a09c13d";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WJXC.app/WJXC";
 			};
 			name = Release;

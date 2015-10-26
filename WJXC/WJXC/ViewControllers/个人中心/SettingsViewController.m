@@ -137,8 +137,11 @@
  */
 - (void)logout
 {
-    NSDictionary *params = @{@"authcode":[LTools cacheForKey:USER_AUTHOD]};
-    
+    NSString *authkey = [GMAPI getAuthkey];
+    if (authkey.length == 0) {
+        return;
+    }
+    NSDictionary *params = @{@"authcode":authkey};
 //    __weak typeof(self)weakSelf = self;
     [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodGet api:USER_LOGOUT_ACTION parameters:params constructingBodyBlock:nil completion:^(NSDictionary *result) {
         

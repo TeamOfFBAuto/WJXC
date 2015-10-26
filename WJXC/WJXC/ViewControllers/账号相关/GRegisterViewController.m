@@ -7,7 +7,7 @@
 //
 
 #import "GRegisterViewController.h"
-@interface GRegisterViewController ()
+@interface GRegisterViewController ()<UITextFieldDelegate>
 {
     NSMutableArray *_yuanViewArray;
     NSMutableArray *_downYuanTitleLabelArray;
@@ -186,13 +186,6 @@
     getYanzhengmaBtn.titleLabel.font = [UIFont systemFontOfSize:15];
     [_downScrollView addSubview:getYanzhengmaBtn];
     
-    
-    
-    
-    
-    
-    
-    
     //输入验证码
     UIView *yanzhengmaView = [[UIView alloc]initWithFrame:CGRectMake(DEVICE_WIDTH+10, 0, DEVICE_WIDTH-20, 47)];
     yanzhengmaView.backgroundColor = [UIColor whiteColor];
@@ -203,6 +196,8 @@
     self.yanzhengmaTf = [[UITextField alloc]initWithFrame:CGRectMake(10, 0, yanzhengmaView.frame.size.width-20, 47)];
     self.yanzhengmaTf.placeholder = @"请输入验证码";
     self.yanzhengmaTf.font = [UIFont systemFontOfSize:15];
+    self.yanzhengmaTf.returnKeyType = UIReturnKeyNext;//下一步
+    self.yanzhengmaTf.delegate = self;
     [yanzhengmaView addSubview:self.yanzhengmaTf];
 
     UILabel *tishiLabel = [[UILabel alloc]initWithFrame:CGRectMake(DEVICE_WIDTH+10, CGRectGetMaxY(yanzhengmaView.frame)+14, yanzhengmaView.frame.size.width, 15)];
@@ -241,13 +236,17 @@
             self.mimaTf.font = [UIFont systemFontOfSize:12];
             self.mimaTf.placeholder = @"输入密码";
             self.mimaTf.secureTextEntry = YES;
+            self.mimaTf.returnKeyType = UIReturnKeyNext;
             [mimaView addSubview:self.mimaTf];
+            self.mimaTf.delegate = self;
         }else if (i == 1){
             self.mima2Tf = [[UITextField alloc]initWithFrame:CGRectMake(10, 49.5*i, mimaView.frame.size.width-20, 49)];
             self.mima2Tf.font = [UIFont systemFontOfSize:12];
             self.mima2Tf.placeholder = @"再次输入密码";
             self.mima2Tf.secureTextEntry = YES;
+            self.mima2Tf.returnKeyType = UIReturnKeyDone;
             [mimaView addSubview:self.mima2Tf];
+            self.mima2Tf.delegate = self;
         }
         
     }
@@ -281,6 +280,7 @@
 //获取验证码
 -(void)getYanzhengmaBtnClicked{
     
+    [self gShou];//收键盘
     
     if (self.phoneTF.text.length < 11) {
         [GMAPI showAutoHiddenMBProgressWithText:@"请填写手机号" addToView:self.view];
@@ -336,7 +336,7 @@
 //输入完验证码
 -(void)btnClicked{
     
-    
+    //下一步
     
     if (self.yanzhengmaTf.text.length == 0) {
         [GMAPI showAutoHiddenMBProgressWithText:@"请输入验证码" addToView:self.view];
@@ -420,7 +420,6 @@
 }
 
 
-
 - (void)startTimer
 {
 //    [self.codeButton setTitle:@"" forState:UIControlStateNormal];
@@ -457,5 +456,32 @@
 //    _codeLabel.hidden = YES;
 //    seconds = 60;
 }
+
+#pragma - mark UITextFileDelegate
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField              // called when 'return' key pressed. return NO to ignore.
+{
+    //下一步
+    if (textField == self.yanzhengmaTf) {
+        
+        [self btnClicked];
+    }
+    
+    //新密码跳转至确认密码
+    if (textField == self.mimaTf) {
+        
+        [self.mima2Tf becomeFirstResponder];
+    }
+    
+    if (textField == self.mima2Tf) {
+        
+        //完成
+        
+        [self querenBtnClicked];
+    }
+    
+    return YES;
+}
+
 
 @end
