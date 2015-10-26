@@ -152,7 +152,6 @@
 
     _downScrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(self.upThreeStepView.frame), DEVICE_WIDTH, DEVICE_HEIGHT-64-self.upThreeStepView.frame.size.height)];
     _downScrollView.userInteractionEnabled = YES;
-    _downScrollView.scrollEnabled = YES;
     [_downScrollView setContentSize:CGSizeMake(DEVICE_WIDTH*3, self.downInfoView.frame.size.height)];
     [self.view addSubview:_downScrollView];
     
@@ -175,6 +174,7 @@
     self.phoneTF.tag = 100;
     self.phoneTF.font = [UIFont systemFontOfSize:15];
     self.phoneTF.placeholder = @"输入手机号";
+    self.phoneTF.delegate = self;
     
     UIButton *getYanzhengmaBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [getYanzhengmaBtn setFrame:CGRectMake(10, CGRectGetMaxY(phoneNumView.frame)+20, DEVICE_WIDTH-20, 47)];
@@ -217,6 +217,9 @@
     btn.layer.cornerRadius = 4;
     [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [_downScrollView addSubview:btn];
+    
+    
+    
 
     
     //设置密码
@@ -274,6 +277,18 @@
     [self.yanzhengmaTf resignFirstResponder];
     [self.mimaTf resignFirstResponder];
     [self.mima2Tf resignFirstResponder];
+    
+    
+    [UIView animateWithDuration:0.2 animations:^{
+        self.view.frame = CGRectMake(0, 64, DEVICE_WIDTH, DEVICE_HEIGHT-64);
+    } completion:^(BOOL finished) {
+        
+    }];
+    
+    
+    
+    
+    
 }
 
 
@@ -479,6 +494,23 @@
         
         [self querenBtnClicked];
     }
+    
+    return YES;
+}
+
+
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField{
+    NSLog(@"%s",__FUNCTION__);
+    
+    [UIView animateWithDuration:0.2 animations:^{
+        self.view.frame = CGRectMake(0, -10, DEVICE_WIDTH, DEVICE_HEIGHT);
+    } completion:^(BOOL finished) {
+        
+    }];
+    
+    
+    
+    
     
     return YES;
 }

@@ -8,7 +8,11 @@
 
 #import "UpdatePWDController.h"
 
-@interface UpdatePWDController ()
+@interface UpdatePWDController ()<UITextFieldDelegate,UIScrollViewDelegate>
+{
+    UIScrollView *_maiScrollView;
+}
+
 
 @end
 
@@ -28,23 +32,37 @@
     self.myTitle = @"修改密码";
     [self setMyViewControllerLeftButtonType:MyViewControllerLeftbuttonTypeBack WithRightButtonType:MyViewControllerRightbuttonTypeNull];
     
+    _maiScrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, DEVICE_HEIGHT)];
+    _maiScrollView.delegate = self;
+    _maiScrollView.contentSize = CGSizeMake(DEVICE_WIDTH, DEVICE_HEIGHT+215-64);
+    
+    
+    
+    
+    [self.view addSubview:_maiScrollView];
+    
+    
+    
     NSArray *titles = @[@"当前密码",@"新密码",@"确认新密码"];
     CGFloat top = 0.f;
+    
+    
     for (int i = 0; i < titles.count; i ++) {
         
         UILabel *titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(10, 20 + 65 * i, 100, 15)];
         titleLabel.text = titles[i];
         titleLabel.font = [UIFont systemFontOfSize:14.f];
         titleLabel.textColor = [UIColor colorWithHexString:@"323232"];
-        [self.view addSubview:titleLabel];
+        [_maiScrollView addSubview:titleLabel];
         
         UITextField *tf = [[UITextField alloc]initWithFrame:CGRectMake(10, titleLabel.bottom + 15, DEVICE_WIDTH - 20, 28)];
-        [self.view addSubview:tf];
+        [_maiScrollView addSubview:tf];
         tf.secureTextEntry = YES;
         tf.tag = 100 + i;
+        tf.delegate = self;
         
         UIImageView *line = [[UIImageView alloc]initWithFrame:CGRectMake(tf.left - 2, tf.bottom - 10, tf.width + 4, 10)];
-        [self.view addSubview:line];
+        [_maiScrollView addSubview:line];
         if (i == 0) {
             line.image = [UIImage imageNamed:@"my_password_line_green"];
         }else
@@ -56,12 +74,12 @@
     }
     
     UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(10, top + 10, DEVICE_WIDTH - 20, 15) title:@"密码长度至少6个字符,最多32个字符" font:14 align:NSTextAlignmentLeft textColor:[UIColor colorWithHexString:@"646464"]];
-    [self.view addSubview:label];
+    [_maiScrollView addSubview:label];
     
     UIButton *sureButton = [[UIButton alloc]initWithframe:CGRectMake(10, label.bottom + 20, DEVICE_WIDTH - 20, 40) buttonType:UIButtonTypeCustom normalTitle:@"确认" selectedTitle:nil target:self action:@selector(clickToSure:)];
     [sureButton addCornerRadius:3.f];
     sureButton.backgroundColor = DEFAULT_TEXTCOLOR;
-    [self.view addSubview:sureButton];
+    [_maiScrollView addSubview:sureButton];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -69,10 +87,37 @@
     // Dispose of any resources that can be recreated.
 }
 
+
+
+
 - (UITextField *)textFieldForTag:(int)tag
 {
     return (UITextField *)[self.view viewWithTag:tag];
 }
+
+
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField{
+    if (textField.tag == 100) {//当前密码
+        
+    }else if (textField.tag == 101){//新密码
+        [_maiScrollView setContentOffset:CGPointMake(0, 100) animated:YES];
+        
+        
+    }else if (textField.tag == 102){//确认新密码
+        
+        [_maiScrollView setContentOffset:CGPointMake(0, 100) animated:YES];
+        
+        
+    }
+}
+
+
+
+
+
+
+
 
 #pragma - mark 事件处理
 
