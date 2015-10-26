@@ -97,7 +97,7 @@
         for (int i = 0; i<count; i++) {
             GclickedImv *imv = [[GclickedImv alloc]initWithFrame:CGRectMake(i%3*(oneImvWithd+5), i/3*(oneImvWithd+5), oneImvWithd, oneImvWithd)];
             NSDictionary *dic = model.comment_pic[i];
-            [imv sd_setImageWithURL:[NSURL URLWithString:[dic stringValueForKey:@"pic"]] placeholderImage:nil];
+            [imv sd_setImageWithURL:[NSURL URLWithString:[dic stringValueForKey:@"pic"]] placeholderImage:[UIImage imageNamed:@"default.png"]];
             imv.userInteractionEnabled = YES;
             imv.url = [dic stringValueForKey:@"pic"];
             imv.urls = tmpArray;
