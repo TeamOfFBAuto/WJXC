@@ -162,33 +162,48 @@
  */
 - (void)creatBottomTools
 {
-    _bottom = [[UIView alloc]initWithFrame:CGRectMake(0, DEVICE_HEIGHT - 64 - 49 - 50, DEVICE_WIDTH, 50)];
+    
+    _bottom = [[UIView alloc]initWithFrame:CGRectMake(0, DEVICE_HEIGHT - 64 - 49 - 50 - 25, DEVICE_WIDTH, 50 + 25)];
     [self.view addSubview:_bottom];
     _bottom.backgroundColor = [UIColor whiteColor];
     
-    UIView *line = [[UIView alloc]initWithFrame:CGRectMake(0, 0, _bottom.width, 0.5)];
+    //继续购物
+    UIView *buyView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, 25)];
+    [_bottom addSubview:buyView];
+    buyView.backgroundColor = [[UIColor blackColor]colorWithAlphaComponent:0.3];
+    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+    btn.frame = buyView.bounds;
+    [btn setTitle:@"宝贝还不够，继续去选择！" forState:UIControlStateNormal];
+    [btn.titleLabel setFont:[UIFont systemFontOfSize:12]];
+    [buyView addSubview:btn];
+    [btn addTarget:self action:@selector(clickToHome:) forControlEvents:UIControlEventTouchUpInside];
+    
+    CGFloat top = 25.f;
+    
+    //其他
+    UIView *line = [[UIView alloc]initWithFrame:CGRectMake(0, top, _bottom.width, 0.5)];
     line.backgroundColor = [UIColor colorWithHexString:@"e4e4e4"];
     [_bottom addSubview:line];
     
-    _selectAllBtn = [[UIButton alloc]initWithframe:CGRectMake(0, 0, 40, _bottom.height) buttonType:UIButtonTypeCustom nornalImage:[UIImage imageNamed:@"shopping cart_normal"] selectedImage:[UIImage imageNamed:@"shopping cart_selected"] target:self action:@selector(clickToSelectAll:)];
+    _selectAllBtn = [[UIButton alloc]initWithframe:CGRectMake(0, top, 40, _bottom.height - top) buttonType:UIButtonTypeCustom nornalImage:[UIImage imageNamed:@"shopping cart_normal"] selectedImage:[UIImage imageNamed:@"shopping cart_selected"] target:self action:@selector(clickToSelectAll:)];
     [_bottom addSubview:_selectAllBtn];
     _selectAllBtn.selected = YES;
     
-    UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(_selectAllBtn.right, 0, 30, _bottom.height) title:@"全选" font:15 align:NSTextAlignmentLeft textColor:[UIColor colorWithHexString:@"494949"]];
+    UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(_selectAllBtn.right, top, 30, _bottom.height - top) title:@"全选" font:15 align:NSTextAlignmentLeft textColor:[UIColor colorWithHexString:@"494949"]];
     [_bottom addSubview:label];
     
-    UILabel *label_heJi = [[UILabel alloc]initWithFrame:CGRectMake(label.right + 10, 12, 30, 14) title:@"合计" font:14 align:NSTextAlignmentLeft textColor:[UIColor colorWithHexString:@"494949"]];
+    UILabel *label_heJi = [[UILabel alloc]initWithFrame:CGRectMake(label.right + 10, top + 12, 30, 14) title:@"合计" font:14 align:NSTextAlignmentLeft textColor:[UIColor colorWithHexString:@"494949"]];
     [_bottom addSubview:label_heJi];
     
     UILabel *label_fei = [[UILabel alloc]initWithFrame:CGRectMake(label.right + 10 - 2, label_heJi.bottom + 5, 35, 8) title:@"不含运费" font:8 align:NSTextAlignmentLeft textColor:[UIColor colorWithHexString:@"494949"]];
     [_bottom addSubview:label_fei];
     
-    _sumLabel = [[UILabel alloc]initWithFrame:CGRectMake(label_heJi.right + 10, 0, 100, _bottom.height) title:@"￥0.00" font:14 align:NSTextAlignmentLeft textColor:[UIColor colorWithHexString:@"f88600"]];
+    _sumLabel = [[UILabel alloc]initWithFrame:CGRectMake(label_heJi.right + 10, top, 100, _bottom.height - top) title:@"￥0.00" font:14 align:NSTextAlignmentLeft textColor:[UIColor colorWithHexString:@"f88600"]];
     [_bottom addSubview:_sumLabel];
     
     [self updateSumPrice];//更新数据
     
-    UIButton *payButton = [[UIButton alloc]initWithframe:CGRectMake(DEVICE_WIDTH - 110, 0, 110, _bottom.height) buttonType:UIButtonTypeCustom normalTitle:@"去结算" selectedTitle:nil target:self action:@selector(clickToPay:)];
+    UIButton *payButton = [[UIButton alloc]initWithframe:CGRectMake(DEVICE_WIDTH - 110, top, 110, _bottom.height - top) buttonType:UIButtonTypeCustom normalTitle:@"去结算" selectedTitle:nil target:self action:@selector(clickToPay:)];
     [payButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     payButton.backgroundColor = [UIColor colorWithHexString:@"f98700"];
     [_bottom addSubview:payButton];
@@ -337,6 +352,17 @@
 {
     UITabBarController *root = ROOTVIEWCONTROLLER;
     root.selectedIndex = 1;
+}
+
+/**
+ *  去选择商品 继续购物
+ *
+ *  @param sender
+ */
+- (void)clickToHome:(UIButton *)sender
+{
+    UITabBarController *root = ROOTVIEWCONTROLLER;
+    root.selectedIndex = 0;
 }
 
 /**
