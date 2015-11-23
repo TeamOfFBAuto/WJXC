@@ -15,7 +15,6 @@
 {
     RefreshTableView *_tab;
     
-    
     HuodongCustomTableViewCell *_tmpCell;
     
     HuodongDetailModel *_theModel;//数据源
@@ -103,19 +102,13 @@
         cell = [[HuodongCustomTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
     }
     
-    
     for (UIView *view in cell.contentView.subviews) {
         [view removeFromSuperview];
     }
     
-    
     [cell loadCustomViewWithModel:_theModel index:indexPath];
     
-    
-    
-    
     return cell;
-    
 }
 
 

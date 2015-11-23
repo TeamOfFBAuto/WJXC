@@ -182,4 +182,10 @@
 //我的优惠券
 #define MYYOUHUIQUAN_LIST @"/index.php?d=api&c=order&m=my_coupon_list"
 
+#pragma mark - web 页面
+//（1）客服聊天的订单详情链接
+#define WEB_ORDERDETAIL @"/index.php?d=admin&c=order&m=order_info&order_id=%@"
+//（2）客服聊天的商品详情链接
+#define WEB_PRODUCTDETAIL @"/index.php?d=admin&c=products&m=product_detail&product_id=%@"
+
 #endif

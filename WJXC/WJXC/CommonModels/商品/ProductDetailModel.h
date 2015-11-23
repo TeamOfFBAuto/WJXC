@@ -33,7 +33,7 @@
 @property(nonatomic,retain)NSDictionary *seckill_info;//秒杀信息 end_time
 @property(nonatomic,retain)NSString *is_seckill;//是否是秒杀
 
-
+@property(nonatomic,retain)NSArray *multi_cover;//多张图
 @property(nonatomic,strong)NSArray *coupon_list;//优惠券数组
 
 @end

@@ -18,11 +18,10 @@
 #import "CoupeView.h"
 #import "ButtonProperty.h"
 #import "CouponModel.h"
+#import "CycleScrollView.h"
 
-@interface ProductDetailViewController ()<UITableViewDataSource,UITableViewDelegate>
+@interface ProductDetailViewController ()<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate>
 {
-    GCycleScrollView *_gscrollView;//上方循环滚动的scrollview
-    
     UITableView *_tableView;//主tableview
     
     ProductDetailModel *_theProductModel;//数据源
@@ -49,6 +48,14 @@
     
     CoupeView *_coupeView;//领取优惠券view
 }
+
+@property(nonatomic,retain)UIView *selectNumView;//修改加入购物车数字view
+@property(nonatomic,retain)UIView *selectNumBgView;//修改加入购物车数字 背景view
+@property(nonatomic,retain)UIButton *reductButton;//减少
+@property(nonatomic,retain)UIButton *addButton;//加
+@property(nonatomic,retain)UITextField *numTf;//显示数量
+@property(nonatomic,retain)CycleScrollView *mainScorllView;
+
 @end
 
 @implementation ProductDetailViewController
@@ -76,13 +83,16 @@
     
     [self setMyViewControllerLeftButtonType:MyViewControllerLeftbuttonTypeText WithRightButtonType:MyViewControllerRightbuttonTypeNull];
     
-    
     self.view.backgroundColor = RGBCOLOR(241, 240, 245);
-    
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(prepareNetData) name:NOTIFICATION_LOGIN object:nil];
     
+    [self addKeyBordNotification];
+    
     [self creatTableView];
+    
+    UIView *head = [self creatGscrollViewWithProductModel:nil];
+    _tableView.tableHeaderView = head;
     
     [self creatUpView];
     
@@ -96,7 +106,149 @@
     // Dispose of any resources that can be recreated.
 }
 
-#pragma - mark 网络请求
+#pragma mark - 网络请求
+
+-(void)networkForCollect{
+    
+    NSString *authcode = [GMAPI getAuthkey];
+    if (authcode.length == 0) {
+        
+        _isHiddenNavigation = YES;
+        
+        LoginViewController *login = [[LoginViewController alloc]init];
+        
+        UINavigationController *unVc = [[UINavigationController alloc]initWithRootViewController:login];
+        
+        [self presentViewController:unVc animated:YES completion:nil];
+        
+        return;
+    }
+    
+    
+    if ([_isfavor intValue] == 0) {
+        NSString *product_id = _theProductModel.product_id;
+        
+        NSDictionary *dic = @{
+                              @"product_id":product_id,
+                              @"authcode":[GMAPI getAuthkey],
+                              };
+        [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodGet api:SHOUCANGRODUCT parameters:dic constructingBodyBlock:nil completion:^(NSDictionary *result) {
+            
+            [GMAPI showAutoHiddenMBProgressWithText:[result stringValueForKey:@"msg"] addToView:self.view];
+            
+            _isfavor = @"1";
+            [_shoucangBtn setImage:[UIImage imageNamed:@"homepage_qianggou_collect_y.png"] forState:UIControlStateNormal];
+            
+        } failBlock:^(NSDictionary *result) {
+            
+        }];
+        
+    }else if ([_isfavor intValue] == 1){
+        NSString *product_id = _theProductModel.product_id;
+        
+        NSDictionary *dic = @{
+                              @"product_id":product_id,
+                              @"authcode":[GMAPI getAuthkey],
+                              };
+        [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodGet api:QUXIAOSHOUCANG parameters:dic constructingBodyBlock:nil completion:^(NSDictionary *result) {
+            
+            [GMAPI showAutoHiddenMBProgressWithText:[result stringValueForKey:@"msg"] addToView:self.view];
+            
+            _isfavor = @"0";
+            [_shoucangBtn setImage:[UIImage imageNamed:@"homepage_qianggou_collect.png"] forState:UIControlStateNormal];
+            
+        } failBlock:^(NSDictionary *result) {
+            
+        }];
+    }
+    
+}
+
+/**
+ *  添加购物车
+ */
+- (void)addProductWithNum:(int)num
+{
+    ProductModel *aModel = _gouwucheModel;
+    
+    int product_num = num;//每次加一个
+    
+    NSString *authcode = [GMAPI getAuthkey];
+    
+    if (authcode.length == 0) {
+        
+        [[DBManager shareInstance]insertProduct:aModel];
+        
+        [LTools showMBProgressWithText:@"添加成功" addToView:self.view];
+        
+        [[NSNotificationCenter defaultCenter]postNotificationName:NOTIFICATION_UPDATE_TO_CART object:nil];
+        
+        int num = [[DBManager shareInstance]QueryAllDataNum];
+        if (num > 0) {
+            _numLabel.hidden = NO;
+            _numLabel.text = [NSString stringWithFormat:@"%d",num];
+        }else
+        {
+            _numLabel.hidden = YES;
+        }
+        
+        return;
+    }
+    
+    __weak typeof(self)weakSelf = self;
+    NSDictionary*dic = @{@"authcode":authcode,
+                         @"product_id":aModel.product_id,
+                         @"product_num":[NSNumber numberWithInt:product_num]};
+    [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodPost api:ORDER_ADD_TO_CART parameters:dic constructingBodyBlock:nil completion:^(NSDictionary *result) {
+        
+        [LTools showMBProgressWithText:result[RESULT_INFO] addToView:self.view];
+        
+        [[NSNotificationCenter defaultCenter]postNotificationName:NOTIFICATION_UPDATE_TO_CART object:nil];
+        
+        [weakSelf getShoppingCarNum];
+        
+    } failBlock:^(NSDictionary *result) {
+        
+        
+    }];
+    
+}
+
+/**
+ *  领取优惠劵
+ *
+ *  @param aModel 优惠劵model
+ *  @param sender
+ */
+- (void)netWorkForCouponModel:(CouponModel *)aModel
+                       button:(UIButton *)sender
+{
+    
+    if (![LTools isLogin:self]) {
+        
+        [_coupeView removeFromSuperview];
+        _coupeView = nil;
+        
+        return;
+    }
+    
+    NSDictionary * parame  = @{
+                               @"coupon_id":aModel.coupon_id,
+                               @"authcode":[GMAPI getAuthkey]
+                               };
+    
+    
+    [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodPost api:GET_COUPON parameters:parame constructingBodyBlock:nil completion:^(NSDictionary *result) {
+        
+        NSLog(@"result %@",result);
+        aModel.enable_receive = @"0";
+        sender.selected = YES;
+        
+    } failBlock:^(NSDictionary *result) {
+        NSLog(@"failBlock == %@",result);
+    }];
+    
+}
 
 /**
  *  添加浏览量
@@ -127,7 +279,8 @@
 /**
  *  请求单品详情
  */
--(void)prepareNetData{
+-(void)prepareNetData
+{
     NSDictionary *parame;
     NSString *authcode = [GMAPI getAuthkey];
     if (authcode.length == 0) {
@@ -144,16 +297,28 @@
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     
     __weak typeof(self)weakSelf = self;
+    __weak typeof(_tableView)weakTable = _tableView;
     [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodGet api:GET_PRODUCTDETAIL parameters:parame constructingBodyBlock:nil completion:^(NSDictionary *result) {
         
         
         [MBProgressHUD hideAllHUDsForView:weakSelf.view animated:YES];
         
-        NSLog(@"%@",result);
+        int code = [result[RESULT_CODE]intValue];
+        if (code == 2000) {
+            
+            [self performSelector:@selector(leftButtonTap:) withObject:nil afterDelay:0.5];
+        }
         
         NSDictionary *detail = [result dictionaryValueForKey:@"detail"];
         
         _theProductModel = [[ProductDetailModel alloc]initWithDictionary:detail];
+        
+        //多张轮播图
+        if (weakTable.tableHeaderView) {
+            weakTable.tableHeaderView = nil;
+        }
+        UIView *head = [self creatGscrollViewWithProductModel:_theProductModel];
+        weakTable.tableHeaderView = head;
         
         NSString *text = nil;
         //秒杀判断
@@ -192,14 +357,7 @@
     }];
 }
 
-
-
-#pragma mark - MyMethod
-
--(void)gGoback{
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
+#pragma mark - 视图创建
 
 //创建上面返回收藏分享按钮
 -(void)creatUpView{
@@ -218,19 +376,60 @@
     _shoucangBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [_shoucangBtn setFrame:CGRectMake(DEVICE_WIDTH - 60, 5, 50, 50)];
     [_shoucangBtn setImage:[UIImage imageNamed:@"homepage_qianggou_collect.png"] forState:UIControlStateNormal];
-    [_shoucangBtn addTarget:self action:@selector(gshoucang) forControlEvents:UIControlEventTouchUpInside];
+    [_shoucangBtn addTarget:self action:@selector(networkForCollect) forControlEvents:UIControlEventTouchUpInside];
     [theBImv addSubview:_shoucangBtn];
     _shoucangBtn.hidden = YES;
     
-//    UIButton *shareBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-//    [shareBtn setFrame:CGRectMake(DEVICE_WIDTH - 50, 5, 50, 50)];
-//    [shareBtn setImage:[UIImage imageNamed:@"homepage_qianggou_share.png"] forState:UIControlStateNormal];
-//    [theBImv addSubview:shareBtn];
+    //    UIButton *shareBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    //    [shareBtn setFrame:CGRectMake(DEVICE_WIDTH - 50, 5, 50, 50)];
+    //    [shareBtn setImage:[UIImage imageNamed:@"homepage_qianggou_share.png"] forState:UIControlStateNormal];
+    //    [theBImv addSubview:shareBtn];
 }
+
+//创建循环滚动的scrollview
+-(UIView *)creatGscrollViewWithProductModel:(ProductDetailModel *)aModel
+{
+    NSArray *coverImages = aModel.multi_cover;
+    if (!aModel || coverImages.count == 0) {
+        
+        UIImageView *imv = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, 0)];
+        [imv sd_setImageWithURL:[NSURL URLWithString:_theProductModel.cover_pic] placeholderImage:[UIImage imageNamed:@"default02.png"]];
+        return imv;
+    }
+    int count = (int)coverImages.count;
+    NSMutableArray *viewsArray = [NSMutableArray arrayWithCapacity:1];
+    for (int i = 0; i < count; i++) {
+        UIImageView *imv = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, DEVICE_WIDTH *W_H_RATIO)];
+        imv.userInteractionEnabled = YES;
+        NSDictionary *dic = coverImages[i];
+        [imv sd_setImageWithURL:[NSURL URLWithString:dic[@"cover_pic"]] placeholderImage:[UIImage imageNamed:@"default02"]];
+        [viewsArray addObject:imv];
+    }
+    
+    self.mainScorllView = [[CycleScrollView alloc] initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, DEVICE_WIDTH * W_H_RATIO) animationDuration:4];
+    self.mainScorllView.scrollView.showsHorizontalScrollIndicator = FALSE;
+    
+    self.mainScorllView.fetchContentViewAtIndex = ^UIView *(NSInteger pageIndex){
+        return viewsArray[pageIndex];
+    };
+    
+    self.mainScorllView.totalPagesCount = ^NSInteger(void){
+        return count;
+    };
+    
+//    __weak typeof (self)bself = self;
+//    self.mainScorllView.TapActionBlock = ^(NSInteger pageIndex){
+//        [bself cycleScrollDidClickedWithIndex:pageIndex];
+//    };
+    
+    return self.mainScorllView;
+}
+
 
 
 //创建tableview
 -(void)creatTableView{
+    
     _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, DEVICE_HEIGHT-45) style:UITableViewStylePlain];
     _tableView.delegate = self;
     _tableView.dataSource = self;
@@ -249,7 +448,7 @@
     
     UIButton *phoneBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [phoneBtn setFrame:CGRectMake(10, 0, 45, 45)];
-//    phoneBtn.backgroundColor = [UIColor orangeColor];
+    //    phoneBtn.backgroundColor = [UIColor orangeColor];
     [phoneBtn setTitle:@"拨打电话" forState:UIControlStateNormal];
     phoneBtn.titleLabel.font = [UIFont systemFontOfSize:10];
     [phoneBtn setImage:[UIImage imageNamed:@"bodadianhua.png"] forState:UIControlStateNormal];
@@ -293,11 +492,10 @@
     [downView addSubview:_jiaruBtn];
     
     
-    
     UIButton *gouwuche = [UIButton buttonWithType:UIButtonTypeCustom];
     [gouwuche setFrame:CGRectMake(DEVICE_WIDTH - 64.5 - 10, -20 - 4, 64.5, 64)];
     gouwuche.layer.cornerRadius = 25;
-//    gouwuche.backgroundColor = [UIColor whiteColor];
+    //    gouwuche.backgroundColor = [UIColor whiteColor];
     [gouwuche setBackgroundImage:[UIImage imageNamed:@"homepage_xq_gwc"] forState:UIControlStateNormal];
     [gouwuche addTarget:self action:@selector(gouwuche) forControlEvents:UIControlEventTouchUpInside];
     [downView addSubview:gouwuche];
@@ -309,6 +507,178 @@
     _numLabel.hidden = YES;
     
     [self getShoppingCarNum];
+}
+
+
+#pragma mark - 添加购物数量控制
+
+-(UIView *)selectNumBgView
+{
+    if (_selectNumBgView) {
+        return _selectNumBgView;
+    }
+    _selectNumBgView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, DEVICE_HEIGHT)];
+    _selectNumBgView.backgroundColor = [[UIColor blackColor]colorWithAlphaComponent:0.3];
+    [[UIApplication sharedApplication].keyWindow addSubview:_selectNumBgView];
+    
+    return _selectNumBgView;
+}
+
+-(UIView *)selectNumView
+{
+    if (_selectNumView) {
+        return _selectNumView;
+    }
+    
+    _selectNumView = [[UIView alloc]initWithFrame:CGRectMake(0, DEVICE_HEIGHT, DEVICE_WIDTH, 170)];
+    _selectNumView.backgroundColor = [UIColor whiteColor];
+    [self.selectNumBgView addSubview:_selectNumView];
+    self.selectNumBgView.alpha = 0.f;
+    
+    //line
+    UIImageView *line1 = [[UIImageView alloc]initWithFrame:CGRectMake(0, _selectNumView.height - 0.5, DEVICE_WIDTH, 0.5)];
+    line1.backgroundColor = DEFAULT_LINECOLOR;
+    [_selectNumView addSubview:line1];
+    
+    //隐藏整个view按钮
+    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+    btn.frame = CGRectMake(0, 0, DEVICE_WIDTH, DEVICE_HEIGHT - _selectNumView.height);
+    [btn addTarget:self action:@selector(clickToHiddenSelectView) forControlEvents:UIControlEventTouchUpInside];
+    [self.selectNumBgView addSubview:btn];
+    
+    [_selectNumBgView bringSubviewToFront:_selectNumView];
+    
+    //关闭按钮
+    UIButton *closeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [closeBtn addTarget:self action:@selector(clickToHiddenSelectView) forControlEvents:UIControlEventTouchUpInside];
+    [closeBtn setImage:[UIImage imageNamed:@"guanbi"] forState:UIControlStateNormal];
+    closeBtn.frame = CGRectMake(DEVICE_WIDTH - 10 - 25, 10 - 5, 25, 25);
+    [_selectNumView addSubview:closeBtn];
+    
+    //数字加减view
+    
+    UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(10, 0, _selectNumView.width, 40) title:@"选择购买数量" font:14 align:NSTextAlignmentCenter textColor:[UIColor colorWithHexString:@"323232"]];
+    [_selectNumView addSubview:label];
+    
+    //line
+    UIImageView *line = [[UIImageView alloc]initWithFrame:CGRectMake(0, label.bottom, DEVICE_WIDTH, 0.5)];
+    line.backgroundColor = DEFAULT_LINECOLOR;
+    [_selectNumView addSubview:line];
+    
+    CGFloat left = (DEVICE_WIDTH - 80 * 2 - 100) / 2.f;
+    //减号
+    UIButton *reductButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [reductButton setTitle:@"-" forState:UIControlStateNormal];
+    [reductButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+    [reductButton setTitleColor:[UIColor colorWithHexString:@"323232"] forState:UIControlStateSelected];
+    reductButton.frame = CGRectMake(left, line.bottom, 80, 50);
+    reductButton.titleLabel.font = [UIFont boldSystemFontOfSize:20];
+    [reductButton addTarget:self action:@selector(clickToReduce) forControlEvents:UIControlEventTouchUpInside];
+    [_selectNumView addSubview:reductButton];
+    reductButton.enabled = NO;
+    
+    self.reductButton = reductButton;
+    
+    //显示数字
+    
+    self.numTf = [[UITextField alloc]initWithFrame:CGRectMake(reductButton.right, reductButton.top, 100, 50)];
+    _numTf.text = @"1";
+    _numTf.textAlignment = NSTextAlignmentCenter;
+    _numTf.textColor = [UIColor colorWithHexString:@"323232"];
+    _numTf.delegate = self;
+    _numTf.keyboardType = UIKeyboardTypeNumberPad;
+    [_selectNumView addSubview:_numTf];
+    
+    //减号
+    UIButton *addButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [addButton setTitle:@"+" forState:UIControlStateNormal];
+    [addButton setTitleColor:[UIColor colorWithHexString:@"323232"] forState:UIControlStateNormal];
+    addButton.frame = CGRectMake(_numTf.right, line.bottom, 80, 50);
+    addButton.titleLabel.font = [UIFont boldSystemFontOfSize:20];
+    [addButton addTarget:self action:@selector(clickToAdd) forControlEvents:UIControlEventTouchUpInside];
+
+    [_selectNumView addSubview:addButton];
+    
+    UIButton *sureButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [sureButton setTitle:@"确定" forState:UIControlStateNormal];
+    [sureButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    sureButton.frame = CGRectMake(reductButton.left, reductButton.bottom + 5, addButton.right - reductButton.left, 35);
+    sureButton.titleLabel.font = [UIFont systemFontOfSize:18];
+    [_selectNumView addSubview:sureButton];
+    sureButton.backgroundColor = [UIColor orangeColor];
+    [sureButton addTarget:self action:@selector(clickToSure) forControlEvents:UIControlEventTouchUpInside];
+    [sureButton addCornerRadius:5.f];
+    
+    return _selectNumView;
+}
+
+- (void)selectShowView:(BOOL)show
+{
+    __weak typeof(UIView *)weakView = self.selectNumView;
+    
+    [UIView animateWithDuration:0.5 animations:^{
+       
+        weakView.top = show ? DEVICE_HEIGHT - 170 : DEVICE_HEIGHT;
+        _selectNumBgView.alpha = show ? 1.f : 0.f;
+    }];
+}
+
+#pragma mark - MyMethod
+
+/**
+ *  确认提交
+ */
+- (void)clickToSure
+{
+    [self clickToHiddenSelectView];
+    
+    int num = [self.numTf.text intValue];
+    num = num > 1 ? num : 1;
+    
+    [self addProductWithNum:num];
+    
+}
+
+- (void)updateReduceState
+{
+    if ([self.numTf.text intValue] > 1) {
+        self.reductButton.selected = YES;
+        self.reductButton.enabled = YES;
+    }else
+    {
+        self.reductButton.selected = NO;
+        self.reductButton.enabled = NO;
+    }
+}
+
+- (void)clickToAdd
+{
+    // + 1
+    
+    self.numTf.text = NSStringFromInt([self.numTf.text intValue] + 1);
+    
+    [self updateReduceState];
+}
+
+- (void)clickToReduce
+{
+    // - 1
+    int num = [self.numTf.text intValue];
+    if (num > 1) {
+        
+        self.numTf.text = NSStringFromInt(num - 1);
+    }
+    [self updateReduceState];
+}
+
+- (void)clickToHiddenSelectView
+{
+    [self selectShowView:NO];
+    [_numTf resignFirstResponder];
+}
+
+-(void)gGoback{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 -(void)gJian{
@@ -326,90 +696,6 @@
     self.numLabel.text = [NSString stringWithFormat:@"%d",_theNum];
 }
 
-
-#pragma makr - UITableViewDelegate && UITabelViewDataSource
-
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    CGFloat height = 0;
-    
-    
-    if (indexPath.row == 0) {//循环滚动
-//        return 180*GscreenRatio_568;
-        
-        return DEVICE_WIDTH * W_H_RATIO;
-    }
-    
-    if (!_tmpCell) {
-        _tmpCell = [[ProductDetailTableViewCell alloc]init];
-    }
-    
-    height = [_tmpCell loadCustomViewWithIndex:indexPath theModel:_theProductModel];
-    
-    return height;
-}
-
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return _theProductModel.product_desc.count + 5;
-}
-
--(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    static NSString *identifier = @"identifier";
-    ProductDetailTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
-    if (!cell) {
-        cell = [[ProductDetailTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
-    }
-    for (UIView *view in cell.contentView.subviews) {
-        [view removeFromSuperview];
-    }
-    
-    if (indexPath.row == 0) {
-        UIImageView *imv = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, DEVICE_WIDTH * W_H_RATIO)];
-        [imv sd_setImageWithURL:[NSURL URLWithString:_theProductModel.cover_pic] placeholderImage:[UIImage imageNamed:@"default02.png"]];
-        [cell.contentView addSubview:imv];
-        return cell;
-    }
-    
-    [cell loadCustomViewWithIndex:indexPath theModel:_theProductModel];
-    
-    if (indexPath.row == 1) {
-        
-        _miaoShaLabel = cell.miaoShaLabel;//没有秒杀时为nil
-
-    }
-    
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    
-    
-    return cell;
-}
-
-- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
-{
-    return [UIView new];
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-{
-    return 0.01f;
-}
-
-
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    if (indexPath.row == 3) {
-        ProductCommentViewController *ccc = [[ProductCommentViewController alloc]init];
-        ccc.model = _theProductModel;
-        [self.navigationController pushViewController:ccc animated:YES];
-    }else if (indexPath.row == 2){
-        NSLog(@"%s",__FUNCTION__);
-        
-        [self clickToCoupe];
-        
-        
-    }
-}
-
-
-
 /**
  *  点击去获取优惠劵
  */
@@ -425,7 +711,6 @@
         CouponModel *amodel = [[CouponModel alloc]initWithDictionary:dic];
         [tmp addObject:amodel];
     }
-    
     
     if (tmp.count == 0) {
         
@@ -448,44 +733,6 @@
     };
     [_coupeView show];
 }
-
-/**
- *  领取优惠劵
- *
- *  @param aModel 优惠劵model
- *  @param sender
- */
-- (void)netWorkForCouponModel:(CouponModel *)aModel
-                       button:(UIButton *)sender
-{
-    
-    if (![LTools isLogin:self]) {
-        
-        [_coupeView removeFromSuperview];
-        _coupeView = nil;
-        
-        return;
-    }
-    
-    NSDictionary * parame  = @{
-                @"coupon_id":aModel.coupon_id,
-                @"authcode":[GMAPI getAuthkey]
-                };
-
-
-    [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodPost api:GET_COUPON parameters:parame constructingBodyBlock:nil completion:^(NSDictionary *result) {
-        
-        NSLog(@"result %@",result);
-        aModel.enable_receive = @"0";
-        sender.selected = YES;
-        
-    } failBlock:^(NSDictionary *result) {
-        NSLog(@"failBlock == %@",result);
-    }];
-    
-}
-
-
 
 #pragma - mark 秒杀倒计时
 
@@ -595,7 +842,9 @@
     
     NSString *imageUrl = _theProductModel.cover_pic;
     NSString *digest = [NSString stringWithFormat:@"\n现价:%.2f元\n原价:%.2f元",[_theProductModel.current_price floatValue],[_theProductModel.original_price floatValue]];
-    NSString *productId = [NSString stringWithFormat:@"productId:%@",_theProductModel.product_id];
+    
+    NSString *product = [NSString stringWithFormat:WEB_PRODUCTDETAIL,_theProductModel.product_id];
+    NSString *productId = [NSString stringWithFormat:@"%@%@",SERVER_URL,product];
     
     NSString *title = [NSString stringWithFormat:@"我在看:[%@]",_theProductModel.product_name];
     
@@ -650,7 +899,9 @@
         
     }else
     {
-        [self clickToAddProduct];
+        
+        [self selectShowView:YES];
+        
     }
 }
 
@@ -670,57 +921,6 @@
             }
             
         }
-}
-
-/**
- *  添加购物车 每次一个
- */
-- (void)clickToAddProduct
-{
-    ProductModel *aModel = _gouwucheModel;
-    
-    int product_num = 1;//每次加一个
-    
-    NSString *authcode = [GMAPI getAuthkey];
-    
-    if (authcode.length == 0) {
-        
-        [[DBManager shareInstance]insertProduct:aModel];
-        
-        [LTools showMBProgressWithText:@"添加成功" addToView:self.view];
-        
-        [[NSNotificationCenter defaultCenter]postNotificationName:NOTIFICATION_UPDATE_TO_CART object:nil];
-        
-        
-        int num = [[DBManager shareInstance]QueryAllDataNum];
-        if (num > 0) {
-            _numLabel.hidden = NO;
-            _numLabel.text = [NSString stringWithFormat:@"%d",num];
-        }else
-        {
-            _numLabel.hidden = YES;
-        }
-        
-        return;
-    }
-    
-    __weak typeof(self)weakSelf = self;
-    NSDictionary*dic = @{@"authcode":authcode,
-                         @"product_id":aModel.product_id,
-                         @"product_num":[NSNumber numberWithInt:product_num]};
-    [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodPost api:ORDER_ADD_TO_CART parameters:dic constructingBodyBlock:nil completion:^(NSDictionary *result) {
-        
-        [LTools showMBProgressWithText:result[RESULT_INFO] addToView:self.view];
-        
-        [[NSNotificationCenter defaultCenter]postNotificationName:NOTIFICATION_UPDATE_TO_CART object:nil];
-        
-        [weakSelf getShoppingCarNum];
-        
-    } failBlock:^(NSDictionary *result) {
-        
-        
-    }];
-    
 }
 
 /**
@@ -766,68 +966,146 @@
 
 }
 
+#pragma mark - 添加删除键盘检测通知
 
-#pragma mark - 收藏
--(void)gshoucang{
+
+-(void)addKeyBordNotification
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(handleWillShowKeyboardForCustomInputView:)
+                                                 name:UIKeyboardWillShowNotification
+                                               object:nil];
     
-    NSString *authcode = [GMAPI getAuthkey];
-    if (authcode.length == 0) {
-        
-        _isHiddenNavigation = YES;
-        
-        LoginViewController *login = [[LoginViewController alloc]init];
-        
-        UINavigationController *unVc = [[UINavigationController alloc]initWithRootViewController:login];
-        
-        [self presentViewController:unVc animated:YES completion:nil];
-        
-        return;
-    }
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(handleWillHideKeyboardForCustomInputView:)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:nil];
+}
+
+#pragma mark - 监测键盘弹出收起以及高度变化
+
+-(void)handleWillShowKeyboardForCustomInputView:(NSNotification *)notification
+{
+    __weak typeof(self) weakSelf = self;
     
+    CGRect keyboardRect = [[notification.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
     
-    if ([_isfavor intValue] == 0) {
-        NSString *product_id = _theProductModel.product_id;
+    CGFloat keyboardY = [[UIApplication sharedApplication].keyWindow convertRect:keyboardRect fromView:nil].origin.y;
+    
+    [UIView animateWithDuration:0.33f animations:^{
         
-        NSDictionary *dic = @{
-                              @"product_id":product_id,
-                              @"authcode":[GMAPI getAuthkey],
-                              };
-        [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodGet api:SHOUCANGRODUCT parameters:dic constructingBodyBlock:nil completion:^(NSDictionary *result) {
-            
-            [GMAPI showAutoHiddenMBProgressWithText:[result stringValueForKey:@"msg"] addToView:self.view];
-            
-            _isfavor = @"1";
-            [_shoucangBtn setImage:[UIImage imageNamed:@"homepage_qianggou_collect_y.png"] forState:UIControlStateNormal];
-            
-        } failBlock:^(NSDictionary *result) {
-            
-        }];
+        weakSelf.selectNumView.top = keyboardY - weakSelf.selectNumView.height;
         
-    }else if ([_isfavor intValue] == 1){
-        NSString *product_id = _theProductModel.product_id;
+    } completion:^(BOOL finished) {
         
-        NSDictionary *dic = @{
-                              @"product_id":product_id,
-                              @"authcode":[GMAPI getAuthkey],
-                              };
-        [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodGet api:QUXIAOSHOUCANG parameters:dic constructingBodyBlock:nil completion:^(NSDictionary *result) {
-            
-            [GMAPI showAutoHiddenMBProgressWithText:[result stringValueForKey:@"msg"] addToView:self.view];
-            
-            _isfavor = @"0";
-            [_shoucangBtn setImage:[UIImage imageNamed:@"homepage_qianggou_collect.png"] forState:UIControlStateNormal];
-            
-        } failBlock:^(NSDictionary *result) {
-            
-        }];
-    }
-    
-    
-    
+    }];
+}
+
+-(void)handleWillHideKeyboardForCustomInputView:(NSNotification *)notification
+{
     
 }
 
+#pragma mark - UITextFieldDelegate <NSObject>
 
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField{
+    
+    return YES;
+}
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    
+}
+- (BOOL)textFieldShouldEndEditing:(UITextField *)textField{
+    
+    return YES;
+}
+- (void)textFieldDidEndEditing:(UITextField *)textField
+{
+    //判断数字不能小于0
+    
+    if ([textField.text intValue] == 0) {
+        textField.text = @"1";
+    }
+}
+
+#pragma mark - UITableViewDelegate && UITabelViewDataSource
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    CGFloat height = 0;
+    
+    
+    if (indexPath.row == 0) {//循环滚动
+        //        return 180*GscreenRatio_568;
+        
+//        return DEVICE_WIDTH * W_H_RATIO;
+        
+        return 0.f;
+    }
+    
+    if (!_tmpCell) {
+        _tmpCell = [[ProductDetailTableViewCell alloc]init];
+    }
+    
+    height = [_tmpCell loadCustomViewWithIndex:indexPath theModel:_theProductModel];
+    
+    return height;
+}
+
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    return _theProductModel.product_desc.count + 5;
+}
+
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    static NSString *identifier = @"identifier";
+    ProductDetailTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
+    if (!cell) {
+        cell = [[ProductDetailTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
+    }
+    for (UIView *view in cell.contentView.subviews) {
+        [view removeFromSuperview];
+    }
+    
+    if (indexPath.row == 0) {
+        
+//        UIImageView *imv = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, 0)];
+//        [imv sd_setImageWithURL:[NSURL URLWithString:_theProductModel.cover_pic] placeholderImage:[UIImage imageNamed:@"default02.png"]];
+//        [cell.contentView addSubview:imv];
+        return cell;
+    }
+    
+    [cell loadCustomViewWithIndex:indexPath theModel:_theProductModel];
+    
+    if (indexPath.row == 1) {
+        _miaoShaLabel = cell.miaoShaLabel;//没有秒杀时为nil
+    }
+    
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    
+    return cell;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    return [UIView new];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return 0.01f;
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (indexPath.row == 3) {
+        ProductCommentViewController *ccc = [[ProductCommentViewController alloc]init];
+        ccc.model = _theProductModel;
+        [self.navigationController pushViewController:ccc animated:YES];
+    }else if (indexPath.row == 2){
+        NSLog(@"%s",__FUNCTION__);
+        
+        [self clickToCoupe];
+    }
+}
 
 
 @end

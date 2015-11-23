@@ -15,6 +15,7 @@
     
     UIScrollView *_downScrollView;
     NSTimer *timer;
+    int _encryCode;//服务端返回的验证码
 }
 @end
 
@@ -59,7 +60,7 @@
     [self.view addSubview:self.upThreeStepView];
     
     UIControl *control = [[UIControl alloc]initWithFrame:self.upThreeStepView.bounds];
-    [control addTarget:self action:@selector(gShou) forControlEvents:UIControlEventTouchUpInside];
+    [control addTarget:self action:@selector(hiddenKeyboard) forControlEvents:UIControlEventTouchUpInside];
     [self.upThreeStepView addSubview:control];
     
     
@@ -107,9 +108,6 @@
         [self.upThreeStepView addSubview:tLabel];
         [_downYuanTitleLabelArray addObject:tLabel];
     }
-    
-    
-    
 }
 
 
@@ -156,7 +154,7 @@
     [self.view addSubview:_downScrollView];
     
     UIControl *tt = [[UIControl alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH*3, _downScrollView.frame.size.height)];
-    [tt addTarget:self action:@selector(gShou) forControlEvents:UIControlEventTouchUpInside];
+    [tt addTarget:self action:@selector(hiddenKeyboard) forControlEvents:UIControlEventTouchUpInside];
     [_downScrollView addSubview:tt];
     
     _downScrollView.scrollEnabled = NO;
@@ -180,7 +178,7 @@
     [getYanzhengmaBtn setFrame:CGRectMake(10, CGRectGetMaxY(phoneNumView.frame)+20, DEVICE_WIDTH-20, 47)];
     [getYanzhengmaBtn setBackgroundColor:RGBCOLOR(122, 172, 0)];
     [getYanzhengmaBtn setTitle:@"获取验证码" forState:UIControlStateNormal];
-    [getYanzhengmaBtn addTarget:self action:@selector(getYanzhengmaBtnClicked) forControlEvents:UIControlEventTouchUpInside];
+    [getYanzhengmaBtn addTarget:self action:@selector(clickToGetEncryptCode) forControlEvents:UIControlEventTouchUpInside];
     [getYanzhengmaBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     getYanzhengmaBtn.layer.cornerRadius = 4;
     getYanzhengmaBtn.titleLabel.font = [UIFont systemFontOfSize:15];
@@ -212,13 +210,11 @@
     [btn setFrame:CGRectMake(DEVICE_WIDTH+10, CGRectGetMaxY(tishiLabel.frame)+14, yanzhengmaView.frame.size.width, 40)];
     btn.backgroundColor = RGBCOLOR(122, 172, 0);
     [btn setTitle:@"下一步" forState:UIControlStateNormal];
-    [btn addTarget:self action:@selector(btnClicked) forControlEvents:UIControlEventTouchUpInside];
+    [btn addTarget:self action:@selector(clickToNext) forControlEvents:UIControlEventTouchUpInside];
     btn.titleLabel.font = [UIFont systemFontOfSize:15];
     btn.layer.cornerRadius = 4;
     [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [_downScrollView addSubview:btn];
-    
-    
     
 
     
@@ -258,7 +254,7 @@
     UIButton *querenBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [querenBtn setFrame:CGRectMake(2*DEVICE_WIDTH+10, CGRectGetMaxY(mimaView.frame)+12, mimaView.frame.size.width, 40)];
     [querenBtn setTitle:@"确认" forState:UIControlStateNormal];
-    [querenBtn addTarget:self action:@selector(querenBtnClicked) forControlEvents:UIControlEventTouchUpInside];
+    [querenBtn addTarget:self action:@selector(clickToFinish) forControlEvents:UIControlEventTouchUpInside];
     querenBtn.layer.cornerRadius = 4;
     querenBtn.titleLabel.font = [UIFont systemFontOfSize:15];
     [querenBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -272,7 +268,7 @@
 
 
 //收键盘
--(void)gShou{
+-(void)hiddenKeyboard{
     [self.phoneTF resignFirstResponder];
     [self.yanzhengmaTf resignFirstResponder];
     [self.mimaTf resignFirstResponder];
@@ -284,18 +280,13 @@
     } completion:^(BOOL finished) {
         
     }];
-    
-    
-    
-    
-    
 }
 
 
 //获取验证码
--(void)getYanzhengmaBtnClicked{
+-(void)clickToGetEncryptCode{
     
-    [self gShou];//收键盘
+    [self hiddenKeyboard];//收键盘
     
     if (self.phoneTF.text.length < 11) {
         [GMAPI showAutoHiddenMBProgressWithText:@"请填写手机号" addToView:self.view];
@@ -315,8 +306,6 @@
         
         __weak typeof(self)weakSelf = self;
         
-       
-        
         [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         
         NSDictionary *param = @{
@@ -328,10 +317,14 @@
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
             NSLog(@"result %@",result);
             
+            _encryCode = [result[@"code"] intValue];
+            
             [LTools showMBProgressWithText:result[RESULT_INFO] addToView:self.view];
             
             [self changeTheUpViewStateWithNum:2];
             [_downScrollView setContentOffset:CGPointMake(DEVICE_WIDTH, 0) animated:YES];
+            
+            
         } failBlock:^(NSDictionary *result) {
             
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
@@ -339,32 +332,35 @@
 //            [GMAPI showAutoHiddenMBProgressWithText:[result objectForKey:@"msg"] addToView:self.view];
             [weakSelf renewTimer];
         }];
-        
-        
     }
-    
-    
-    
-    
 }
 
 //输入完验证码
--(void)btnClicked{
+-(void)clickToNext{
     
+    [self hiddenKeyboard];
     //下一步
     
     if (self.yanzhengmaTf.text.length == 0) {
-        [GMAPI showAutoHiddenMBProgressWithText:@"请输入验证码" addToView:self.view];
+        
+        [LTools showMBProgressWithText:@"请输入验证码" addToView:self.view];
+
     }else{
-        [self changeTheUpViewStateWithNum:3];
-        [_downScrollView setContentOffset:CGPointMake(2*DEVICE_WIDTH, 0) animated:YES];
+        
+        if (_encryCode == [self.yanzhengmaTf.text intValue]) {
+            
+            [self changeTheUpViewStateWithNum:3];
+            [_downScrollView setContentOffset:CGPointMake(2 * DEVICE_WIDTH, 0) animated:YES];
+            
+        }else
+        {
+            [LTools showMBProgressWithText:@"请输入正确的验证码" addToView:self.view];
+        }
     }
-    
-    
 }
 
 //提交注册
--(void)querenBtnClicked{
+-(void)clickToFinish{
     //    get方式调取
     //    参数解释依次为:
     //    username(昵称,可不填，系统自动分配一个) string
@@ -374,7 +370,7 @@
     //    code(验证码 6位数字) int
     //    mobile(手机号) string
     
-    [self gShou];
+    [self hiddenKeyboard];
     
     
     if (![self.mimaTf.text isEqualToString:self.mima2Tf.text]) {
@@ -479,7 +475,7 @@
     //下一步
     if (textField == self.yanzhengmaTf) {
         
-        [self btnClicked];
+        [self clickToNext];
     }
     
     //新密码跳转至确认密码
@@ -492,7 +488,7 @@
         
         //完成
         
-        [self querenBtnClicked];
+        [self clickToFinish];
     }
     
     return YES;
@@ -502,15 +498,16 @@
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField{
     NSLog(@"%s",__FUNCTION__);
     
+    if (!iPhone4) {
+        
+        return YES;
+    }
+    
     [UIView animateWithDuration:0.2 animations:^{
         self.view.frame = CGRectMake(0, -10, DEVICE_WIDTH, DEVICE_HEIGHT);
     } completion:^(BOOL finished) {
         
     }];
-    
-    
-    
-    
     
     return YES;
 }

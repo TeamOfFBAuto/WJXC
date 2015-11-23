@@ -58,7 +58,7 @@ static int seconds = 60;//计时60s
 //计算时间
 - (void)calculateTime
 {
-    NSString *title = [NSString stringWithFormat:@"%d秒",seconds];
+    NSString *title = [NSString stringWithFormat:@"%ds",seconds];
     
     self.codeLabel.text = title;
     
@@ -123,8 +123,6 @@ static int seconds = 60;//计时60s
          [weakSelf renewTimer];
     }];
     
-
-    
 }
 
 
@@ -139,8 +137,8 @@ static int seconds = 60;//计时60s
     
     
     NSString *password = self.passwordTF.text;
-    NSString *secondPassword = self.secondPassword.text;
-    int code = [self.securityTF.text intValue];
+//    NSString *secondPassword = self.secondPassword.text;
+//    int code = [self.securityTF.text intValue];
     NSString *mobile = self.phoneTF.text;
     
     if (![LTools isValidateMobile:mobile]) {
@@ -168,8 +166,6 @@ static int seconds = 60;//计时60s
         return;
     }
     
-    
-    
     NSDictionary *dic = @{
                           @"mobile":mobile,
                           @"code":self.securityTF.text,
@@ -186,26 +182,6 @@ static int seconds = 60;//计时60s
     } failBlock:^(NSDictionary *result) {
         
     }];
-    
-    
-    
-//    LTools *tool = [[LTools alloc]initWithUrl:url isPost:NO postData:nil];
-//    [tool requestCompletion:^(NSDictionary *result, NSError *erro) {
-//        
-//        NSLog(@"result %@ erro %@",result,erro);
-//        
-//        [LTools showMBProgressWithText:result[RESULT_INFO] addToView:self.view];
-//        
-//        
-//        [self performSelector:@selector(clickToClose:) withObject:nil afterDelay:1];
-//        
-//        
-//    } failBlock:^(NSDictionary *failDic, NSError *erro) {
-//        
-//        NSLog(@"failDic %@ erro %@",failDic,erro);
-//        
-//    }];
-    
 }
 
 - (void)clickToClose:(UIButton *)sender

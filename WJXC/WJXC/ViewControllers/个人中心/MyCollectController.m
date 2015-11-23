@@ -116,6 +116,39 @@
     
 }
 
+/**
+ *  取消收藏
+ */
+-(void)cancelCollectionWithProductId:(NSString *)productId{
+    
+    if (!productId) {
+        return;
+    }
+    NSDictionary *dic = @{
+                          @"product_id":productId,
+                          @"authcode":[GMAPI getAuthkey],
+                          };
+    __weak typeof(self)weakSelf = self;
+    __weak typeof(_table)weakTable = _table;
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodGet api:QUXIAOSHOUCANG parameters:dic constructingBodyBlock:nil completion:^(NSDictionary *result) {
+        
+        [MBProgressHUD hideAllHUDsForView:weakSelf.view animated:YES];
+
+        
+        [GMAPI showAutoHiddenMBProgressWithText:[result stringValueForKey:@"msg"] addToView:weakSelf.view];
+        
+        weakTable.isReloadData = YES;
+        weakTable.pageNum = 1;
+        [weakSelf getCollectionList];
+        
+    } failBlock:^(NSDictionary *result) {
+        
+        [MBProgressHUD hideAllHUDsForView:weakSelf.view animated:YES];
+
+    }];
+}
+
 
 #pragma mark - 代理
 
@@ -157,6 +190,34 @@
 {
     return 86.f;
 }
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    return YES;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    if (editingStyle == UITableViewCellEditingStyleDelete)
+    {
+        //todo
+        
+        ProductModel *model = _table.dataArray[indexPath.row];
+        [self cancelCollectionWithProductId:model.product_id];
+    }
+}
+    
+
+// 这里默认删除的按钮为英文，想要改变成中文，需要再实现一个方法。
+    
+- (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath NS_AVAILABLE_IOS(3_0){
+    
+    return @"删除";
+}
+    
+    
+
+
 
 #pragma mark - UITableViewDataSource
 

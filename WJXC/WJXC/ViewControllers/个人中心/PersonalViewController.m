@@ -536,7 +536,10 @@
         case 4:
         {
             NSLog(@"客服中心");
-            
+            if (!isLogin) {
+                [self presentLoginVc];
+                return;
+            }
             RCDChatViewController *chatService = [[RCDChatViewController alloc] init];
             chatService.userName = @"客服";
             chatService.targetId = SERVICE_ID;

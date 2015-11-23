@@ -57,7 +57,7 @@
     [aaa addAttribute:NSForegroundColorAttributeName value:RGBCOLOR(105, 106, 107) range:NSMakeRange(0,5)];
     [aaa addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:12] range:NSMakeRange(0,5)];
     [aaa addAttribute:NSForegroundColorAttributeName value:RGBCOLOR(122, 173, 0) range:NSMakeRange(5, 3)];
-    [aaa addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:12] range:NSMakeRange(5, 3)];
+    [aaa addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:14] range:NSMakeRange(5, 3)];
     [aaa addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInteger:NSUnderlineStyleSingle] range:NSMakeRange(5, 3)];
     
     
@@ -285,6 +285,11 @@
                    @"registration_id":registration_id
                    };
     }else{
+        
+        thirdId = thirdId ? : @"";
+        nickName = nickName ? : @"";
+        thirdphoto = thirdphoto ? : thirdphoto;
+        
         params = @{
                    @"type":type,
                    @"thirdid":thirdId,

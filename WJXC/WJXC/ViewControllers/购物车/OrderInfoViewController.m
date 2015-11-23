@@ -275,34 +275,24 @@
  *  @param sender
  */
 - (void)clickToChat:(UIButton *)sender
-{    
-//    RCRichContentMessage
+{
+//    NSString *product = [NSString stringWithFormat:WEB_ORDERDETAIL,_orderModel.order_id];
+//    NSString *productId = [NSString stringWithFormat:@"%@%@",SERVER_URL,product];
 //    
-//    SimpleMessage *msg = [SimpleMessage messageWithContent:@"哈哈可以发送任何类型的消息,自定义的消息😄来了"];
-//    msg.extra = @"http://pic.nipic.com/2007-11-09/2007119122519868_2.jpg";
+//    NSString *text = [NSString stringWithFormat:@"订单编号:%@",_orderModel.order_no];
+//    RCTextMessage *msg = [[RCTextMessage alloc]init];
+//    msg.content = text;
+//    msg.extra = productId;
 //    
-//    [[RCIMClient sharedRCIMClient]sendMessage:ConversationType_CUSTOMERSERVICE targetId:SERVICE_ID content:msg pushContent:@"推送自定义" success:^(long messageId) {
+//    [[RCIMClient sharedRCIMClient]sendMessage:ConversationType_CUSTOMERSERVICE targetId:SERVICE_ID content:msg pushContent:@"客服消息" success:^(long messageId) {
 //        NSLog(@"messageid %ld",messageId);
 //    } error:^(RCErrorCode nErrorCode, long messageId) {
 //        NSLog(@"nErrorCode %ld",nErrorCode);
 //        
 //    }];
     
-//    NSString *imageUrl = _theProductModel.cover_pic;
-//    NSString *digest = [NSString stringWithFormat:@"%@\n现价:%.2f\n原价:%.2f",_theProductModel.product_name,[_theProductModel.current_price floatValue],[_theProductModel.original_price floatValue]];
-//    NSString *productId = [NSString stringWithFormat:@"productId:%@",_theProductModel.product_id];
     
-    NSString *text = [NSString stringWithFormat:@"订单编号:%@",_orderModel.order_no];
-    RCTextMessage *msg = [[RCTextMessage alloc]init];
-    msg.content = text;
-    msg.extra = @"订单编号:";
-    
-    [[RCIMClient sharedRCIMClient]sendMessage:ConversationType_CUSTOMERSERVICE targetId:SERVICE_ID content:msg pushContent:@"客服消息" success:^(long messageId) {
-        NSLog(@"messageid %ld",messageId);
-    } error:^(RCErrorCode nErrorCode, long messageId) {
-        NSLog(@"nErrorCode %ld",nErrorCode);
-        
-    }];
+    [self sendProductDetailMessage];
     
     RCDChatViewController *chatService = [[RCDChatViewController alloc] init];
     chatService.userName = @"客服";
@@ -310,6 +300,26 @@
     chatService.conversationType = ConversationType_CUSTOMERSERVICE;
     chatService.title = chatService.userName;
     [self.navigationController pushViewController:chatService animated:YES];
+}
+
+
+-(void)sendProductDetailMessage
+{
+    NSString *imageUrl = @"http://123.57.51.27:86/order.jpg";
+    NSString *digest = @"";
+    
+    NSString *product = [NSString stringWithFormat:WEB_ORDERDETAIL,_orderModel.order_id];
+    NSString *productId = [NSString stringWithFormat:@"%@%@",SERVER_URL,product];
+    
+    NSString *title = [NSString stringWithFormat:@"订单编号:%@",_orderModel.order_no];
+    
+    RCRichContentMessage *msg = [RCRichContentMessage messageWithTitle:title digest:digest imageURL:imageUrl extra:productId];
+    [[RCIMClient sharedRCIMClient]sendMessage:ConversationType_CUSTOMERSERVICE targetId:SERVICE_ID content:msg pushContent:@"客服消息" success:^(long messageId) {
+        NSLog(@"messageid %ld",messageId);
+    } error:^(RCErrorCode nErrorCode, long messageId) {
+        NSLog(@"nErrorCode %ld",nErrorCode);
+        
+    }];
 }
 
 /**

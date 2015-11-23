@@ -15,11 +15,8 @@
 #import "adverModel.h"
 #import "HuodongViewController.h"
 #import "GstartView.h"
-
 #import "CycleScrollView.h"
-
-//测试
-#import "AddCommentViewController.h"
+#import "WebviewController.h"
 
 @interface HomeViewController ()<UITableViewDataSource,RefreshDelegate>
 {
@@ -55,7 +52,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
     
     _timer_daojishi = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(updateTime) userInfo:nil repeats:YES];
     [_timer_daojishi fire];
@@ -235,90 +231,88 @@
     if (section == 0) {
         height = 35;
     }
-    
     return height;
 }
-
 
 
 - (void)refreshScrollViewDidScroll:(UIScrollView *)scrollView{
     
 }
 
-
-
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     static NSString *identitfier = @"identfier";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identitfier];
     if (!cell) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identitfier];
+        UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake(5, 0, DEVICE_WIDTH - 10, (DEVICE_WIDTH - 10) / 3.f) ];
+        imageView.tag = 100;
+        [cell.contentView addSubview:imageView];
     }
-    
-    for (UIView *view in cell.contentView.subviews) {
-        [view removeFromSuperview];
-    }
-    
-    
-    ProductModel *model = _tableView.dataArray[indexPath.row];
-    
-    UIImageView *imv = [[UIImageView alloc]initWithFrame:CGRectMake(5, 5, DEVICE_WIDTH-10, _cellHeight)];
-    imv.backgroundColor = [UIColor whiteColor];
-    [imv setImage:[UIImage imageNamed:@"homepage_bg.png"]];
-    [cell.contentView addSubview:imv];
-    
-    
-    UIImageView *picImv = [[UIImageView alloc]initWithFrame:CGRectMake(5, 5, imv.frame.size.width*0.5, imv.frame.size.width*0.5 * W_H_RATIO)];
-    [picImv sd_setImageWithURL:[NSURL URLWithString:model.cover_pic] placeholderImage:[UIImage imageNamed:@"default01.png"]];
-    [cell.contentView addSubview:picImv];
-    
-    //标识是否是秒杀
-    
-    int is_seckill = [model.is_seckill intValue];
-    if (is_seckill == 1) {
-        
-        UIImageView *miaosha = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 32, 32)];
-        miaosha.image = [UIImage imageNamed:@"homepage_miaosha"];
-        [picImv addSubview:miaosha];
-    }
-    
-    
-    UIView *infoView = [[UIView alloc]initWithFrame:CGRectMake(imv.frame.size.width*0.5, 0, imv.frame.size.width*0.5-10, imv.frame.size.height)];
-//    infoView.backgroundColor = [UIColor orangeColor];
-    [imv addSubview:infoView];
-    
-    //产品名
-    UILabel *ttLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 30, infoView.frame.size.width, 30) title:model.product_name font:12 align:NSTextAlignmentRight textColor:[UIColor blackColor]];
-    ttLabel.numberOfLines = 2;
-    [infoView addSubview:ttLabel];
-    
-    //价格
-    NSString *pp = [NSString stringWithFormat:@"￥%@",model.current_price];
-    UILabel *priceLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(ttLabel.frame)+5, ttLabel.frame.size.width, ttLabel.frame.size.height*0.5) title:pp font:12 align:NSTextAlignmentRight textColor:RGBCOLOR(241, 113, 0)];
-    [infoView addSubview:priceLabel];
-    
-    //评价星星
-    GstartView *cc = [[GstartView alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(priceLabel.frame)+5, 60, 13)];
-    cc.maxStartNum = 5;
-    cc.startNum = [model.star_level floatValue];
-    [cc updateStartNum];
-    [infoView addSubview:cc];
-    
-    //评价
-    NSString *ping = [NSString stringWithFormat:@"已有%@人评价",model.comment_num];
-    UILabel *pingjiaLabel = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMaxX(cc.frame), cc.frame.origin.y, infoView.frame.size.width - cc.frame.size.width, 15) title:ping font:12 align:NSTextAlignmentRight textColor:RGBCOLOR(121,170,0)];
-    CGFloat kuan = pingjiaLabel.frame.size.width;
-    [pingjiaLabel setMatchedFrame4LabelWithOrigin:CGPointMake(CGRectGetMaxX(cc.frame), cc.frame.origin.y-1) height:15 limitMaxWidth:infoView.frame.size.width - cc.frame.size.width];
-    CGFloat newKuan = pingjiaLabel.frame.size.width;
-    
-    [cc setLeft:cc.left+kuan-newKuan];
-    [pingjiaLabel setLeft:CGRectGetMaxX(cc.frame)];
-    
-    [infoView addSubview:pingjiaLabel];
-    
-    
-    
     
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    ProductModel *model = _tableView.dataArray[indexPath.row];
+    
+    UIImageView *imageView = [cell.contentView viewWithTag:100];
+    [imageView sd_setImageWithURL:[NSURL URLWithString:model.list_cover_pic] placeholderImage:[UIImage imageNamed:@"default01"]];
+    
+    //    for (UIView *view in cell.contentView.subviews) {
+    //        [view removeFromSuperview];
+    //    }
+
+//    UIImageView *imv = [[UIImageView alloc]initWithFrame:CGRectMake(5, 5, DEVICE_WIDTH-10, _cellHeight)];
+//    imv.backgroundColor = [UIColor whiteColor];
+//    [imv setImage:[UIImage imageNamed:@"homepage_bg.png"]];
+//    [cell.contentView addSubview:imv];
+//    
+//    
+//    UIImageView *picImv = [[UIImageView alloc]initWithFrame:CGRectMake(5, 5, imv.frame.size.width*0.5, imv.frame.size.width*0.5 * W_H_RATIO)];
+//    [picImv sd_setImageWithURL:[NSURL URLWithString:model.cover_pic] placeholderImage:[UIImage imageNamed:@"default01.png"]];
+//    [cell.contentView addSubview:picImv];
+//    
+//    //标识是否是秒杀
+//    
+//    int is_seckill = [model.is_seckill intValue];
+//    if (is_seckill == 1) {
+//        
+//        UIImageView *miaosha = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 32, 32)];
+//        miaosha.image = [UIImage imageNamed:@"homepage_miaosha"];
+//        [picImv addSubview:miaosha];
+//    }
+//    
+//    
+//    UIView *infoView = [[UIView alloc]initWithFrame:CGRectMake(imv.frame.size.width*0.5, 0, imv.frame.size.width*0.5-10, imv.frame.size.height)];
+////    infoView.backgroundColor = [UIColor orangeColor];
+//    [imv addSubview:infoView];
+//    
+//    //产品名
+//    UILabel *ttLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 30, infoView.frame.size.width, 30) title:model.product_name font:12 align:NSTextAlignmentRight textColor:[UIColor blackColor]];
+//    ttLabel.numberOfLines = 2;
+//    [infoView addSubview:ttLabel];
+//    
+//    //价格
+//    NSString *pp = [NSString stringWithFormat:@"￥%@",model.current_price];
+//    UILabel *priceLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(ttLabel.frame)+5, ttLabel.frame.size.width, ttLabel.frame.size.height*0.5) title:pp font:12 align:NSTextAlignmentRight textColor:RGBCOLOR(241, 113, 0)];
+//    [infoView addSubview:priceLabel];
+//    
+//    //评价星星
+//    GstartView *cc = [[GstartView alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(priceLabel.frame)+5, 60, 13)];
+//    cc.maxStartNum = 5;
+//    cc.startNum = [model.star_level floatValue];
+//    [cc updateStartNum];
+//    [infoView addSubview:cc];
+//    
+//    //评价
+//    NSString *ping = [NSString stringWithFormat:@"已有%@人评价",model.comment_num];
+//    UILabel *pingjiaLabel = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMaxX(cc.frame), cc.frame.origin.y, infoView.frame.size.width - cc.frame.size.width, 15) title:ping font:12 align:NSTextAlignmentRight textColor:RGBCOLOR(121,170,0)];
+//    CGFloat kuan = pingjiaLabel.frame.size.width;
+//    [pingjiaLabel setMatchedFrame4LabelWithOrigin:CGPointMake(CGRectGetMaxX(cc.frame), cc.frame.origin.y-1) height:15 limitMaxWidth:infoView.frame.size.width - cc.frame.size.width];
+//    CGFloat newKuan = pingjiaLabel.frame.size.width;
+//    
+//    [cc setLeft:cc.left+kuan-newKuan];
+//    [pingjiaLabel setLeft:CGRectGetMaxX(cc.frame)];
+//    
+//    [infoView addSubview:pingjiaLabel];
+    
     
     return cell;
 }
@@ -349,9 +343,6 @@
     
     return view;
 }
-
-
-
 
 #pragma mark - MyMethod
 
@@ -451,32 +442,30 @@
         [bself cycleScrollDidClickedWithIndex:pageIndex];
     };
     
-    
-    
-    
     return self.mainScorllView;
-    
-    
 }
 
+/**
+ *  轮播点击事件
+ *
+ *  @param
+ */
 
-
--(void)cycleScrollDidClickedWithIndex:(NSInteger)index{
+-(void)cycleScrollDidClickedWithIndex:(NSInteger)index
+{
     adverModel *model = _TopDataArray[index];
-    if ([model.type intValue] == 1) {//活动
+    if ([model.type intValue] == 1) { //活动
         
-        HuodongViewController *cc = [[HuodongViewController alloc]init];
-        cc.huodongId = model.relative_id;
-        cc.hidesBottomBarWhenPushed = YES;
-        [self.navigationController pushViewController:cc animated:YES];
-        
-        
-        //        //测试评价晒单
-        //        AddCommentViewController *cc = [[AddCommentViewController alloc]init];
-        //        cc.theModelArray = _tableView.dataArray;
-        //        cc.hidesBottomBarWhenPushed = YES;
-        //        [self.navigationController pushViewController:cc animated:YES];
-        
+//        HuodongViewController *cc = [[HuodongViewController alloc]init];
+//        cc.huodongId = model.relative_id;
+//        cc.hidesBottomBarWhenPushed = YES;
+//        [self.navigationController pushViewController:cc animated:YES];
+        NSString *url = model.url;
+        WebviewController *web = [[WebviewController alloc]init];
+        web.webUrl = url;
+        web.title = model.title;
+        web.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:web animated:YES];
         
     }else if ([model.type intValue] == 2){//秒杀
         ProductDetailViewController *cc = [[ProductDetailViewController alloc]init];

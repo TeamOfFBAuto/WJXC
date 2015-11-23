@@ -62,7 +62,7 @@
          //有秒杀显示秒杀价格  没有秒杀时判断是否有打折
          
          NSString *yuanjia = model.original_price;
-         NSString *xianjia = model.current_price;
+         NSString *xianjia = model.current_price ? model.current_price : @"0";
          if ([model.is_seckill intValue] == 1) {
              
              xianjia = model.seckill_info[@"seckill_price"];

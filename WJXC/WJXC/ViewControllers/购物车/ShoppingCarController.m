@@ -170,19 +170,26 @@
     //继续购物
     UIView *buyView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, 25)];
     [_bottom addSubview:buyView];
-    buyView.backgroundColor = [[UIColor blackColor]colorWithAlphaComponent:0.3];
+    
+//    buyView.backgroundColor = [UIColor colorWithHexString:@"f98700"];
+
+//    buyView.backgroundColor = [[UIColor blackColor]colorWithAlphaComponent:0.3];
+    
+    buyView.backgroundColor = [DEFAULT_TEXTCOLOR colorWithAlphaComponent:0.7];
+    
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     btn.frame = buyView.bounds;
-    [btn setTitle:@"宝贝还不够，继续去选择！" forState:UIControlStateNormal];
-    [btn.titleLabel setFont:[UIFont systemFontOfSize:12]];
+    [btn setTitle:@"返回继续购物" forState:UIControlStateNormal];
+    [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [btn.titleLabel setFont:[UIFont systemFontOfSize:14]];
     [buyView addSubview:btn];
     [btn addTarget:self action:@selector(clickToHome:) forControlEvents:UIControlEventTouchUpInside];
     
     CGFloat top = 25.f;
     
     //其他
-    UIView *line = [[UIView alloc]initWithFrame:CGRectMake(0, top, _bottom.width, 0.5)];
-    line.backgroundColor = [UIColor colorWithHexString:@"e4e4e4"];
+    UIView *line = [[UIView alloc]initWithFrame:CGRectMake(0, top - 0.5, _bottom.width, 0.5)];
+    line.backgroundColor = [UIColor blackColor];
     [_bottom addSubview:line];
     
     _selectAllBtn = [[UIButton alloc]initWithframe:CGRectMake(0, top, 40, _bottom.height - top) buttonType:UIButtonTypeCustom nornalImage:[UIImage imageNamed:@"shopping cart_normal"] selectedImage:[UIImage imageNamed:@"shopping cart_selected"] target:self action:@selector(clickToSelectAll:)];

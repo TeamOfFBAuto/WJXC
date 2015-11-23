@@ -25,5 +25,7 @@
 @property(nonatomic,strong)NSString *cover_width;
 @property(nonatomic,strong)NSString *cover_height;
 @property(nonatomic,strong)NSDictionary *relative_info;
+@property(nonatomic,strong)NSString *url;//对应的web页
+
 
 @end

@@ -36,6 +36,7 @@
 @property (nonatomic,retain)NSString *normal_comment_num;
 @property (nonatomic,retain)NSString *bad_comment_num;
 @property (nonatomic,retain)NSString *cover_pic;
+@property (nonatomic,retain)NSString *list_cover_pic;//3:1长图
 @property (nonatomic,retain)NSString *cover_picsize;
 @property (nonatomic,retain)NSString *cover_width;
 @property (nonatomic,retain)NSString *cover_height;

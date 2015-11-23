@@ -13,6 +13,7 @@
 #import "ProductDetailViewController.h"
 #import "SimpleMessageCell.h"
 #import "SimpleMessage.h"
+#import "OrderInfoViewController.h"
 
 @interface RCDChatViewController ()
 
@@ -49,15 +50,6 @@
 {
     [super viewDidLoad];
 
-   
-//    NSString *__string = @"返回";
-//    
-//    
-//    int unreadMsgCount = [[RCIMClient sharedRCIMClient]getUnreadCount: @[@(ConversationType_PRIVATE),@(ConversationType_DISCUSSION), @(ConversationType_APPSERVICE), @(ConversationType_PUBLICSERVICE),@(ConversationType_GROUP)]];
-//    if (0 < unreadMsgCount) {
-//        __string = [NSString  stringWithFormat:@"返回(%d)",unreadMsgCount];
-//    }
-    
     UIBarButtonItem * spaceButton1 = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
     spaceButton1.width = IOS7_OR_LATER ? -10 : 5;
     
@@ -77,19 +69,6 @@
     _myTitleLabel.textColor = DEFAULT_TEXTCOLOR;
     _myTitleLabel.font = [UIFont systemFontOfSize:17];
     self.navigationItem.titleView = _myTitleLabel;
-    
-//    UIButton *_my_right_button = [UIButton buttonWithType:UIButtonTypeCustom];
-//    _my_right_button.frame = CGRectMake(0,0,60,44);
-//    _my_right_button.titleLabel.textAlignment = NSTextAlignmentRight;
-//    [_my_right_button setTitle:@"设置" forState:UIControlStateNormal];
-//    [_my_right_button setContentHorizontalAlignment:UIControlContentHorizontalAlignmentRight];
-//    _my_right_button.titleLabel.font = [UIFont systemFontOfSize:15];
-//    
-//    [_my_right_button setTitleColor:DEFAULT_TEXTCOLOR forState:UIControlStateNormal];
-//    
-//    [_my_right_button addTarget:self action:@selector(rightBarButtonItemClicked:) forControlEvents:UIControlEventTouchUpInside];
-//    
-//    self.navigationItem.rightBarButtonItems = @[spaceButton,[[UIBarButtonItem alloc] initWithCustomView:_my_right_button]];
     
     //会话页面注册 UI
     [self registerClass:SimpleMessageCell.class forCellWithReuseIdentifier:@"SimpleMessageCell"];
@@ -177,19 +156,56 @@
     RCRichContentMessage *msg = (RCRichContentMessage *)model.content;
     
     NSLog(@"model %@",msg.extra);
-
-    NSMutableString *string = [NSMutableString stringWithString:msg.extra];
-    [string replaceOccurrencesOfString:@"productId:" withString:@"" options:0 range:NSMakeRange(0, string.length)];
-    NSString *productId = string;
-    if (productId.length) {
+    
+    NSString *extra = msg.extra;
+    
+    //单品
+    if ([extra containsString:@"product_id="]) {
         
-        ProductDetailViewController *cc = [[ProductDetailViewController alloc]init];
-        cc.product_id = productId;
-        cc.hidesBottomBarWhenPushed = YES;
-        [self.navigationController pushViewController:cc animated:YES];
-    }else
-    {
-        NSLog(@"单品id有误");
+        NSString *productId = @"";
+        NSArray *arr = [msg.extra componentsSeparatedByString:@"product_id="];
+        if (arr.count > 1) {
+            
+            productId = arr.lastObject;
+        }else
+        {
+            return;
+        }
+        
+        if (productId.length) {
+            
+            ProductDetailViewController *cc = [[ProductDetailViewController alloc]init];
+            cc.product_id = productId;
+            cc.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:cc animated:YES];
+        }else
+        {
+            NSLog(@"单品id有误");
+        }
+    }
+    //订单
+    else if ([extra containsString:@"order_id="]){
+        
+        NSString *orderId = @"";
+        NSArray *arr = [msg.extra componentsSeparatedByString:@"order_id="];
+        if (arr.count > 1) {
+            
+            orderId = arr.lastObject;
+        }else
+        {
+            return;
+        }
+        
+        if (orderId.length) {
+            
+            OrderInfoViewController *cc = [[OrderInfoViewController alloc]init];
+            cc.order_id = orderId;
+            cc.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:cc animated:YES];
+        }else
+        {
+            NSLog(@"订单id有误");
+        }
     }
 }
 
