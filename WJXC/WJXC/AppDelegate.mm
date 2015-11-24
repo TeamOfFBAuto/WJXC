@@ -283,8 +283,17 @@
 - (void)applicationDidEnterBackground:(UIApplication *)application {
     
     //未读消息
-    int unreadMsgCount = [[RCIMClient sharedRCIMClient]getUnreadCount: @[@(ConversationType_CUSTOMERSERVICE)]];;
+    int unreadMsgCount = [[RCIMClient sharedRCIMClient]getUnreadCount: @[@(ConversationType_CUSTOMERSERVICE)]];
+    
+    if (![LTools isLogin]) {
+        unreadMsgCount = 0;
+    }
     application.applicationIconBadgeNumber = unreadMsgCount;
+    
+    
+//    NSString *userId = [GMAPI getUid];
+//    int unreadMsgCount = [[RCIMClient sharedRCIMClient]getUnreadCount:ConversationType_CUSTOMERSERVICE targetId:userId];
+//    application.applicationIconBadgeNumber = unreadMsgCount;
 }
 
 //- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {

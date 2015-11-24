@@ -30,11 +30,6 @@
     
     UIImageView *_headImageView;
     UIView *_headerView;//tableView头部view
-    
-//    UIImageView *_iconImageView;//头像
-//    UILabel *_nameLabel;//名字
-    
-//    UIButton *_unLoginButton;//未登录button
 }
 
 @property(nonatomic,retain)UIButton *unLoginButton;
@@ -331,6 +326,8 @@
     self.nameLabel.text = [LTools cacheForKey:USER_NAME];
     
     [self.iconImageView sd_setImageWithURL:[NSURL URLWithString:[LTools cacheForKey:USER_HEAD_IMAGEURL]] placeholderImage:DEFAULT_HEADIMAGE];
+    
+    [_tableView reloadData];
 }
 
 #pragma mark - 创建视图
@@ -587,6 +584,11 @@
     if (indexPath.row == 4) {
         
         int num = [[RCIMClient sharedRCIMClient]getUnreadCount: @[@(ConversationType_CUSTOMERSERVICE)]];
+        
+        if (![LTools isLogin]) {
+            num = 0;
+        }
+        
         if (num <= 0) {
             
             cell.messageNumLabel.hidden = YES;

@@ -171,7 +171,9 @@
 {
     ProductModel *aModel = _gouwucheModel;
     
-    int product_num = num;//每次加一个
+    int product_num = num;//每次加num个
+    
+    aModel.addNum = num;
     
     NSString *authcode = [GMAPI getAuthkey];
     
@@ -183,7 +185,7 @@
         
         [[NSNotificationCenter defaultCenter]postNotificationName:NOTIFICATION_UPDATE_TO_CART object:nil];
         
-        int num = [[DBManager shareInstance]QueryAllDataNum];
+        int num = [[DBManager shareInstance] QueryAllDataNum];
         if (num > 0) {
             _numLabel.hidden = NO;
             _numLabel.text = [NSString stringWithFormat:@"%d",num];
@@ -616,7 +618,7 @@
 {
     __weak typeof(UIView *)weakView = self.selectNumView;
     
-    [UIView animateWithDuration:0.5 animations:^{
+    [UIView animateWithDuration:0.3 animations:^{
        
         weakView.top = show ? DEVICE_HEIGHT - 170 : DEVICE_HEIGHT;
         _selectNumBgView.alpha = show ? 1.f : 0.f;

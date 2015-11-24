@@ -569,6 +569,10 @@
         number_str = [NSString stringWithFormat:@"%d",unreadMsgCount];
     }
     
+    if (![LTools isLogin]) {
+        number_str = nil;
+    }
+    
     NSLog(@"--%d %d",[[RCIMClient sharedRCIMClient]getTotalUnreadCount],unreadMsgCount);
     
     UITabBarController *root = (UITabBarController *)[UIApplication sharedApplication].keyWindow.rootViewController;

@@ -52,6 +52,8 @@
 @property (nonatomic,retain)NSString *uid;
 @property (nonatomic,retain)NSString *product_num;
 
+@property (nonatomic,assign)int addNum;//新加入个数
+
 //额外添加
 
 @property(nonatomic,assign)BOOL selected;//是否被选择

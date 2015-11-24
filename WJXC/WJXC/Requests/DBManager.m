@@ -189,14 +189,14 @@
     if ([_dataBase open]) {
         
         [_dataBase beginTransaction];
-       
+        
         //cart_pro_id int,uid text,product_name text,product_id int,product_num int,current_price text,add_time text
         
         NSString *uid = aModel.uid ? : @"";
         NSString *name = aModel.product_name ? : @"";
         NSString *productId = aModel.product_id ? : @"0";
         NSString *addTime = aModel.add_time ? : @"";
-//        NSString *num = aModel.product_num ? : @"0";
+        //        NSString *num = aModel.product_num ? : @"0";
         NSString *price = aModel.current_price ? : @"0";
         NSString *cover_pic = aModel.cover_pic ? : @"";
         
@@ -209,16 +209,18 @@
             num = [rs intForColumnIndex:0];
             
             NSLog(@"productId %@ existNum: %d",productId,num);
-
+            
         }
         
         //存在的话 +1 否则 插入新数据
         if (num > 0) {
             
-            [_dataBase executeUpdate:@"update ShoppingCar set product_num = product_num + 1 where product_id = ?",[NSNumber numberWithInt:[productId intValue]]];
+            NSString *sql = [NSString stringWithFormat:@"update ShoppingCar set product_num = product_num + %d where product_id = %d",aModel.addNum,[productId intValue]];
+            
+            [_dataBase executeUpdate:sql];
         }else
         {
-            [_dataBase executeUpdate:@"insert into ShoppingCar (uid,product_name,product_id,current_price,add_time,cover_pic,product_num) values (?,?,?,?,?,?,?)",uid,name,[NSNumber numberWithInt:[productId intValue]],price,addTime,cover_pic,[NSNumber numberWithInt:1]];
+            [_dataBase executeUpdate:@"insert into ShoppingCar (uid,product_name,product_id,current_price,add_time,cover_pic,product_num) values (?,?,?,?,?,?,?)",uid,name,[NSNumber numberWithInt:[productId intValue]],price,addTime,cover_pic,[NSNumber numberWithInt:aModel.addNum]];
         }
         
         [_dataBase commit];
@@ -226,6 +228,51 @@
     }
     
 }
+
+//-(void)insertProduct:(ProductModel *)aModel
+//{
+//    //插入数据库
+//    
+//    if ([_dataBase open]) {
+//        
+//        [_dataBase beginTransaction];
+//       
+//        //cart_pro_id int,uid text,product_name text,product_id int,product_num int,current_price text,add_time text
+//        
+//        NSString *uid = aModel.uid ? : @"";
+//        NSString *name = aModel.product_name ? : @"";
+//        NSString *productId = aModel.product_id ? : @"0";
+//        NSString *addTime = aModel.add_time ? : @"";
+////        NSString *num = aModel.product_num ? : @"0";
+//        NSString *price = aModel.current_price ? : @"0";
+//        NSString *cover_pic = aModel.cover_pic ? : @"";
+//        
+//        
+//        FMResultSet *rs = [_dataBase executeQuery:@"SELECT count(*) FROM ShoppingCar where product_id = ?",productId];
+//        
+//        int num = 0;
+//        while ([rs next]){
+//            
+//            num = [rs intForColumnIndex:0];
+//            
+//            NSLog(@"productId %@ existNum: %d",productId,num);
+//
+//        }
+//        
+//        //存在的话 +1 否则 插入新数据
+//        if (num > 0) {
+//            
+//            [_dataBase executeUpdate:@"update ShoppingCar set product_num = product_num + 1 where product_id = ?",[NSNumber numberWithInt:[productId intValue]]];
+//        }else
+//        {
+//            [_dataBase executeUpdate:@"insert into ShoppingCar (uid,product_name,product_id,current_price,add_time,cover_pic,product_num) values (?,?,?,?,?,?,?)",uid,name,[NSNumber numberWithInt:[productId intValue]],price,addTime,cover_pic,[NSNumber numberWithInt:1]];
+//        }
+//        
+//        [_dataBase commit];
+//        [_dataBase close];
+//    }
+//    
+//}
 
 /**
  *  单品数量 +1 或者 -1
