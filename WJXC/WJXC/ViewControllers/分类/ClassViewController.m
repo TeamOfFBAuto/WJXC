@@ -122,9 +122,11 @@
 //    =10  每页显示数量
 
     //@"":@"" 城市
-    NSDictionary *params = @{@"province_id":@"1000",
+    NSString *province_id = [GMAPI getCurrentProvinceId];
+    NSString *city_id = [GMAPI getCurrentCityId];
+    NSDictionary *params = @{@"province_id":province_id,
                              @"category_id":@"3",
-                             @"city_id":@"1001",
+                             @"city_id":city_id,
                              @"page":[NSNumber numberWithInt:_table.pageNum],
                              @"perpage":[NSNumber numberWithInt:20]};
     

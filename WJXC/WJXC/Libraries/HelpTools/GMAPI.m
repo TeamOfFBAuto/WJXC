@@ -365,6 +365,7 @@
 
 
 
+
 - (void)didFailToLocateUserWithError:(NSError *)error{
     //金领时代 40.041951,116.33934
     //天安门 39.915187,116.403877
@@ -556,6 +557,35 @@
     sqlite3_finalize(stmt);
     return subCityArray;
     
+}
+
+
++(NSString *)getCurrentProvinceId{
+    NSString *str;
+    NSDictionary *dic = [GMAPI cacheForKey:USERLocation];
+    str = [dic stringValueForKey:@"province"];
+    
+    if ([LTools isEmpty:str]) {
+        str = @"1000";//北京
+    }
+    
+    return str;
+}
+
++(NSString *)getCurrentCityId{
+    NSString *str;
+    NSDictionary *dic = [GMAPI cacheForKey:USERLocation];
+    str = [dic stringValueForKey:@"city"];
+    if ([LTools isEmpty:str]) {
+        str = @"1005";//海淀
+    }
+    return str;
+}
+
++(NSString *)getCurrentCityName{
+    NSString *ss = [self getCurrentCityId];
+    NSString *cc = [self cityNameForId:[ss intValue]];
+    return cc;
 }
 
 

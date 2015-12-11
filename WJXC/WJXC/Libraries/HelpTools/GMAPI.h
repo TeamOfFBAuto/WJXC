@@ -141,6 +141,10 @@
 //开启定位
 -(void)startDingwei;
 
+//获取当前定位省份id 城市id
++(NSString *)getCurrentProvinceId;
++(NSString *)getCurrentCityId;
++(NSString *)getCurrentCityName;
 
 //地区选择相关
 + (int)cityIdForName:(NSString *)cityName;

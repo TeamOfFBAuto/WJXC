@@ -79,9 +79,11 @@
 
 -(void)prepareNetData{
     NSString * guanjianzi = _tf.text;
+    NSString *province_id = [GMAPI getCurrentProvinceId];
+    NSString *city_id = [GMAPI getCurrentCityId];
     NSDictionary *dic = @{
-                          @"province_id":@"1000",
-                          @"city_id":@"1001",
+                          @"province_id":province_id,
+                          @"city_id":city_id,
                           @"keywords":guanjianzi,
                           @"page":[NSString stringWithFormat:@"%d",_tab.pageNum],
                           @"perpage":@"10"

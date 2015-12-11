@@ -325,8 +325,8 @@
 {
     NSLog(@"%s",__FUNCTION__);
     
-    NSString *province_id = @"1000";
-    NSString *city_id = @"1001";
+    NSString *province_id = [GMAPI getCurrentProvinceId];
+    NSString *city_id = [GMAPI getCurrentCityId];
     NSDictionary *parame;
     if (tableView.tag == 200) {//新品
         parame = @{
@@ -412,8 +412,8 @@
 - (void)loadMoreDataForTableView:(RefreshTableView *)tableView
 {
     NSLog(@"%s",__FUNCTION__);
-    NSString *province_id = @"1000";
-    NSString *city_id = @"1001";
+    NSString *province_id = [GMAPI getCurrentProvinceId];
+    NSString *city_id = [GMAPI getCurrentCityId];
     NSDictionary *parame;
     if (tableView.tag == 200) {//新品
         parame = @{
