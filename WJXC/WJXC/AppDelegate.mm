@@ -689,6 +689,9 @@
     __weak typeof(self)weakSelf = self;
     NSString *user_name = [GMAPI getUsername];
     NSString *icon = [GMAPI getUerHeadImageUrl];
+    
+    icon = icon.length > 0 ? icon : @"default";
+    
     NSDictionary *params = @{@"user_id":user_id,
                              @"name":user_name,
                              @"portrait_uri":icon};

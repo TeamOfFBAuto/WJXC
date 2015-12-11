@@ -69,13 +69,16 @@
     ProductModel *aModel = _table.dataArray[sender.tag - 100];
     
     int product_num = 1;//测试
+    
+    aModel.addNum = 1;
+
     NSString *authcode = [GMAPI getAuthkey];
     
     if (authcode.length == 0) {
         
         [[DBManager shareInstance]insertProduct:aModel];
         
-        [LTools showMBProgressWithText:@"添加购物车成功" addToView:self.view];
+        [LTools showMBProgressWithText:@"添加成功" addToView:self.view];
         
         [[NSNotificationCenter defaultCenter]postNotificationName:NOTIFICATION_UPDATE_TO_CART object:nil];
 

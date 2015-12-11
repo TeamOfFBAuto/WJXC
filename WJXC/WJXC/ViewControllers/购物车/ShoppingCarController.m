@@ -100,8 +100,6 @@
         [self syncCartInfo];
     }else
     {
-//        [_table showRefreshHeader:YES];
-        
         if (_isUpdateCart) {
             
             [_table showRefreshHeader:YES];
