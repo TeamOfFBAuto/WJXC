@@ -139,7 +139,7 @@
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         
-        NSLog(@"---->response %@",operation.responseString);
+        DDLOG(@"---->response %@",operation.responseString);
         
         
         NSString *errInfo = @"网络有问题,请检查网络";
@@ -187,7 +187,7 @@
     
     NSString *newStr = [requestUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     
-    NSLog(@"requestUrl %@",newStr);
+    DDLOG(@"requestUrl %@",newStr);
     NSURL *urlS = [NSURL URLWithString:newStr];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:urlS cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:30];
     
@@ -205,7 +205,7 @@
 
 - (void)cancelRequest
 {
-    NSLog(@"取消请求");
+    DDLOG(@"取消请求");
     [connection cancel];
 }
 
@@ -218,7 +218,7 @@
     
     _data = [NSMutableData data];
     
-    NSLog(@"response :%@",response);
+    DDLOG(@"response :%@",response);
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
@@ -258,7 +258,7 @@
                     
                 }else
                 {
-                    NSLog(@"errcode:%d erroInfo:%@",erroCode,erroInfo);
+                    DDLOG(@"errcode:%d erroInfo:%@",erroCode,erroInfo);
                     
                     NSDictionary *failDic = @{RESULT_INFO:@"获取数据异常",RESULT_CODE:[NSString stringWithFormat:@"%d",erroCode]};
                     failBlock(failDic,0);
@@ -271,7 +271,7 @@
             }
         }else
         {
-            NSLog(@"-----------解析数据为空");
+            DDLOG(@"-----------解析数据为空");
             
             NSDictionary *failDic = @{RESULT_INFO:@"获取数据异常",RESULT_CODE:@"999"};
             failBlock(failDic,0);
@@ -282,7 +282,7 @@
     }else
     {
         
-        NSLog(@"-----------请求数据为空");
+        DDLOG(@"-----------请求数据为空");
         
         NSDictionary *failDic = @{RESULT_INFO:@"获取数据异常",RESULT_CODE:@"999"};
         
@@ -298,7 +298,7 @@
 {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
     
-    NSLog(@"data 为空 connectionError %@",error);
+    DDLOG(@"data 为空 connectionError %@",error);
     
     NSString *errInfo = @"网络有问题,请检查网络";
     switch (error.code) {
@@ -573,7 +573,7 @@
         number_str = nil;
     }
     
-    NSLog(@"--%d %d",[[RCIMClient sharedRCIMClient]getTotalUnreadCount],unreadMsgCount);
+    DDLOG(@"--%d %d",[[RCIMClient sharedRCIMClient]getTotalUnreadCount],unreadMsgCount);
     
     UITabBarController *root = (UITabBarController *)[UIApplication sharedApplication].keyWindow.rootViewController;
     

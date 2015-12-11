@@ -37,10 +37,6 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    
-    NSLog(@"----------%@",self.category_id);
-    
-    
     self.view.backgroundColor = [UIColor whiteColor];
     
     
@@ -154,7 +150,6 @@
     
     
     int page = floor((scrollView.contentOffset.x - DEVICE_WIDTH / 2) / DEVICE_WIDTH) + 1;//只要大于半页就算下一页
-    NSLog(@"page %d",page);
     //选中状态
     [self controlSelectedButtonTag:page + 100];
     
@@ -179,12 +174,12 @@
 -(void)getjingweidu{
     CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
     if (kCLAuthorizationStatusRestricted == status) {
-        NSLog(@"kCLAuthorizationStatusRestricted 开启定位失败");
+        DDLOG(@"kCLAuthorizationStatusRestricted 开启定位失败");
         UIAlertView *al = [[UIAlertView alloc]initWithTitle:@"提示" message:@"开启定位失败" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
         [al show];
         return;
     }else if (kCLAuthorizationStatusDenied == status){
-        NSLog(@"请允许衣加衣使用定位服务");
+        DDLOG(@"请允许衣加衣使用定位服务");
         UIAlertView *al = [[UIAlertView alloc]initWithTitle:@"提示" message:@"请允许衣加衣使用定位服务" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
         [al show];
         return;
@@ -205,9 +200,7 @@
 
 - (void)theLocationDictionary:(NSDictionary *)dic{
     
-    NSLog(@"%@",dic);
     _locationDic = dic;
-    NSLog(@"%@",_locationDic);
     
     NSString *theString;
     
@@ -221,10 +214,8 @@
     
     [self.leftBtn setTitle:theString forState:UIControlStateNormal];
     int city_id = [GMAPI cityIdForName:theString];
-    NSLog(@"city_id : %d",city_id);
+    DDLOG(@"city_id : %d",city_id);
     
-    
-//    [self creatTableView];
     
     [self creatCustomView];
     
@@ -323,7 +314,7 @@
 
 - (void)loadNewDataForTableView:(RefreshTableView *)tableView
 {
-    NSLog(@"%s",__FUNCTION__);
+    DDLOG(@"%s",__FUNCTION__);
     
     NSString *province_id = [GMAPI getCurrentProvinceId];
     NSString *city_id = [GMAPI getCurrentCityId];
@@ -384,7 +375,7 @@
     
     
     [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodGet api:GET_PRODUCTlIST parameters:parame constructingBodyBlock:nil completion:^(NSDictionary *result) {
-        NSLog(@"%@",result);
+        DDLOG(@"%@",result);
         
         NSArray *list = [result arrayValueForKey:@"list"];
         NSMutableArray *productModelArray = [NSMutableArray arrayWithCapacity:1];
@@ -411,7 +402,6 @@
 }
 - (void)loadMoreDataForTableView:(RefreshTableView *)tableView
 {
-    NSLog(@"%s",__FUNCTION__);
     NSString *province_id = [GMAPI getCurrentProvinceId];
     NSString *city_id = [GMAPI getCurrentCityId];
     NSDictionary *parame;
@@ -444,7 +434,7 @@
     
     [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodGet api:GET_PRODUCT_COMMENT parameters:parame constructingBodyBlock:nil completion:^(NSDictionary *result) {
         
-        NSLog(@"%@",result);
+        DDLOG(@"%@",result);
         NSArray *list = [result arrayValueForKey:@"list"];
         NSMutableArray *productModelArray = [NSMutableArray arrayWithCapacity:1];
         for (NSDictionary *dic in list) {
@@ -540,7 +530,6 @@
         height = [_tmpCell loadCustomViewWithModel:amodel index:indexPath];
     }
 
-    NSLog(@"-------------------%f",height);
     return height;
 }
 

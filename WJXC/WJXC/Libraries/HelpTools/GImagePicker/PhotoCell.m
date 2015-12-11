@@ -49,9 +49,7 @@
 }
 - (UIImageView *)imageView{
     if (!_imageView) {
-        _imageView = [[UIImageView alloc] initWithFrame:self.contentView.bounds];
-        NSLog(@"------------%@",NSStringFromCGRect(_imageView.frame));
-        
+        _imageView = [[UIImageView alloc] initWithFrame:self.contentView.bounds];        
         _imageView.backgroundColor = [UIColor clearColor];
         _imageView.clipsToBounds = YES;
 //        _imageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;

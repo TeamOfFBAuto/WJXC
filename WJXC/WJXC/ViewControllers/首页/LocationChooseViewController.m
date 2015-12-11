@@ -328,9 +328,7 @@
     CGRect r = view.frame;
     r.size.height = height;
     view.frame = r;
-    
-    NSLog(@"-------------------------%f",r.size.height);
-    
+        
     return view;
     
 }

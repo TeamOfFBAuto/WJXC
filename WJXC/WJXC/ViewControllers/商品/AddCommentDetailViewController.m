@@ -182,15 +182,9 @@
     
 }
 
-
-
-
-
 -(void)nimingClicked:(UIButton *)sender{
     sender.selected = !sender.selected;
     _isniming = sender.selected;
-    NSLog(@"%d",_isniming);
-    
 }
 
 
@@ -211,7 +205,6 @@
 }
 
 - (void)textViewDidChange:(UITextView *)textView{
-    NSLog(@"%@",textView.text);
     if (textView.text.length == 0) {
         _holderLabel.hidden = NO;
         [_tv resignFirstResponder];
@@ -292,7 +285,7 @@ static NSString *kPhotoCellIdentifier = @"kPhotoCellIdentifier";
 #pragma mark - UICollectionViewDelegate
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"，，，，，%ld",(long)[indexPath row]);
+    DDLOG(@"，，，，，%ld",(long)[indexPath row]);
     
 }
 
@@ -329,7 +322,7 @@ static NSString *kPhotoCellIdentifier = @"kPhotoCellIdentifier";
     
     self.uploadImageArray = [NSMutableArray arrayWithCapacity:1];
     
-    NSLog(@"-------%lu",(unsigned long)self.assetsArray.count);
+    DDLOG(@"-------%lu",(unsigned long)self.assetsArray.count);
     
     for (int i = 0;i<self.assetsArray.count;i++) {
         
@@ -421,12 +414,8 @@ static NSString *kPhotoCellIdentifier = @"kPhotoCellIdentifier";
 
 //上传
 -(void)shangChuan{
-    NSLog(@"let is begin to upload data");
-    
     
     [self upLoadImage:self.uploadImageArray];
-    
-    
 }
 
 
@@ -500,7 +489,7 @@ static NSString *kPhotoCellIdentifier = @"kPhotoCellIdentifier";
                                        
                                        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
                                        
-                                       NSLog(@"success %@",responseObject);
+                                       DDLOG(@"success %@",responseObject);
                                        
                                        NSError * myerr;
                                        
@@ -523,8 +512,8 @@ static NSString *kPhotoCellIdentifier = @"kPhotoCellIdentifier";
                                        
                                        [GMAPI showAutoHiddenMBProgressWithText:@"评价失败，请重新提交" addToView:self.view];
                                        
-                                       NSLog(@"operation.responseString:%@",operation.responseString);
-                                       NSLog(@"失败 : %@",error);
+                                       DDLOG(@"operation.responseString:%@",operation.responseString);
+                                       DDLOG(@"失败 : %@",error);
                                        
                                        
                                    }];
@@ -554,7 +543,7 @@ static NSString *kPhotoCellIdentifier = @"kPhotoCellIdentifier";
 {
     _theScore = (int)score;
     
-    NSLog(@"score:%d",_theScore);
+    DDLOG(@"score:%d",_theScore);
 }
 
 

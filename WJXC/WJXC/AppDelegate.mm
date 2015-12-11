@@ -108,7 +108,7 @@
     if (userInfo)
     {
         //test
-        NSLog(@"didFinishLaunch : userInfo %@",userInfo);
+        DDLOG(@"didFinishLaunch : userInfo %@",userInfo);
         
         NSString *type = userInfo[@"type"];
         NSString *theme_id = userInfo[@"theme_id"];
@@ -168,7 +168,7 @@
     // 如果要关注网络及授权验证事件，请设定     generalDelegate参数
     BOOL ret = [_mapManager start:baiduMapAk  generalDelegate:self];
     if (!ret) {
-        NSLog(@"manager start failed!");
+        DDLOG(@"manager start failed!");
     }
     
     
@@ -233,7 +233,7 @@
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
     
-    NSLog(@"openURL------ %@",url);
+    DDLOG(@"openURL------ %@",url);
     
     //当支付宝客户端在操作时,商户 app 进程在后台被结束,只能通过这个 block 输出支付 结果。
     
@@ -244,7 +244,7 @@
         [[AlipaySDK defaultService] processOrderWithPaymentResult:url
                                                   standbyCallback:^(NSDictionary *resultDic) {
                                                       
-                                                      NSLog(@"ali result = %@",resultDic);
+                                                      DDLOG(@"ali result = %@",resultDic);
                                                       
                                                       
                                                   }]; }
@@ -252,7 +252,7 @@
     if ([url.host isEqualToString:@"platformapi"]){//支付宝钱包快登授权返回 authCode
         [[AlipaySDK defaultService] processAuthResult:url standbyCallback:^(NSDictionary *resultDic) {
             
-            NSLog(@"ali result = %@",resultDic);
+            DDLOG(@"ali result = %@",resultDic);
             
         }];
     }
@@ -312,11 +312,11 @@
     //极光推送
     [APService handleRemoteNotification:userInfo];
     
-    NSLog(@"JPush2 remote %@",userInfo);
+    DDLOG(@"JPush2 remote %@",userInfo);
 
     UIApplicationState state = [application applicationState];
     if (state == UIApplicationStateInactive){
-        NSLog(@"UIApplicationStateInactive %@",userInfo);
+        DDLOG(@"UIApplicationStateInactive %@",userInfo);
         //程序在后台运行 点击消息进入走此处,做相应处理
         
         NSDictionary *aps = userInfo[@"aps"];
@@ -332,7 +332,7 @@
         
     }
     if (state == UIApplicationStateActive) {
-        NSLog(@"UIApplicationStateActive %@",userInfo);
+        DDLOG(@"UIApplicationStateActive %@",userInfo);
         //程序就在前台
         
         _remoteMessageDic = userInfo;
@@ -347,7 +347,7 @@
     }
     if (state == UIApplicationStateBackground)
     {
-        NSLog(@"UIApplicationStateBackground %@",userInfo);
+        DDLOG(@"UIApplicationStateBackground %@",userInfo);
     }
 
 }
@@ -377,7 +377,7 @@
             case WXSuccess:
             {
                 //服务器端查询支付通知或查询API返回的结果再提示成功
-                NSLog(@"支付成功");
+                DDLOG(@"支付成功");
                 errInfo = @"支付成功";
                 result = YES;
             }
@@ -385,22 +385,22 @@
             case WXErrCodeCommon:
             case WXErrCodeSentFail:
             {
-                NSLog(@"1、可能的原因：签名错误、未注册APPID、项目设置APPID不正确、注册的APPID与设置的不匹配、其他异常等.\n2、发送失败");
+                DDLOG(@"1、可能的原因：签名错误、未注册APPID、项目设置APPID不正确、注册的APPID与设置的不匹配、其他异常等.\n2、发送失败");
                 errInfo = @"微信支付异常";
             }
                 break;
             case WXErrCodeUserCancel:
-                NSLog(@"用户取消支付");
+                DDLOG(@"用户取消支付");
                 errInfo = @"用户取消支付";
 
                 break;
             case WXErrCodeAuthDeny:
 
-                NSLog(@"授权失败");
+                DDLOG(@"授权失败");
                 errInfo = @"微信支付授权失败";
                 break;
             default:
-                NSLog(@"支付失败， retcode=%d",resp.errCode);
+                DDLOG(@"支付失败， retcode=%d",resp.errCode);
                 
                 errInfo = @"微信支付失败";
                 break;
@@ -411,6 +411,14 @@
     }
 }
 
+
+- (void)isZero:(double) d
+{
+    if (d >= -DBL_EPSILON && d <= DBL_EPSILON)
+    {
+        //d是0处理
+    }
+}
 
 #pragma mark - 友盟分享
 
@@ -427,7 +435,7 @@
     [MobClick startWithAppkey:UmengAppkey];
     
     //打开调试log的开关
-    [UMSocialData openLog:YES];
+    [UMSocialData openLog:NO];
     
     //打开新浪微博的SSO开关
     [UMSocialSinaHandler openSSOWithRedirectURL:RedirectUrl];
@@ -459,12 +467,12 @@
     //不需要更新,return
     if (![LTools cacheBoolForKey:USER_UPDATEHEADIMAGE]) {
         
-        NSLog(@"不需要更新头像");
+        DDLOG(@"不需要更新头像");
         
         return;
     }else
     {
-        NSLog(@"需要更新头像");
+        DDLOG(@"需要更新头像");
 
     }
     
@@ -488,7 +496,7 @@
         
     } completion:^(NSDictionary *result) {
         
-        NSLog(@"completion result %@",result[Erro_Info]);
+        DDLOG(@"completion result %@",result[Erro_Info]);
         
         [LTools cacheBool:NO ForKey:USER_UPDATEHEADIMAGE];//不需要更新头像
         
@@ -496,7 +504,7 @@
         
     } failBlock:^(NSDictionary *result) {
         
-        NSLog(@"failBlock result %@",result[Erro_Info]);
+        DDLOG(@"failBlock result %@",result[Erro_Info]);
         
     }];
 }
@@ -510,7 +518,7 @@
  */
 - (void)onRCIMReceiveMessage:(RCMessage *)message left:(int)left
 {
-    NSLog(@"RCIMReceiveMessageDelegate %d",left);
+    DDLOG(@"RCIMReceiveMessageDelegate %d",left);
     //接受到消息 更新未读消息
     
     if (0 == left) {
@@ -564,14 +572,14 @@
     NSString *userName = [LTools rongCloudUserNameWithUid:userId];
     NSString *userIcon = [LTools rongCloudUserIconWithUid:userId];
 
-    NSLog(@"userId %@ userIcon %@",userId,userIcon);
+    DDLOG(@"userId %@ userIcon %@",userId,userIcon);
 
     if ([userId isEqualToString:[GMAPI getUid]]) {
         
         userName = [GMAPI getUsername];
     }
     
-    NSLog(@"----->|%@|",userName);
+    DDLOG(@"----->|%@|",userName);
     
     //没有保存用户名 或者 更新时间超过一个小时
     if ([LTools isEmpty:userName] || [LTools isEmpty:userIcon]  || [LTools rongCloudNeedRefreshUserId:userId]) {
@@ -634,7 +642,7 @@
 
 - (void)theLocationDictionary:(NSDictionary *)dic{
     
-    NSLog(@"定位成功------>%@",dic);
+    DDLOG(@"定位成功------>%@",dic);
     
     if (_locationBlock) {
         
@@ -647,7 +655,7 @@
 
 -(void)theLocationFaild:(NSDictionary *)dic{
     
-    NSLog(@"定位失败----->%@",dic);
+    DDLOG(@"定位失败----->%@",dic);
     
     if (_locationBlock) {
         _locationBlock(dic);
@@ -717,17 +725,17 @@
 
         [[RCIMClient sharedRCIMClient]connectWithToken:userToken success:^(NSString *userId) {
             
-            NSLog(@"登录成功融云 userId %@",userId);
+            DDLOG(@"登录成功融云 userId %@",userId);
             
             [weakSelf stopRongTimer];//停止计时
             
         } error:^(RCConnectErrorCode status) {
             
-            NSLog(@"RCConnectErrorCode %ld",status);
+            DDLOG(@"RCConnectErrorCode %ld",status);
             
         } tokenIncorrect:^{
             
-            NSLog(@"token不对");
+            DDLOG(@"token不对");
             
             [LTools cache:nil ForKey:USER_RONGCLOUD_TOKEN];
         }];
@@ -756,25 +764,25 @@
 //建立连接
 - (void)notificationForDidSetupNotification:(NSNotification *)notify
 {
-    NSLog(@"建立连接 JPush %@ %@",notify.userInfo,notify.object);
+    DDLOG(@"建立连接 JPush %@ %@",notify.userInfo,notify.object);
 }
 
 //关闭连接
 - (void)notificationForDidCloseNotification:(NSNotification *)notify
 {
-    NSLog(@"关闭连接 JPush %@ %@",notify.userInfo,notify.object);
+    DDLOG(@"关闭连接 JPush %@ %@",notify.userInfo,notify.object);
 }
 
 //注册成功
 - (void)notificationForDidRegisterNotification:(NSNotification *)notify
 {
-    NSLog(@"注册成功 JPush %@ %@",notify.userInfo,notify.object);
+    DDLOG(@"注册成功 JPush %@ %@",notify.userInfo,notify.object);
 }
 
 //登录成功
 - (void)notificationForDidLoginNotification:(NSNotification *)notify
 {
-    NSLog(@"登录成功 JPush %@ %@",notify.userInfo,notify.object);
+    DDLOG(@"登录成功 JPush %@ %@",notify.userInfo,notify.object);
     
     [self uploadRegisterId];
 }
@@ -782,7 +790,7 @@
 //收到消息(非APNS)
 - (void)notificationForDidReceiveMessageNotification:(NSNotification *)notify
 {
-    NSLog(@"收到消息(非APNS) JPush %@ %@",notify.userInfo,notify.object);
+    DDLOG(@"收到消息(非APNS) JPush %@ %@",notify.userInfo,notify.object);
     
     NSDictionary *userInfo = _remoteMessageDic;
     
@@ -795,7 +803,7 @@
 //错误提示
 - (void)notificationForErrorNotification:(NSNotification *)notify
 {
-    NSLog(@"错误提示 JPush %@ %@",notify.userInfo,notify.object);
+    DDLOG(@"错误提示 JPush %@ %@",notify.userInfo,notify.object);
 
 }
 
@@ -820,7 +828,7 @@
             
         }else
         {
-            NSLog(@"忽略");
+            DDLOG(@"忽略");
         }
     }
 }
@@ -896,9 +904,9 @@
     NSDictionary *params = @{@"authcode":authkey,
                              @"registration_id":registration_id};
     [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodPost api:USER_UPDATE_USEINFO parameters:params constructingBodyBlock:nil completion:^(NSDictionary *result) {
-        NSLog(@"更新register_id%@",result);
+        DDLOG(@"更新register_id%@",result);
     } failBlock:^(NSDictionary *result) {
-        NSLog(@"失败register_id%@",result);
+        DDLOG(@"失败register_id%@",result);
     }];
 }
 

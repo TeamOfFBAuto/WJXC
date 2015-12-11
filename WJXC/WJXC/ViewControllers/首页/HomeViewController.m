@@ -148,7 +148,6 @@
                              @"perpage":@"10"
                              };
     [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodGet api:GET_PRODUCTlIST parameters:parame constructingBodyBlock:nil completion:^(NSDictionary *result) {
-        NSLog(@"%@",result);
         
         NSArray *list = [result arrayValueForKey:@"list"];
         NSMutableArray *arr = [NSMutableArray arrayWithCapacity:1];
@@ -193,8 +192,6 @@
                              };
     
     [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodGet api:GET_PRODUCTlIST parameters:parame constructingBodyBlock:nil completion:^(NSDictionary *result) {
-        
-        NSLog(@"%@",result);
         
         NSArray *list = [result arrayValueForKey:@"list"];
         NSMutableArray *arr = [NSMutableArray arrayWithCapacity:1];
@@ -449,7 +446,6 @@
     [bannerView setBackgroundColor:[UIColor lightGrayColor]];
     __weak typeof (self)bself = self;
     [bannerView setTapActionBlock:^(NSInteger index) {
-        NSLog(@"--tap index %ld",index);
         [bself cycleScrollDidClickedWithIndex:index];
     }];
     
@@ -500,7 +496,6 @@
     
     [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodGet api:GET_HOMESCROLLVIEWDATA parameters:parame constructingBodyBlock:nil completion:^(NSDictionary *result) {
         
-        NSLog(@"--------%@",result);
         NSArray *list = [result arrayValueForKey:@"list"];
         
         _TopDataArray = [NSMutableArray arrayWithCapacity:1];
@@ -545,12 +540,12 @@
 -(void)getjingweidu{
     CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
     if (kCLAuthorizationStatusRestricted == status) {
-        NSLog(@"kCLAuthorizationStatusRestricted 开启定位失败");
+        DDLOG(@"kCLAuthorizationStatusRestricted 开启定位失败");
         UIAlertView *al = [[UIAlertView alloc]initWithTitle:@"提示" message:@"开启定位失败" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
         [al show];
         return;
     }else if (kCLAuthorizationStatusDenied == status){
-        NSLog(@"请允许衣加衣使用定位服务");
+        DDLOG(@"请允许衣加衣使用定位服务");
         UIAlertView *al = [[UIAlertView alloc]initWithTitle:@"提示" message:@"请允许衣加衣使用定位服务" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
         [al show];
         return;
@@ -571,9 +566,7 @@
 
 - (void)theLocationDictionary:(NSDictionary *)dic{
     
-    NSLog(@"%@",dic);
     _locationDic = dic;
-    NSLog(@"%@",_locationDic);
     
     NSString *theString;
     
@@ -591,10 +584,7 @@
     }
     
     self.leftLabel.text = theString;
-    int city_id = [GMAPI cityIdForName:theString];
-    NSLog(@"city_id : %d",city_id);
-    
-    
+//    int city_id = [GMAPI cityIdForName:theString];
     
     NSDictionary *cachDic = @{
                           @"province":[NSString stringWithFormat:@"%d",procinceId],
@@ -634,10 +624,6 @@
     self.leftLabel.text = city;
     
     int cityId = [GMAPI cityIdForName:self.leftLabel.text];
-    
-    NSLog(@"我擦 %d",cityId);
-    
-    
     
     NSString *pStr = [NSString stringWithFormat:@"%d",[GMAPI cityIdForName:province]];
     NSString *cStr = [NSString stringWithFormat:@"%d",[GMAPI cityIdForName:city]];

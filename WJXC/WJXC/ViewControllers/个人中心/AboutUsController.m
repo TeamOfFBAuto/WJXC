@@ -108,7 +108,7 @@
 
 - (void)dealloc
 {
-    NSLog(@"--%s--",__FUNCTION__);
+    DDLOG(@"--%s--",__FUNCTION__);
     
     [_aWebview stopLoading];
     _aWebview.delegate = nil;
@@ -126,9 +126,9 @@
 }
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error{
     
-    NSLog(@"erro %@",error);
+    DDLOG(@"erro %@",error);
     
-    NSLog(@"data 为空 connectionError %@",error);
+    DDLOG(@"data 为空 connectionError %@",error);
     
     [MBProgressHUD hideAllHUDsForView:webView animated:YES];
     

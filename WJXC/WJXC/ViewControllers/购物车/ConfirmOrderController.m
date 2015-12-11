@@ -119,7 +119,7 @@
     __weak typeof(self)weakSelf = self;
     [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodGet api:ORDER_GET_EXPRESS_FEE parameters:params constructingBodyBlock:nil completion:^(NSDictionary *result) {
         
-        NSLog(@"更新邮费%@ %@",result[RESULT_INFO],result);
+        DDLOG(@"更新邮费%@ %@",result[RESULT_INFO],result);
         float fee = [result[@"fee"]floatValue];
         _expressFee = fee;
         [weakSelf updateExpressFeeAndSumPrice:fee];
@@ -127,7 +127,7 @@
         
     } failBlock:^(NSDictionary *result) {
         
-        NSLog(@"更新邮费 失败 %@",result[RESULT_INFO]);
+        DDLOG(@"更新邮费 失败 %@",result[RESULT_INFO]);
         
     }];
 

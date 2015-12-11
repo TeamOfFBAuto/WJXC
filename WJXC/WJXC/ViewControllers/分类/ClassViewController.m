@@ -133,7 +133,7 @@
     __weak typeof(_table)weakTable = _table;
     [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodGet api:PRODUCT_LIST parameters:params constructingBodyBlock:nil completion:^(NSDictionary *result) {
         
-        NSLog(@"completion:%@",result);
+        DDLOG(@"completion:%@",result);
         NSArray *list = result[@"list"];
         NSMutableArray *temp = [NSMutableArray arrayWithCapacity:list.count];
         for (NSDictionary *aDic in list) {
@@ -169,7 +169,7 @@
         
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         
-        NSLog(@"%@",result);
+        DDLOG(@"%@",result);
         
         NSArray *list = [result arrayValueForKey:@"list"];
         _dataArray = list;
