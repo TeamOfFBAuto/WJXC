@@ -10,13 +10,6 @@
  */
 #import "MyViewController.h"
 
-typedef enum {
-   
-    PAY_RESULT_TYPE_Success = 1,//成功
-    PAY_RESULT_TYPE_Waiting = 2,//处理中
-    PAY_RESULT_TYPE_Fail = 3 //失败
-    
-}PAY_RESULT_TYPE;
 @interface PayActionViewController : MyViewController
 
 @property(nonatomic,retain)NSString *orderId;//订单号 实际可用
@@ -24,5 +17,6 @@ typedef enum {
 @property(nonatomic,assign)float sumPrice;//总价格
 
 @property(nonatomic,assign)int payStyle;//1 支付宝 2 为微信
+@property(nonatomic,retain)UIViewController *lastVc;//上一个页面
 
 @end

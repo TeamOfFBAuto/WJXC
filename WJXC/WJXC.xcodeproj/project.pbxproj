@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		130E3B4D1C0EF16000DC42B1 /* LBannerItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 130E3B4A1C0EF16000DC42B1 /* LBannerItem.m */; };
+		130E3B4E1C0EF16000DC42B1 /* LBannerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 130E3B4C1C0EF16000DC42B1 /* LBannerView.m */; };
 		131A6F291B706D8A0097201D /* SimpleMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 131A6F281B706D8A0097201D /* SimpleMessage.m */; };
 		131A6F2C1B706DA20097201D /* SimpleMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 131A6F2B1B706DA20097201D /* SimpleMessageCell.m */; };
 		131A93401C00760500E80781 /* guanbi@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 131A933F1C00760500E80781 /* guanbi@2x.png */; };
@@ -157,6 +159,7 @@
 		13B11D191BB183F9005C933B /* youhui_yilingqu@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 13B11D171BB183F9005C933B /* youhui_yilingqu@2x.png */; };
 		13B11D1A1BB183F9005C933B /* youhui_lingqu@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 13B11D181BB183F9005C933B /* youhui_lingqu@2x.png */; };
 		13B2DBCF1B552B2800EE2B6C /* AddAddressController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B2DBCE1B552B2800EE2B6C /* AddAddressController.m */; };
+		13BF8F2A1C199E2300C7C021 /* PayResultViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13BF8F291C199E2300C7C021 /* PayResultViewController.m */; };
 		13C32C531B71C3FF004B9105 /* libPushSDK-1.8.5.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 13C32C521B71C3FF004B9105 /* libPushSDK-1.8.5.a */; };
 		13C32C551B71C41C004B9105 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 13C32C541B71C41C004B9105 /* CFNetwork.framework */; };
 		13C32C571B71C42D004B9105 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 13C32C561B71C42D004B9105 /* CoreFoundation.framework */; };
@@ -166,7 +169,6 @@
 		13E8FEA41B8C13DD00840BF9 /* homepage_miaosha@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 13E8FEA31B8C13DD00840BF9 /* homepage_miaosha@2x.png */; };
 		13E8FEAA1B8C619B00840BF9 /* homepage_xq_gwc@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 13E8FEA91B8C619B00840BF9 /* homepage_xq_gwc@2x.png */; };
 		13EB1EA01B623E3600E5CA57 /* my_√@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 13EB1E9F1B623E3600E5CA57 /* my_√@2x.png */; };
-		13EB1EA61B623E8B00E5CA57 /* PayResultViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13EB1EA51B623E8B00E5CA57 /* PayResultViewController.m */; };
 		13F1F8AB1B70DA2800831BF9 /* my_payFail@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 13F1F8AA1B70DA2800831BF9 /* my_payFail@2x.png */; };
 		13FEA4781B4A28E1009BD01D /* PersonalCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 13FEA4761B4A28E1009BD01D /* PersonalCell.m */; };
 		13FEA4791B4A28E1009BD01D /* PersonalCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13FEA4771B4A28E1009BD01D /* PersonalCell.xib */; };
@@ -331,6 +333,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		130E3B491C0EF16000DC42B1 /* LBannerItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBannerItem.h; sourceTree = "<group>"; };
+		130E3B4A1C0EF16000DC42B1 /* LBannerItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBannerItem.m; sourceTree = "<group>"; };
+		130E3B4B1C0EF16000DC42B1 /* LBannerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBannerView.h; sourceTree = "<group>"; };
+		130E3B4C1C0EF16000DC42B1 /* LBannerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBannerView.m; sourceTree = "<group>"; };
 		131A6F271B706D8A0097201D /* SimpleMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleMessage.h; sourceTree = "<group>"; };
 		131A6F281B706D8A0097201D /* SimpleMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SimpleMessage.m; sourceTree = "<group>"; };
 		131A6F2A1B706DA20097201D /* SimpleMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleMessageCell.h; sourceTree = "<group>"; };
@@ -543,6 +549,8 @@
 		13B11D181BB183F9005C933B /* youhui_lingqu@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "youhui_lingqu@2x.png"; sourceTree = "<group>"; };
 		13B2DBCD1B552B2800EE2B6C /* AddAddressController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddAddressController.h; sourceTree = "<group>"; };
 		13B2DBCE1B552B2800EE2B6C /* AddAddressController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddAddressController.m; sourceTree = "<group>"; };
+		13BF8F281C199E2300C7C021 /* PayResultViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PayResultViewController.h; sourceTree = "<group>"; };
+		13BF8F291C199E2300C7C021 /* PayResultViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PayResultViewController.m; sourceTree = "<group>"; };
 		13C32C511B71C3FF004B9105 /* APService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APService.h; sourceTree = "<group>"; };
 		13C32C521B71C3FF004B9105 /* libPushSDK-1.8.5.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libPushSDK-1.8.5.a"; sourceTree = "<group>"; };
 		13C32C541B71C41C004B9105 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
@@ -553,8 +561,6 @@
 		13E8FEA31B8C13DD00840BF9 /* homepage_miaosha@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "homepage_miaosha@2x.png"; sourceTree = "<group>"; };
 		13E8FEA91B8C619B00840BF9 /* homepage_xq_gwc@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "homepage_xq_gwc@2x.png"; sourceTree = "<group>"; };
 		13EB1E9F1B623E3600E5CA57 /* my_√@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "my_√@2x.png"; sourceTree = "<group>"; };
-		13EB1EA41B623E8B00E5CA57 /* PayResultViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PayResultViewController.h; sourceTree = "<group>"; };
-		13EB1EA51B623E8B00E5CA57 /* PayResultViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PayResultViewController.m; sourceTree = "<group>"; };
 		13F1F8AA1B70DA2800831BF9 /* my_payFail@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "my_payFail@2x.png"; sourceTree = "<group>"; };
 		13FEA4751B4A28E1009BD01D /* PersonalCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonalCell.h; sourceTree = "<group>"; };
 		13FEA4761B4A28E1009BD01D /* PersonalCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonalCell.m; sourceTree = "<group>"; };
@@ -904,6 +910,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		130E3B481C0EF16000DC42B1 /* LBannerView */ = {
+			isa = PBXGroup;
+			children = (
+				130E3B491C0EF16000DC42B1 /* LBannerItem.h */,
+				130E3B4A1C0EF16000DC42B1 /* LBannerItem.m */,
+				130E3B4B1C0EF16000DC42B1 /* LBannerView.h */,
+				130E3B4C1C0EF16000DC42B1 /* LBannerView.m */,
+			);
+			path = LBannerView;
+			sourceTree = "<group>";
+		};
 		131A6F261B706D8A0097201D /* RoncCloudCustomClass */ = {
 			isa = PBXGroup;
 			children = (
@@ -1243,6 +1260,7 @@
 		13A64C311B3BEB4200D9A106 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				130E3B481C0EF16000DC42B1 /* LBannerView */,
 				E3D07FC11B3D4A5F00E4F87D /* ThirdClass */,
 				13A64C3D1B3BEB7100D9A106 /* HelpTools */,
 			);
@@ -1376,8 +1394,8 @@
 				139D439B1B5A489D0036DC3B /* ConfirmOrderController.m */,
 				13A208811B5FA7DC00CC4EC0 /* PayActionViewController.h */,
 				13A208821B5FA7DC00CC4EC0 /* PayActionViewController.m */,
-				13EB1EA41B623E8B00E5CA57 /* PayResultViewController.h */,
-				13EB1EA51B623E8B00E5CA57 /* PayResultViewController.m */,
+				13BF8F281C199E2300C7C021 /* PayResultViewController.h */,
+				13BF8F291C199E2300C7C021 /* PayResultViewController.m */,
 				13241E781B6396E200D42737 /* OrderInfoViewController.h */,
 				13241E791B6396E200D42737 /* OrderInfoViewController.m */,
 			);
@@ -2367,8 +2385,10 @@
 				E340998B1B6271CB00FF5257 /* ClassView.m in Sources */,
 				E3C15F941B4CA45000C30039 /* GRegisterViewController.m in Sources */,
 				E3F1A0A71B70F0DA00102989 /* JKAssetsGroupCell.m in Sources */,
+				130E3B4E1C0EF16000DC42B1 /* LBannerView.m in Sources */,
 				139457711B4678D200C45EB6 /* UIView+Additions.m in Sources */,
 				E3CE7F681B4D1FE60012940C /* NSDictionary+GJson.m in Sources */,
+				130E3B4D1C0EF16000DC42B1 /* LBannerItem.m in Sources */,
 				E340998E1B6272F000FF5257 /* ClassDetailViewController.m in Sources */,
 				136C03DC1BB1619300E5395D /* ButtonProperty.m in Sources */,
 				137F85321BB0014C00FD44B2 /* TuiKuanViewController.m in Sources */,
@@ -2420,7 +2440,6 @@
 				E3F1A0AD1B70F0DA00102989 /* JKPhotoBrowserCell.m in Sources */,
 				13A64C5D1B3BF71C00D9A106 /* ClassViewController.m in Sources */,
 				E3F1A02A1B6F61F500102989 /* HuodongModel.m in Sources */,
-				13EB1EA61B623E8B00E5CA57 /* PayResultViewController.m in Sources */,
 				139457591B46730100C45EB6 /* Order.m in Sources */,
 				135F85E21B4CBE5C00B5E5AD /* SettingsViewController.m in Sources */,
 				13FEA49C1B4BD590009BD01D /* AddressCell.m in Sources */,
@@ -2441,6 +2460,7 @@
 				E3C15FDD1B4CDC2800C30039 /* ProductDetailViewController.m in Sources */,
 				E3DE399F1B5921600015EEF6 /* GstartView.m in Sources */,
 				13FEA4781B4A28E1009BD01D /* PersonalCell.m in Sources */,
+				13BF8F2A1C199E2300C7C021 /* PayResultViewController.m in Sources */,
 				13FEA4891B4BCD89009BD01D /* RefreshTableView.m in Sources */,
 				138407321B5905B20008CAC3 /* DBManager.m in Sources */,
 				13A147101B6A1CE600B6A3DB /* OrderModel.m in Sources */,
@@ -2544,7 +2564,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "1d6ee27e-3877-408f-ae84-83566d5ecb26";
+				PROVISIONING_PROFILE = "4892b59c-cee9-43e8-ab91-088144236219";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -2582,7 +2602,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PROVISIONING_PROFILE = "1d6ee27e-3877-408f-ae84-83566d5ecb26";
+				PROVISIONING_PROFILE = "4892b59c-cee9-43e8-ab91-088144236219";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -2616,7 +2636,7 @@
 					"$(PROJECT_DIR)/WJXC/Libraries/ThirdClass/lib",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "1d6ee27e-3877-408f-ae84-83566d5ecb26";
+				PROVISIONING_PROFILE = "4892b59c-cee9-43e8-ab91-088144236219";
 				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/**";
 				VALID_ARCHS = "arm64 armv7";
 			};
@@ -2650,7 +2670,7 @@
 					"$(PROJECT_DIR)/WJXC/Libraries/ThirdClass/lib",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "1d6ee27e-3877-408f-ae84-83566d5ecb26";
+				PROVISIONING_PROFILE = "4892b59c-cee9-43e8-ab91-088144236219";
 				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/**";
 				VALID_ARCHS = "arm64 armv7";
 			};
@@ -2672,7 +2692,7 @@
 				INFOPLIST_FILE = WJXCTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "45165e94-420c-430d-89d2-3ff20a09c13d";
+				PROVISIONING_PROFILE = "4892b59c-cee9-43e8-ab91-088144236219";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WJXC.app/WJXC";
 			};
 			name = Debug;
@@ -2689,7 +2709,7 @@
 				INFOPLIST_FILE = WJXCTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "45165e94-420c-430d-89d2-3ff20a09c13d";
+				PROVISIONING_PROFILE = "4892b59c-cee9-43e8-ab91-088144236219";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WJXC.app/WJXC";
 			};
 			name = Release;

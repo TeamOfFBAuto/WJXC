@@ -15,7 +15,8 @@
 @property(nonatomic,retain)NSString *orderId;
 @property(nonatomic,retain)NSString *orderNum;
 @property(nonatomic,assign)CGFloat sumPrice;
-@property(nonatomic,assign)BOOL isPaySuccess;//是否支付成
+//@property(nonatomic,assign)BOOL isPaySuccess;//是否支付成
 @property(nonatomic,retain)NSString *erroInfo;//失败原因
+@property(nonatomic,assign)PAY_RESULT_TYPE payResultType;//支付结果
 
 @end

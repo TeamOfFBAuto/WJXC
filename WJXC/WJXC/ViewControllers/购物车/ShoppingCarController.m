@@ -84,8 +84,10 @@
 {
     [super viewWillAppear:animated];
     
-    self.navigationController.navigationBarHidden = YES;
-    self.navigationController.navigationBarHidden = NO;
+//    self.navigationController.navigationBarHidden = YES;
+//    self.navigationController.navigationBarHidden = NO;
+    
+    [self.navigationController setNavigationBarHidden:NO animated:animated];
     
     //判断是否需要同步到服务器 1、数据库有 2、登录了
     

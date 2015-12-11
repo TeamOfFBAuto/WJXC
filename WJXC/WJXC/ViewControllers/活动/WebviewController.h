@@ -13,6 +13,6 @@
 @interface WebviewController : MyViewController
 
 @property(nonatomic,retain)NSString *webUrl;
-@property(nonatomic,retain)NSString *title;
+@property(nonatomic,retain)NSString *titleString;
 
 @end

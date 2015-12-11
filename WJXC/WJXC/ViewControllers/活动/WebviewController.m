@@ -22,7 +22,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    self.myTitle = self.title ? self.title : @"活动详情";
+    self.myTitle = self.titleString ? self.titleString : @"活动详情";
     [self setMyViewControllerLeftButtonType:MyViewControllerLeftbuttonTypeBack WithRightButtonType:MyViewControllerRightbuttonTypeNull];
     
     self.webView = [[UIWebView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, DEVICE_HEIGHT - 64)];
@@ -34,7 +34,7 @@
     
     
     [self.webView loadRequest:request progress:^(NSUInteger bytesWritten, long long totalBytesWritten, long long totalBytesExpectedToWrite) {
-        NSLog(@"%ld",bytesWritten);
+        NSLog(@"%ld",(unsigned long)(int)bytesWritten);
         
     } success:^NSString *(NSHTTPURLResponse *response, NSString *HTML) {
         

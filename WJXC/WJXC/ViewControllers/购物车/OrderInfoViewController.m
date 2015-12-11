@@ -88,8 +88,10 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    self.navigationController.navigationBarHidden = YES;
-    self.navigationController.navigationBarHidden = NO;
+//    self.navigationController.navigationBarHidden = YES;
+//    self.navigationController.navigationBarHidden = NO;
+    
+    [self.navigationController setNavigationBarHidden:NO animated:animated];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -260,6 +262,7 @@
     pay.orderNum = orderNum;
     pay.sumPrice = [_orderModel.total_fee floatValue];
     pay.payStyle = [_orderModel.pay_type intValue];//支付类型
+    pay.lastVc = self;
     pay.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:pay animated:YES];
 }

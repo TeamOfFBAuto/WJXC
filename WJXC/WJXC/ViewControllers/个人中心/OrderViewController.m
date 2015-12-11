@@ -56,8 +56,10 @@
         self.navigationController.navigationBarHidden = NO;
         return;
     }
-    self.navigationController.navigationBarHidden = YES;
-    self.navigationController.navigationBarHidden = NO;
+//    self.navigationController.navigationBarHidden = YES;
+//    self.navigationController.navigationBarHidden = NO;
+    
+    [self.navigationController setNavigationBarHidden:NO animated:animated];
 }
 
 - (void)viewDidLoad {
@@ -414,6 +416,7 @@
     pay.orderNum = orderNum;
     pay.sumPrice = sumPrice;
     pay.payStyle = payStyle;
+    pay.lastVc = self;
     [self.navigationController pushViewController:pay animated:YES];
 }
 

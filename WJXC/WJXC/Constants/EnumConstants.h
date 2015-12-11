@@ -47,4 +47,12 @@ typedef enum{
     ORDERTYPE_TuiHuan //退换
 }ORDERTYPE;
 
+typedef enum {
+    
+    PAY_RESULT_TYPE_Success = 1,//成功
+    PAY_RESULT_TYPE_Waiting = 2,//处理中
+    PAY_RESULT_TYPE_Fail = 3 //失败
+    
+}PAY_RESULT_TYPE;
+
 #endif

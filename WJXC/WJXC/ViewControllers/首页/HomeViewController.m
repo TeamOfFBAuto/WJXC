@@ -17,6 +17,7 @@
 #import "GstartView.h"
 #import "CycleScrollView.h"
 #import "WebviewController.h"
+#import "LBannerView.h"//广告滚动
 
 @interface HomeViewController ()<UITableViewDataSource,RefreshDelegate>
 {
@@ -347,7 +348,7 @@
 #pragma mark - MyMethod
 
 //创建循环滚动的scrollview
--(UIView*)creatGscrollView{
+-(UIView *)creatGscrollView{
 
     NSMutableArray *viewsArray = [NSMutableArray arrayWithCapacity:1];
     _daojishiArray = [NSMutableArray arrayWithCapacity:1];
@@ -425,24 +426,36 @@
         
     }
     
-    self.mainScorllView = [[CycleScrollView alloc] initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, DEVICE_WIDTH * W_H_RATIO) animationDuration:4];
-    self.mainScorllView.scrollView.showsHorizontalScrollIndicator = FALSE;
+//    self.mainScorllView = [[CycleScrollView alloc] initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, DEVICE_WIDTH * W_H_RATIO) animationDuration:4];
+//    self.mainScorllView.scrollView.showsHorizontalScrollIndicator = FALSE;
+//    
+//    self.mainScorllView.fetchContentViewAtIndex = ^UIView *(NSInteger pageIndex){
+//        return viewsArray[pageIndex];
+//    };
+//    
+//    NSInteger count = _TopDataArray.count;
+//    self.mainScorllView.totalPagesCount = ^NSInteger(void){
+//        return count;
+//    };
+//    
+//    __weak typeof (self)bself = self;
+//    self.mainScorllView.TapActionBlock = ^(NSInteger pageIndex){
+//        [bself cycleScrollDidClickedWithIndex:pageIndex];
+//    };
     
-    self.mainScorllView.fetchContentViewAtIndex = ^UIView *(NSInteger pageIndex){
-        return viewsArray[pageIndex];
-    };
-    
-    NSInteger count = _TopDataArray.count;
-    self.mainScorllView.totalPagesCount = ^NSInteger(void){
-        return count;
-    };
-    
+    LBannerView *bannerView = [[LBannerView alloc] initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, DEVICE_WIDTH * W_H_RATIO)];
+    [bannerView setContentViews:viewsArray];
+    [bannerView showPageControl];
+    [bannerView setBackgroundColor:[UIColor lightGrayColor]];
     __weak typeof (self)bself = self;
-    self.mainScorllView.TapActionBlock = ^(NSInteger pageIndex){
-        [bself cycleScrollDidClickedWithIndex:pageIndex];
-    };
+    [bannerView setTapActionBlock:^(NSInteger index) {
+        NSLog(@"--tap index %ld",index);
+        [bself cycleScrollDidClickedWithIndex:index];
+    }];
     
-    return self.mainScorllView;
+    [bannerView setAutomicScrollingDuration:3];
+    
+    return bannerView;
 }
 
 /**
@@ -463,7 +476,7 @@
         NSString *url = model.url;
         WebviewController *web = [[WebviewController alloc]init];
         web.webUrl = url;
-        web.title = model.title;
+        web.titleString = model.title;
         web.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:web animated:YES];
         
@@ -497,7 +510,7 @@
             [_TopDataArray addObject:model];
         }
         
-        if (list.count>0) {
+        if (list.count > 0) {
             _tableView.tableHeaderView = [self creatGscrollView];
         }
 

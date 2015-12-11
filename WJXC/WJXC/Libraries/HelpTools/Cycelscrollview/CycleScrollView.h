@@ -5,7 +5,10 @@
 //  Created by gaomeng on 14-1-23.
 //  Copyright (c) 2014年 Apple Inc. All rights reserved.
 //
-
+/**
+ *  hhhhhhhhhhh
+ *
+ */
 #import <UIKit/UIKit.h>
 
 @interface CycleScrollView : UIView

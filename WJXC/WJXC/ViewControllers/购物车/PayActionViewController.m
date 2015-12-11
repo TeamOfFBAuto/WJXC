@@ -48,29 +48,31 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    self.navigationController.navigationBarHidden = YES;
-    self.navigationController.navigationBarHidden = NO;
+//    self.navigationController.navigationBarHidden = YES;
+//    self.navigationController.navigationBarHidden = NO;
+    
+    [self.navigationController setNavigationBarHidden:NO animated:animated];
 }
 
--(void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    
-    //在navigationController中移除 确认订单viewController
-    
-    //确认订单之后到支付页面,这时候不能再返回到确认订单页面
-    
-    NSArray *vcArray = self.navigationController.viewControllers;
-    
-    for (UIViewController *viewController in vcArray) {
-        
-        if ([viewController isKindOfClass:NSClassFromString(@"ConfirmOrderController")]) {
-            
-            [viewController removeFromParentViewController];
-        }
-    }
-    
-}
+//-(void)viewDidAppear:(BOOL)animated
+//{
+//    [super viewDidAppear:animated];
+//    
+//    //在navigationController中移除 确认订单viewController
+//    
+//    //确认订单之后到支付页面,这时候不能再返回到确认订单页面
+//    
+//    NSArray *vcArray = self.navigationController.viewControllers;
+//    
+//    for (UIViewController *viewController in vcArray) {
+//        
+//        if ([viewController isKindOfClass:NSClassFromString(@"ConfirmOrderController")]) {
+//            
+//            [viewController removeFromParentViewController];
+//        }
+//    }
+//    
+//}
 
 #pragma - mark 通知处理
 
@@ -88,7 +90,7 @@
         
     }else
     {
-        [self payResultSuccess:NO erroInfo:erroInfo];
+        [self payResultSuccess:PAY_RESULT_TYPE_Fail  erroInfo:erroInfo];
     }
 }
 
@@ -105,6 +107,7 @@
 
     [_loading show:YES];
     _validateTime = 10;//十次
+    [self networkForPayValidate];
     _validateTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(networkForPayValidate) userInfo:nil repeats:YES];
 }
 
@@ -135,16 +138,36 @@
     [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodGet api:ORDER_GET_ORDER_PAY parameters:params constructingBodyBlock:nil completion:^(NSDictionary *result) {
         NSLog(@"result %@",result);
         
-        [weakSelf stopTimer];
-        
+        // 0和1的情况下,服务端已经收到支付宝异步通知
         int pay = [result[@"pay"]intValue];
+        
         if (pay == 1) {
             
-            [weakSelf payResultSuccess:YES erroInfo:nil];
-        }else
+            [weakSelf stopTimer];
+            
+            [weakSelf payResultSuccess:PAY_RESULT_TYPE_Success erroInfo:@"支付成功"];
+            
+        }else if (pay == 0)
         {
-            [weakSelf payResultSuccess:NO erroInfo:result[Erro_Info]];
+            [weakSelf stopTimer];
+            
+            [weakSelf payResultSuccess:PAY_RESULT_TYPE_Fail erroInfo:@"支付失败"];
+            
+        }else{
+            
+            //pay == 2 正在支付中,或者其他未有状态
+            
+            NSLog(@"正在支付中");
+            
+            if (_validateTime == 0) {
+                
+                [weakSelf stopTimer];
+                
+                [weakSelf payResultSuccess:PAY_RESULT_TYPE_Waiting erroInfo:@"支付结果处理中"];
+            }
         }
+        
+        _validateTime --;
         
     } failBlock:^(NSDictionary *result) {
         NSLog(@"result fail %@",result);
@@ -238,7 +261,7 @@
             {
                 NSLog(@"支付失败");
                 
-                [weakSelf payResultSuccess:NO erroInfo:@"中途取消支付或者网络连接错误"];
+                [weakSelf payResultSuccess:PAY_RESULT_TYPE_Fail erroInfo:@"中途取消支付或者网络连接错误"];
 //                8000
 //                正在处理中
 //                4000
@@ -378,7 +401,7 @@
 /**
  *  支付成功
  */
-- (void)payResultSuccess:(PAY_RESULT_TYPE)result
+- (void)payResultSuccess:(PAY_RESULT_TYPE)resultType
                 erroInfo:(NSString *)erroInfo
 {
     //更新购物车
@@ -387,15 +410,18 @@
     //支付成功通知
     [[NSNotificationCenter defaultCenter]postNotificationName:NOTIFICATION_PAY_SUCCESS object:nil];
 
-//    PayResultViewController *result = [[PayResultViewController alloc]init];
-//    result.orderId = self.orderId;
-//    result.orderNum = self.orderNum;
-//    result.sumPrice = self.sumPrice;
-//    result.isPaySuccess = success;
-//    result.erroInfo = erroInfo;
-//    result.hidesBottomBarWhenPushed = YES;
-//    [self.navigationController pushViewController:result animated:YES];
-}
+    PayResultViewController *result = [[PayResultViewController alloc]init];
+    result.orderId = self.orderId;
+    result.orderNum = self.orderNum;
+    result.sumPrice = self.sumPrice;
+    result.payResultType = resultType;
+    result.erroInfo = erroInfo;
+    if (self.lastVc && (resultType != PAY_RESULT_TYPE_Fail)) { //成功和等待中需要pop掉,失败的时候不需要,有可能返回重新支付
+        [self.lastVc.navigationController popViewControllerAnimated:NO];
+        [self.lastVc.navigationController pushViewController:result animated:YES];
+        return;
+    }
+    [self.navigationController pushViewController:result animated:YES];}
 
 /**
  *  查看订单
