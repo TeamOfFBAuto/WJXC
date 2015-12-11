@@ -26,7 +26,7 @@
  *  默认头像
  */
 
-#define DEFAULT_HEADIMAGE [UIImage imageNamed:@"grzx150_150"] //默认头像
+#define DEFAULT_HEADIMAGE [UIImage imageNamed:@"default"] //默认头像
 #define DEFAULT_BANNER_IMAGE [UIImage imageNamed:@"my_bg.png"] //默认banner
 
 #define DEFAULT_YIJIAYI [UIImage imageNamed:@"default"] //默认图标

@@ -1375,11 +1375,11 @@
     hud.mode = MBProgressHUDModeText;
     hud.labelText = text;
     hud.margin = 10.f;
-    hud.yOffset = 150.f;
-    hud.opacity = 0.7f;
+//    hud.yOffset = 150.f;
+//    hud.opacity = 0.7f;
     hud.removeFromSuperViewOnHide = YES;
-    hud.color = DEFAULT_TEXTCOLOR;
-    hud.labelFont = [UIFont systemFontOfSize:12];
+//    hud.color = DEFAULT_TEXTCOLOR;
+//    hud.labelFont = [UIFont systemFontOfSize:12];
     [hud setCornerRadius:3.f];
     [hud hide:YES afterDelay:1.5];
 }

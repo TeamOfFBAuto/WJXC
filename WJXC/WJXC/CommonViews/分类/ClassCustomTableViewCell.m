@@ -35,7 +35,7 @@
     CGFloat height_width = 560.0/750;
     
     UIImageView *imv = [[UIImageView alloc]initWithFrame:CGRectMake(0, 5, DEVICE_WIDTH, DEVICE_WIDTH *height_width)];
-    [imv sd_setImageWithURL:[NSURL URLWithString:model.cover_pic] placeholderImage:nil];
+    [imv l_setImageWithURL:[NSURL URLWithString:model.cover_pic] placeholderImage:nil];
     [self.contentView addSubview:imv];
     
     

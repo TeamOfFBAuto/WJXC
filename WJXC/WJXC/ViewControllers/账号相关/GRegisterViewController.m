@@ -329,7 +329,6 @@
             
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
             NSLog(@"failDic %@",result);
-//            [GMAPI showAutoHiddenMBProgressWithText:[result objectForKey:@"msg"] addToView:self.view];
             [weakSelf renewTimer];
         }];
     }
@@ -378,10 +377,10 @@
         return;
     }
     
-    NSString *userName = @"";
+//    NSString *userName = @"";
     NSString *password = self.mimaTf.text;
-    Gender sex = Gender_Girl;//默认女
-    Register_Type type = Register_Phone;//默认手机号方式
+//    Gender sex = Gender_Girl;//默认女
+//    Register_Type type = Register_Phone;//默认手机号方式
     int code = [self.yanzhengmaTf.text intValue];
     NSString *mobile = self.phoneTF.text;
     
@@ -394,11 +393,6 @@
     if (![LTools isValidatePwd:password]) {
         
         [LTools alertText:ALERT_ERRO_PASSWORD viewController:self];
-        return;
-    }
-    if (self.mimaTf.text.length != 6) {
-        
-        [LTools alertText:ALERT_ERRO_SECURITYCODE viewController:self];
         return;
     }
     
@@ -428,6 +422,11 @@
     
     [self.navigationController popViewControllerAnimated:YES];
     
+    //注册成功block
+    if (self.registerBlock) {
+        
+        self.registerBlock(self.phoneTF.text,self.mimaTf.text);
+    }
 }
 
 

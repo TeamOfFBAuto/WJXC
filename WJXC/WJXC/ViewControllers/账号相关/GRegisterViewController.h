@@ -10,6 +10,8 @@
 
 #import "MyViewController.h"
 
+typedef void(^RegisterBlock)(NSString *phoneNum,NSString *passWord);//注册成功的block
+
 @interface GRegisterViewController : MyViewController
 
 @property(nonatomic,strong)UIView *upThreeStepView;//上面三个步骤的view
@@ -23,5 +25,8 @@
 @property(nonatomic,strong)UITextField *mimaTf;//密码
 
 @property(nonatomic,strong)UITextField *mima2Tf;//重复密码
+
+@property(nonatomic,copy)RegisterBlock registerBlock;//注册block
+
 
 @end

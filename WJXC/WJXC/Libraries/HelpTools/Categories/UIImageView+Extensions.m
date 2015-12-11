@@ -101,29 +101,49 @@
  */
 -(void)l_setImageWithURL:(NSURL *)url placeholderImage:(UIImage *)placeholder
 {
-//    __block UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
-//    indicator.frame = self.bounds;
-//    [self addSubview:indicator];
-//    indicator.center = CGPointMake(self.width/2.f, self.height/2.f);
-//    [indicator startAnimating];
-    
-    self.contentMode =  UIViewContentModeCenter;
-    self.backgroundColor = DEFAULT_VIEW_BACKGROUNDCOLOR;
+    [self l_setImageWithURL:url placeholderImage:placeholder completed:nil];
+}
 
+- (void)l_setImageWithURL:(NSURL *)url placeholderImage:(UIImage *)placeholder completed:(SDWebImageCompletionBlock)completedBlock {
+    
+    self.backgroundColor = DEFAULT_VIEW_BACKGROUNDCOLOR;
+    //没有默认图时加菊花
+    __block UIActivityIndicatorView *indicator;
+    if (!placeholder) {
+        
+        indicator = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        indicator.frame = self.bounds;
+        [self addSubview:indicator];
+        indicator.center = CGPointMake(self.width/2.f, self.height/2.f);
+        [indicator startAnimating];
+        //        indicator.backgroundColor = [UIColor redColor];
+    }else
+    {
+        self.contentMode =  UIViewContentModeCenter;
+    }
+    
+    __weak typeof(self)weakSelf = self;
     [self sd_setImageWithURL:url placeholderImage:placeholder completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         
+        //block callBack
+        if (completedBlock) {
+            completedBlock(image,error,cacheType,imageURL);
+        }
+        
+        //update by lcw
         if (image) {
             
             self.contentMode = UIViewContentModeScaleToFill;//等比例拉伸填充
         }else
         {
-            //此模式小图标居中显示 不拉伸
-//            self.contentMode =  UIViewContentModeCenter;
-//            self.image = placeholder;
+            UILabel *label = [[UILabel alloc]initWithFrame:self.bounds title:@"" font:10 align:NSTextAlignmentCenter textColor:[UIColor colorWithHexString:@"646464"]];
+            [weakSelf addSubview:label];
         }
         
-//        [indicator stopAnimating];
-
+        [indicator stopAnimating];
+        [indicator removeFromSuperview];
+        indicator = nil;
+        
     }];
 }
 
