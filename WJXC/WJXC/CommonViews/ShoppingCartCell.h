@@ -22,6 +22,7 @@
 @property (strong, nonatomic) IBOutlet UIView *bgView;
 @property (strong, nonatomic) IBOutlet UIButton *deleteBtn;
 
+@property (strong, nonatomic) IBOutlet UIView *numView;
 - (void)setCellWithModel:(id)aModel;
 
 @end

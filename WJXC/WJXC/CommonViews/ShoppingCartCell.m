@@ -26,14 +26,13 @@
 
 - (void)setCellWithModel:(ProductModel *)aModel
 {
-//    _aModel = aModel;
-//    
-//    [self.addButton addTarget:self action:@selector(clickToAdd:) forControlEvents:UIControlEventTouchUpInside];
-//    [self.reduceButton addTarget:self action:@selector(clickToReduce:) forControlEvents:UIControlEventTouchUpInside];
+    [self.productImageView l_setImageWithURL:[NSURL URLWithString:aModel.cover_pic] placeholderImage:DEFAULT_HEADIMAGE];
     
-    [self.productImageView sd_setImageWithURL:[NSURL URLWithString:aModel.cover_pic] placeholderImage:DEFAULT_HEADIMAGE];
+//    CGFloat width = self.numView.left - self.productImageView.right - 20;
+//    _nameLabel.width = width;
+    
     NSString *name = aModel.product_name;
-    self.nameLabel.width = [LTools widthForText:name font:13];
+//    self.nameLabel.width = [LTools widthForText:name font:13];
     _nameLabel.numberOfLines = 2;
     _nameLabel.lineBreakMode = NSLineBreakByCharWrapping;
     _nameLabel.height = [LTools heightForText:name width:_nameLabel.width font:13];
@@ -46,14 +45,5 @@
     self.reduceButton.userInteractionEnabled = [aModel.product_num intValue] == 1 ? NO : YES;
 }
 
-//- (void)clickToAdd:(UIButton *)sender
-//{
-//    
-//}
-//
-//- (void)clickToReduce:(UIButton *)sender
-//{
-//    
-//}
 
 @end
