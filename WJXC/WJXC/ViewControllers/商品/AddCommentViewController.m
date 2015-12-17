@@ -134,7 +134,7 @@
         ProductModel *amodel = _dataArray[indexPath.row];
         
         UIImageView *imv = [[UIImageView alloc]initWithFrame:CGRectMake(10, 15, 60, 60)];
-        [imv sd_setImageWithURL:[NSURL URLWithString:amodel.cover_pic] placeholderImage:[UIImage imageNamed:@"default.png"]];
+        [imv l_setImageWithURL:[NSURL URLWithString:amodel.cover_pic] placeholderImage:DEFAULT_HEADIMAGE];
         [cell.contentView addSubview:imv];
         
         UILabel *tt = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMaxX(imv.frame)+10, imv.frame.origin.y, DEVICE_WIDTH - 80 - 90, imv.frame.size.height) title:amodel.product_name font:15 align:NSTextAlignmentLeft textColor:[UIColor blackColor]];

@@ -32,9 +32,9 @@
     self.headerImv.layer.cornerRadius = 18;
     self.headerImv.backgroundColor = [UIColor grayColor];
     if ([model.is_anony intValue] == 1) {//匿名
-        [self.headerImv setImage:[UIImage imageNamed:@"default.png"]];
+        [self.headerImv setImage:DEFAULT_HEADIMAGE];
     }else if ([model.is_anony intValue] == 0){
-        [self.headerImv sd_setImageWithURL:[NSURL URLWithString:model.avatar] placeholderImage:[UIImage imageNamed:@"default.png"]];
+        [self.headerImv l_setImageWithURL:[NSURL URLWithString:model.avatar] placeholderImage:DEFAULT_HEADIMAGE];
     }
     
     self.headerImv.layer.masksToBounds = YES;
@@ -97,7 +97,7 @@
         for (int i = 0; i<count; i++) {
             GclickedImv *imv = [[GclickedImv alloc]initWithFrame:CGRectMake(i%3*(oneImvWithd+5), i/3*(oneImvWithd+5), oneImvWithd, oneImvWithd)];
             NSDictionary *dic = model.comment_pic[i];
-            [imv sd_setImageWithURL:[NSURL URLWithString:[dic stringValueForKey:@"pic"]] placeholderImage:[UIImage imageNamed:@"default.png"]];
+            [imv l_setImageWithURL:[NSURL URLWithString:[dic stringValueForKey:@"pic"]] placeholderImage:DEFAULT_HEADIMAGE];
             imv.userInteractionEnabled = YES;
             imv.url = [dic stringValueForKey:@"pic"];
             imv.urls = tmpArray;

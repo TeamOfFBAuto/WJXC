@@ -31,7 +31,7 @@
             bili = cor_width/cor_height;
         }
         UIImageView *coverImv = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, 180*bili)];
-        [coverImv sd_setImageWithURL:[NSURL URLWithString:theModel.cover_pic] placeholderImage:[UIImage imageNamed:@"default02.png"]];
+        [coverImv l_setImageWithURL:[NSURL URLWithString:theModel.cover_pic] placeholderImage:DEFAULT_HEADIMAGE];
         [self.contentView addSubview:coverImv];
         //标题
         UILabel *huodongLable = [[UILabel alloc]initWithFrame:CGRectMake(10, CGRectGetMaxY(coverImv.frame)+10, DEVICE_WIDTH - 20, 0) title:theModel.title font:13 align:NSTextAlignmentLeft textColor:RGBCOLOR(240, 114, 0)];

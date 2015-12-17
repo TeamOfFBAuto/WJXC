@@ -19,6 +19,7 @@
 #import "ButtonProperty.h"
 #import "CouponModel.h"
 #import "CycleScrollView.h"
+#import "LBannerView.h"
 
 @interface ProductDetailViewController ()<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate>
 {
@@ -394,37 +395,29 @@
     NSArray *coverImages = aModel.multi_cover;
     if (!aModel || coverImages.count == 0) {
         
-        UIImageView *imv = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, 0)];
-        [imv sd_setImageWithURL:[NSURL URLWithString:_theProductModel.cover_pic] placeholderImage:[UIImage imageNamed:@"default02.png"]];
+        UIImageView *imv = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, DEVICE_WIDTH * W_H_RATIO)];
+        [imv l_setImageWithURL:[NSURL URLWithString:_theProductModel.cover_pic] placeholderImage:DEFAULT_HEADIMAGE];
         return imv;
     }
+    
     int count = (int)coverImages.count;
     NSMutableArray *viewsArray = [NSMutableArray arrayWithCapacity:1];
     for (int i = 0; i < count; i++) {
         UIImageView *imv = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, DEVICE_WIDTH *W_H_RATIO)];
         imv.userInteractionEnabled = YES;
         NSDictionary *dic = coverImages[i];
-        [imv sd_setImageWithURL:[NSURL URLWithString:dic[@"cover_pic"]] placeholderImage:[UIImage imageNamed:@"default02"]];
+        [imv l_setImageWithURL:[NSURL URLWithString:dic[@"cover_pic"]] placeholderImage:DEFAULT_HEADIMAGE];
         [viewsArray addObject:imv];
     }
     
-    self.mainScorllView = [[CycleScrollView alloc] initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, DEVICE_WIDTH * W_H_RATIO) animationDuration:4];
-    self.mainScorllView.scrollView.showsHorizontalScrollIndicator = FALSE;
+    LBannerView *bannerView = [[LBannerView alloc] initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, DEVICE_WIDTH * W_H_RATIO)];
+    [bannerView setContentViews:viewsArray];
+    [bannerView showPageControl];
+    [bannerView setBackgroundColor:[UIColor lightGrayColor]];
     
-    self.mainScorllView.fetchContentViewAtIndex = ^UIView *(NSInteger pageIndex){
-        return viewsArray[pageIndex];
-    };
+    [bannerView setAutomicScrollingDuration:3];
     
-    self.mainScorllView.totalPagesCount = ^NSInteger(void){
-        return count;
-    };
-    
-//    __weak typeof (self)bself = self;
-//    self.mainScorllView.TapActionBlock = ^(NSInteger pageIndex){
-//        [bself cycleScrollDidClickedWithIndex:pageIndex];
-//    };
-    
-    return self.mainScorllView;
+    return bannerView;
 }
 
 
@@ -1070,9 +1063,6 @@
     
     if (indexPath.row == 0) {
         
-//        UIImageView *imv = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, 0)];
-//        [imv sd_setImageWithURL:[NSURL URLWithString:_theProductModel.cover_pic] placeholderImage:[UIImage imageNamed:@"default02.png"]];
-//        [cell.contentView addSubview:imv];
         return cell;
     }
     

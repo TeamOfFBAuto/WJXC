@@ -83,7 +83,7 @@
     
     
     UIImageView *imv = [[UIImageView alloc]initWithFrame:CGRectMake(10, 10, 60, 60)];
-    [imv sd_setImageWithURL:[NSURL URLWithString:self.theModel.cover_pic] placeholderImage:[UIImage imageNamed:@"default.png"]];
+    [imv l_setImageWithURL:[NSURL URLWithString:self.theModel.cover_pic] placeholderImage:DEFAULT_HEADIMAGE];
     [upview addSubview:imv];
     
     UILabel *tt = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMaxX(imv.frame)+10, imv.frame.origin.y, DEVICE_WIDTH - 80 - 90, imv.frame.size.height) title:self.theModel.product_name font:15 align:NSTextAlignmentLeft textColor:[UIColor blackColor]];

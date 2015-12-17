@@ -225,7 +225,7 @@
         
         NSString *imgUrl = [dic stringValueForKey:@"cover_pic"];
         UIImageView *imagev = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, viewWidth, viewWidth)];
-        [imagev sd_setImageWithURL:[NSURL URLWithString:imgUrl] placeholderImage:[UIImage imageNamed:@"default.png"]];
+        [imagev l_setImageWithURL:[NSURL URLWithString:imgUrl] placeholderImage:DEFAULT_HEADIMAGE];
         [view addSubview:imagev];
         
         UILabel *titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(imagev.frame), viewWidth, 20)];

@@ -60,6 +60,7 @@
     _cellHeight = (DEVICE_WIDTH/2- 5)  * W_H_RATIO;
     
     
+    self.view.backgroundColor = [UIColor whiteColor];
     self.myTitle = @"万聚鲜城";
     [self setMyViewControllerLeftButtonType:MyViewControllerLeftbuttonTypeNull WithRightButtonType:MyViewControllerRightbuttonTypeNull];
 
@@ -111,7 +112,8 @@
     
     [self getScrollviewNetData];
     
-    
+    NSArray *test = @[@"test"];
+//    NSString *s = test[2];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -145,7 +147,7 @@
                              @"province_id":[dic stringValueForKey:@"province"],
                              @"city_id":[dic stringValueForKey:@"city"],
                              @"page":[NSString stringWithFormat:@"%d",_tableView.pageNum],
-                             @"perpage":@"10"
+                             @"per_page":@"10"
                              };
     [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodGet api:GET_PRODUCTlIST parameters:parame constructingBodyBlock:nil completion:^(NSDictionary *result) {
         
@@ -156,7 +158,7 @@
             [arr addObject:model];
         }
         
-        [tableView reloadData:arr pageSize:20];
+        [tableView reloadData:arr pageSize:10];
     } failBlock:^(NSDictionary *result) {
         
         [tableView loadFail];
@@ -245,17 +247,27 @@
         UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake(5, 0, DEVICE_WIDTH - 10, (DEVICE_WIDTH - 10) / 3.f) ];
         imageView.tag = 100;
         [cell.contentView addSubview:imageView];
+        
+        UIImageView *miaosha = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 32, 32)];
+        miaosha.image = [UIImage imageNamed:@"homepage_miaosha"];
+        [imageView addSubview:miaosha];
+        miaosha.tag = 101;
     }
     
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     ProductModel *model = _tableView.dataArray[indexPath.row];
     
     UIImageView *imageView = [cell.contentView viewWithTag:100];
-    [imageView sd_setImageWithURL:[NSURL URLWithString:model.list_cover_pic] placeholderImage:[UIImage imageNamed:@"default01"]];
+    [imageView l_setImageWithURL:[NSURL URLWithString:model.list_cover_pic] placeholderImage:DEFAULT_HEADIMAGE];
     
-    //    for (UIView *view in cell.contentView.subviews) {
-    //        [view removeFromSuperview];
-    //    }
+    UIImageView *miaosha = [imageView viewWithTag:101];
+    int is_seckill = [model.is_seckill intValue];
+    if (is_seckill == 1) {
+        miaosha.hidden = NO;
+    }else
+    {
+        miaosha.hidden = YES;
+    }
 
 //    UIImageView *imv = [[UIImageView alloc]initWithFrame:CGRectMake(5, 5, DEVICE_WIDTH-10, _cellHeight)];
 //    imv.backgroundColor = [UIColor whiteColor];
@@ -355,7 +367,7 @@
         adverModel *amodel = _TopDataArray[i];
         NSString *str = amodel.cover_pic;
 //        imv.backgroundColor = [UIColor orangeColor];
-        [imv sd_setImageWithURL:[NSURL URLWithString:str] placeholderImage:[UIImage imageNamed:@"default02.png"]];
+        [imv l_setImageWithURL:[NSURL URLWithString:str] placeholderImage:DEFAULT_HEADIMAGE];
         
         if ([amodel.type intValue] == 2) {//秒杀
             NSDictionary *relative_info = amodel.relative_info;
@@ -489,10 +501,7 @@
 
 
 -(void)getScrollviewNetData{
-    NSDictionary *parame = @{
-                             @"page":@"1",
-                             @"perpage":@"10"
-                             };
+    NSDictionary *parame = nil;
     
     [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodGet api:GET_HOMESCROLLVIEWDATA parameters:parame constructingBodyBlock:nil completion:^(NSDictionary *result) {
         

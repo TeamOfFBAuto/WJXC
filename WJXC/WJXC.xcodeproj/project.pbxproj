@@ -130,7 +130,7 @@
 		13A147101B6A1CE600B6A3DB /* OrderModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 13A1470F1B6A1CE600B6A3DB /* OrderModel.m */; };
 		13A147131B6B6A6900B6A3DB /* order_chat@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 13A147111B6B6A6900B6A3DB /* order_chat@2x.png */; };
 		13A147141B6B6A6900B6A3DB /* order_phone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 13A147121B6B6A6900B6A3DB /* order_phone@2x.png */; };
-		13A147161B6B865000B6A3DB /* default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 13A147151B6B865000B6A3DB /* default@2x.png */; };
+		13A147161B6B865000B6A3DB /* default111@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 13A147151B6B865000B6A3DB /* default111@2x.png */; };
 		13A2087A1B5C96C800CC4EC0 /* ConfirmInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 13A208781B5C96C800CC4EC0 /* ConfirmInfoCell.m */; };
 		13A2087B1B5C96C800CC4EC0 /* ConfirmInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13A208791B5C96C800CC4EC0 /* ConfirmInfoCell.xib */; };
 		13A2087F1B5CD81C00CC4EC0 /* SelectAddressCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 13A2087D1B5CD81C00CC4EC0 /* SelectAddressCell.m */; };
@@ -170,6 +170,7 @@
 		13E8FEAA1B8C619B00840BF9 /* homepage_xq_gwc@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 13E8FEA91B8C619B00840BF9 /* homepage_xq_gwc@2x.png */; };
 		13EB1EA01B623E3600E5CA57 /* my_√@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 13EB1E9F1B623E3600E5CA57 /* my_√@2x.png */; };
 		13F1F8AB1B70DA2800831BF9 /* my_payFail@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 13F1F8AA1B70DA2800831BF9 /* my_payFail@2x.png */; };
+		13FCCA1D1C1EAC3C0098A9C1 /* default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 13FCCA1C1C1EAC3C0098A9C1 /* default@2x.png */; };
 		13FEA4781B4A28E1009BD01D /* PersonalCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 13FEA4761B4A28E1009BD01D /* PersonalCell.m */; };
 		13FEA4791B4A28E1009BD01D /* PersonalCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13FEA4771B4A28E1009BD01D /* PersonalCell.xib */; };
 		13FEA47B1B4A35BD009BD01D /* my_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 13FEA47A1B4A35BD009BD01D /* my_bg@2x.png */; };
@@ -493,7 +494,7 @@
 		13A1470F1B6A1CE600B6A3DB /* OrderModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrderModel.m; sourceTree = "<group>"; };
 		13A147111B6B6A6900B6A3DB /* order_chat@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "order_chat@2x.png"; sourceTree = "<group>"; };
 		13A147121B6B6A6900B6A3DB /* order_phone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "order_phone@2x.png"; sourceTree = "<group>"; };
-		13A147151B6B865000B6A3DB /* default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default@2x.png"; sourceTree = "<group>"; };
+		13A147151B6B865000B6A3DB /* default111@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default111@2x.png"; sourceTree = "<group>"; };
 		13A208771B5C96C800CC4EC0 /* ConfirmInfoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfirmInfoCell.h; sourceTree = "<group>"; };
 		13A208781B5C96C800CC4EC0 /* ConfirmInfoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConfirmInfoCell.m; sourceTree = "<group>"; };
 		13A208791B5C96C800CC4EC0 /* ConfirmInfoCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ConfirmInfoCell.xib; sourceTree = "<group>"; };
@@ -562,6 +563,7 @@
 		13E8FEA91B8C619B00840BF9 /* homepage_xq_gwc@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "homepage_xq_gwc@2x.png"; sourceTree = "<group>"; };
 		13EB1E9F1B623E3600E5CA57 /* my_√@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "my_√@2x.png"; sourceTree = "<group>"; };
 		13F1F8AA1B70DA2800831BF9 /* my_payFail@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "my_payFail@2x.png"; sourceTree = "<group>"; };
+		13FCCA1C1C1EAC3C0098A9C1 /* default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default@2x.png"; sourceTree = "<group>"; };
 		13FEA4751B4A28E1009BD01D /* PersonalCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonalCell.h; sourceTree = "<group>"; };
 		13FEA4761B4A28E1009BD01D /* PersonalCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonalCell.m; sourceTree = "<group>"; };
 		13FEA4771B4A28E1009BD01D /* PersonalCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PersonalCell.xib; sourceTree = "<group>"; };
@@ -1869,7 +1871,8 @@
 				136C03DD1BB168B900E5395D /* 优惠劵 */,
 				E3F1A0321B6FDE1A00102989 /* default01@2x.png */,
 				E3F1A0331B6FDE1A00102989 /* default02@2x.png */,
-				13A147151B6B865000B6A3DB /* default@2x.png */,
+				13A147151B6B865000B6A3DB /* default111@2x.png */,
+				13FCCA1C1C1EAC3C0098A9C1 /* default@2x.png */,
 				131A933F1C00760500E80781 /* guanbi@2x.png */,
 				E3CE7F691B4D4C660012940C /* 商品 */,
 				139456AC1B46296F00C45EB6 /* 登录 */,
@@ -2057,6 +2060,7 @@
 				13A64BF11B3BDF5D00D9A106 /* Frameworks */,
 				13A64BF21B3BDF5D00D9A106 /* Resources */,
 				4EC23EB9AD1E4F763578E0AF /* Copy Pods Resources */,
+				5A3D462DE7C040839C821917 /* Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -2190,6 +2194,7 @@
 				E350150B1B68CD6800A6B9DE /* buy_jiantou_d@2x.png in Resources */,
 				1394571E1B46296F00C45EB6 /* my_address@2x.png in Resources */,
 				13A2087B1B5C96C800CC4EC0 /* ConfirmInfoCell.xib in Resources */,
+				13FCCA1D1C1EAC3C0098A9C1 /* default@2x.png in Resources */,
 				E3F1A0B71B70F0DA00102989 /* compose_pic_add_highlighted@3x.png in Resources */,
 				139457151B46296F00C45EB6 /* classify_2_jt@2x.png in Resources */,
 				139457411B46296F00C45EB6 /* homepage_bottom_classify_green@2x.png in Resources */,
@@ -2228,7 +2233,7 @@
 				139457071B46296F00C45EB6 /* login_qq@2x.png in Resources */,
 				139457261B46296F00C45EB6 /* my_setting@2x.png in Resources */,
 				13B11D1A1BB183F9005C933B /* youhui_lingqu@2x.png in Resources */,
-				13A147161B6B865000B6A3DB /* default@2x.png in Resources */,
+				13A147161B6B865000B6A3DB /* default111@2x.png in Resources */,
 				13FEA49D1B4BD590009BD01D /* AddressCell.xib in Resources */,
 				1375AD5B1B4D054D001631CE /* my_password_line_green.png in Resources */,
 				E3D07FED1B3D4A9100E4F87D /* UMSocialLocalizable.strings in Resources */,
@@ -2333,6 +2338,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		5A3D462DE7C040839C821917 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */

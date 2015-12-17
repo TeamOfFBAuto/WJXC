@@ -174,9 +174,10 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 		</dict>
 		<dict>
 			<key>FooterText</key>
-			<string>LICENSE Copyright 2009 - 2012 UMeng.com, Inc. All rights reserved.</string>
+			<string>Copyright 2011 - 2015 UMeng.com. All rights reserved.
+</string>
 			<key>Title</key>
-			<string>UMeng</string>
+			<string>UMengAnalytics-NO-IDFA</string>
 			<key>Type</key>
 			<string>PSGroupSpecifier</string>
 		</dict>

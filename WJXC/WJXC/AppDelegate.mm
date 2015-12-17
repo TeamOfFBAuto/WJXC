@@ -50,7 +50,6 @@
     NSString *name = [NSString stringWithFormat:@"万聚鲜城%@",version];
     [WXApi registerApp:WXAPPID withDescription:name];
     
-    
 #pragma - mark 融云
     //融云
     
@@ -82,7 +81,7 @@
     
 #pragma mark JPush远程通知
     
-    [APService crashLogON];
+//    [APService crashLogON];
     
     // Required
     if ([[UIDevice currentDevice].systemVersion floatValue] >= 8.0) {
@@ -425,14 +424,16 @@
 
 - (void)umengShare
 {
+    //使用友盟统计
+    [MobClick startWithAppkey:UmengAppkey reportPolicy:BATCH channelId:nil];
+//    [MobClick setLogEnabled:YES];
+//    [MobClick setCrashReportEnabled:YES];
+    
     //友盟反馈
     
     [UMFeedback setAppkey:UmengAppkey];
     
     [UMSocialData setAppKey:UmengAppkey];
-    
-    //使用友盟统计
-    [MobClick startWithAppkey:UmengAppkey];
     
     //打开调试log的开关
     [UMSocialData openLog:NO];
