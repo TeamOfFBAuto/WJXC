@@ -88,8 +88,6 @@
     negativeSpacer.width = -18;
     self.navigationItem.rightBarButtonItems = @[negativeSpacer,btn_right];
     
-    
-    
     if ([GMAPI cacheForKey:USERLocation]) {
         
         NSDictionary *dic = [GMAPI cacheForKey:USERLocation];
@@ -111,9 +109,6 @@
     }
     
     [self getScrollviewNetData];
-    
-    NSArray *test = @[@"test"];
-//    NSString *s = test[2];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -202,7 +197,7 @@
             [arr addObject:model];
         }
         
-        [tableView reloadData:arr pageSize:20];
+        [tableView reloadData:arr pageSize:10];
     } failBlock:^(NSDictionary *result) {
         [tableView loadFail];
     }];
@@ -554,8 +549,8 @@
         [al show];
         return;
     }else if (kCLAuthorizationStatusDenied == status){
-        DDLOG(@"请允许衣加衣使用定位服务");
-        UIAlertView *al = [[UIAlertView alloc]initWithTitle:@"提示" message:@"请允许衣加衣使用定位服务" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+        DDLOG(@"请允许万聚鲜城使用定位服务");
+        UIAlertView *al = [[UIAlertView alloc]initWithTitle:@"提示" message:@"请允许万聚鲜城使用定位服务" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
         [al show];
         return;
     }
@@ -566,10 +561,6 @@
         
         [weakSelf theLocationDictionary:dic];
     }];
-    
-    
-    
-    
 }
 
 
@@ -601,11 +592,7 @@
                           };
     [GMAPI cache:cachDic ForKey:USERLocation];
     
-    
-    
     [self creatTableView];
-    
-    
 }
 
 
