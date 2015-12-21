@@ -65,14 +65,6 @@
     [self setMyViewControllerLeftButtonType:MyViewControllerLeftbuttonTypeNull WithRightButtonType:MyViewControllerRightbuttonTypeNull];
 
     
-    self.leftLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 80, 40)];
-    self.leftLabel.textColor = RGBCOLOR(124, 172, 0);
-    self.leftLabel.font = [UIFont systemFontOfSize:15];
-    [self.leftLabel addTaget:self action:@selector(pushToLocationChoose) tag:0];
-    
-    
-    UIBarButtonItem *leftBar = [[UIBarButtonItem alloc]initWithCustomView:self.leftLabel];
-    self.navigationItem.leftBarButtonItem = leftBar;
     
     
     UIButton *searchBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -88,8 +80,51 @@
     negativeSpacer.width = -18;
     self.navigationItem.rightBarButtonItems = @[negativeSpacer,btn_right];
     
+    
+    
+    
+    [self creatTableView];
+    [self getScrollviewNetData];
+    
+    
+    
+    //定位相关
+    [self creatNavcLeftLabel];
+    [self getLocalLocation];
+    
+    
+    
+    
+    
+    
+    
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - 视图创建
+
+//创建navigation左边显示label
+-(void)creatNavcLeftLabel{
+    self.leftLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 80, 40)];
+    self.leftLabel.text = @"正在定位...";
+    self.leftLabel.textColor = DEFAULT_TEXTCOLOR;
+    self.leftLabel.font = [UIFont systemFontOfSize:15];
+    [self.leftLabel addTaget:self action:@selector(pushToLocationChoose) tag:0];
+    
+    
+    UIBarButtonItem *leftBar = [[UIBarButtonItem alloc]initWithCustomView:self.leftLabel];
+    self.navigationItem.leftBarButtonItem = leftBar;
+}
+
+#pragma mark - 定位相关 gm - start
+
+//获取本地存储的位置信息
+-(void)getLocalLocation{
     if ([GMAPI cacheForKey:USERLocation]) {
-        
         NSDictionary *dic = [GMAPI cacheForKey:USERLocation];
         NSString *str;
         if ([[dic stringValueForKey:@"city"]intValue] == 0) {
@@ -97,24 +132,88 @@
             str = [GMAPI cityNameForId:theId];
         }else{
             int theId = [[dic stringValueForKey:@"city"]intValue];
-            str = [GMAPI cityNameForId:theId];
+            
+            str = [GMAPI getCityNameOf4CityWithCityId:theId];
+            
         }
         self.leftLabel.text = str;
         
-        [self creatTableView];
     }else{
         
         [self getjingweidu];
         
     }
-    
-    [self getScrollviewNetData];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+
+//获取经纬度
+-(void)getjingweidu{
+    CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
+    if (kCLAuthorizationStatusRestricted == status) {
+        NSLog(@"kCLAuthorizationStatusRestricted 开启定位失败");
+        UIAlertView *al = [[UIAlertView alloc]initWithTitle:@"提示" message:@"开启定位失败" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+        [al show];
+        return;
+    }else if (kCLAuthorizationStatusDenied == status){
+        NSLog(@"请允许河马医生使用定位服务");
+        UIAlertView *al = [[UIAlertView alloc]initWithTitle:@"提示" message:@"请允许河马医生使用定位服务" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+        [al show];
+        return;
+    }
+    
+    __weak typeof(self)weakSelf = self;
+    
+    [[GMAPI appDeledate]startDingweiWithBlock:^(NSDictionary *dic) {
+        
+        [weakSelf theLocationDictionary:dic];
+    }];
+    
 }
+
+- (void)theLocationDictionary:(NSDictionary *)dic{
+    
+    NSLog(@"%@",dic);
+    _locationDic = dic;
+    NSLog(@"%@",_locationDic);
+    
+    NSString *theString;
+    
+    int cityId = 0;
+    int procinceId = 0;
+    
+    if ([[dic stringValueForKey:@"province"]isEqualToString:@"北京市"] || [[dic stringValueForKey:@"province"]isEqualToString:@"上海市"] || [[dic stringValueForKey:@"province"]isEqualToString:@"天津市"] || [[dic stringValueForKey:@"province"]isEqualToString:@"重庆市"]) {
+        theString = [dic stringValueForKey:@"province"];
+        procinceId = [GMAPI cityIdForName:theString];
+        cityId = 0;
+    }else{
+        theString = [dic stringValueForKey:@"city"];
+        procinceId =[GMAPI cityIdForName:[dic stringValueForKey:@"province"]];
+        cityId = [GMAPI cityIdForName:[dic stringValueForKey:@"city"]];
+    }
+    
+    
+    
+    if ([LTools isEmpty:theString]) {
+        self.leftLabel.text = @"北京市";
+        NSDictionary *cachDic = @{
+                                  @"province":[NSString stringWithFormat:@"%d",1000],
+                                  @"city":[NSString stringWithFormat:@"%d",1005]
+                                  };
+        [GMAPI cache:cachDic ForKey:USERLocation];
+    }else{
+        self.leftLabel.text = theString;
+        NSDictionary *cachDic = @{
+                                  @"province":[NSString stringWithFormat:@"%d",procinceId],
+                                  @"city":[NSString stringWithFormat:@"%d",cityId]
+                                  };
+        [GMAPI cache:cachDic ForKey:USERLocation];
+    }
+    
+    
+    
+    
+}
+
 
 
 
@@ -136,14 +235,26 @@
     
     NSDictionary *dic = [GMAPI cacheForKey:USERLocation];
     
+    NSDictionary *parame;
     
-    NSDictionary *parame = @{
-                             @"is_recommend":@"1",
-                             @"province_id":[dic stringValueForKey:@"province"],
-                             @"city_id":[dic stringValueForKey:@"city"],
-                             @"page":[NSString stringWithFormat:@"%d",_tableView.pageNum],
-                             @"per_page":@"10"
-                             };
+    if (dic) {
+        parame = @{
+                   @"is_recommend":@"1",
+                   @"province_id":[dic stringValueForKey:@"province"],
+                   @"city_id":[dic stringValueForKey:@"city"],
+                   @"page":[NSString stringWithFormat:@"%d",_tableView.pageNum],
+                   @"per_page":@"10"
+                   };
+    }else{
+        parame = @{
+                   @"is_recommend":@"1",
+                   @"province_id":@"1000",
+                   @"city_id":@"1005",
+                   @"page":[NSString stringWithFormat:@"%d",_tableView.pageNum],
+                   @"per_page":@"10"
+                   };
+    }
+    
     [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodGet api:GET_PRODUCTlIST parameters:parame constructingBodyBlock:nil completion:^(NSDictionary *result) {
         
         NSArray *list = [result arrayValueForKey:@"list"];
@@ -540,60 +651,7 @@
 }
 
 
-#pragma mark - 获取经纬度
--(void)getjingweidu{
-    CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
-    if (kCLAuthorizationStatusRestricted == status) {
-        DDLOG(@"kCLAuthorizationStatusRestricted 开启定位失败");
-        UIAlertView *al = [[UIAlertView alloc]initWithTitle:@"提示" message:@"开启定位失败" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-        [al show];
-        return;
-    }else if (kCLAuthorizationStatusDenied == status){
-        DDLOG(@"请允许万聚鲜城使用定位服务");
-        UIAlertView *al = [[UIAlertView alloc]initWithTitle:@"提示" message:@"请允许万聚鲜城使用定位服务" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-        [al show];
-        return;
-    }
-    
-    __weak typeof(self)weakSelf = self;
-    
-    [[GMAPI appDeledate]startDingweiWithBlock:^(NSDictionary *dic) {
-        
-        [weakSelf theLocationDictionary:dic];
-    }];
-}
 
-
-- (void)theLocationDictionary:(NSDictionary *)dic{
-    
-    _locationDic = dic;
-    
-    NSString *theString;
-    
-    int cityId = 0;
-    int procinceId = 0;
-    
-    if ([[dic stringValueForKey:@"province"]isEqualToString:@"北京市"] || [[dic stringValueForKey:@"province"]isEqualToString:@"上海市"] || [[dic stringValueForKey:@"province"]isEqualToString:@"天津市"] || [[dic stringValueForKey:@"province"]isEqualToString:@"重庆市"]) {
-        theString = [dic stringValueForKey:@"province"];
-        procinceId = [GMAPI cityIdForName:theString];
-        cityId = 0;
-    }else{
-        theString = [dic stringValueForKey:@"city"];
-        procinceId =[GMAPI cityIdForName:[dic stringValueForKey:@"province"]];
-        cityId = [GMAPI cityIdForName:[dic stringValueForKey:@"city"]];
-    }
-    
-    self.leftLabel.text = theString;
-//    int city_id = [GMAPI cityIdForName:theString];
-    
-    NSDictionary *cachDic = @{
-                          @"province":[NSString stringWithFormat:@"%d",procinceId],
-                          @"city":[NSString stringWithFormat:@"%d",cityId]
-                          };
-    [GMAPI cache:cachDic ForKey:USERLocation];
-    
-    [self creatTableView];
-}
 
 
 
@@ -619,7 +677,6 @@
 -(void)setLocationDataWithCityStr:(NSString *)city provinceStr:(NSString *)province{
     self.leftLabel.text = city;
     
-    int cityId = [GMAPI cityIdForName:self.leftLabel.text];
     
     NSString *pStr = [NSString stringWithFormat:@"%d",[GMAPI cityIdForName:province]];
     NSString *cStr = [NSString stringWithFormat:@"%d",[GMAPI cityIdForName:city]];

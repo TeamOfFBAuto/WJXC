@@ -11,8 +11,12 @@
 
 @interface SeachCustomTableViewCell : UITableViewCell
 
+@property(nonatomic,strong)UIImageView *imv;
+@property(nonatomic,strong)UILabel *titleLabel;
+@property(nonatomic,strong)UILabel *priceLabel;
 
 
+-(id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier;
 
 
 -(void)loadCustomViewWithModel:(ProductModel *)theModel index:(NSIndexPath *)theIndexPath;

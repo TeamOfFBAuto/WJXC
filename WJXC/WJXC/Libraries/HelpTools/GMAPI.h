@@ -146,6 +146,10 @@
 +(NSString *)getCurrentCityId;
 +(NSString *)getCurrentCityName;
 
+//根据cityid 拿到city名 如果cityid是4个直辖市的区id 则取provinceName
++(NSString *)getCityNameOf4CityWithCityId:(int)cityId;
+
+
 //地区选择相关
 + (int)cityIdForName:(NSString *)cityName;
 

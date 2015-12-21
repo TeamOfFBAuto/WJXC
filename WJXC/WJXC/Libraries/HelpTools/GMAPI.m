@@ -863,6 +863,26 @@
 }
 
 
++(NSString*)getProvineIdWithCityId:(int)cityId{
+    
+    NSString *provinceId = [NSString stringWithFormat:@"%d00",cityId/100];
+    return provinceId;
+}
+
++(NSString *)getCityNameOf4CityWithCityId:(int)cityId{
+    
+    NSString *city_name = [self cityNameForId:cityId];
+    
+    if (cityId<1400) {
+        NSString *p_id = [self getProvineIdWithCityId:cityId];
+        city_name = [self cityNameForId:[p_id intValue]];
+        
+    }else{
+        city_name = [self cityNameForId:cityId];
+    }
+    
+    return city_name;
+}
 
 
 @end

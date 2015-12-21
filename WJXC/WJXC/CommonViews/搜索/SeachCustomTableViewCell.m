@@ -21,21 +21,35 @@
 }
 
 
+
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(nullable NSString *)reuseIdentifier{
+    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    if (self) {
+        self.imv = [[UIImageView alloc]initWithFrame:CGRectMake(10,10, 60, 60)];
+        [self.contentView addSubview:self.imv];
+        
+        self.titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMaxX(self.imv.frame)+10, self.imv.frame.origin.y, DEVICE_WIDTH - 90, 40)];
+        self.titleLabel.font = [UIFont systemFontOfSize:13];
+        self.titleLabel.numberOfLines = 2;
+        self.titleLabel.textColor =[UIColor blackColor];
+        [self.contentView addSubview:self.titleLabel];
+        
+        self.priceLabel = [[UILabel alloc]initWithFrame:CGRectMake(self.titleLabel.frame.origin.x, CGRectGetMaxY(self.titleLabel.frame), self.titleLabel.frame.size.width, 20)];
+        self.priceLabel.font = [UIFont systemFontOfSize:13];
+        self.priceLabel.textColor = RGBCOLOR(244, 139, 46);
+        [self.contentView addSubview:self.priceLabel];
+        
+    }
+    
+    return self;
+}
+
+
+
 -(void)loadCustomViewWithModel:(ProductModel *)theModel index:(NSIndexPath *)theIndexPath{
-    UIImageView *imv = [[UIImageView alloc]initWithFrame:CGRectMake(10,10, 60, 60)];
-    [imv sd_setImageWithURL:[NSURL URLWithString:theModel.cover_pic] placeholderImage:nil];
-    [self.contentView addSubview:imv];
-    
-    UILabel *titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMaxX(imv.frame)+10, imv.frame.origin.y, DEVICE_WIDTH - 90, 30) title:theModel.product_name font:14 align:NSTextAlignmentLeft textColor:[UIColor blackColor]];
-    titleLabel.numberOfLines = 2;
-    
-    [self.contentView addSubview:titleLabel];
-    
-    
-    
-    UILabel *price = [[UILabel alloc]initWithFrame:CGRectMake(titleLabel.frame.origin.x, CGRectGetMaxY(titleLabel.frame), titleLabel.frame.size.width, 30) title:[NSString stringWithFormat:@"￥%@",theModel.current_price] font:14 align:NSTextAlignmentLeft textColor:RGBCOLOR(244, 139, 46)];
-    [self.contentView addSubview:price];
-    
+    [self.imv sd_setImageWithURL:[NSURL URLWithString:theModel.cover_pic] placeholderImage:nil];
+    self.titleLabel.text = theModel.product_name;
+    self.priceLabel.text = [NSString stringWithFormat:@"￥%@",theModel.current_price];
 }
 
 @end
