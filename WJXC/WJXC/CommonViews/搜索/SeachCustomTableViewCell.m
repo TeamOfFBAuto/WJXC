@@ -47,7 +47,7 @@
 
 
 -(void)loadCustomViewWithModel:(ProductModel *)theModel index:(NSIndexPath *)theIndexPath{
-    [self.imv sd_setImageWithURL:[NSURL URLWithString:theModel.cover_pic] placeholderImage:nil];
+    [self.imv l_setImageWithURL:[NSURL URLWithString:theModel.cover_pic] placeholderImage:nil];
     self.titleLabel.text = theModel.product_name;
     self.priceLabel.text = [NSString stringWithFormat:@"￥%@",theModel.current_price];
 }

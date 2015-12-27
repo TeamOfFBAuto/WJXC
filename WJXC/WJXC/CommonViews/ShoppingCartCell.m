@@ -28,13 +28,12 @@
 {
     [self.productImageView l_setImageWithURL:[NSURL URLWithString:aModel.cover_pic] placeholderImage:DEFAULT_HEADIMAGE];
     
-//    CGFloat width = self.numView.left - self.productImageView.right - 20;
-//    _nameLabel.width = width;
+    CGFloat width =  DEVICE_WIDTH - self.productImageView.right - self.numBgView.width  - 20;
+    _nameLabel.width = width;
     
     NSString *name = aModel.product_name;
-//    self.nameLabel.width = [LTools widthForText:name font:13];
     _nameLabel.numberOfLines = 2;
-    _nameLabel.lineBreakMode = NSLineBreakByCharWrapping;
+    _nameLabel.lineBreakMode = NSLineBreakByTruncatingTail;
     _nameLabel.height = [LTools heightForText:name width:_nameLabel.width font:13];
     _nameLabel.text = aModel.product_name;
     

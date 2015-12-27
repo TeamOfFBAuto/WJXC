@@ -40,15 +40,15 @@
                                 <rect key="frame" x="48" y="9" width="60" height="60"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="IFr-LK-0vy">
-                                <rect key="frame" x="116" y="12" width="86" height="21"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="characterWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="IFr-LK-0vy">
+                                <rect key="frame" x="116" y="10" width="86" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="￥200.00" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="xFM-VM-zpb">
-                                <rect key="frame" x="116" y="44" width="86" height="21"/>
+                                <rect key="frame" x="116" y="47" width="86" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                 <color key="textColor" red="0.99215686274509807" green="0.53725490196078429" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -97,13 +97,14 @@
                 <outlet property="bgView" destination="sLI-4q-l8r" id="nYb-sl-l89"/>
                 <outlet property="deleteBtn" destination="n5g-UH-cVV" id="5MZ-qY-cbS"/>
                 <outlet property="nameLabel" destination="IFr-LK-0vy" id="wO4-N8-vaX"/>
+                <outlet property="numBgView" destination="Y4i-UT-Rm6" id="Vdw-05-cSw"/>
                 <outlet property="numLabel" destination="zKH-7A-hZu" id="qfa-fo-UhJ"/>
                 <outlet property="priceLabel" destination="xFM-VM-zpb" id="Llu-0p-dEg"/>
                 <outlet property="productImageView" destination="JSZ-G3-1cK" id="bGE-JR-1An"/>
                 <outlet property="reduceButton" destination="GbY-H1-fC9" id="mSq-tk-U3h"/>
                 <outlet property="selectedButton" destination="0UT-Fi-n29" id="9F8-IR-j2O"/>
             </connections>
-            <point key="canvasLocation" x="-99" y="207.5"/>
+            <point key="canvasLocation" x="-236" y="154.5"/>
         </tableViewCell>
     </objects>
     <resources>

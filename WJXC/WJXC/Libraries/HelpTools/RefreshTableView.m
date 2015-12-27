@@ -405,16 +405,16 @@
     }
     [self.dataArray addObjectsFromArray:data];
     
-    if (self.dataArray.count < pageSize) {
-        
-//        [self performSelector:@selector(finishReloadigDataAndHiddenMore) withObject:nil afterDelay:0];
-        
-        [self finishReloadigDataAndHiddenMore];
-        
-    }else
-    {
+//    if (self.contentSize.height < self.height) {
+//        
+////        [self performSelector:@selector(finishReloadigDataAndHiddenMore) withObject:nil afterDelay:0];
+//        
+//        [self finishReloadigDataAndHiddenMore];
+//        
+//    }else
+//    {
         [self performSelector:@selector(finishReloadigData) withObject:nil afterDelay:0];
-    }
+//    }
 }
 
 //成功加载
@@ -471,7 +471,7 @@
             self.pageNum = 1;
         }
     }
-    [self performSelector:@selector(finishReloadigData) withObject:nil afterDelay:1.0];
+    [self performSelector:@selector(finishReloadigData) withObject:nil afterDelay:0.f];
 
 }
 

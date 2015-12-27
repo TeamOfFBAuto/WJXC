@@ -402,58 +402,61 @@
 }
 - (void)loadMoreDataForTableView:(RefreshTableView *)tableView
 {
-    NSString *province_id = [GMAPI getCurrentProvinceId];
-    NSString *city_id = [GMAPI getCurrentCityId];
-    NSDictionary *parame;
-    if (tableView.tag == 200) {//新品
-        parame = @{
-                   @"is_new":@"1",
-                   @"province_id":province_id,
-                   @"city_id":city_id,
-                   @"page":[NSString stringWithFormat:@"%d",tableView.pageNum],
-                   @"perpage":@"10"
-                   };
-    }else if (tableView.tag == 201){//热卖
-        parame = @{
-                   @"is_new":@"1",
-                   @"province_id":province_id,
-                   @"city_id":city_id,
-                   @"page":[NSString stringWithFormat:@"%d",tableView.pageNum],
-                   @"perpage":@"10"
-                   };
-    }else if (tableView.tag == 202){//价格
-        parame = @{
-                   @"is_hot":@"1",
-                   @"province_id":province_id,
-                   @"city_id":city_id,
-                   @"page":[NSString stringWithFormat:@"%d",tableView.pageNum],
-                   @"perpage":@"10"
-                   };
-    }
-
     
-    [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodGet api:GET_PRODUCT_COMMENT parameters:parame constructingBodyBlock:nil completion:^(NSDictionary *result) {
-        
-        DDLOG(@"%@",result);
-        NSArray *list = [result arrayValueForKey:@"list"];
-        NSMutableArray *productModelArray = [NSMutableArray arrayWithCapacity:1];
-        for (NSDictionary *dic in list) {
-            ProductModel *amodel = [[ProductModel alloc]initWithDictionary:dic];
-            [productModelArray addObject:amodel];
-        }
-        
-        if (tableView.tag == 200) {
-            [_tab0 reloadData:productModelArray pageSize:10];
-        }else if (tableView.tag == 201){
-            [_tab1 reloadData:productModelArray pageSize:10];
-        }else if (tableView.tag == 202){
-            [_tab2 reloadData:productModelArray pageSize:10];
-        }
-        
-        
-    } failBlock:^(NSDictionary *result) {
-        [tableView loadFail];
-    }];
+    [self loadNewDataForTableView:tableView];
+    
+//    NSString *province_id = [GMAPI getCurrentProvinceId];
+//    NSString *city_id = [GMAPI getCurrentCityId];
+//    NSDictionary *parame;
+//    if (tableView.tag == 200) {//新品
+//        parame = @{
+//                   @"is_new":@"1",
+//                   @"province_id":province_id,
+//                   @"city_id":city_id,
+//                   @"page":[NSString stringWithFormat:@"%d",tableView.pageNum],
+//                   @"perpage":@"10"
+//                   };
+//    }else if (tableView.tag == 201){//热卖
+//        parame = @{
+//                   @"is_new":@"1",
+//                   @"province_id":province_id,
+//                   @"city_id":city_id,
+//                   @"page":[NSString stringWithFormat:@"%d",tableView.pageNum],
+//                   @"perpage":@"10"
+//                   };
+//    }else if (tableView.tag == 202){//价格
+//        parame = @{
+//                   @"is_hot":@"1",
+//                   @"province_id":province_id,
+//                   @"city_id":city_id,
+//                   @"page":[NSString stringWithFormat:@"%d",tableView.pageNum],
+//                   @"perpage":@"10"
+//                   };
+//    }
+//
+//    
+//    [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodGet api:GET_PRODUCT_COMMENT parameters:parame constructingBodyBlock:nil completion:^(NSDictionary *result) {
+//        
+//        DDLOG(@"%@",result);
+//        NSArray *list = [result arrayValueForKey:@"list"];
+//        NSMutableArray *productModelArray = [NSMutableArray arrayWithCapacity:1];
+//        for (NSDictionary *dic in list) {
+//            ProductModel *amodel = [[ProductModel alloc]initWithDictionary:dic];
+//            [productModelArray addObject:amodel];
+//        }
+//        
+//        if (tableView.tag == 200) {
+//            [_tab0 reloadData:productModelArray pageSize:10];
+//        }else if (tableView.tag == 201){
+//            [_tab1 reloadData:productModelArray pageSize:10];
+//        }else if (tableView.tag == 202){
+//            [_tab2 reloadData:productModelArray pageSize:10];
+//        }
+//        
+//        
+//    } failBlock:^(NSDictionary *result) {
+//        [tableView loadFail];
+//    }];
     
 }
 
@@ -599,12 +602,7 @@
         
         
     }];
-    
 }
-
-
-
-
 
 
 @end
