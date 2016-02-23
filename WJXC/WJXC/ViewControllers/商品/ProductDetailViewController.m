@@ -793,11 +793,18 @@
 
 -(void)gouwuche{
     
-    [self.navigationController popToRootViewControllerAnimated:NO];
+//    [self.navigationController popToRootViewControllerAnimated:NO];
+//    
+//    UITabBarController *tabbarVc = ROOTVIEWCONTROLLER;
+//    
+//    tabbarVc.selectedIndex = 2;
     
-    UITabBarController *tabbarVc = ROOTVIEWCONTROLLER;
     
-    tabbarVc.selectedIndex = 2;
+    //修改为push购物车
+    
+    ShoppingCarController *shoppingCar = [[ShoppingCarController alloc]init];
+    shoppingCar.isPush = YES;
+    [self.navigationController pushViewController:shoppingCar animated:YES];
 }
 
 /**
@@ -807,14 +814,19 @@
  */
 - (void)clickToChat:(UIButton *)sender
 {
-    [self sendProductDetailMessage];
+    _isHiddenNavigation = YES;
+    if ([LTools isLogin:self]) {
+        
+        [self sendProductDetailMessage];
+        
+        RCDChatViewController *chatService = [[RCDChatViewController alloc] init];
+        chatService.userName = @"客服";
+        chatService.targetId = SERVICE_ID;
+        chatService.conversationType = ConversationType_CUSTOMERSERVICE;
+        chatService.title = chatService.userName;
+        [self.navigationController pushViewController:chatService animated:YES];
+    }
     
-    RCDChatViewController *chatService = [[RCDChatViewController alloc] init];
-    chatService.userName = @"客服";
-    chatService.targetId = SERVICE_ID;
-    chatService.conversationType = ConversationType_CUSTOMERSERVICE;
-    chatService.title = chatService.userName;
-    [self.navigationController pushViewController:chatService animated:YES];
 }
 
 

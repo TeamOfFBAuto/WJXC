@@ -49,13 +49,26 @@
 
 @implementation ShoppingCarController
 
+- (void)dealloc
+{
+    DDLOG(@"shoppingcar dealloc");
+    [_table removeObserver:self forKeyPath:@"_dataArrayCount"];
+    _table.refreshDelegate = nil;
+    _table.dataSource = nil;
+    _table = nil;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
     self.myTitle = @"购物车";
-    
-    [self setMyViewControllerLeftButtonType:MyViewControllerLeftbuttonTypeNull WithRightButtonType:MyViewControllerRightbuttonTypeText];
+    if (_isPush) {
+        [self setMyViewControllerLeftButtonType:MyViewControllerLeftbuttonTypeBack WithRightButtonType:MyViewControllerRightbuttonTypeText];
+    }else
+    {
+        [self setMyViewControllerLeftButtonType:MyViewControllerLeftbuttonTypeNull WithRightButtonType:MyViewControllerRightbuttonTypeText];
+    }
     
     [self.my_right_button setTitle:@"编辑" forState:UIControlStateNormal];
     [self.my_right_button setTitle:@"完成" forState:UIControlStateSelected];
@@ -83,10 +96,7 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
-//    self.navigationController.navigationBarHidden = YES;
-//    self.navigationController.navigationBarHidden = NO;
-    
+
     [self.navigationController setNavigationBarHidden:NO animated:animated];
     
     //判断是否需要同步到服务器 1、数据库有 2、登录了
@@ -162,18 +172,17 @@
  */
 - (void)creatBottomTools
 {
-    
-    _bottom = [[UIView alloc]initWithFrame:CGRectMake(0, DEVICE_HEIGHT - 64 - 49 - 50 - 25, DEVICE_WIDTH, 50 + 25)];
+    CGFloat top = DEVICE_HEIGHT - 64 - 49 - 50 - 25;
+    if (_isPush) {
+        top += 49;
+    }
+    _bottom = [[UIView alloc]initWithFrame:CGRectMake(0, top, DEVICE_WIDTH, 50 + 25)];
     [self.view addSubview:_bottom];
     _bottom.backgroundColor = [UIColor whiteColor];
     
     //继续购物
     UIView *buyView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, 25)];
     [_bottom addSubview:buyView];
-    
-//    buyView.backgroundColor = [UIColor colorWithHexString:@"f98700"];
-
-//    buyView.backgroundColor = [[UIColor blackColor]colorWithAlphaComponent:0.3];
     
     buyView.backgroundColor = [DEFAULT_TEXTCOLOR colorWithAlphaComponent:0.7];
     
@@ -185,7 +194,7 @@
     [buyView addSubview:btn];
     [btn addTarget:self action:@selector(clickToHome:) forControlEvents:UIControlEventTouchUpInside];
     
-    CGFloat top = 25.f;
+    top = 25.f;
     
     //其他
     UIView *line = [[UIView alloc]initWithFrame:CGRectMake(0, top - 0.5, _bottom.width, 0.5)];
@@ -368,6 +377,10 @@
  */
 - (void)clickToHome:(UIButton *)sender
 {
+    if (_isPush) {
+        [self.navigationController popToRootViewControllerAnimated:YES];
+        return;
+    }
     UITabBarController *root = ROOTVIEWCONTROLLER;
     root.selectedIndex = 0;
 }
@@ -435,6 +448,8 @@
     sender.selected = !sender.selected;
     
     _selectAllBtn.selected = [self isAllSelected];
+    
+    [self updateSumPrice];
 
 }
 
@@ -584,7 +599,7 @@
                              @"cart_pro_id":aModel.cart_pro_id};
     
     __weak typeof(_table)weakTable = _table;
-    __weak typeof(self)weakSelf = self;
+//    __weak typeof(self)weakSelf = self;
     [[YJYRequstManager shareInstance]requestWithMethod:YJYRequstMethodGet api:ORDER_DEL_CART_PRODUCT parameters:params constructingBodyBlock:nil completion:^(NSDictionary *result) {
         
         [weakTable.dataArray removeObjectAtIndex:index];
@@ -790,8 +805,7 @@
     [cell.deleteBtn addTarget:self action:@selector(clickToDelete:) forControlEvents:UIControlEventTouchUpInside];
     
     //监控选中按钮状态以及数量
-    [cell.selectedButton addObserver:self forKeyPath:@"selected" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
-//    [cell.numLabel addObserver:self forKeyPath:@"text" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
+//    [cell.selectedButton addObserver:self forKeyPath:@"selected" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
     
     cell.bgView.left = _isEditing ? -40 : 0;
     
@@ -805,7 +819,7 @@
 {
     
     if ([keyPath isEqualToString:@"selected"]) {
-        [self updateSumPrice];
+//        [self updateSumPrice];
 
     }else if ([keyPath isEqualToString:@"_dataArrayCount"]){
         

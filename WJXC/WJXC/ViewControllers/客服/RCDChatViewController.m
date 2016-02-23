@@ -36,7 +36,7 @@
 {
     [super viewWillAppear:animated];
     
-    self.navigationController.navigationBarHidden = NO;
+//    self.navigationController.navigationBarHidden = NO;
     
     if([self.navigationController.navigationBar respondsToSelector:@selector(setBackgroundImage:forBarMetrics:)] )
     {
@@ -48,6 +48,9 @@
 
 -(void)viewDidLoad
 {
+    
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
+
     [super viewDidLoad];
 
     UIBarButtonItem * spaceButton1 = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];

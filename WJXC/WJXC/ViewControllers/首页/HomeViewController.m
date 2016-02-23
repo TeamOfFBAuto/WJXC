@@ -59,13 +59,9 @@
     
     _cellHeight = (DEVICE_WIDTH/2- 5)  * W_H_RATIO;
     
-    
     self.view.backgroundColor = [UIColor whiteColor];
     self.myTitle = @"万聚鲜城";
     [self setMyViewControllerLeftButtonType:MyViewControllerLeftbuttonTypeNull WithRightButtonType:MyViewControllerRightbuttonTypeNull];
-
-    
-    
     
     UIButton *searchBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [searchBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -80,23 +76,13 @@
     negativeSpacer.width = -18;
     self.navigationItem.rightBarButtonItems = @[negativeSpacer,btn_right];
     
-    
-    
-    
     [self creatTableView];
     [self getScrollviewNetData];
-    
     
     
     //定位相关
     [self creatNavcLeftLabel];
     [self getLocalLocation];
-    
-    
-    
-    
-    
-    
     
 }
 
@@ -123,7 +109,8 @@
 #pragma mark - 定位相关 gm - start
 
 //获取本地存储的位置信息
--(void)getLocalLocation{
+-(void)getLocalLocation
+{
     if ([GMAPI cacheForKey:USERLocation]) {
         NSDictionary *dic = [GMAPI cacheForKey:USERLocation];
         NSString *str;
@@ -141,13 +128,13 @@
     }else{
         
         [self getjingweidu];
-        
     }
 }
 
 
 //获取经纬度
 -(void)getjingweidu{
+    
     CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
     if (kCLAuthorizationStatusRestricted == status) {
         NSLog(@"kCLAuthorizationStatusRestricted 开启定位失败");
@@ -208,10 +195,6 @@
                                   };
         [GMAPI cache:cachDic ForKey:USERLocation];
     }
-    
-    
-    
-    
 }
 
 

@@ -116,11 +116,25 @@
         [self addSubview:indicator];
         indicator.center = CGPointMake(self.width/2.f, self.height/2.f);
         [indicator startAnimating];
-        //        indicator.backgroundColor = [UIColor redColor];
     }else
     {
-        self.contentMode =  UIViewContentModeCenter;
+        if ([placeholder isKindOfClass:[UIImage class]]) {
+            
+            CGSize imageSize = placeholder.size;
+            //默认图比imageView大
+            if (imageSize.width > CGRectGetWidth(self.frame) ||
+                imageSize.height > CGRectGetHeight(self.frame)) {
+                
+                self.contentMode = UIViewContentModeScaleAspectFit;//等比例填充
+                
+            }else
+            {
+                self.contentMode = UIViewContentModeCenter;//中间显示
+            }
+        }
     }
+    
+    self.clipsToBounds = YES;
     
     __weak typeof(self)weakSelf = self;
     [self sd_setImageWithURL:url placeholderImage:placeholder completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
@@ -134,10 +148,17 @@
         if (image) {
             
             self.contentMode = UIViewContentModeScaleToFill;//等比例拉伸填充
+            self.clipsToBounds = YES;
         }else
         {
-            UILabel *label = [[UILabel alloc]initWithFrame:self.bounds title:@"" font:10 align:NSTextAlignmentCenter textColor:[UIColor colorWithHexString:@"646464"]];
-            [weakSelf addSubview:label];
+            if (!placeholder) {
+                UILabel *label = [[UILabel alloc]initWithFrame:self.bounds];
+                label.text = @"抱歉,图片加载失败~";
+                label.font = [UIFont systemFontOfSize:10];
+                label.textAlignment = NSTextAlignmentCenter;
+                label.textColor = [UIColor colorWithHexString:@"646464"];
+                [weakSelf addSubview:label];
+            }
         }
         
         [indicator stopAnimating];

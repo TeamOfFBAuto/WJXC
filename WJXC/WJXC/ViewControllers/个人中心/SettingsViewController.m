@@ -19,6 +19,7 @@
 {
     NSArray *_titlesArr;
     UITableView *_table;
+    UIButton *_loginButton;//登录按钮
 }
 
 @end
@@ -39,6 +40,7 @@
     self.myTitle = @"设置";
     [self setMyViewControllerLeftButtonType:MyViewControllerLeftbuttonTypeBack WithRightButtonType:MyViewControllerRightbuttonTypeNull];
     
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(actionForLogin) name:NOTIFICATION_LOGIN object:nil];
     _titlesArr = @[@"修改密码",@"关于我们",@"意见反馈"];
     
     _table = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, DEVICE_HEIGHT - 64) style:UITableViewStylePlain];
@@ -47,6 +49,21 @@
     [self.view addSubview:_table];
     
     [self addLogoutButton];
+}
+
+/**
+ *  登录通知
+ */
+- (void)actionForLogin
+{
+    if ([LTools isLogin]) {
+        _loginButton.backgroundColor = DEFAULT_TEXTCOLOR;
+        _loginButton.userInteractionEnabled = YES;
+    }else
+    {
+        _loginButton.backgroundColor = RGBCOLOR(241, 240, 245);
+        _loginButton.userInteractionEnabled = NO;
+    }
 }
 
 -(void)viewDidLayoutSubviews
@@ -76,8 +93,17 @@
     UIView *footer = [[UIView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, _table.height - 50 * _titlesArr.count)];
     
     UIButton *btn = [[UIButton alloc]initWithframe:CGRectMake(33, footer.height - 43 - 20, DEVICE_WIDTH - 66, 43) buttonType:UIButtonTypeCustom normalTitle:@"退出登录" selectedTitle:nil target:self action:@selector(clickToLogout:)];
-    btn.backgroundColor = DEFAULT_TEXTCOLOR;
     [btn addCornerRadius:3.f];
+    _loginButton = btn;
+    
+    if ([LTools isLogin]) {
+        btn.backgroundColor = DEFAULT_TEXTCOLOR;
+        btn.userInteractionEnabled = YES;
+    }else
+    {
+        btn.backgroundColor = RGBCOLOR(241, 240, 245);
+        btn.userInteractionEnabled = NO;
+    }
 
     [footer addSubview:btn];
     
@@ -215,8 +241,11 @@
     switch (indexPath.row) {
         case 0:
         {
-            UpdatePWDController *updatePwd = [[UpdatePWDController alloc]init];
-            [self.navigationController pushViewController:updatePwd animated:YES];
+            if ([LTools isLogin:self]) {
+                
+                UpdatePWDController *updatePwd = [[UpdatePWDController alloc]init];
+                [self.navigationController pushViewController:updatePwd animated:YES];
+            }
         }
             break;
         case 1:

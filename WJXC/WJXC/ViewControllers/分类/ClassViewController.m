@@ -50,11 +50,8 @@
     
     _selectRow = 0;
     
-    
     [self prepareNetData];
-  
-    
-    
+
 }
 
 - (void)didReceiveMemoryWarning {
@@ -204,6 +201,11 @@
         [view removeFromSuperview];
     }
     
+    //不是数组return
+    if (child == nil ||
+        ![child isKindOfClass:[NSArray class]]) {
+        return;
+    }
     
     NSInteger num_oneRow = 3;
     CGFloat viewJiange = 10;
@@ -222,19 +224,21 @@
         UITapGestureRecognizer *tt = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(smallClassViewClickedWithIndexPath:)];
         [view addGestureRecognizer:tt];
         
-        
-        NSString *imgUrl = [dic stringValueForKey:@"cover_pic"];
-        UIImageView *imagev = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, viewWidth, viewWidth)];
-        [imagev l_setImageWithURL:[NSURL URLWithString:imgUrl] placeholderImage:DEFAULT_HEADIMAGE];
-        [view addSubview:imagev];
-        
-        UILabel *titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(imagev.frame), viewWidth, 20)];
-        titleLabel.text = [dic stringValueForKey:@"category_name"];
-        titleLabel.font = [UIFont systemFontOfSize:12];
-        titleLabel.textAlignment = NSTextAlignmentCenter;
-        [view addSubview:titleLabel];
-        
-        height = CGRectGetMaxY(view.frame)+10;
+        if (dic && [dic isKindOfClass:[NSDictionary class]]) {
+            
+            NSString *imgUrl = [dic stringValueForKey:@"cover_pic"];
+            UIImageView *imagev = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, viewWidth, viewWidth)];
+            [imagev l_setImageWithURL:[NSURL URLWithString:imgUrl] placeholderImage:DEFAULT_HEADIMAGE];
+            [view addSubview:imagev];
+            
+            UILabel *titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(imagev.frame), viewWidth, 20)];
+            titleLabel.text = [dic stringValueForKey:@"category_name"];
+            titleLabel.font = [UIFont systemFontOfSize:12];
+            titleLabel.textAlignment = NSTextAlignmentCenter;
+            [view addSubview:titleLabel];
+            
+            height = CGRectGetMaxY(view.frame)+10;
+        }
     }
     
     

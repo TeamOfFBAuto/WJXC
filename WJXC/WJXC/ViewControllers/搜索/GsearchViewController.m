@@ -57,7 +57,7 @@
 #pragma mark - MyMethod
 
 -(void)creatTab{
-    _tab = [[RefreshTableView alloc]initWithFrame:CGRectMake(0, 50, DEVICE_WIDTH, DEVICE_HEIGHT - 50) style:UITableViewStylePlain];
+    _tab = [[RefreshTableView alloc]initWithFrame:CGRectMake(0, 50, DEVICE_WIDTH, DEVICE_HEIGHT - 50 - 64) style:UITableViewStylePlain];
     _tab.refreshDelegate = self;
     _tab.dataSource = self;
     [self.view addSubview:_tab];
@@ -126,6 +126,7 @@
     _tf.font = [UIFont systemFontOfSize:15];
     _tf.placeholder = @"请输入关键词";
     _tf.delegate = self;
+    _tf.returnKeyType = UIReturnKeySearch;
     [backview addSubview:_tf];
     
     
@@ -146,9 +147,13 @@
 -(void)gSearch{
     
     [_tf resignFirstResponder];
-    
-    [_tab showRefreshHeader:YES];
-    
+
+    if (_tf.text.length > 0) {
+        [_tab showRefreshHeader:YES];
+    }else
+    {
+        [LTools showMBProgressWithText:@"请输入有效的搜索关键词！" addToView:self.view];
+    }
 }
 
 

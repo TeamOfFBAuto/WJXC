@@ -12,4 +12,6 @@
 
 @interface ShoppingCarController : MyViewController
 
+@property(nonatomic,assign)BOOL isPush;//是否是push过来的
+
 @end

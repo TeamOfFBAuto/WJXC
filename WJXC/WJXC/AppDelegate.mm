@@ -50,6 +50,19 @@
     NSString *name = [NSString stringWithFormat:@"万聚鲜城%@",version];
     [WXApi registerApp:WXAPPID withDescription:name];
     
+//    https://itunes.apple.com/cn/app/yi-jia-yi-fa-xian-mei-li-wei/id951259287?mt=8
+    [[LTools shareInstance]versionForAppid:@"1026846736" Block:^(BOOL isNewVersion, NSString *updateUrl, NSString *updateContent) {
+        
+        if (isNewVersion) {
+            
+            DDLOG(@"新版本");
+        }else
+        {
+            DDLOG(@"没有现版本");
+        }
+        
+    }];
+    
 #pragma - mark 融云
     //融云
     
@@ -295,24 +308,40 @@
 //    application.applicationIconBadgeNumber = unreadMsgCount;
 }
 
-//- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
-//    
-//    // IOS 7 Support Required
-//    [APService handleRemoteNotification:userInfo];
-//    completionHandler(UIBackgroundFetchResultNewData);
-//    
-//    NSLog(@"JPush1 remote %@",userInfo);
-//}
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
+    
+    // IOS 7 Support Required
+    
+    [self actionForApplication:application notificationUserInfo:userInfo];
+    
+    completionHandler(UIBackgroundFetchResultNewData);
+    
+    NSLog(@"JPush1 remote %@",userInfo);
+}
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
+    [self actionForApplication:application notificationUserInfo:userInfo];
+
+}
+
+/**
+ *  处理远程通知消息
+ *
+ *  @param application 用于判断程序状态
+ *  @param userInfo    通知内容
+ */
+- (void)actionForApplication:(UIApplication *)application
+        notificationUserInfo:(NSDictionary *)userInfo
+{
+    
     [LTools updateTabbarUnreadMessageNumber];
     
     //极光推送
     [APService handleRemoteNotification:userInfo];
     
     DDLOG(@"JPush2 remote %@",userInfo);
-
+    
     UIApplicationState state = [application applicationState];
     if (state == UIApplicationStateInactive){
         DDLOG(@"UIApplicationStateInactive %@",userInfo);
@@ -348,7 +377,6 @@
     {
         DDLOG(@"UIApplicationStateBackground %@",userInfo);
     }
-
 }
 
 
