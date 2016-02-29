@@ -35,6 +35,7 @@ PODS:
   - UIView+Helpers (1.4.0)
   - UMengAnalytics-NO-IDFA (3.6.7)
   - UMengFeedback (2.3.4)
+  - UMengSocial (4.4)
 
 DEPENDENCIES:
   - AFNetworking (~> 2.3.1)
@@ -47,6 +48,7 @@ DEPENDENCIES:
   - UIView+Helpers (~> 1.4.0)
   - UMengAnalytics-NO-IDFA
   - UMengFeedback (~> 2.3.1)
+  - UMengSocial
 
 SPEC CHECKSUMS:
   AFNetworking: 05b9f6e3aa5ac45bc383b4bb108ef338080a26c7
@@ -59,5 +61,6 @@ SPEC CHECKSUMS:
   UIView+Helpers: dff2da5bb142b8ed51460176af41ef726d49174b
   UMengAnalytics-NO-IDFA: 6d02561a00579b2e37718f204eb81347df5d7b8b
   UMengFeedback: 5283cc0e324dffca4dd54c4abb3cbded56487817
+  UMengSocial: aba7296602310385114d82c255539a7bef3b7ab0
 
 COCOAPODS: 0.39.0

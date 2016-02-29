@@ -57,6 +57,8 @@
 {
     NSString *baseUrl = [SERVER_URL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     
+    //显示菊花
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     
@@ -173,6 +175,9 @@
               completion:(AFResultBlock)completionBlock
                failBlock:(AFResultBlock)failBlock
 {
+    
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+
     NSString *key = [self requestHashKey:operation];
     _requstRecordDictionary[key] = operation;
     
@@ -245,6 +250,8 @@
               failtBlock:(AFResultBlock)failBlock
 {
     DDLOG(@"failure %@",operation.responseString);
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+
     NSString *errInfo = @"网络有问题,请检查网络";
     switch (error.code) {
         case NSURLErrorNotConnectedToInternet:

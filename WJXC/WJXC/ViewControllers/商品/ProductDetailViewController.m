@@ -20,8 +20,9 @@
 #import "CouponModel.h"
 #import "CycleScrollView.h"
 #import "LBannerView.h"
+#import "LShareSheetView.h"
 
-@interface ProductDetailViewController ()<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate>
+@interface ProductDetailViewController ()<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate,UMSocialUIDelegate>
 {
     UITableView *_tableView;//主tableview
     
@@ -48,6 +49,9 @@
     BOOL _isHiddenNavigation;//控制navigationBar显示
     
     CoupeView *_coupeView;//领取优惠券view
+    
+    NSString *_shareUrl;//分享链接
+    NSString *_shareContent;//分享内容
 }
 
 @property(nonatomic,retain)UIView *selectNumView;//修改加入购物车数字view
@@ -377,16 +381,17 @@
     
     
     _shoucangBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [_shoucangBtn setFrame:CGRectMake(DEVICE_WIDTH - 60, 5, 50, 50)];
+    [_shoucangBtn setFrame:CGRectMake(DEVICE_WIDTH - 50, 5, 50, 50)];
     [_shoucangBtn setImage:[UIImage imageNamed:@"homepage_qianggou_collect.png"] forState:UIControlStateNormal];
     [_shoucangBtn addTarget:self action:@selector(networkForCollect) forControlEvents:UIControlEventTouchUpInside];
     [theBImv addSubview:_shoucangBtn];
     _shoucangBtn.hidden = YES;
     
-    //    UIButton *shareBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    //    [shareBtn setFrame:CGRectMake(DEVICE_WIDTH - 50, 5, 50, 50)];
-    //    [shareBtn setImage:[UIImage imageNamed:@"homepage_qianggou_share.png"] forState:UIControlStateNormal];
-    //    [theBImv addSubview:shareBtn];
+    UIButton *shareBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [shareBtn setFrame:CGRectMake(_shoucangBtn.left - 50, 5, 50, 50)];
+    [shareBtn setImage:[UIImage imageNamed:@"homepage_qianggou_share.png"] forState:UIControlStateNormal];
+    [shareBtn addTarget:self action:@selector(clickToShare) forControlEvents:UIControlEventTouchUpInside];
+    [theBImv addSubview:shareBtn];
 }
 
 //创建循环滚动的scrollview
@@ -618,7 +623,129 @@
     }];
 }
 
-#pragma mark - MyMethod
+#pragma mark - 事件处理
+
+/**
+ *  分享
+ */
+- (void)clickToShare
+{
+    
+//    http://123.57.51.27:85&/index.php?d=wap&c=products&m=get_product_detail&product_id=84
+    
+//    http://123.57.51.27:85/wap/products/detail/4
+//    NSString *url = [NSString stringWithFormat:@"%@%@&product_id=%@",SERVER_URL,SHARE_URL,self.product_id];
+    NSString *url = [NSString stringWithFormat:@"%@/wap/products/detail/%@",SERVER_URL,self.product_id];
+    NSString *title = _theProductModel.product_name;
+    NSString *content = @"我在万聚鲜城发现了一个不错的商品,赶快来看看吧。";
+    
+    
+    NSString *coverImageUrl = _theProductModel.cover_pic;
+    
+    UIImage *shareImage = [UIImage imageNamed:@"appIcon200"];//默认图片
+
+    __weak typeof(self) weakself = self;
+
+    [[SDWebImageDownloader sharedDownloader]downloadImageWithURL:[NSURL URLWithString:coverImageUrl] options:SDWebImageDownloaderUseNSURLCache progress:^(NSInteger receivedSize, NSInteger expectedSize) {
+        DDLOG(@"");
+    } completed:^(UIImage *image, NSData *data, NSError *error, BOOL finished) {
+        
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            // code here
+            if (image) {
+                [weakself shareWithImage:image shareTitle:title shareContent:content linkUrl:url];
+            }else
+            {
+                [weakself shareWithImage:shareImage shareTitle:title shareContent:content linkUrl:url];
+            }
+        });
+        
+    }];
+}
+
+
+- (void)shareWithImage:(UIImage *)shareImage
+            shareTitle:(NSString *)shareTitle
+          shareContent:(NSString *)shareContent
+               linkUrl:(NSString *)linkUrl
+{
+//    [[LShareSheetView shareInstance] showShareContent:shareContent title:shareTitle shareUrl:linkUrl shareImage:shareImage targetViewController:self];
+//    [[LShareSheetView shareInstance]actionBlock:^(NSInteger buttonIndex, Share_Type shareType) {
+//        
+//        if (shareType == Share_QQ) {
+//            
+//            NSLog(@"Share_QQ");
+//            
+//        }else if (shareType == Share_QQZone){
+//            
+//            NSLog(@"Share_QQZone");
+//            
+//        }else if (shareType == Share_WeiBo){
+//            
+//            NSLog(@"Share_WeiBo");
+//            
+//        }else if (shareType == Share_WX_HaoYou){
+//            
+//            NSLog(@"Share_WX_HaoYou");
+//            
+//        }else if (shareType == Share_WX_PengYouQuan){
+//            
+//            NSLog(@"Share_WX_PengYouQuan");
+//            
+//        }
+//        
+//    }];
+    
+    _shareUrl = linkUrl;
+    _shareContent = shareContent;
+    
+    NSArray *snsNames = @[UMShareToWechatTimeline,UMShareToSina,UMShareToQzone,UMShareToWechatSession,UMShareToQQ];
+    //调用快速分享接口
+    [UMSocialSnsService presentSnsIconSheetView:self
+                                         appKey:UmengAppkey
+                                      shareText:shareContent
+                                     shareImage:shareImage
+                                shareToSnsNames:snsNames
+                                       delegate:self];
+}
+
+#pragma mark - 分享 UMSocialUIDelegate <NSObject>
+
+-(void)didSelectSocialPlatform:(NSString *)platformName withSocialData:(UMSocialData *)socialData
+{
+    NSString *url = _shareUrl;
+    NSString *title = _theProductModel.product_name;
+    socialData.title = title;
+
+    if ([platformName isEqualToString:UMShareToQQ]) {
+        
+        socialData.extConfig.qqData.url = url; //设置你自己的url地址;
+        socialData.extConfig.qqData.title = title;
+        
+    }else if ([platformName isEqualToString:UMShareToSina]){
+        
+        NSString *content = [NSString stringWithFormat:@"%@%@",_shareContent,url];
+        socialData.shareText = content;
+        
+    }else if ([platformName isEqualToString:UMShareToQzone]){
+        
+        //qqzone
+        socialData.extConfig.qzoneData.url = url;
+        socialData.extConfig.qzoneData.title = title;
+        
+    }else if ([platformName isEqualToString:UMShareToWechatSession]){ //微信好友
+        
+        socialData.extConfig.wechatSessionData.url = url; //设置你自己的url地址;
+        socialData.extConfig.wechatSessionData.title = title;
+        
+    }else if ([platformName isEqualToString:UMShareToWechatTimeline]){ //朋友圈
+        
+        socialData.extConfig.wechatTimelineData.url = url; //设置你自己的url地址;
+        socialData.extConfig.wechatTimelineData.title = title;
+    }
+}
+
 
 /**
  *  确认提交
@@ -1105,7 +1232,6 @@
         ccc.model = _theProductModel;
         [self.navigationController pushViewController:ccc animated:YES];
     }else if (indexPath.row == 2){
-        NSLog(@"%s",__FUNCTION__);
         
         [self clickToCoupe];
     }

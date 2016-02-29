@@ -342,7 +342,7 @@
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     
     //test FBLife 605673005 fbauto 904576362
-    NSString *url = [NSString stringWithFormat:@"http://itunes.apple.com/lookup?id=%@",appid];
+    NSString *url = [NSString stringWithFormat:@"https://itunes.apple.com/lookup?id=%@",appid];
     
     NSString *newStr = [url stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     

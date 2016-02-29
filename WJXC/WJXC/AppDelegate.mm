@@ -470,15 +470,19 @@
     [UMSocialSinaHandler openSSOWithRedirectURL:RedirectUrl];
     
     //设置分享到QQ空间的应用Id，和分享url 链接
-    [UMSocialQQHandler setQQWithAppId:QQAPPID appKey:QQAPPKEY url:@"http://www.umeng.com/social"];
+    [UMSocialQQHandler setQQWithAppId:QQAPPID appKey:QQAPPKEY url:@"http://a.app.qq.com/o/simple.jsp?pkgname=com.epe.wjxc"];
     
     //设置支持没有客户端情况下使用SSO授权
     [UMSocialQQHandler setSupportWebView:YES];
     
     //设置微信AppId，设置分享url，默认使用友盟的网址
-    [UMSocialWechatHandler setWXAppId:WXAPPID appSecret:WXAPPSECRET url:@"http://www.umeng.com/social"];
+    [UMSocialWechatHandler setWXAppId:WXAPPID appSecret:WXAPPSECRET url:@"http://a.app.qq.com/o/simple.jsp?pkgname=com.epe.wjxc"];
     
     //    [UMSocialTencentWeiboHandler openSSOWithRedirectUrl:@"http://sns.whalecloud.com/tencent2/callback"];
+    
+    NSArray *snsNames = @[UMShareToWechatTimeline,UMShareToQzone,UMShareToWechatSession,UMShareToQQ];
+    //UMShareToSina
+     [UMSocialConfig hiddenNotInstallPlatforms:snsNames];
     
 }
 

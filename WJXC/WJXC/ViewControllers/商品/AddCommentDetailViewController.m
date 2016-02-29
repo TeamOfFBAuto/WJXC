@@ -470,8 +470,12 @@ static NSString *kPhotoCellIdentifier = @"kPhotoCellIdentifier";
                                            
                                            UIImage *aImage = aImage_arr[i];
                                            
-                                           NSData * data= UIImageJPEGRepresentation(aImage, 1);
-                                           
+//                                           NSData * data= UIImageJPEGRepresentation(aImage, 1);
+                                           NSData *data;
+                                           if (aImage) {
+                                               
+                                               data = [self dataWithImage:aImage CompressMaxSize:200 * 1000 compression:0.5];
+                                           }
                                            NSLog(@"---> 大小 %ld",(unsigned long)data.length);
                                            
                                            NSString *imageName = [NSString stringWithFormat:@"icon%d.jpg",i];
@@ -522,6 +526,31 @@ static NSString *kPhotoCellIdentifier = @"kPhotoCellIdentifier";
     [o2 setUploadProgressBlock:^(NSUInteger bytesWritten, long long totalBytesWritten, long long totalBytesExpectedToWrite) {
         
     }];
+}
+
+/**
+ *  压缩图片返回NSData
+ *
+ *  @param maxSize     最大允许值
+ *  @param compression 压缩率 最大0.1
+ *
+ *  @return 压缩后NSData
+ */
+- (NSData *)dataWithImage:(UIImage *)image
+          CompressMaxSize:(NSInteger)maxSize
+              compression:(CGFloat)compression
+{
+    CGFloat maxCompression = 0.1f;//最大压缩0.1
+    NSData *imageData = UIImageJPEGRepresentation(image, compression);
+    
+    NSLog(@"imagedata1 %lu",(unsigned long)imageData.length);
+    
+    while ([imageData length] > maxSize && compression > maxCompression) {
+        compression -= 0.1;
+        imageData = UIImageJPEGRepresentation(image, compression);
+    }
+    
+    return imageData;
 }
 
 -(void)pingjiaSuccessToGoBack{
